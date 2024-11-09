@@ -10,21 +10,21 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 class AppKitToggleButton extends StatefulWidget {
-  AppKitToggleButton({
+  const AppKitToggleButton({
     super.key,
     required this.onChanged,
     required this.type,
     required this.childOn,
     required this.childOff,
-    AppKitToggleButtonController? controller,
+    required this.isOn,
     this.padding,
     this.semanticLabel,
     this.color,
     this.mouseCursor = SystemMouseCursors.basic,
     this.controlSize = AppKitControlSize.regular,
-  }) : controller = controller ?? AppKitToggleButtonController();
+  });
 
-  final AppKitToggleButtonController controller;
+  final bool isOn;
   final EdgeInsetsGeometry? padding;
   final ValueChanged<bool>? onChanged;
   final String? semanticLabel;
@@ -36,8 +36,6 @@ class AppKitToggleButton extends StatefulWidget {
   final Color? color;
 
   bool get enabled => onChanged != null;
-
-  bool get isOn => controller.isOn;
 
   @override
   State<AppKitToggleButton> createState() => _AppKitToggleButtonState();
@@ -64,17 +62,19 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
   }
 
   Color _getBackgroundColor({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isDark,
     required bool isMainWindow,
   }) {
     return _BoxDecorationBuilder.buildBoxDecoration(
+      theme: theme,
       accentColor: accentColor,
       isEnabled: widget.enabled,
       isDark: isDark,
       isMainWindow: isMainWindow,
       type: widget.type,
-      isOn: widget.controller.isOn,
+      isOn: widget.isOn,
     ).color!;
   }
 
@@ -110,15 +110,17 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
   }
 
   BoxDecoration _getBackgroundBoxDecoration({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isMainWindow,
     required bool isDark,
   }) {
     return _BoxDecorationBuilder.buildBoxDecoration(
+      theme: theme,
       accentColor: accentColor,
       isEnabled: widget.enabled,
       isDark: isDark,
-      isOn: widget.controller.isOn,
+      isOn: widget.isOn,
       type: widget.type,
       isMainWindow: isMainWindow,
     );
@@ -203,7 +205,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasUiKitTheme(context));
+    assert(debugCheckHasAppKitTheme(context));
 
     final bool enabled = widget.enabled;
     final AppKitThemeData theme = AppKitTheme.of(context);
@@ -219,8 +221,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
         onTapCancel: enabled ? _handleTapCancel : null,
         onTap: widget.enabled
             ? () {
-                widget.onChanged!.call(!widget.controller.isOn);
-                widget.controller.toggle();
+                widget.onChanged!.call(!widget.isOn);
               }
             : null,
         child: Semantics(
@@ -240,6 +241,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                           MainWindowStateListener.instance.isMainWindow.value;
 
                       final Color backgroundColor = _getBackgroundColor(
+                        theme: theme,
                         accentColor: accentColor,
                         isDark: theme.brightness.isDark,
                         isMainWindow: isMainWindow,
@@ -258,6 +260,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
                       return DecoratedBox(
                         decoration: _getBackgroundBoxDecoration(
+                          theme: theme,
                           accentColor: backgroundColor,
                           isMainWindow: isMainWindow,
                           isDark: theme.brightness.isDark,
@@ -306,6 +309,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
 class _BoxDecorationBuilder {
   static BoxDecoration buildBoxDecoration({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isOn,
     required bool isEnabled,
@@ -314,6 +318,7 @@ class _BoxDecorationBuilder {
     required AppKitToggleButtonType type,
   }) {
     final color = getBackgroundColor(
+      theme: theme,
       accentColor: accentColor,
       isEnabled: isEnabled,
       isDark: isDark,
@@ -343,6 +348,7 @@ class _BoxDecorationBuilder {
   }
 
   static Color getBackgroundColor({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isEnabled,
     required bool isDark,
@@ -351,7 +357,7 @@ class _BoxDecorationBuilder {
     required AppKitToggleButtonType type,
   }) {
     final isPrimary = type == AppKitToggleButtonType.primary && isMainWindow;
-    const controlBackgroundColor = MacosColors.controlBackgroundColor;
+    final controlBackgroundColor = theme.controlBackgroundColor;
     return isPrimary && isEnabled && isOn
         ? accentColor
         : (isEnabled

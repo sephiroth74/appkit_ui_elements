@@ -1,7 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 
-bool debugCheckHasUiKitTheme(BuildContext context, [bool check = true]) {
+bool debugCheckHasAppKitTheme(BuildContext context, [bool check = true]) {
   assert(() {
     if (AppKitTheme.maybeOf(context) == null) {
       throw FlutterError.fromParts(<DiagnosticsNode>[

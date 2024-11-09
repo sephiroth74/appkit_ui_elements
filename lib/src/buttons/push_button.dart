@@ -58,6 +58,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
   }
 
   Color _getBackgroundColor({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isDark,
     required bool isMainWindow,
@@ -65,6 +66,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
     final bool enabled = widget.enabled;
 
     return _BoxDecorationBuilder.buildBoxDecoration(
+      theme: theme,
       accentColor: accentColor,
       isEnabled: enabled,
       isDark: isDark,
@@ -119,11 +121,13 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
   }
 
   BoxDecoration _getBackgroundBoxDecoration({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isMainWindow,
     required bool isDark,
   }) {
     return _BoxDecorationBuilder.buildBoxDecoration(
+      theme: theme,
       accentColor: accentColor,
       isEnabled: widget.enabled,
       isDark: isDark,
@@ -210,7 +214,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasUiKitTheme(context));
+    assert(debugCheckHasAppKitTheme(context));
 
     final bool enabled = widget.enabled;
     final AppKitThemeData theme = AppKitTheme.of(context);
@@ -242,6 +246,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
                           MainWindowStateListener.instance.isMainWindow.value;
 
                       final Color backgroundColor = _getBackgroundColor(
+                        theme: theme,
                         accentColor: accentColor,
                         isDark: theme.brightness.isDark,
                         isMainWindow: isMainWindow,
@@ -258,6 +263,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
 
                       return DecoratedBox(
                         decoration: _getBackgroundBoxDecoration(
+                          theme: theme,
                           accentColor: backgroundColor,
                           isMainWindow: isMainWindow,
                           isDark: theme.brightness.isDark,
@@ -304,6 +310,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
 
 class _BoxDecorationBuilder {
   static BoxDecoration buildBoxDecoration({
+    required AppKitThemeData theme,
     required Color accentColor,
     required bool isEnabled,
     required bool isDark,
@@ -311,7 +318,7 @@ class _BoxDecorationBuilder {
     required AppKitPushButtonType type,
   }) {
     final isPrimary = type == AppKitPushButtonType.primary && isMainWindow;
-    const controlBackgroundColor = MacosColors.controlBackgroundColor;
+    final controlBackgroundColor = theme.controlBackgroundColor;
     final color = isPrimary && isEnabled
         ? accentColor
         : (isEnabled

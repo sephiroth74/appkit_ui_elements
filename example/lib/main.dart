@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/pages/checkbox_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
@@ -72,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   items: const [
                     SidebarItem(label: Text('Push Button')),
                     SidebarItem(label: Text('Toggle Button')),
+                    SidebarItem(label: Text('Checkbox')),
                   ],
                   currentIndex: pageIndex,
                   onChanged: (index) {
@@ -84,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: [
           const PushButtonPage(),
           const ToggleButtonPage(),
+          const CheckboxPage(),
         ][pageIndex],
       ),
     );

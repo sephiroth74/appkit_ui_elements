@@ -10,14 +10,10 @@ class ToggleButtonPage extends StatefulWidget {
 }
 
 class _ToggleButtonPageState extends State<ToggleButtonPage> {
-  AppKitToggleButtonController button1Controller =
-      AppKitToggleButtonController();
-  AppKitToggleButtonController button2Controller =
-      AppKitToggleButtonController();
-  AppKitToggleButtonController button3Controller =
-      AppKitToggleButtonController();
-  AppKitToggleButtonController button4Controller =
-      AppKitToggleButtonController();
+  bool button1Value = false;
+  bool button2Value = false;
+  bool button3Value = false;
+  bool button4Value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +46,11 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                             const SizedBox(width: 16.0),
                             AppKitToggleButton(
                               key: const Key('button1'),
-                              controller: button1Controller,
+                              isOn: button1Value,
                               onChanged: (value) {
-                                setState(() {});
+                                setState(() {
+                                  button1Value = value;
+                                });
                               },
                               controlSize: AppKitControlSize.large,
                               type: AppKitToggleButtonType.primary,
@@ -74,9 +72,11 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                             const SizedBox(width: 16.0),
                             AppKitToggleButton(
                               key: const Key('button2'),
-                              controller: button2Controller,
+                              isOn: button2Value,
                               onChanged: (value) {
-                                setState(() {});
+                                setState(() {
+                                  button2Value = value;
+                                });
                               },
                               controlSize: AppKitControlSize.large,
                               type: AppKitToggleButtonType.secondary,
@@ -98,8 +98,10 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                             const SizedBox(width: 16.0),
                             AppKitToggleButton(
                               key: const Key('button3'),
-                              controller: button3Controller,
-                              onChanged: (value) => setState(() {}),
+                              isOn: button3Value,
+                              onChanged: (value) => setState(() {
+                                button3Value = value;
+                              }),
                               controlSize: AppKitControlSize.large,
                               type: AppKitToggleButtonType.primary,
                               color: MacosColors.applePurple,
@@ -121,8 +123,10 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                             const SizedBox(width: 16.0),
                             AppKitToggleButton(
                               key: const Key('button4'),
-                              controller: button4Controller,
-                              onChanged: (value) => setState(() {}),
+                              isOn: button4Value,
+                              onChanged: (value) => setState(() {
+                                button4Value = value;
+                              }),
                               controlSize: AppKitControlSize.large,
                               type: AppKitToggleButtonType.secondary,
                               color: MacosColors.applePurple,
@@ -145,10 +149,10 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               controlSize: AppKitControlSize.large,
                               onPressed: () {
                                 setState(() {
-                                  button1Controller.isOn = true;
-                                  button2Controller.isOn = true;
-                                  button3Controller.isOn = true;
-                                  button4Controller.isOn = true;
+                                  button1Value = true;
+                                  button2Value = true;
+                                  button3Value = true;
+                                  button4Value = true;
                                 });
                               },
                               child: const Text('Set All On'),
@@ -159,10 +163,10 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               controlSize: AppKitControlSize.large,
                               onPressed: () {
                                 setState(() {
-                                  button1Controller.isOn = false;
-                                  button2Controller.isOn = false;
-                                  button3Controller.isOn = false;
-                                  button4Controller.isOn = false;
+                                  button1Value = false;
+                                  button2Value = false;
+                                  button3Value = false;
+                                  button4Value = false;
                                 });
                               },
                               child: const Text('Set All Off'),
