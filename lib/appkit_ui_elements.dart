@@ -7,6 +7,7 @@ export 'src/controls/toggle_button.dart';
 export 'src/controls/checkbox.dart';
 export 'src/controls/radio_button.dart';
 export 'src/controls/help_button.dart';
+export 'src/controls/arrow_button.dart';
 export 'src/enums/enums.dart';
 export 'src/theme/appkit_theme.dart';
 export 'src/theme/appkit_push_button_theme.dart';

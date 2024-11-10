@@ -84,7 +84,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final bool isMainWindow;
   final VisualDensity visualDensity;
   final Color canvasColor;
-  final CupertinoDynamicColor controlBackgroundColor;
+  final Color controlBackgroundColor;
+  final Color controlBackgroundColorDisabled;
   final MacosTypography typography;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
@@ -112,6 +113,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     canvasColor ??= isDark
         ? const Color.fromRGBO(40, 40, 40, 1.0)
         : const Color.fromRGBO(246, 246, 246, 1.0);
+
+    final controlBackgroundColor = isDark
+        ? MacosColors.controlBackgroundColor.darkColor
+        : MacosColors.controlBackgroundColor.color;
+    final controlBackgroundColorDisabled = isDark
+        ? MacosColors.controlBackgroundColor.darkColor.withOpacity(0.5)
+        : MacosColors.controlBackgroundColor.color.withOpacity(0.5);
 
     pushButtonTheme ??= const AppKitPushButtonThemeData(
       buttonRadius: {
@@ -170,7 +178,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
       canvasColor: canvasColor,
-      controlBackgroundColor: MacosColors.controlBackgroundColor,
+      controlBackgroundColor: controlBackgroundColor,
+      controlBackgroundColorDisabled: controlBackgroundColorDisabled,
     );
 
     final customData = defaultData.copyWith(
@@ -262,6 +271,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.helpButtonTheme,
     required this.canvasColor,
     required this.controlBackgroundColor,
+    required this.controlBackgroundColorDisabled,
   });
 
   @override
@@ -275,7 +285,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         pushButtonTheme,
         toggleButtonTheme,
         helpButtonTheme,
-        controlBackgroundColor
+        controlBackgroundColor,
+        controlBackgroundColorDisabled,
       ];
 
   AppKitThemeData copyWith({
@@ -285,7 +296,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     VisualDensity? visualDensity,
     MacosTypography? typography,
     Color? canvasColor,
-    CupertinoDynamicColor? controlBackgroundColor,
+    Color? controlBackgroundColor,
+    Color? controlBackgroundColorDisabled,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
@@ -302,6 +314,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: canvasColor ?? this.canvasColor,
       controlBackgroundColor:
           controlBackgroundColor ?? this.controlBackgroundColor,
+      controlBackgroundColorDisabled:
+          controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
     );
   }
 
@@ -317,6 +331,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       pushButtonTheme: other.pushButtonTheme,
       toggleButtonTheme: other.toggleButtonTheme,
       controlBackgroundColor: other.controlBackgroundColor,
+      controlBackgroundColorDisabled: other.controlBackgroundColorDisabled,
       helpButtonTheme: other.helpButtonTheme,
     );
   }
@@ -335,12 +350,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: AppKitHelpButtonThemeData.lerp(
           a.helpButtonTheme, b.helpButtonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
-      controlBackgroundColor: CupertinoDynamicColor.withBrightness(
-        color: Color.lerp(
-            a.controlBackgroundColor.color, b.controlBackgroundColor.color, t)!,
-        darkColor: Color.lerp(a.controlBackgroundColor.darkColor,
-            b.controlBackgroundColor.darkColor, t)!,
-      ),
+      controlBackgroundColor:
+          Color.lerp(a.controlBackgroundColor, b.controlBackgroundColor, t)!,
+      controlBackgroundColorDisabled: Color.lerp(
+          a.controlBackgroundColorDisabled,
+          b.controlBackgroundColorDisabled,
+          t)!,
     );
   }
 
@@ -362,6 +377,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'toggleButtonTheme', toggleButtonTheme));
     properties
         .add(ColorProperty('controlBackgroundColor', controlBackgroundColor));
+    properties.add(ColorProperty(
+        'controlBackgroundColorDisabled', controlBackgroundColorDisabled));
     properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
         'helpButtonTheme', helpButtonTheme));
   }
