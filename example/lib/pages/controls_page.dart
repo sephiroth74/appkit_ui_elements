@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
-class CheckboxPage extends StatefulWidget {
-  const CheckboxPage({super.key});
+class ControlsPage extends StatefulWidget {
+  const ControlsPage({super.key});
 
   @override
-  State<CheckboxPage> createState() => _CheckboxPageState();
+  State<ControlsPage> createState() => _ControlsPageState();
 }
 
-class _CheckboxPageState extends State<CheckboxPage> {
+class _ControlsPageState extends State<ControlsPage> {
   bool? checkboxValue1 = true;
 
   bool radioButtonValue2 = true;
   bool radioButtonValue3 = false;
+
+  bool switchValue1 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class _CheckboxPageState extends State<CheckboxPage> {
                       const Divider(
                         thickness: 0.5,
                       ),
-                      const WidgetTitle(label: 'Radio Button'),
+                      const WidgetTitle(label: 'RadioButton'),
                       const SizedBox(height: 20.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -253,6 +255,22 @@ class _CheckboxPageState extends State<CheckboxPage> {
                       const Divider(
                         thickness: 0.5,
                       ),
+                      const WidgetTitle(label: 'HelpButton'),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          AppKitHelpButton(
+                            onPressed: () {},
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitHelpButton(
+                            color: MacosColors.appleBlue,
+                            onPressed: () {},
+                          ),
+                          const SizedBox(width: 16.0),
+                          const AppKitHelpButton(),
+                        ],
+                      )
                     ],
                   );
                 },

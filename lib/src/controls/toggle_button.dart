@@ -38,28 +38,26 @@ class AppKitToggleButton extends StatefulWidget {
   bool get enabled => onChanged != null;
 
   @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty<AppKitToggleButtonType>('type', type));
+    properties.add(EnumProperty<AppKitControlSize>('controlSize', controlSize));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
+    properties.add(StringProperty('semanticLabel', semanticLabel));
+    properties
+        .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
+    properties
+        .add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
+    properties.add(DiagnosticsProperty<Color>('color', color));
+  }
+
+  @override
   State<AppKitToggleButton> createState() => _AppKitToggleButtonState();
 }
 
 class _AppKitToggleButtonState extends State<AppKitToggleButton> {
   @visibleForTesting
   bool buttonHeldDown = false;
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(EnumProperty<AppKitToggleButtonType>('type', widget.type));
-    properties.add(
-        EnumProperty<AppKitControlSize>('controlSize', widget.controlSize));
-    properties.add(
-        DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
-    properties.add(StringProperty('semanticLabel', widget.semanticLabel));
-    properties.add(
-        DiagnosticsProperty<MouseCursor>('mouseCursor', widget.mouseCursor));
-    properties.add(
-        FlagProperty('enabled', value: widget.enabled, ifFalse: 'disabled'));
-    properties.add(DiagnosticsProperty<Color>('color', widget.color));
-  }
 
   Color _getBackgroundColor({
     required AppKitThemeData theme,

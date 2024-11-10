@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   items: const [
                     SidebarItem(label: Text('Push Button')),
                     SidebarItem(label: Text('Toggle Button')),
-                    SidebarItem(label: Text('Checkbox')),
+                    SidebarItem(label: Text('Controls')),
                   ],
                   currentIndex: pageIndex,
                   onChanged: (index) {
@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: [
           const PushButtonPage(),
           const ToggleButtonPage(),
-          const CheckboxPage(),
+          const ControlsPage(),
         ][pageIndex],
       ),
     );

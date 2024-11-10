@@ -1,6 +1,4 @@
-import 'package:appkit_ui_elements/src/enums/enums.dart';
-import 'package:appkit_ui_elements/src/theme/appkit_push_button_theme.dart';
-import 'package:appkit_ui_elements/src/theme/appkit_toggle_button_theme.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -90,6 +88,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final MacosTypography typography;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
+  final AppKitHelpButtonThemeData helpButtonTheme;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -97,6 +96,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     MacosTypography? typography,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
+    AppKitHelpButtonThemeData? helpButtonTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -153,6 +153,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     toggleButtonTheme ??= AppKitToggleButtonThemeData.copyFrom(pushButtonTheme);
 
+    helpButtonTheme ??= AppKitHelpButtonThemeData(
+      color: isDark ? MacosColors.textBackgroundColor : MacosColors.textColor,
+      disabledColor: isDark
+          ? MacosColors.textBackgroundColor.withOpacity(0.5)
+          : MacosColors.textColor.withOpacity(0.5),
+    );
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -161,6 +168,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: typography,
       pushButtonTheme: pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme,
+      helpButtonTheme: helpButtonTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: MacosColors.controlBackgroundColor,
     );
@@ -174,6 +182,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: typography,
       pushButtonTheme: pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme,
+      helpButtonTheme: helpButtonTheme,
     );
 
     return defaultData.merge(customData);
@@ -250,6 +259,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.typography,
     required this.pushButtonTheme,
     required this.toggleButtonTheme,
+    required this.helpButtonTheme,
     required this.canvasColor,
     required this.controlBackgroundColor,
   });
@@ -264,6 +274,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         typography,
         pushButtonTheme,
         toggleButtonTheme,
+        helpButtonTheme,
         controlBackgroundColor
       ];
 
@@ -273,10 +284,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     bool? isMainWindow,
     VisualDensity? visualDensity,
     MacosTypography? typography,
-    AppKitPushButtonThemeData? pushButtonTheme,
-    AppKitToggleButtonThemeData? toggleButtonTheme,
     Color? canvasColor,
     CupertinoDynamicColor? controlBackgroundColor,
+    AppKitPushButtonThemeData? pushButtonTheme,
+    AppKitToggleButtonThemeData? toggleButtonTheme,
+    AppKitHelpButtonThemeData? helpButtonTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -286,6 +298,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: typography ?? this.typography,
       pushButtonTheme: pushButtonTheme ?? this.pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme ?? this.toggleButtonTheme,
+      helpButtonTheme: helpButtonTheme ?? this.helpButtonTheme,
       canvasColor: canvasColor ?? this.canvasColor,
       controlBackgroundColor:
           controlBackgroundColor ?? this.controlBackgroundColor,
@@ -304,6 +317,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       pushButtonTheme: other.pushButtonTheme,
       toggleButtonTheme: other.toggleButtonTheme,
       controlBackgroundColor: other.controlBackgroundColor,
+      helpButtonTheme: other.helpButtonTheme,
     );
   }
 
@@ -318,6 +332,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.pushButtonTheme, b.pushButtonTheme, t),
       toggleButtonTheme: AppKitToggleButtonThemeData.lerp(
           a.toggleButtonTheme, b.toggleButtonTheme, t),
+      helpButtonTheme: AppKitHelpButtonThemeData.lerp(
+          a.helpButtonTheme, b.helpButtonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
       controlBackgroundColor: CupertinoDynamicColor.withBrightness(
         color: Color.lerp(
@@ -346,5 +362,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'toggleButtonTheme', toggleButtonTheme));
     properties
         .add(ColorProperty('controlBackgroundColor', controlBackgroundColor));
+    properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
+        'helpButtonTheme', helpButtonTheme));
   }
 }

@@ -180,12 +180,13 @@ class _DecoratedContainer extends StatelessWidget {
     final iconColor = enabled
         ? color.computeLuminance() > 0.5
             ? MacosColors.black
-            : Colors.white
+            : MacosColors.white
         : MacosColors.tertiaryLabelColor;
 
     return Container(
-      foregroundDecoration:
-          isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,
+      foregroundDecoration: isDown
+          ? BoxDecoration(color: MacosColors.black.withOpacity(0.1))
+          : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: !enabled
@@ -197,7 +198,7 @@ class _DecoratedContainer extends StatelessWidget {
           boxShadow: [
             if (value == false || !isMainWindow && enabled) ...[
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: MacosColors.black.withOpacity(0.1),
               ),
               BoxShadow(
                 color:
@@ -215,8 +216,8 @@ class _DecoratedContainer extends StatelessWidget {
                 ? GradientBoxBorder(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.black.withOpacity(0.2),
-                        Colors.black.withOpacity(0.15),
+                        MacosColors.black.withOpacity(0.2),
+                        MacosColors.black.withOpacity(0.15),
                       ],
                       transform: const GradientRotation(pi / 2),
                     ),
@@ -227,8 +228,8 @@ class _DecoratedContainer extends StatelessWidget {
             gradient: value != false && isMainWindow
                 ? LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(0.17),
-                      Colors.white.withOpacity(0),
+                      MacosColors.white.withOpacity(0.17),
+                      MacosColors.white.withOpacity(0),
                     ],
                     transform: const GradientRotation(pi / 2),
                   )

@@ -34,28 +34,26 @@ class AppKitPushButton extends StatefulWidget {
   bool get enabled => onPressed != null;
 
   @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty<AppKitPushButtonType>('type', type));
+    properties.add(EnumProperty<AppKitControlSize>('controlSize', controlSize));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
+    properties.add(StringProperty('semanticLabel', semanticLabel));
+    properties
+        .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
+    properties
+        .add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
+    properties.add(DiagnosticsProperty<Color>('color', color));
+  }
+
+  @override
   State<AppKitPushButton> createState() => _AppKitPushButtonState();
 }
 
 class _AppKitPushButtonState extends State<AppKitPushButton> {
   @visibleForTesting
   bool buttonHeldDown = false;
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(EnumProperty<AppKitPushButtonType>('type', widget.type));
-    properties.add(
-        EnumProperty<AppKitControlSize>('controlSize', widget.controlSize));
-    properties.add(
-        DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
-    properties.add(StringProperty('semanticLabel', widget.semanticLabel));
-    properties.add(
-        DiagnosticsProperty<MouseCursor>('mouseCursor', widget.mouseCursor));
-    properties.add(
-        FlagProperty('enabled', value: widget.enabled, ifFalse: 'disabled'));
-    properties.add(DiagnosticsProperty<Color>('color', widget.color));
-  }
 
   Color _getBackgroundColor({
     required AppKitThemeData theme,
