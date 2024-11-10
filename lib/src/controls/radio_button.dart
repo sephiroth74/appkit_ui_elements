@@ -13,20 +13,21 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 const _kSize = 14.0;
-const _kCornerRadiusRatio = 4.0;
 const _kBorderWidthRatio = 28;
 const _kBoxShadowSpreadRatio = 28;
 const _kBoxShadowOffsetRatio = 14;
 
-class AppKitCheckbox extends StatefulWidget {
-  final bool? value;
+class AppKitRadioButton<T> extends StatefulWidget {
+  final T? groupValue;
+  final T value;
   final Color? color;
-  final ValueChanged<bool>? onChanged;
+  final ValueChanged<T>? onChanged;
   final String? semanticLabel;
   final double size;
 
-  const AppKitCheckbox({
+  const AppKitRadioButton({
     super.key,
+    required this.groupValue,
     required this.value,
     this.color,
     this.onChanged,
@@ -34,12 +35,14 @@ class AppKitCheckbox extends StatefulWidget {
     this.size = _kSize,
   });
 
+  bool get isSelected => groupValue == value;
+
   bool get enabled => onChanged != null;
 
-  bool get isIndeterminate => value == null;
+  bool get isIndeterminate => groupValue == null;
 
   @override
-  State<AppKitCheckbox> createState() => _AppKitCheckboxState();
+  State<AppKitRadioButton<T>> createState() => _AppKitRadioButtonState<T>();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -48,16 +51,16 @@ class AppKitCheckbox extends StatefulWidget {
         'state',
         isIndeterminate
             ? 'indeterminate'
-            : value!
-                ? 'checked'
-                : 'unchecked'));
+            : isSelected
+                ? 'selected'
+                : 'unselected'));
     properties.add(ColorProperty('color', color));
     properties.add(FlagProperty('enabled', value: enabled, ifTrue: 'enabled'));
     properties.add(StringProperty('semanticLabel', semanticLabel));
   }
 }
 
-class _AppKitCheckboxState extends State<AppKitCheckbox> {
+class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
   @visibleForTesting
   bool buttonHeldDown = false;
 
@@ -88,15 +91,11 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
       onTapDown: widget.enabled ? _handleTapDown : null,
       onTapUp: widget.enabled ? _handleTapUp : null,
       onTapCancel: widget.enabled ? _handleTapCancel : null,
-      onTap: () {
-        if (widget.value == null) {
-          widget.onChanged?.call(true);
-        } else {
-          widget.onChanged?.call(!widget.value!);
-        }
-      },
+      onTap: widget.onChanged != null
+          ? () => widget.onChanged!.call(widget.value)
+          : null,
       child: Semantics(
-        checked: widget.value == true,
+        checked: widget.isSelected,
         label: widget.semanticLabel,
         child: UiElementColorBuilder(
           builder: (context, colorContainer) {
@@ -111,10 +110,9 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
               alignment: Alignment.center,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(widget.size / _kCornerRadiusRatio),
+                shape: BoxShape.circle,
                 boxShadow: [
-                  if (widget.value != false &&
+                  if ((widget.isSelected || widget.isIndeterminate) &&
                       isMainWindow &&
                       widget.enabled) ...[
                     BoxShadow(
@@ -136,7 +134,9 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
                   isDown: buttonHeldDown,
                   color:
                       isMainWindow ? accentColor : theme.controlBackgroundColor,
-                  value: widget.value,
+                  value: widget.groupValue == null
+                      ? null
+                      : widget.groupValue == widget.value,
                   enabled: widget.enabled,
                   theme: theme,
                   size: widget.size,
@@ -175,7 +175,6 @@ class _DecoratedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = size / _kCornerRadiusRatio;
     final shadowSpread = size / _kBoxShadowSpreadRatio;
     final iconColor = enabled
         ? color.computeLuminance() > 0.5
@@ -188,12 +187,12 @@ class _DecoratedContainer extends StatelessWidget {
           isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
+          shape: BoxShape.circle,
           color: !enabled
               ? theme.controlBackgroundColor.withOpacity(0.5)
               : value != false && isMainWindow
                   ? color
                   : null,
-          borderRadius: BorderRadius.circular(radius),
           boxShadow: [
             if (value == false || !isMainWindow && enabled) ...[
               BoxShadow(
@@ -211,6 +210,7 @@ class _DecoratedContainer extends StatelessWidget {
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(
+            shape: BoxShape.circle,
             border: ((value == false || !isMainWindow) && enabled)
                 ? GradientBoxBorder(
                     gradient: LinearGradient(
@@ -223,7 +223,6 @@ class _DecoratedContainer extends StatelessWidget {
                     width: size / _kBorderWidthRatio,
                   )
                 : null,
-            borderRadius: BorderRadius.circular(radius),
             gradient: value != false && isMainWindow
                 ? LinearGradient(
                     colors: [
@@ -238,7 +237,7 @@ class _DecoratedContainer extends StatelessWidget {
               ? Center(
                   child: CustomPaint(
                     size: Size.square(size * 0.9),
-                    painter: _CheckboxIconPainter(
+                    painter: _RadioButtonIconPainter(
                       type: value == null
                           ? _IconType.indeterminate
                           : _IconType.check,
@@ -253,32 +252,35 @@ class _DecoratedContainer extends StatelessWidget {
   }
 }
 
-class _CheckboxIconPainter extends CustomPainter {
+class _RadioButtonIconPainter extends CustomPainter {
   final _IconType type;
   final Color color;
   final Paint painter;
 
-  _CheckboxIconPainter({
+  _RadioButtonIconPainter({
     required this.type,
     required this.color,
   }) : painter = Paint()
           ..color = color
-          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
           ..strokeJoin = StrokeJoin.round
-          ..strokeCap = StrokeCap.round;
+          ..style = type == _IconType.check
+              ? PaintingStyle.fill
+              : PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
-    painter.strokeWidth = size.width / 6;
     final path = Path();
+    painter.strokeWidth = size.width / 6;
 
     switch (type) {
       case _IconType.check:
         {
           path
-            ..moveTo(size.width * 0.2, size.height * 0.5)
-            ..lineTo(size.width * 0.45, size.height * 0.75)
-            ..lineTo(size.width * 0.8, size.height * 0.25);
+            ..moveTo(size.width / 2, size.height / 2)
+            ..addOval(Rect.fromCircle(
+                center: Offset(size.width / 2, size.height / 2),
+                radius: size.width / 4.25));
           break;
         }
 
@@ -295,7 +297,7 @@ class _CheckboxIconPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _CheckboxIconPainter oldDelegate) {
+  bool shouldRepaint(covariant _RadioButtonIconPainter oldDelegate) {
     return oldDelegate.color != color || oldDelegate.type != type;
   }
 }

@@ -229,14 +229,13 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
           label: widget.semanticLabel,
           child: ConstrainedBox(
               constraints: _getButtonConstraints(theme: buttonTheme),
-              child: UiElementColorBuilder(
-                  builder: (context, colorContainer) {
+              child: UiElementColorBuilder(builder: (context, colorContainer) {
                 final Color accentColor = widget.color ??
                     theme.accentColor ??
                     colorContainer.controlAccentColor;
                 final isMainWindow =
                     MainWindowStateListener.instance.isMainWindow.value;
-              
+
                 final Color backgroundColor = _getBackgroundColor(
                   theme: theme,
                   accentColor: accentColor,
@@ -251,10 +250,10 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                   isDark: theme.brightness.isDark,
                   isMainWindow: isMainWindow,
                 );
-                final baseStyle = theme.typography.body
-                    .copyWith(color: foregroundColor);
+                final baseStyle =
+                    theme.typography.body.copyWith(color: foregroundColor);
                 final borderRadius = _getBorderRadius(buttonTheme);
-              
+
                 return DecoratedBox(
                   decoration: _getBackgroundBoxDecoration(
                     theme: theme,
@@ -286,8 +285,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                           heightFactor: 1.0,
                           child: DefaultTextStyle(
                               style: _textStyle(
-                                  theme: buttonTheme,
-                                  baseStyle: baseStyle),
+                                  theme: buttonTheme, baseStyle: baseStyle),
                               child: widget.isOn
                                   ? widget.childOn
                                   : widget.childOff),
