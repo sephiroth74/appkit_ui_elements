@@ -45,15 +45,11 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<AppKitPushButtonType>('type', widget.type));
-    properties.add(
-        EnumProperty<AppKitControlSize>('controlSize', widget.controlSize));
-    properties.add(
-        DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
+    properties.add(EnumProperty<AppKitControlSize>('controlSize', widget.controlSize));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
     properties.add(StringProperty('semanticLabel', widget.semanticLabel));
-    properties.add(
-        DiagnosticsProperty<MouseCursor>('mouseCursor', widget.mouseCursor));
-    properties.add(
-        FlagProperty('enabled', value: widget.enabled, ifFalse: 'disabled'));
+    properties.add(DiagnosticsProperty<MouseCursor>('mouseCursor', widget.mouseCursor));
+    properties.add(FlagProperty('enabled', value: widget.enabled, ifFalse: 'disabled'));
     properties.add(DiagnosticsProperty<Color>('color', widget.color));
   }
 
@@ -116,8 +112,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
 
     return widget.enabled
         ? luminance(blendedBackgroundColor, textColor: textColor)
-        : luminance(blendedBackgroundColor, textColor: textColor)
-            .withOpacity(0.25);
+        : luminance(blendedBackgroundColor, textColor: textColor).withOpacity(0.25);
   }
 
   BoxDecoration _getBackgroundBoxDecoration({
@@ -158,9 +153,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
     required BorderRadiusGeometry borderRadius,
   }) {
     final isDark = theme.brightness.isDark;
-    final color = isDark
-        ? buttonTheme.overlayPressedColor.darkColor
-        : buttonTheme.overlayPressedColor.color;
+    final color = isDark ? buttonTheme.overlayPressedColor.darkColor : buttonTheme.overlayPressedColor.color;
     return BoxDecoration(
       color: color,
       borderRadius: borderRadius,
@@ -171,23 +164,16 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
     return BorderRadius.circular(theme.buttonRadius[widget.controlSize] ?? 0.0);
   }
 
-  EdgeInsetsGeometry _getButtonPadding(
-      {required AppKitPushButtonThemeData theme, EdgeInsetsGeometry? padding}) {
-    return (theme.buttonPadding[widget.controlSize] ?? EdgeInsets.zero)
-        .add(padding ?? EdgeInsets.zero);
+  EdgeInsetsGeometry _getButtonPadding({required AppKitPushButtonThemeData theme, EdgeInsetsGeometry? padding}) {
+    return (theme.buttonPadding[widget.controlSize] ?? EdgeInsets.zero).add(padding ?? EdgeInsets.zero);
   }
 
-  TextStyle _textStyle(
-      {required AppKitPushButtonThemeData theme,
-      required TextStyle baseStyle}) {
+  TextStyle _textStyle({required AppKitPushButtonThemeData theme, required TextStyle baseStyle}) {
     final fontSize = theme.fontSize[widget.controlSize];
-    return fontSize != null
-        ? baseStyle.copyWith(fontSize: fontSize)
-        : baseStyle;
+    return fontSize != null ? baseStyle.copyWith(fontSize: fontSize) : baseStyle;
   }
 
-  BoxConstraints _getButtonConstraints(
-      {required AppKitPushButtonThemeData theme}) {
+  BoxConstraints _getButtonConstraints({required AppKitPushButtonThemeData theme}) {
     return BoxConstraints(
       minHeight: theme.buttonSize[widget.controlSize]?.height ?? 0.0,
       minWidth: theme.buttonSize[widget.controlSize]?.width ?? 0.0,
@@ -218,8 +204,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
 
     final bool enabled = widget.enabled;
     final AppKitThemeData theme = AppKitTheme.of(context);
-    final AppKitPushButtonThemeData buttonTheme =
-        AppKitPushButtonTheme.of(context);
+    final AppKitPushButtonThemeData buttonTheme = AppKitPushButtonTheme.of(context);
 
     return MouseRegion(
       cursor: widget.mouseCursor,
@@ -234,74 +219,59 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
           label: widget.semanticLabel,
           child: ConstrainedBox(
               constraints: _getButtonConstraints(theme: buttonTheme),
-              child: StreamBuilder(
-                  stream: AppkitUiElementColors.systemColorObserver.stream,
-                  builder: (context, _) {
-                    return UiElementColorBuilder(
-                        builder: (context, colorContainer) {
-                      final Color accentColor = widget.color ??
-                          theme.accentColor ??
-                          colorContainer.controlAccentColor;
-                      final isMainWindow =
-                          MainWindowStateListener.instance.isMainWindow.value;
-
-                      final Color backgroundColor = _getBackgroundColor(
-                        theme: theme,
-                        accentColor: accentColor,
-                        isDark: theme.brightness.isDark,
-                        isMainWindow: isMainWindow,
-                      );
-                      final Color foregroundColor = _getForegroundColor(
-                        theme: theme,
-                        buttonTheme: buttonTheme,
-                        backgroundColor: backgroundColor,
-                        isMainWindow: isMainWindow,
-                      );
-                      final baseStyle = theme.typography.body
-                          .copyWith(color: foregroundColor);
-                      final borderRadius = _getBorderRadius(buttonTheme);
-
-                      return DecoratedBox(
-                        decoration: _getBackgroundBoxDecoration(
-                          theme: theme,
-                          accentColor: backgroundColor,
-                          isMainWindow: isMainWindow,
-                          isDark: theme.brightness.isDark,
-                        ).copyWith(
-                          borderRadius: borderRadius,
-                        ),
-                        child: DecoratedBox(
-                          decoration: _getForegroundBoxDecoration(
+              child: UiElementColorBuilder(builder: (context, colorContainer) {
+                final Color accentColor = widget.color ?? theme.accentColor ?? colorContainer.controlAccentColor;
+                final isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+              
+                final Color backgroundColor = _getBackgroundColor(
+                  theme: theme,
+                  accentColor: accentColor,
+                  isDark: theme.brightness.isDark,
+                  isMainWindow: isMainWindow,
+                );
+                final Color foregroundColor = _getForegroundColor(
+                  theme: theme,
+                  buttonTheme: buttonTheme,
+                  backgroundColor: backgroundColor,
+                  isMainWindow: isMainWindow,
+                );
+                final baseStyle = theme.typography.body.copyWith(color: foregroundColor);
+                final borderRadius = _getBorderRadius(buttonTheme);
+              
+                return DecoratedBox(
+                  decoration: _getBackgroundBoxDecoration(
+                    theme: theme,
+                    accentColor: backgroundColor,
+                    isMainWindow: isMainWindow,
+                    isDark: theme.brightness.isDark,
+                  ).copyWith(
+                    borderRadius: borderRadius,
+                  ),
+                  child: DecoratedBox(
+                    decoration: _getForegroundBoxDecoration(
+                        buttonTheme: buttonTheme, isMainWindow: isMainWindow, borderRadius: borderRadius),
+                    child: Container(
+                      foregroundDecoration: buttonHeldDown
+                          ? _getForegroundPressedBoxDecoration(
+                              theme: theme,
                               buttonTheme: buttonTheme,
-                              isMainWindow: isMainWindow,
-                              borderRadius: borderRadius),
-                          child: Container(
-                            foregroundDecoration: buttonHeldDown
-                                ? _getForegroundPressedBoxDecoration(
-                                    theme: theme,
-                                    buttonTheme: buttonTheme,
-                                    borderRadius: borderRadius,
-                                  )
-                                : const BoxDecoration(),
-                            child: Padding(
-                              padding: _getButtonPadding(
-                                  theme: buttonTheme, padding: widget.padding),
-                              child: Align(
-                                alignment: Alignment.center,
-                                widthFactor: 1.0,
-                                heightFactor: 1.0,
-                                child: DefaultTextStyle(
-                                    style: _textStyle(
-                                        theme: buttonTheme,
-                                        baseStyle: baseStyle),
-                                    child: widget.child),
-                              ),
-                            ),
-                          ),
+                              borderRadius: borderRadius,
+                            )
+                          : const BoxDecoration(),
+                      child: Padding(
+                        padding: _getButtonPadding(theme: buttonTheme, padding: widget.padding),
+                        child: Align(
+                          alignment: Alignment.center,
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: DefaultTextStyle(
+                              style: _textStyle(theme: buttonTheme, baseStyle: baseStyle), child: widget.child),
                         ),
-                      );
-                    });
-                  })),
+                      ),
+                    ),
+                  ),
+                );
+              })),
         ),
       ),
     );
@@ -321,16 +291,10 @@ class _BoxDecorationBuilder {
     final controlBackgroundColor = theme.controlBackgroundColor;
     final color = isPrimary && isEnabled
         ? accentColor
-        : (isEnabled
-            ? controlBackgroundColor
-            : controlBackgroundColor.withOpacity(0.5));
+        : (isEnabled ? controlBackgroundColor : controlBackgroundColor.withOpacity(0.5));
     return BoxDecoration(
       border: _getBoxBorder(
-          accentColor: accentColor,
-          isEnabled: isEnabled,
-          isDark: isDark,
-          isMainWindow: isMainWindow,
-          type: type),
+          accentColor: accentColor, isEnabled: isEnabled, isDark: isDark, isMainWindow: isMainWindow, type: type),
       color: color,
       boxShadow: _getBoxShadow(
         accentColor: accentColor,
@@ -355,11 +319,9 @@ class _BoxDecorationBuilder {
       gradient: LinearGradient(
         colors: [
           CupertinoDynamicColor.withBrightness(
-              color: MacosColors.black.withOpacity(0.0),
-              darkColor: MacosColors.white.withOpacity(0.0)),
+              color: MacosColors.black.withOpacity(0.0), darkColor: MacosColors.white.withOpacity(0.0)),
           CupertinoDynamicColor.withBrightness(
-              color: MacosColors.black.withOpacity(0.3),
-              darkColor: MacosColors.white.withOpacity(0.3)),
+              color: MacosColors.black.withOpacity(0.3), darkColor: MacosColors.white.withOpacity(0.3)),
         ],
         transform: const GradientRotation(pi / 2),
       ),

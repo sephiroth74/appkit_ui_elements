@@ -229,78 +229,74 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
           label: widget.semanticLabel,
           child: ConstrainedBox(
               constraints: _getButtonConstraints(theme: buttonTheme),
-              child: StreamBuilder(
-                  stream: AppkitUiElementColors.systemColorObserver.stream,
-                  builder: (context, _) {
-                    return UiElementColorBuilder(
-                        builder: (context, colorContainer) {
-                      final Color accentColor = widget.color ??
-                          theme.accentColor ??
-                          colorContainer.controlAccentColor;
-                      final isMainWindow =
-                          MainWindowStateListener.instance.isMainWindow.value;
-
-                      final Color backgroundColor = _getBackgroundColor(
-                        theme: theme,
-                        accentColor: accentColor,
-                        isDark: theme.brightness.isDark,
-                        isMainWindow: isMainWindow,
-                      );
-                      final Color foregroundColor = _getForegroundColor(
-                        accentColor: accentColor,
-                        backgroundColor: backgroundColor,
-                        theme: theme,
+              child: UiElementColorBuilder(
+                  builder: (context, colorContainer) {
+                final Color accentColor = widget.color ??
+                    theme.accentColor ??
+                    colorContainer.controlAccentColor;
+                final isMainWindow =
+                    MainWindowStateListener.instance.isMainWindow.value;
+              
+                final Color backgroundColor = _getBackgroundColor(
+                  theme: theme,
+                  accentColor: accentColor,
+                  isDark: theme.brightness.isDark,
+                  isMainWindow: isMainWindow,
+                );
+                final Color foregroundColor = _getForegroundColor(
+                  accentColor: accentColor,
+                  backgroundColor: backgroundColor,
+                  theme: theme,
+                  buttonTheme: buttonTheme,
+                  isDark: theme.brightness.isDark,
+                  isMainWindow: isMainWindow,
+                );
+                final baseStyle = theme.typography.body
+                    .copyWith(color: foregroundColor);
+                final borderRadius = _getBorderRadius(buttonTheme);
+              
+                return DecoratedBox(
+                  decoration: _getBackgroundBoxDecoration(
+                    theme: theme,
+                    accentColor: backgroundColor,
+                    isMainWindow: isMainWindow,
+                    isDark: theme.brightness.isDark,
+                  ).copyWith(
+                    borderRadius: borderRadius,
+                  ),
+                  child: DecoratedBox(
+                    decoration: _getForegroundBoxDecoration(
                         buttonTheme: buttonTheme,
-                        isDark: theme.brightness.isDark,
                         isMainWindow: isMainWindow,
-                      );
-                      final baseStyle = theme.typography.body
-                          .copyWith(color: foregroundColor);
-                      final borderRadius = _getBorderRadius(buttonTheme);
-
-                      return DecoratedBox(
-                        decoration: _getBackgroundBoxDecoration(
-                          theme: theme,
-                          accentColor: backgroundColor,
-                          isMainWindow: isMainWindow,
-                          isDark: theme.brightness.isDark,
-                        ).copyWith(
-                          borderRadius: borderRadius,
-                        ),
-                        child: DecoratedBox(
-                          decoration: _getForegroundBoxDecoration(
+                        borderRadius: borderRadius),
+                    child: Container(
+                      foregroundDecoration: buttonHeldDown
+                          ? _getForegroundPressedBoxDecoration(
+                              theme: theme,
                               buttonTheme: buttonTheme,
-                              isMainWindow: isMainWindow,
-                              borderRadius: borderRadius),
-                          child: Container(
-                            foregroundDecoration: buttonHeldDown
-                                ? _getForegroundPressedBoxDecoration(
-                                    theme: theme,
-                                    buttonTheme: buttonTheme,
-                                    borderRadius: borderRadius,
-                                  )
-                                : const BoxDecoration(),
-                            child: Padding(
-                              padding: _getButtonPadding(
-                                  theme: buttonTheme, padding: widget.padding),
-                              child: Align(
-                                alignment: Alignment.center,
-                                widthFactor: 1.0,
-                                heightFactor: 1.0,
-                                child: DefaultTextStyle(
-                                    style: _textStyle(
-                                        theme: buttonTheme,
-                                        baseStyle: baseStyle),
-                                    child: widget.isOn
-                                        ? widget.childOn
-                                        : widget.childOff),
-                              ),
-                            ),
-                          ),
+                              borderRadius: borderRadius,
+                            )
+                          : const BoxDecoration(),
+                      child: Padding(
+                        padding: _getButtonPadding(
+                            theme: buttonTheme, padding: widget.padding),
+                        child: Align(
+                          alignment: Alignment.center,
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: DefaultTextStyle(
+                              style: _textStyle(
+                                  theme: buttonTheme,
+                                  baseStyle: baseStyle),
+                              child: widget.isOn
+                                  ? widget.childOn
+                                  : widget.childOff),
                         ),
-                      );
-                    });
-                  })),
+                      ),
+                    ),
+                  ),
+                );
+              })),
         ),
       ),
     );
