@@ -170,9 +170,11 @@ class _DecoratedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = size / _kCornerRadiusRatio;
     final shadowSpread = size / _kBoxShadowSpreadRatio;
-    final iconColor = color.computeLuminance() > 0.5
-        ? (enabled ? MacosColors.black : MacosColors.tertiaryLabelColor)
-        : (enabled ? Colors.white : MacosColors.tertiaryLabelColor);
+    final iconColor = enabled
+        ? color.computeLuminance() > 0.5
+            ? MacosColors.black
+            : Colors.white
+        : MacosColors.tertiaryLabelColor;
 
     return Container(
       foregroundDecoration: isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,

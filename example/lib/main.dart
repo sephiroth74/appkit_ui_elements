@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:example/pages/checkbox_page.dart';
+import 'package:example/pages/controls_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';

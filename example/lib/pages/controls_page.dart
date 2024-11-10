@@ -53,6 +53,22 @@ class _CheckboxPageState extends State<CheckboxPage> {
                           ),
                           const SizedBox(width: 16.0),
                           AppKitCheckbox(
+                            color: MacosColors.systemOrangeColor,
+                            value: value1,
+                            onChanged: (value) {
+                              setState(() {
+                                final oldValue = value1;
+                                if (value1 == false && value == true) {
+                                  value1 = null;
+                                } else {
+                                  value1 = value;
+                                }
+                                debugPrint('onChanged: $oldValue ==> $value1');
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitCheckbox(
                             value: value1,
                           ),
                         ],
