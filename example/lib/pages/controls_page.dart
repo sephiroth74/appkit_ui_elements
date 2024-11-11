@@ -327,6 +327,7 @@ class _ControlsPageState extends State<ControlsPage> {
                             const SizedBox(width: 16.0),
                             AppKitStepper(
                               value: stepperValue,
+                              increment: 1,
                               onChanged: (value) {
                                 debugPrint('onChanged($value)');
                                 setState(() {

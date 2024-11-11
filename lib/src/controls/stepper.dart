@@ -359,57 +359,14 @@ class _AppKitStepperState extends State<AppKitStepper> {
   }
 
   void _incrementValue() {
-    if (widget.value + widget.increment <= widget.maxValue) {
-      widget.onChanged?.call(widget.value + widget.increment);
-    }
+    final newValue = (widget.value + widget.increment)
+        .clamp(widget.minValue, widget.maxValue);
+    widget.onChanged?.call(newValue);
   }
 
   void _decrementValue() {
-    if (widget.value - widget.increment >= widget.minValue) {
-      widget.onChanged?.call(widget.value - widget.increment);
-    }
+    final newValue = (widget.value - widget.increment)
+        .clamp(widget.minValue, widget.maxValue);
+    widget.onChanged?.call(newValue);
   }
 }
-
-// class AppKitStepperController extends ChangeNotifier {
-//   final double min;
-//   final double max;
-//   final double increment;
-//   double _value;
-
-//   AppKitStepperController({
-//     required this.min,
-//     required this.max,
-//     required this.increment,
-//     required double value,
-//   })  : assert(min <= value && value <= max),
-//         _value = value;
-
-//   double get value => _value;
-
-//   set value(double newValue) {
-//     if (newValue != _value && min <= newValue && newValue <= max) {
-//       _value = newValue;
-//       notifyListeners();
-//     }
-//   }
-
-//   void incrementValue() {
-//     if (_value + increment <= max) {
-//       _value += increment;
-//       notifyListeners();
-//     }
-//   }
-
-//   void decrementValue() {
-//     if (_value - increment >= min) {
-//       _value -= increment;
-//       notifyListeners();
-//     }
-//   }
-
-//   void resetValue() {
-//     _value = min;
-//     notifyListeners();
-//   }
-// }
