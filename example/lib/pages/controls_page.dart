@@ -298,6 +298,23 @@ class _ControlsPageState extends State<ControlsPage> {
                             const AppKitArrowButton(),
                           ],
                         ),
+                        const SizedBox(width: 16.0, height: 16.0),
+                        const Divider(thickness: 0.5),
+                        const WidgetTitle(label: 'DisclosureButton'),
+                        const SizedBox(height: 20.0),
+                        Row(
+                          children: [
+                            AppKitDisclosureButton(
+                              isDown: false,
+                              onPressed: () {},
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitDisclosureButton(
+                              onPressed: () {},
+                              isDown: true,
+                            ),
+                          ],
+                        ),
                       ],
                     );
                   },
