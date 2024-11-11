@@ -136,7 +136,7 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                         ]),
                     child: SizedBox.expand(
                       child: CustomPaint(
-                        painter: _IconButtonPainter(
+                        painter: IconButtonPainter(
                           color: iconColor,
                           size: widget.size * 0.8,
                           icon: widget.icon,
@@ -152,14 +152,18 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
   }
 }
 
-class _IconButtonPainter extends CustomPainter {
+class IconButtonPainter extends CustomPainter {
   final Color color;
   final double size;
   final AppKitControlButtonIcon icon;
   final Paint _paint;
+  final Offset offset;
 
-  _IconButtonPainter(
-      {required this.color, required this.size, required this.icon})
+  IconButtonPainter(
+      {required this.color,
+      required this.size,
+      required this.icon,
+      this.offset = Offset.zero})
       : _paint = Paint()
           ..color = color
           ..style = PaintingStyle.stroke
@@ -171,6 +175,8 @@ class _IconButtonPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final path = Path();
     final double halfSize = size.width / 2;
+
+    // canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), Paint()..color = Colors.amber.withOpacity(0.5));
 
     switch (icon) {
       case AppKitControlButtonIcon.arrows:
@@ -191,9 +197,12 @@ class _IconButtonPainter extends CustomPainter {
         {
           final double arrowWidthSize = size.width / 6.285;
           final double arrowHeightSize = size.width / 11;
-          path.moveTo(halfSize - arrowWidthSize, halfSize + arrowHeightSize);
-          path.lineTo(halfSize, halfSize - arrowHeightSize);
-          path.lineTo(halfSize + arrowWidthSize, halfSize + arrowHeightSize);
+          path.moveTo(halfSize - arrowWidthSize + offset.dx,
+              halfSize + arrowHeightSize + offset.dy);
+          path.lineTo(
+              halfSize + offset.dx, halfSize - arrowHeightSize + offset.dy);
+          path.lineTo(halfSize + offset.dx + arrowWidthSize,
+              halfSize + arrowHeightSize + offset.dy);
           break;
         }
 
@@ -201,9 +210,12 @@ class _IconButtonPainter extends CustomPainter {
         {
           final double arrowWidthSize = size.width / 6.285;
           final double arrowHeightSize = size.width / 11;
-          path.moveTo(halfSize - arrowWidthSize, halfSize - arrowHeightSize);
-          path.lineTo(halfSize, halfSize + arrowHeightSize);
-          path.lineTo(halfSize + arrowWidthSize, halfSize - arrowHeightSize);
+          path.moveTo(halfSize - arrowWidthSize + offset.dx,
+              halfSize - arrowHeightSize + offset.dy);
+          path.lineTo(
+              halfSize + offset.dx, halfSize + arrowHeightSize + offset.dy);
+          path.lineTo(halfSize + arrowWidthSize + offset.dx,
+              halfSize - arrowHeightSize + offset.dy);
           break;
         }
     }
@@ -212,7 +224,7 @@ class _IconButtonPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _IconButtonPainter oldDelegate) {
+  bool shouldRepaint(covariant IconButtonPainter oldDelegate) {
     return color != oldDelegate.color || size != oldDelegate.size;
   }
 }

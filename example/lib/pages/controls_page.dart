@@ -17,6 +17,7 @@ class _ControlsPageState extends State<ControlsPage> {
 
   bool radioButtonValue2 = true;
   bool radioButtonValue3 = false;
+  double stepperValue = 50;
 
   bool switchValue1 = true;
 
@@ -31,7 +32,6 @@ class _ControlsPageState extends State<ControlsPage> {
         ContentArea(
           builder: (context, ScrollController scrollController) {
             return Container(
-              color: const Color(0xFFCCCCCC),
               child: SingleChildScrollView(
                 controller: scrollController,
                 padding: const EdgeInsets.all(20),
@@ -315,6 +315,31 @@ class _ControlsPageState extends State<ControlsPage> {
                             ),
                           ],
                         ),
+                        const SizedBox(width: 16.0, height: 16.0),
+                        const Divider(thickness: 0.5),
+                        const WidgetTitle(label: 'Stepper'),
+                        const SizedBox(height: 20.0),
+                        Row(
+                          children: [
+                            SizedBox(
+                                width: 100,
+                                child: Text('Value: $stepperValue')),
+                            const SizedBox(width: 16.0),
+                            AppKitStepper(
+                              value: stepperValue,
+                              onChanged: (value) {
+                                debugPrint('onChanged($value)');
+                                setState(() {
+                                  stepperValue = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitStepper(
+                              value: stepperValue,
+                            ),
+                          ],
+                        )
                       ],
                     );
                   },
