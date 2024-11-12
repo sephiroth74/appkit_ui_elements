@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -90,6 +91,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
   final AppKitHelpButtonThemeData helpButtonTheme;
+  final AppKitSliderThemeData sliderTheme;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -98,6 +100,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
+    AppKitSliderThemeData? sliderTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -168,6 +171,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           : MacosColors.textColor.withOpacity(0.5),
     );
 
+    sliderTheme ??= AppKitSliderThemeData(
+      trackColor: AppKitColors.fills.opaque.primary.resolveWith(brightness),
+      thumbColor: controlBackgroundColor,
+      sliderColor: accentColor,
+      tickColor: const Color(0xFFC9C9C7),
+      discreteAnchorThreshold: 0.01,
+      animationDuration: 200,
+    );
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -177,6 +189,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       pushButtonTheme: pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
+      sliderTheme: sliderTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
@@ -189,9 +202,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       visualDensity: visualDensity,
       canvasColor: canvasColor,
       typography: typography,
+      controlBackgroundColor: controlBackgroundColor,
+      controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       pushButtonTheme: pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
+      sliderTheme: sliderTheme,
     );
 
     return defaultData.merge(customData);
@@ -269,6 +285,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.pushButtonTheme,
     required this.toggleButtonTheme,
     required this.helpButtonTheme,
+    required this.sliderTheme,
     required this.canvasColor,
     required this.controlBackgroundColor,
     required this.controlBackgroundColorDisabled,
@@ -285,6 +302,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         pushButtonTheme,
         toggleButtonTheme,
         helpButtonTheme,
+        sliderTheme,
         controlBackgroundColor,
         controlBackgroundColorDisabled,
       ];
@@ -301,6 +319,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
+    AppKitSliderThemeData? sliderTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -311,6 +330,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       pushButtonTheme: pushButtonTheme ?? this.pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme ?? this.toggleButtonTheme,
       helpButtonTheme: helpButtonTheme ?? this.helpButtonTheme,
+      sliderTheme: sliderTheme ?? this.sliderTheme,
       canvasColor: canvasColor ?? this.canvasColor,
       controlBackgroundColor:
           controlBackgroundColor ?? this.controlBackgroundColor,
@@ -333,6 +353,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlBackgroundColor: other.controlBackgroundColor,
       controlBackgroundColorDisabled: other.controlBackgroundColorDisabled,
       helpButtonTheme: other.helpButtonTheme,
+      sliderTheme: other.sliderTheme,
     );
   }
 
@@ -356,6 +377,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.controlBackgroundColorDisabled,
           b.controlBackgroundColorDisabled,
           t)!,
+      sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
     );
   }
 
@@ -381,5 +403,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'controlBackgroundColorDisabled', controlBackgroundColorDisabled));
     properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
         'helpButtonTheme', helpButtonTheme));
+    properties.add(
+        DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
   }
 }

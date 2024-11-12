@@ -25,7 +25,7 @@ class _ControlsPageState extends State<ControlsPage> {
   Widget build(BuildContext context) {
     return MacosScaffold(
       toolBar: const ToolBar(
-        title: Text('Checkboxes'),
+        title: Text('Controls'),
         titleWidth: 200,
       ),
       children: [

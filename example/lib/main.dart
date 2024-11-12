@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/pages/controls_page.dart';
+import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
@@ -74,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Push Button')),
                     SidebarItem(label: Text('Toggle Button')),
                     SidebarItem(label: Text('Controls')),
+                    SidebarItem(label: Text('Indicators')),
                   ],
                   currentIndex: pageIndex,
                   onChanged: (index) {
@@ -87,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const PushButtonPage(),
           const ToggleButtonPage(),
           const ControlsPage(),
+          const IndicatorsPage(),
         ][pageIndex],
       ),
     );

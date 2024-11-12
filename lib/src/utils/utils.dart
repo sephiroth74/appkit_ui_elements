@@ -26,3 +26,6 @@ Color luminance(Color backgroundColor,
       ? textColor.darkColor
       : textColor.color;
 }
+
+int lerpInt(int begin, int end, double t) =>
+    (begin + (end - begin) * t).round();

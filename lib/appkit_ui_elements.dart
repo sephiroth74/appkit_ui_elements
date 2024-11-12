@@ -11,11 +11,13 @@ export 'src/controls/arrow_button.dart';
 export 'src/controls/custom_painter_button.dart';
 export 'src/controls/disclosure_button.dart';
 export 'src/controls/stepper.dart';
+export 'src/controls/slider.dart';
 export 'src/enums/enums.dart';
 export 'src/theme/appkit_theme.dart';
 export 'src/theme/appkit_push_button_theme.dart';
 export 'src/theme/appkit_toggle_button_theme.dart';
 export 'src/theme/appkit_help_button_theme.dart';
+export 'src/theme/appkit_slider_theme.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {
