@@ -4,16 +4,16 @@ import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
 import 'package:flutter/foundation.dart';
 
-const double _kSliderMinWidth = 100.0;
-const double _kSliderHeight = 24.0;
-const double _kDiscreteThumbCornerRadius = 4.0;
-const double _kDiscreteThumbWidth = 8.0;
 const double _kContinuousThumbSize = 20.0;
-const double _kTrackHeight = 4.0;
-const double _kContinuousTrackCornerRadius = 2.0;
-const double _kTickWidth = 2.0;
-const double _kTickHeight = 8.0;
 const int _kAnimationDuration = 200;
+const int _kHorizontalPaddingThreshold = 2;
+
+// overall minimum width of the widget
+const double _kOverallMinWidth = 100.0;
+
+// overall height of the widget
+const double _kOverallHeight =
+    _kContinuousThumbSize + _kHorizontalPaddingThreshold;
 
 class AppKitSlider extends StatefulWidget {
   final double value;
@@ -77,7 +77,6 @@ class _AppKitSliderState extends State<AppKitSlider>
         ..addListener(() {
           if (_animationController.isAnimating ||
               _animationController.isCompleted) {
-            debugPrint('animation: ${_animation.value}');
             widget.onChanged
                 ?.call(_animation.value.clamp(widget.min, widget.max));
           }
@@ -207,22 +206,26 @@ class _AppKitSliderState extends State<AppKitSlider>
     final AppKitThemeData theme = AppKitTheme.of(context);
     final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
 
+    final discreteThumbSize = sliderTheme.discreteThumbSize;
+
     return Semantics(
       slider: true,
       label: widget.semanticLabel,
       value: widget.value.toStringAsFixed(2),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: _kSliderMinWidth),
+        constraints: const BoxConstraints(minWidth: _kOverallMinWidth),
         child: LayoutBuilder(
           builder: (context, constraints) {
             double width = constraints.maxWidth;
-            if (width.isInfinite) width = _kSliderMinWidth;
+            if (width.isInfinite) width = _kOverallMinWidth;
 
             double horizontalPadding;
             if (!continous) {
-              horizontalPadding = (_kDiscreteThumbWidth / 2) + 2;
+              horizontalPadding =
+                  (discreteThumbSize.width / 2) + _kHorizontalPaddingThreshold;
             } else {
-              horizontalPadding = (_kContinuousThumbSize / 2) + 2;
+              horizontalPadding =
+                  (_kContinuousThumbSize / 2) + _kHorizontalPaddingThreshold;
             }
 
             width -= (horizontalPadding * 2);
@@ -234,7 +237,7 @@ class _AppKitSliderState extends State<AppKitSlider>
 
               return Center(
                 child: SizedBox(
-                  height: _kSliderHeight,
+                  height: _kOverallHeight,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTapDown: (details) {
@@ -268,7 +271,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                           child: Container(
                             margin: EdgeInsets.symmetric(
                                 horizontal: horizontalPadding),
-                            height: _kTrackHeight,
+                            height: sliderTheme.trackHeight,
                             width: width,
                             decoration: BoxDecoration(
                               color: enabled
@@ -278,8 +281,8 @@ class _AppKitSliderState extends State<AppKitSlider>
                                   color: AppKitColors.fills.opaque.tertiary,
                                   width: 0.5),
                               borderRadius: continous
-                                  ? const BorderRadius.all(Radius.circular(
-                                      _kContinuousTrackCornerRadius))
+                                  ? BorderRadius.all(Radius.circular(
+                                      sliderTheme.continuousTrackCornerRadius))
                                   : null,
                             ),
                           ),
@@ -291,15 +294,15 @@ class _AppKitSliderState extends State<AppKitSlider>
                           child: Container(
                             margin: EdgeInsets.symmetric(
                                 horizontal: horizontalPadding),
-                            height: _kTrackHeight,
+                            height: sliderTheme.trackHeight,
                             width: width * percentage,
                             decoration: BoxDecoration(
                               color: enabled
                                   ? (accentColor)
                                   : (accentColor).withOpacity(0.5),
                               borderRadius: continous
-                                  ? const BorderRadius.all(Radius.circular(
-                                      _kContinuousTrackCornerRadius))
+                                  ? BorderRadius.all(Radius.circular(
+                                      sliderTheme.continuousTrackCornerRadius))
                                   : null,
                             ),
                           ),
@@ -310,11 +313,15 @@ class _AppKitSliderState extends State<AppKitSlider>
                             padding: EdgeInsets.symmetric(
                                 horizontal: horizontalPadding),
                             child: SizedBox(
-                              height: _kSliderHeight,
+                              height: _kOverallHeight,
                               width: width,
                               child: CustomPaint(
-                                size: Size(width, _kSliderHeight),
+                                size: Size(width, _kOverallHeight),
                                 painter: _DiscreteTickPainter(
+                                  tickWidth: sliderTheme.tickWidth,
+                                  tickHeight: sliderTheme.tickHeight,
+                                  cornerRadius:
+                                      sliderTheme.discreteTickCornerRadius,
                                   color: enabled
                                       ? accentColor
                                       : accentColor.withOpacity(0.5),
@@ -336,9 +343,11 @@ class _AppKitSliderState extends State<AppKitSlider>
                           Positioned(
                             left: width * percentage -
                                 (_kContinuousThumbSize / 2),
-                            width: (_kContinuousThumbSize * 2) + 4,
+                            width: (_kContinuousThumbSize * 2) +
+                                (_kHorizontalPaddingThreshold * 2),
                             height: _kContinuousThumbSize,
-                            top: _kSliderHeight / 2 - _kContinuousThumbSize / 2,
+                            top:
+                                _kOverallHeight / 2 - _kContinuousThumbSize / 2,
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: horizontalPadding),
@@ -355,18 +364,22 @@ class _AppKitSliderState extends State<AppKitSlider>
                           ),
                         ] else ...[
                           Positioned(
-                            left:
-                                width * percentage - (_kDiscreteThumbWidth / 2),
-                            width: (_kDiscreteThumbWidth * 2) + 4,
-                            height: _kContinuousThumbSize,
-                            top: _kSliderHeight / 2 - _kContinuousThumbSize / 2,
+                            left: width * percentage -
+                                (discreteThumbSize.width / 2),
+                            width: (discreteThumbSize.width * 2) + 4,
+                            height: discreteThumbSize.height,
+                            top: _kOverallHeight / 2 -
+                                (discreteThumbSize.height / 2),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: horizontalPadding),
                               child: GestureDetector(
                                 onTapDown: (_) => thumbHeldDown = true,
                                 child: _DiscreteThumb(
+                                  size: discreteThumbSize,
                                   color: sliderTheme.thumbColor,
+                                  cornerRadius:
+                                      sliderTheme.discreteThumbCornerRadius,
                                   foregroundColor: enabled && _thumbHeldDown
                                       ? AppKitColors.fills.opaque.tertiary.color
                                       : null,
@@ -443,28 +456,31 @@ class _ContinuousThumb extends StatelessWidget {
 class _DiscreteThumb extends StatelessWidget {
   const _DiscreteThumb({
     required this.color,
+    required this.cornerRadius,
+    required this.size,
     this.foregroundColor,
   });
 
   final Color color;
   final Color? foregroundColor;
+  final double cornerRadius;
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _kContinuousThumbSize,
-      width: _kDiscreteThumbWidth,
+      height: size.height,
+      width: size.width,
       foregroundDecoration: foregroundColor != null
           ? BoxDecoration(
               color: foregroundColor,
-              borderRadius: BorderRadius.circular(_kDiscreteThumbCornerRadius))
+              borderRadius: BorderRadius.circular(cornerRadius))
           : null,
       decoration: BoxDecoration(
         color: color,
         border: Border.all(
             color: AppKitColors.fills.opaque.quinary.color, width: 0.5),
-        borderRadius: const BorderRadius.all(
-            Radius.circular(_kDiscreteThumbCornerRadius)),
+        borderRadius: BorderRadius.all(Radius.circular(cornerRadius)),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.5),
@@ -491,13 +507,19 @@ class _DiscreteTickPainter extends CustomPainter {
     required this.stops,
     required this.selectedPercentage,
     required this.backgroundColor,
+    required this.cornerRadius,
     required this.color,
+    required this.tickHeight,
+    required this.tickWidth,
   });
 
   final List<double> stops;
   final double selectedPercentage;
   final Color backgroundColor;
   final Color color;
+  final double cornerRadius;
+  final double tickHeight;
+  final double tickWidth;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -517,12 +539,12 @@ class _DiscreteTickPainter extends CustomPainter {
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(
-            x - (_kTickWidth / 2),
-            (size.height / 2) - (_kTickHeight / 2),
-            _kTickWidth,
-            _kTickHeight,
+            x - (tickWidth / 2),
+            (size.height / 2) - (tickHeight / 2),
+            tickWidth,
+            tickHeight,
           ),
-          const Radius.circular(_kDiscreteThumbCornerRadius),
+          Radius.circular(cornerRadius),
         ),
         isPastSelectedPercentage ? backgroundPaint : paint,
       );

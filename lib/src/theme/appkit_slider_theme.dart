@@ -46,10 +46,37 @@ class AppKitSliderThemeData with Diagnosticable {
   // The duration of the animation when the slider value changes.
   final int? animationDuration;
 
+  // discrete slider thumb corner radius
+  final double discreteThumbCornerRadius;
+
+  // continuous slider track corner radius
+  final double continuousTrackCornerRadius;
+
+  // discrete ticks corner radius
+  final double discreteTickCornerRadius;
+
+  // The height of the track.
+  final double trackHeight;
+
+  // The height of the tick (discrete slider).
+  final double tickHeight;
+
+  // The width of the tick (discrete slider).
+  final double tickWidth;
+
+  final Size discreteThumbSize;
+
   AppKitSliderThemeData({
     required this.trackColor,
     required this.thumbColor,
     required this.discreteAnchorThreshold,
+    required this.discreteThumbCornerRadius,
+    required this.continuousTrackCornerRadius,
+    required this.discreteTickCornerRadius,
+    required this.trackHeight,
+    required this.tickHeight,
+    required this.tickWidth,
+    required this.discreteThumbSize,
     this.sliderColor,
     this.tickColor,
     this.animationDuration,
@@ -60,8 +87,15 @@ class AppKitSliderThemeData with Diagnosticable {
     Color? trackColor,
     Color? sliderColor,
     Color? tickColor,
-    double? discreteAnchorThreshold,
     int? animationDuration,
+    double? discreteAnchorThreshold,
+    double? discreteThumbCornerRadius,
+    double? continuousTrackCornerRadius,
+    double? discreteTickCornerRadius,
+    double? trackHeight,
+    double? tickHeight,
+    double? tickWidth,
+    Size? discreteThumbSize,
   }) {
     return AppKitSliderThemeData(
       thumbColor: thumbColor ?? this.thumbColor,
@@ -71,6 +105,16 @@ class AppKitSliderThemeData with Diagnosticable {
       discreteAnchorThreshold:
           discreteAnchorThreshold ?? this.discreteAnchorThreshold,
       animationDuration: animationDuration ?? this.animationDuration,
+      discreteThumbCornerRadius:
+          discreteThumbCornerRadius ?? this.discreteThumbCornerRadius,
+      continuousTrackCornerRadius:
+          continuousTrackCornerRadius ?? this.continuousTrackCornerRadius,
+      discreteTickCornerRadius:
+          discreteTickCornerRadius ?? this.discreteTickCornerRadius,
+      trackHeight: trackHeight ?? this.trackHeight,
+      tickHeight: tickHeight ?? this.tickHeight,
+      tickWidth: tickWidth ?? this.tickWidth,
+      discreteThumbSize: discreteThumbSize ?? this.discreteThumbSize,
     );
   }
 
@@ -83,6 +127,13 @@ class AppKitSliderThemeData with Diagnosticable {
       sliderColor: other.sliderColor,
       discreteAnchorThreshold: other.discreteAnchorThreshold,
       animationDuration: other.animationDuration,
+      discreteThumbCornerRadius: other.discreteThumbCornerRadius,
+      continuousTrackCornerRadius: other.continuousTrackCornerRadius,
+      discreteTickCornerRadius: other.discreteTickCornerRadius,
+      trackHeight: other.trackHeight,
+      tickHeight: other.tickHeight,
+      tickWidth: other.tickWidth,
+      discreteThumbSize: other.discreteThumbSize,
     );
   }
 
@@ -96,6 +147,16 @@ class AppKitSliderThemeData with Diagnosticable {
     properties.add(
         DoubleProperty('discreteAnchorThreshold', discreteAnchorThreshold));
     properties.add(IntProperty('animationDuration', animationDuration));
+    properties.add(
+        DoubleProperty('discreteThumbCornerRadius', discreteThumbCornerRadius));
+    properties.add(DoubleProperty(
+        'continuousTrackCornerRadius', continuousTrackCornerRadius));
+    properties.add(
+        DoubleProperty('discreteTickCornerRadius', discreteTickCornerRadius));
+    properties.add(DoubleProperty('trackHeight', trackHeight));
+    properties.add(DoubleProperty('tickHeight', tickHeight));
+    properties.add(DoubleProperty('tickWidth', tickWidth));
+    properties.add(DiagnosticsProperty('discreteThumbSize', discreteThumbSize));
   }
 
   static AppKitSliderThemeData lerp(
@@ -111,6 +172,17 @@ class AppKitSliderThemeData with Diagnosticable {
           a.animationDuration != null && b.animationDuration != null
               ? lerpInt(a.animationDuration!, b.animationDuration!, t)
               : b.animationDuration,
+      discreteThumbCornerRadius: lerpDouble(
+          a.discreteThumbCornerRadius, b.discreteThumbCornerRadius, t)!,
+      continuousTrackCornerRadius: lerpDouble(
+          a.continuousTrackCornerRadius, b.continuousTrackCornerRadius, t)!,
+      discreteTickCornerRadius: lerpDouble(
+          a.discreteTickCornerRadius, b.discreteTickCornerRadius, t)!,
+      trackHeight: lerpDouble(a.trackHeight, b.trackHeight, t)!,
+      tickHeight: lerpDouble(a.tickHeight, b.tickHeight, t)!,
+      tickWidth: lerpDouble(a.tickWidth, b.tickWidth, t)!,
+      discreteThumbSize:
+          Size.lerp(a.discreteThumbSize, b.discreteThumbSize, t)!,
     );
   }
 }

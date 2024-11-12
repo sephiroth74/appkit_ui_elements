@@ -178,6 +178,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       tickColor: const Color(0xFFC9C9C7),
       discreteAnchorThreshold: 0.01,
       animationDuration: 200,
+      discreteThumbCornerRadius: 4.0,
+      discreteTickCornerRadius: 1.0,
+      continuousTrackCornerRadius: 2.0,
+      trackHeight: 4.0,
+      tickHeight: 8.0,
+      tickWidth: 2.0,
+      discreteThumbSize: const Size(8.0, 20.0),
     );
 
     final defaultData = AppKitThemeData.raw(
