@@ -11,7 +11,7 @@ class IndicatorsPage extends StatefulWidget {
 }
 
 class _IndicatorsPageState extends State<IndicatorsPage> {
-  double slider1Value = 0.5;
+  double slider1Value = .65;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +38,8 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                       Column(
                         children: [
                           AppKitSlider(
-                            min: 0,
-                            max: 100,
+                            min: 0.0,
+                            max: 1.0,
                             value: slider1Value,
                             onChanged: (value) {
                               debugPrint('Slider 1: $value');
@@ -49,20 +49,20 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                           const SizedBox(height: 20.0),
                           AppKitSlider(
                             style: AppKitSliderStyle.discreteFree,
-                            min: 0,
-                            max: 100,
+                            min: 0.0,
+                            max: 1.0,
                             stops: const [
                               0,
-                              10,
-                              20,
-                              30,
-                              40,
-                              50,
-                              60,
-                              70,
-                              80,
-                              90,
-                              100
+                              .1,
+                              .2,
+                              .3,
+                              .4,
+                              .5,
+                              .6,
+                              .7,
+                              .8,
+                              .9,
+                              1.0
                             ],
                             value: slider1Value,
                             onChanged: (value) {
@@ -73,9 +73,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                           const SizedBox(height: 20.0),
                           AppKitSlider(
                             style: AppKitSliderStyle.discreteFixed,
-                            min: 0,
-                            max: 100,
-                            stops: const [0, 10, 15, 20, 90, 100],
+                            stops: const [0.0, 0.1, 0.15, 0.2, 0.9, 1.0],
                             value: slider1Value,
                             onChanged: (value) {
                               debugPrint('Slider 3: $value');

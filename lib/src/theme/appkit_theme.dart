@@ -185,6 +185,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       tickHeight: 8.0,
       tickWidth: 2.0,
       discreteThumbSize: const Size(8.0, 20.0),
+      continuousThumbSize: 20.0,
     );
 
     final defaultData = AppKitThemeData.raw(

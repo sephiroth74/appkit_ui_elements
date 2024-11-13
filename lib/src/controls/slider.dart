@@ -4,16 +4,12 @@ import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
 import 'package:flutter/foundation.dart';
 
-const double _kContinuousThumbSize = 20.0;
 const int _kAnimationDuration = 200;
-const int _kHorizontalPaddingThreshold = 2;
+
+const int _kHorizontalPaddingThreshold = 0;
 
 // overall minimum width of the widget
 const double _kOverallMinWidth = 100.0;
-
-// overall height of the widget
-const double _kOverallHeight =
-    _kContinuousThumbSize + _kHorizontalPaddingThreshold;
 
 class AppKitSlider extends StatefulWidget {
   final double value;
@@ -60,6 +56,16 @@ class _AppKitSliderState extends State<AppKitSlider>
   @override
   void initState() {
     super.initState();
+
+    if (widget.style != AppKitSliderStyle.continuous) {
+      // check if stops are within min and max limits
+      assert(
+          widget.stops.first == widget.min && widget.stops.last == widget.max);
+      // check if stops are in ascending order
+      for (int i = 0; i < widget.stops.length - 1; i++) {
+        assert(widget.stops[i] < widget.stops[i + 1]);
+      }
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
@@ -207,6 +213,9 @@ class _AppKitSliderState extends State<AppKitSlider>
     final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
 
     final discreteThumbSize = sliderTheme.discreteThumbSize;
+    final continuousThumbSize = sliderTheme.continuousThumbSize;
+    final overallHeight =
+        sliderTheme.continuousThumbSize + _kHorizontalPaddingThreshold;
 
     return Semantics(
       slider: true,
@@ -225,7 +234,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                   (discreteThumbSize.width / 2) + _kHorizontalPaddingThreshold;
             } else {
               horizontalPadding =
-                  (_kContinuousThumbSize / 2) + _kHorizontalPaddingThreshold;
+                  (continuousThumbSize / 2) + _kHorizontalPaddingThreshold;
             }
 
             width -= (horizontalPadding * 2);
@@ -237,7 +246,7 @@ class _AppKitSliderState extends State<AppKitSlider>
 
               return Center(
                 child: SizedBox(
-                  height: _kOverallHeight,
+                  height: overallHeight,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTapDown: (details) {
@@ -313,10 +322,10 @@ class _AppKitSliderState extends State<AppKitSlider>
                             padding: EdgeInsets.symmetric(
                                 horizontal: horizontalPadding),
                             child: SizedBox(
-                              height: _kOverallHeight,
+                              height: overallHeight,
                               width: width,
                               child: CustomPaint(
-                                size: Size(width, _kOverallHeight),
+                                size: Size(width, overallHeight),
                                 painter: _DiscreteTickPainter(
                                   tickWidth: sliderTheme.tickWidth,
                                   tickHeight: sliderTheme.tickHeight,
@@ -341,19 +350,19 @@ class _AppKitSliderState extends State<AppKitSlider>
                         // continuous thumb
                         if (continous) ...[
                           Positioned(
-                            left: width * percentage -
-                                (_kContinuousThumbSize / 2),
-                            width: (_kContinuousThumbSize * 2) +
+                            left:
+                                width * percentage - (continuousThumbSize / 2),
+                            width: (continuousThumbSize * 2) +
                                 (_kHorizontalPaddingThreshold * 2),
-                            height: _kContinuousThumbSize,
-                            top:
-                                _kOverallHeight / 2 - _kContinuousThumbSize / 2,
+                            height: continuousThumbSize,
+                            top: overallHeight / 2 - continuousThumbSize / 2,
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: horizontalPadding),
                               child: GestureDetector(
                                 onTapDown: (details) => thumbHeldDown = true,
                                 child: _ContinuousThumb(
+                                  continuousThumbSize: continuousThumbSize,
                                   color: sliderTheme.thumbColor,
                                   foregroundColor: enabled && _thumbHeldDown
                                       ? AppKitColors.fills.opaque.tertiary.color
@@ -368,7 +377,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                                 (discreteThumbSize.width / 2),
                             width: (discreteThumbSize.width * 2) + 4,
                             height: discreteThumbSize.height,
-                            top: _kOverallHeight / 2 -
+                            top: overallHeight / 2 -
                                 (discreteThumbSize.height / 2),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -410,28 +419,29 @@ enum AppKitSliderStyle {
 class _ContinuousThumb extends StatelessWidget {
   const _ContinuousThumb({
     required this.color,
+    required this.continuousThumbSize,
     this.foregroundColor,
   });
 
   final Color color;
   final Color? foregroundColor;
+  final double continuousThumbSize;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _kContinuousThumbSize,
-      width: _kContinuousThumbSize,
+      height: continuousThumbSize,
+      width: continuousThumbSize,
       foregroundDecoration: foregroundColor != null
           ? BoxDecoration(
               color: foregroundColor,
-              borderRadius: BorderRadius.circular(_kContinuousThumbSize))
+              borderRadius: BorderRadius.circular(continuousThumbSize))
           : null,
       decoration: BoxDecoration(
         color: color,
         border: Border.all(
             color: AppKitColors.fills.opaque.quinary.color, width: 0.5),
-        borderRadius:
-            const BorderRadius.all(Radius.circular(_kContinuousThumbSize)),
+        borderRadius: BorderRadius.all(Radius.circular(continuousThumbSize)),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.5),

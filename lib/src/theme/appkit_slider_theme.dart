@@ -64,7 +64,11 @@ class AppKitSliderThemeData with Diagnosticable {
   // The width of the tick (discrete slider).
   final double tickWidth;
 
+  // The size of the thumb (discrete slider).
   final Size discreteThumbSize;
+
+  // The size of the thumb (continuous slider).
+  final double continuousThumbSize;
 
   AppKitSliderThemeData({
     required this.trackColor,
@@ -77,10 +81,24 @@ class AppKitSliderThemeData with Diagnosticable {
     required this.tickHeight,
     required this.tickWidth,
     required this.discreteThumbSize,
+    required this.continuousThumbSize,
     this.sliderColor,
     this.tickColor,
     this.animationDuration,
-  });
+  })  : assert(discreteAnchorThreshold >= 0.0),
+        assert(discreteThumbCornerRadius >= 0.0),
+        assert(continuousTrackCornerRadius >= 0.0),
+        assert(discreteTickCornerRadius >= 0.0),
+        assert(trackHeight >= 0.0),
+        assert(tickHeight >= 0.0),
+        assert(tickWidth >= 0.0),
+        assert(continuousThumbSize > 0.0),
+        assert(discreteThumbSize.width > 0.0),
+        assert(discreteThumbSize.height > 0.0),
+        assert(trackHeight <= discreteThumbSize.height),
+        assert(trackHeight <= continuousThumbSize),
+        assert(tickHeight <= discreteThumbSize.height),
+        assert(tickHeight <= continuousThumbSize);
 
   AppKitSliderThemeData copyWith({
     Color? thumbColor,
@@ -96,6 +114,7 @@ class AppKitSliderThemeData with Diagnosticable {
     double? tickHeight,
     double? tickWidth,
     Size? discreteThumbSize,
+    double? continuousThumbSize,
   }) {
     return AppKitSliderThemeData(
       thumbColor: thumbColor ?? this.thumbColor,
@@ -115,6 +134,7 @@ class AppKitSliderThemeData with Diagnosticable {
       tickHeight: tickHeight ?? this.tickHeight,
       tickWidth: tickWidth ?? this.tickWidth,
       discreteThumbSize: discreteThumbSize ?? this.discreteThumbSize,
+      continuousThumbSize: continuousThumbSize ?? this.continuousThumbSize,
     );
   }
 
@@ -134,6 +154,7 @@ class AppKitSliderThemeData with Diagnosticable {
       tickHeight: other.tickHeight,
       tickWidth: other.tickWidth,
       discreteThumbSize: other.discreteThumbSize,
+      continuousThumbSize: other.continuousThumbSize,
     );
   }
 
@@ -157,6 +178,7 @@ class AppKitSliderThemeData with Diagnosticable {
     properties.add(DoubleProperty('tickHeight', tickHeight));
     properties.add(DoubleProperty('tickWidth', tickWidth));
     properties.add(DiagnosticsProperty('discreteThumbSize', discreteThumbSize));
+    properties.add(DoubleProperty('continuousThumbSize', continuousThumbSize));
   }
 
   static AppKitSliderThemeData lerp(
@@ -183,6 +205,8 @@ class AppKitSliderThemeData with Diagnosticable {
       tickWidth: lerpDouble(a.tickWidth, b.tickWidth, t)!,
       discreteThumbSize:
           Size.lerp(a.discreteThumbSize, b.discreteThumbSize, t)!,
+      continuousThumbSize:
+          lerpDouble(a.continuousThumbSize, b.continuousThumbSize, t)!,
     );
   }
 }
