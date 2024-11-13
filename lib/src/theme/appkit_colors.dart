@@ -5,34 +5,45 @@ class AppKitColors {
   static AppKitColorContainer fills = AppKitColorContainer(
     opaque: AppKitColor(
       primary: const CupertinoDynamicColor.withBrightness(
-          color: Color.fromRGBO(0, 0, 0, 0.1),
-          darkColor: Color.fromRGBO(255, 255, 255, 0.1)),
+          color: Color.fromRGBO(0, 0, 0, 0.1), darkColor: Color.fromRGBO(255, 255, 255, 0.1)),
       secondary: const CupertinoDynamicColor.withBrightness(
-          color: Color.fromRGBO(0, 0, 0, 0.08),
-          darkColor: Color.fromRGBO(255, 255, 255, 0.08)),
+          color: Color.fromRGBO(0, 0, 0, 0.08), darkColor: Color.fromRGBO(255, 255, 255, 0.08)),
       tertiary: const CupertinoDynamicColor.withBrightness(
-          color: Color.fromRGBO(0, 0, 0, 0.05),
-          darkColor: Color.fromRGBO(255, 255, 255, 0.05)),
+          color: Color.fromRGBO(0, 0, 0, 0.05), darkColor: Color.fromRGBO(255, 255, 255, 0.05)),
       quaternary: const CupertinoDynamicColor.withBrightness(
-          color: Color.fromRGBO(0, 0, 0, 0.03),
-          darkColor: Color.fromRGBO(255, 255, 255, 0.03)),
+          color: Color.fromRGBO(0, 0, 0, 0.03), darkColor: Color.fromRGBO(255, 255, 255, 0.03)),
       quinary: const CupertinoDynamicColor.withBrightness(
-          color: Color.fromRGBO(0, 0, 0, 0.02),
-          darkColor: Color.fromRGBO(255, 255, 255, 0.02)),
+          color: Color.fromRGBO(0, 0, 0, 0.02), darkColor: Color.fromRGBO(255, 255, 255, 0.02)),
     ),
     vibrant: AppKitColor(
-      primary: const CupertinoDynamicColor.withBrightness(
-          color: Color(0xFFD9D9D9), darkColor: Color(0xFF242424)),
-      secondary: const CupertinoDynamicColor.withBrightness(
-          color: Color(0xFFE6E6E6), darkColor: Color(0xFF141414)),
-      tertiary: const CupertinoDynamicColor.withBrightness(
-          color: Color(0xFFF2F2F2), darkColor: Color(0xFF0D0D0D)),
-      quaternary: const CupertinoDynamicColor.withBrightness(
-          color: Color(0xFFF7F7F7), darkColor: Color(0xFF090909)),
-      quinary: const CupertinoDynamicColor.withBrightness(
-          color: Color(0xFFFBFBFB), darkColor: Color(0xFF070707)),
+      primary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFD9D9D9), darkColor: Color(0xFF242424)),
+      secondary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFE6E6E6), darkColor: Color(0xFF141414)),
+      tertiary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFF2F2F2), darkColor: Color(0xFF0D0D0D)),
+      quaternary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFF7F7F7), darkColor: Color(0xFF090909)),
+      quinary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFFBFBFB), darkColor: Color(0xFF070707)),
     ),
   );
+
+  static AppKitColorContainer text = AppKitColorContainer(
+      opaque: AppKitColor(
+        primary: const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.85), darkColor: Color.fromRGBO(255, 255, 255, 0.85)),
+        secondary: const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.5), darkColor: Color.fromRGBO(255, 255, 255, 0.55)),
+        tertiary: const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.25), darkColor: Color.fromRGBO(255, 255, 255, 0.25)),
+        quaternary: const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.1), darkColor: Color.fromRGBO(255, 255, 255, 0.1)),
+        quinary: const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.05), darkColor: Color.fromRGBO(255, 255, 255, 0.05)),
+      ),
+      vibrant: AppKitColor(
+        primary: const CupertinoDynamicColor.withBrightness(color: Color(0xFF4C4C4C), darkColor: Color(0xFFE5E5E5)),
+        secondary: const CupertinoDynamicColor.withBrightness(color: Color(0xFF808080), darkColor: Color(0xFF7C7C7C)),
+        tertiary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFBFBFBF), darkColor: Color(0xFF414141)),
+        quaternary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFBFBFBF), darkColor: Color(0xFF414141)),
+        quinary: const CupertinoDynamicColor.withBrightness(color: Color(0xFFBFBFBF), darkColor: Color(0xFF414141)),
+      ));
 }
 
 class AppKitColorContainer {
@@ -111,16 +122,13 @@ class AppKitColor with Diagnosticable {
           darkColor: Color.lerp(a.primary.darkColor, b.primary.darkColor, t)!),
       secondary: CupertinoDynamicColor.withBrightness(
           color: Color.lerp(a.secondary.color, b.secondary.color, t)!,
-          darkColor:
-              Color.lerp(a.secondary.darkColor, b.secondary.darkColor, t)!),
+          darkColor: Color.lerp(a.secondary.darkColor, b.secondary.darkColor, t)!),
       tertiary: CupertinoDynamicColor.withBrightness(
           color: Color.lerp(a.tertiary.color, b.tertiary.color, t)!,
-          darkColor:
-              Color.lerp(a.tertiary.darkColor, b.tertiary.darkColor, t)!),
+          darkColor: Color.lerp(a.tertiary.darkColor, b.tertiary.darkColor, t)!),
       quaternary: CupertinoDynamicColor.withBrightness(
           color: Color.lerp(a.quaternary.color, b.quaternary.color, t)!,
-          darkColor:
-              Color.lerp(a.quaternary.darkColor, b.quaternary.darkColor, t)!),
+          darkColor: Color.lerp(a.quaternary.darkColor, b.quaternary.darkColor, t)!),
       quinary: CupertinoDynamicColor.withBrightness(
           color: Color.lerp(a.quinary.color, b.quinary.color, t)!,
           darkColor: Color.lerp(a.quinary.darkColor, b.quinary.darkColor, t)!),

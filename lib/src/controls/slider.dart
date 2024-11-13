@@ -274,6 +274,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                     },
                     onTapUp: (details) => thumbHeldDown = false,
                     child: Stack(
+                      clipBehavior: Clip.none,
                       children: [
                         // track
                         Center(
@@ -410,12 +411,7 @@ class _AppKitSliderState extends State<AppKitSlider>
   }
 }
 
-enum AppKitSliderStyle {
-  continuous,
-  discreteFixed,
-  discreteFree,
-}
-
+/// Continuous thumb for the slider.
 class _ContinuousThumb extends StatelessWidget {
   const _ContinuousThumb({
     required this.color,
@@ -448,7 +444,7 @@ class _ContinuousThumb extends StatelessWidget {
             blurStyle: BlurStyle.outer,
             blurRadius: 0.25,
             spreadRadius: 0,
-            offset: Offset(0, 0.25),
+            offset: Offset(0, .25),
           ),
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.25),

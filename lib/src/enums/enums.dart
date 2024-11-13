@@ -9,3 +9,11 @@ enum AppKitControlSize {
 enum AppKitPushButtonType { primary, secondary, destructive }
 
 enum AppKitToggleButtonType { primary, secondary }
+
+enum AppKitSliderStyle {
+  continuous,
+  discreteFixed,
+  discreteFree,
+}
+
+enum AppKitSegmentedControlStyle { single, multiple }
