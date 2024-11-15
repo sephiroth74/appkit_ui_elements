@@ -15,6 +15,8 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
   double slider1Value = .65;
   AppKitSegmentedController multipleController1 =
       AppKitSegmentedController.multiple(length: 8, initialSelection: {0, 1});
+  AppKitSegmentedController singleController1 =
+      AppKitSegmentedController.single(length: 5, initialSelection: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +125,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             ),
                             const SizedBox(height: 20.0),
                             AppKitSegmentedControl(
+                              size: AppKitSegmentedControlSize.regular,
                               controller: AppKitSegmentedController.multiple(length: 5, initialSelection: {0, 2}),
                               labels: const [
                                 'Pizza',
@@ -143,7 +146,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                         Column(
                           children: [
                             AppKitSegmentedControl(
-                              controller: AppKitSegmentedController.single(length: 5, initialSelection: 1),
+                              controller: singleController1,
                               icons: const [
                                 CupertinoIcons.text_alignleft,
                                 CupertinoIcons.text_aligncenter,
@@ -157,14 +160,13 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             ),
                             const SizedBox(height: 20.0),
                             AppKitSegmentedControl(
-                              controller: AppKitSegmentedController.single(length: 6, initialSelection: 2),
+                              controller: singleController1,
                               labels: const [
-                                'Label',
-                                'Label',
-                                'Label',
-                                'Label',
-                                'Label',
-                                'Label',
+                                'Left',
+                                'Center',
+                                'Right',
+                                'Underline',
+                                'Strikethrough',
                               ],
                               onSelectionChanged: (value) {
                                 debugPrint('Single Selection: $value');

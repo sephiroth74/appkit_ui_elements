@@ -215,7 +215,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                                               ? AppKitColors.text.opaque.primary.darkColor
                                               : AppKitColors.text.opaque.primary)
                                       : Padding(
-                                          padding: const EdgeInsets.only(bottom: 2.0),
+                                          padding: const EdgeInsets.only(bottom: 2.0, left: 2.0, right: 2.0),
                                           child: Text(
                                             widget.labels![index],
                                             maxLines: 1,
@@ -286,7 +286,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                                 ),
                                 child: Center(
                                   child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 3),
+                                    padding: const EdgeInsets.only(bottom: 3, left: 3, right: 3),
                                     child: Text(
                                       widget.labels![index],
                                       maxLines: 1,
