@@ -8,7 +8,7 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 class AppKitSegmentedControl extends StatefulWidget {
-  final SegmentedController controller;
+  final AppKitSegmentedController controller;
   final List<IconData>? icons;
   final List<String>? labels;
   final ValueChanged<List<int>>? onSelectionChanged;
@@ -73,6 +73,10 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
     });
   }
 
+  void _handleControllerChange() {
+    setState(() {});
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -83,9 +87,22 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_handleControllerChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller.removeListener(_handleControllerChange);
+  }
+
+  @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
     final AppKitThemeData theme = AppKitTheme.of(context);
+    final segmentedControlTheme = AppKitSegmentedControlTheme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     return UiElementColorBuilder(
       builder: (context, colorContainer) {
@@ -144,11 +161,11 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                       child = Stack(
                         children: [
                           if (index > 0 && !_isTabSelected(index - 1) && !isSelected) ...[
-                            const VerticalDivider(
-                              indent: 4,
-                              endIndent: 4,
+                            VerticalDivider(
+                              indent: (constraints.maxHeight - 12) / 2,
+                              endIndent: (constraints.maxHeight - 12) / 2,
                               width: 1,
-                              color: Color(0xFFE8E8E8),
+                              color: segmentedControlTheme.dividerColorMultipleSelection,
                               thickness: 1,
                             ),
                           ],
@@ -191,25 +208,25 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                                             : const BorderRadius.all(Radius.zero),
                               ),
                               child: Center(
-                                  child: Padding(
-                                padding: const EdgeInsets.only(top: 2, bottom: 2),
-                                child: widget.icons != null
-                                    ? Icon(widget.icons![index],
-                                        size: widget.size.iconSize,
-                                        color: isSelected
-                                            ? AppKitColors.text.opaque.primary.darkColor
-                                            : AppKitColors.text.opaque.primary)
-                                    : Text(
-                                        widget.labels![index],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: widget.size.textSize,
-                                            color: isSelected
-                                                ? AppKitColors.text.opaque.primary.darkColor
-                                                : AppKitColors.text.opaque.primary),
-                                      ),
-                              )),
+                                  child: widget.icons != null
+                                      ? Icon(widget.icons![index],
+                                          size: widget.size.iconSize,
+                                          color: isSelected
+                                              ? AppKitColors.text.opaque.primary.darkColor
+                                              : AppKitColors.text.opaque.primary)
+                                      : Padding(
+                                          padding: const EdgeInsets.only(bottom: 2.0),
+                                          child: Text(
+                                            widget.labels![index],
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: widget.size.textSize,
+                                                color: isSelected
+                                                    ? AppKitColors.text.opaque.primary.darkColor
+                                                    : AppKitColors.text.opaque.primary),
+                                          ),
+                                        )),
                             ),
                           ),
                         ],
@@ -224,10 +241,10 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                               !_isTabDown(index) &&
                               !isSelected) ...[
                             VerticalDivider(
-                              indent: (constraints.maxHeight-13)/2,
+                              indent: (constraints.maxHeight - 13) / 2,
                               endIndent: (constraints.maxHeight - 13) / 2,
                               width: 1,
-                              color: const Color(0xFFCCCBCB),
+                              color: segmentedControlTheme.dividerColorSingleSelection,
                               thickness: 1,
                             ),
                           ],
@@ -274,7 +291,8 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                                       widget.labels![index],
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: widget.size.textSize, color: AppKitColors.text.opaque.primary),
+                                      style: TextStyle(
+                                          fontSize: widget.size.textSize, color: AppKitColors.text.opaque.primary),
                                     ),
                                   ),
                                 ),
@@ -307,10 +325,10 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
   }
 }
 
-abstract class SegmentedController extends ChangeNotifier {
+abstract class AppKitSegmentedController extends ChangeNotifier {
   final int length;
 
-  SegmentedController({required this.length}) : assert(length > 0);
+  AppKitSegmentedController({required this.length}) : assert(length > 0);
 
   bool isSelected(int index);
 
@@ -329,7 +347,7 @@ abstract class SegmentedController extends ChangeNotifier {
   }
 }
 
-class SegmentedControllerSingle extends SegmentedController {
+class SegmentedControllerSingle extends AppKitSegmentedController {
   SegmentedControllerSingle({int initialIndex = 0, required super.length})
       : _index = initialIndex,
         _previousIndex = initialIndex,
@@ -369,7 +387,7 @@ class SegmentedControllerSingle extends SegmentedController {
   bool get isSingle => true;
 }
 
-class SegmentedControllerMultiple extends SegmentedController {
+class SegmentedControllerMultiple extends AppKitSegmentedController {
   final Set<int> _selectedIndexes;
 
   SegmentedControllerMultiple({Set<int>? initialSelection, required super.length})
@@ -441,9 +459,9 @@ extension ControlSizeX on AppKitSegmentedControlSize {
   double get iconSize {
     switch (this) {
       case AppKitSegmentedControlSize.mini:
-        return 12;
+        return 10;
       case AppKitSegmentedControlSize.small:
-        return 14;
+        return 13;
       case AppKitSegmentedControlSize.regular:
         return 16;
     }

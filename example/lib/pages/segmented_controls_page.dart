@@ -13,6 +13,8 @@ class SegmentedControlsPage extends StatefulWidget {
 
 class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
   double slider1Value = .65;
+  AppKitSegmentedController multipleController1 =
+      AppKitSegmentedController.multiple(length: 8, initialSelection: {0, 1});
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +42,88 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                         const SizedBox(height: 20.0),
                         Column(
                           children: [
-                            AppKitSegmentedControl(
-                              controller: SegmentedController.multiple(length: 8, initialSelection: {0,1}),
-                              icons: const [
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
-                                CupertinoIcons.star_fill,
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                const SizedBox(width: 100, child: Text('Regular Size: ')),
+                                Flexible(
+                                  flex: 1,
+                                  child: AppKitSegmentedControl(
+                                    controller: multipleController1,
+                                    icons: const [
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                    ],
+                                    onSelectionChanged: (value) {
+                                      debugPrint('Multiple Selection: $value');
+                                    },
+                                  ),
+                                ),
                               ],
-                              onSelectionChanged: (value) {
-                                debugPrint('Multiple Selection: $value');
-                              },
+                            ),
+                            const SizedBox(height: 20.0),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                const SizedBox(width: 100, child: Text('Small Size: ')),
+                                Flexible(
+                                  flex: 1,
+                                  child: AppKitSegmentedControl(
+                                    size: AppKitSegmentedControlSize.small,
+                                    controller: multipleController1,
+                                    icons: const [
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                    ],
+                                    onSelectionChanged: (value) {
+                                      debugPrint('Multiple Selection: $value');
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20.0),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                const SizedBox(width: 100, child: Text('Mini Size: ')),
+                                Flexible(
+                                  flex: 1,
+                                  child: AppKitSegmentedControl(
+                                    size: AppKitSegmentedControlSize.mini,
+                                    controller: multipleController1,
+                                    icons: const [
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                      CupertinoIcons.star_fill,
+                                    ],
+                                    onSelectionChanged: (value) {
+                                      debugPrint('Multiple Selection: $value');
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 20.0),
                             AppKitSegmentedControl(
-                              controller: SegmentedController.multiple(length: 5, initialSelection: {0, 2}),
+                              controller: AppKitSegmentedController.multiple(length: 5, initialSelection: {0, 2}),
                               labels: const [
                                 'Pizza',
                                 'Pasta',
@@ -78,7 +143,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                         Column(
                           children: [
                             AppKitSegmentedControl(
-                              controller: SegmentedController.single(length: 5, initialSelection: 1),
+                              controller: AppKitSegmentedController.single(length: 5, initialSelection: 1),
                               icons: const [
                                 CupertinoIcons.text_alignleft,
                                 CupertinoIcons.text_aligncenter,
@@ -92,7 +157,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             ),
                             const SizedBox(height: 20.0),
                             AppKitSegmentedControl(
-                              controller: SegmentedController.single(length: 6, initialSelection: 2),
+                              controller: AppKitSegmentedController.single(length: 6, initialSelection: 2),
                               labels: const [
                                 'Label',
                                 'Label',
