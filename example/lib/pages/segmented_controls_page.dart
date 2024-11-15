@@ -25,7 +25,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
         ContentArea(
           builder: (context, ScrollController scrollController) {
             return Container(
-              color: Color(0xFFd9d9d9),
+              color: Color(0xFFf0efef),
               child: SingleChildScrollView(
                 clipBehavior: Clip.none,
                 controller: scrollController,
@@ -41,27 +41,70 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                         Column(
                           children: [
                             AppKitSegmentedControl(
-                              style: AppKitSegmentedControlStyle.multiple,
-                              controller: SegmentedControllerMultiple(length: 5, initialSelection: {0}),
+                              controller: SegmentedController.multiple(length: 8, initialSelection: {0,1}),
                               icons: const [
-                                CupertinoIcons.home,
-                                CupertinoIcons.search,
-                                CupertinoIcons.add,
-                                CupertinoIcons.settings,
-                                CupertinoIcons.profile_circled,
-                              ],
-                              children: const [
-                                Text('One'),
-                                Text('Two'),
-                                Text('Three'),
-                                Text('Four'),
-                                Text('Five'),
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
+                                CupertinoIcons.star_fill,
                               ],
                               onSelectionChanged: (value) {
                                 debugPrint('Multiple Selection: $value');
                               },
                             ),
                             const SizedBox(height: 20.0),
+                            AppKitSegmentedControl(
+                              controller: SegmentedController.multiple(length: 5, initialSelection: {0, 2}),
+                              labels: const [
+                                'Pizza',
+                                'Pasta',
+                                'Coke',
+                                'Beer',
+                                'Cake',
+                              ],
+                              onSelectionChanged: (value) {
+                                debugPrint('Multiple Selection: $value');
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20.0),
+                        const WidgetTitle(label: 'Single Selection'),
+                        const SizedBox(height: 20.0),
+                        Column(
+                          children: [
+                            AppKitSegmentedControl(
+                              controller: SegmentedController.single(length: 5, initialSelection: 1),
+                              icons: const [
+                                CupertinoIcons.text_alignleft,
+                                CupertinoIcons.text_aligncenter,
+                                CupertinoIcons.text_alignright,
+                                CupertinoIcons.bold_italic_underline,
+                                CupertinoIcons.strikethrough,
+                              ],
+                              onSelectionChanged: (value) {
+                                debugPrint('Single Selection: $value');
+                              },
+                            ),
+                            const SizedBox(height: 20.0),
+                            AppKitSegmentedControl(
+                              controller: SegmentedController.single(length: 6, initialSelection: 2),
+                              labels: const [
+                                'Label',
+                                'Label',
+                                'Label',
+                                'Label',
+                                'Label',
+                                'Label',
+                              ],
+                              onSelectionChanged: (value) {
+                                debugPrint('Single Selection: $value');
+                              },
+                            ),
                           ],
                         ),
                       ],

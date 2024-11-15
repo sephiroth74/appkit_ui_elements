@@ -82,6 +82,9 @@ class AppKitColor with Diagnosticable {
   final CupertinoDynamicColor quaternary;
   final CupertinoDynamicColor quinary;
 
+  CupertinoDynamicColor get quinaryInverted =>
+      CupertinoDynamicColor.withBrightness(color: quinary.darkColor, darkColor: quinary.color);
+
   AppKitColor(
       {required this.primary,
       required this.secondary,

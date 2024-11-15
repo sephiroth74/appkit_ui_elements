@@ -16,4 +16,4 @@ enum AppKitSliderStyle {
   discreteFree,
 }
 
-enum AppKitSegmentedControlStyle { single, multiple }
+enum AppKitSegmentedControlSize { regular, small, mini }
