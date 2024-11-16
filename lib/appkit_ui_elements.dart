@@ -13,6 +13,7 @@ export 'src/controls/disclosure_button.dart';
 export 'src/controls/stepper.dart';
 export 'src/controls/slider.dart';
 export 'src/controls/segmented_control.dart';
+export 'src/controls/switch.dart';
 export 'src/enums/enums.dart';
 export 'src/theme/appkit_theme.dart';
 export 'src/theme/appkit_push_button_theme.dart';

@@ -41,6 +41,29 @@ class _ControlsPageState extends State<ControlsPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const WidgetTitle(label: 'Switches'),
+                        const SizedBox(height: 20.0),
+                        Row(
+                          children: [
+                            AppKitSwitch(
+                                checked: switchValue1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    debugPrint('onChanged($value)');
+                                    switchValue1 = value;
+                                  });
+                                }),
+                            const SizedBox(width: 16.0),
+                            AppKitSwitch(
+                              checked: switchValue1,
+                              color: MacosColors.systemOrangeColor,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 16.0, height: 16.0),
+                        const Divider(
+                          thickness: 0.5,
+                        ),
                         const WidgetTitle(label: 'Checkboxes'),
                         const SizedBox(height: 20.0),
                         Row(

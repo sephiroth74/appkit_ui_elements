@@ -87,6 +87,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color canvasColor;
   final Color controlBackgroundColor;
   final Color controlBackgroundColorDisabled;
+  final Color controlColorPressed;
   final MacosTypography typography;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
@@ -108,6 +109,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     bool? isMainWindow,
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
+    Color? controlColorPressed,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
@@ -119,12 +121,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         ? const Color.fromRGBO(40, 40, 40, 1.0)
         : const Color.fromRGBO(246, 246, 246, 1.0);
 
-    final controlBackgroundColor = isDark
+    controlBackgroundColor ??= isDark
         ? MacosColors.controlBackgroundColor.darkColor
         : MacosColors.controlBackgroundColor.color;
-    final controlBackgroundColorDisabled = isDark
+    controlBackgroundColorDisabled ??= isDark
         ? MacosColors.controlBackgroundColor.darkColor.withOpacity(0.5)
         : MacosColors.controlBackgroundColor.color.withOpacity(0.5);
+    controlColorPressed ??= isDark
+        ? MacosColors.white.withOpacity(0.1)
+        : MacosColors.black.withOpacity(0.1);
 
     pushButtonTheme ??= const AppKitPushButtonThemeData(
       buttonRadius: {
@@ -213,6 +218,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
+      controlColorPressed: controlColorPressed,
     );
 
     final customData = defaultData.copyWith(
@@ -224,6 +230,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: typography,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
+      controlColorPressed: controlColorPressed,
       pushButtonTheme: pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
@@ -311,6 +318,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.canvasColor,
     required this.controlBackgroundColor,
     required this.controlBackgroundColorDisabled,
+    required this.controlColorPressed,
   });
 
   @override
@@ -328,6 +336,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         segmentedControlTheme,
         controlBackgroundColor,
         controlBackgroundColorDisabled,
+        controlColorPressed,
       ];
 
   AppKitThemeData copyWith({
@@ -339,6 +348,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? canvasColor,
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
+    Color? controlColorPressed,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
@@ -362,6 +372,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           controlBackgroundColor ?? this.controlBackgroundColor,
       controlBackgroundColorDisabled:
           controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
+      controlColorPressed: controlColorPressed ?? this.controlColorPressed,
     );
   }
 
@@ -381,6 +392,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: other.helpButtonTheme,
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
+      controlColorPressed: other.controlColorPressed,
     );
   }
 
@@ -407,6 +419,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
       segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
           a.segmentedControlTheme, b.segmentedControlTheme, t),
+      controlColorPressed:
+          Color.lerp(a.controlColorPressed, b.controlColorPressed, t)!,
     );
   }
 
@@ -436,5 +450,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
     properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>(
         'segmentedControlTheme', segmentedControlTheme));
+    properties.add(ColorProperty('controlColorPressed', controlColorPressed));
   }
 }
