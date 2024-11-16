@@ -15,6 +15,10 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
   double slider1Value = .65;
   AppKitSegmentedController multipleController1 =
       AppKitSegmentedController.multiple(length: 8, initialSelection: {0, 1});
+
+  AppKitSegmentedController multipleController2 =
+      AppKitSegmentedController.multiple(length: 5, initialSelection: {3, 4});
+
   AppKitSegmentedController singleController1 =
       AppKitSegmentedController.single(length: 5, initialSelection: 0);
 
@@ -29,13 +33,14 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
         ContentArea(
           builder: (context, ScrollController scrollController) {
             return Container(
-              color: Color(0xFFf0efef),
+              color: const Color(0xFFf0efef),
               child: SingleChildScrollView(
                 clipBehavior: Clip.none,
                 controller: scrollController,
                 padding: const EdgeInsets.all(20),
                 child: Builder(
                   builder: (context) {
+                    final theme = AppKitTheme.of(context);
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +52,8 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                const SizedBox(width: 100, child: Text('Regular Size: ')),
+                                const SizedBox(
+                                    width: 100, child: Text('Regular Size: ')),
                                 Flexible(
                                   flex: 1,
                                   child: AppKitSegmentedControl(
@@ -62,8 +68,9 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                       CupertinoIcons.star_fill,
                                       CupertinoIcons.star_fill,
                                     ],
-                                    onSelectionChanged: (value) {
-                                      debugPrint('Multiple Selection: $value');
+                                    onSelectionChanged: (selection, index) {
+                                      debugPrint(
+                                          'Multiple Selection: $selection, $index');
                                     },
                                   ),
                                 ),
@@ -73,11 +80,13 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                const SizedBox(width: 100, child: Text('Small Size: ')),
+                                const SizedBox(
+                                    width: 100, child: Text('Small Size: ')),
                                 Flexible(
                                   flex: 1,
                                   child: AppKitSegmentedControl(
                                     size: AppKitSegmentedControlSize.small,
+                                    color: Colors.amber.shade900,
                                     controller: multipleController1,
                                     icons: const [
                                       CupertinoIcons.star_fill,
@@ -89,9 +98,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                       CupertinoIcons.star_fill,
                                       CupertinoIcons.star_fill,
                                     ],
-                                    onSelectionChanged: (value) {
-                                      debugPrint('Multiple Selection: $value');
-                                    },
+                                    onSelectionChanged: (p0, p1) {},
                                   ),
                                 ),
                               ],
@@ -100,7 +107,8 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                const SizedBox(width: 100, child: Text('Mini Size: ')),
+                                const SizedBox(
+                                    width: 100, child: Text('Mini Size: ')),
                                 Flexible(
                                   flex: 1,
                                   child: AppKitSegmentedControl(
@@ -116,9 +124,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                       CupertinoIcons.star_fill,
                                       CupertinoIcons.star_fill,
                                     ],
-                                    onSelectionChanged: (value) {
-                                      debugPrint('Multiple Selection: $value');
-                                    },
+                                    onSelectionChanged: (p0, p1) {},
                                   ),
                                 ),
                               ],
@@ -126,7 +132,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                             const SizedBox(height: 20.0),
                             AppKitSegmentedControl(
                               size: AppKitSegmentedControlSize.regular,
-                              controller: AppKitSegmentedController.multiple(length: 5, initialSelection: {0, 2}),
+                              controller: multipleController2,
                               labels: const [
                                 'Pizza',
                                 'Pasta',
@@ -134,9 +140,34 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                 'Beer',
                                 'Cake',
                               ],
-                              onSelectionChanged: (value) {
-                                debugPrint('Multiple Selection: $value');
-                              },
+                              onSelectionChanged: (p0, p1) {},
+                            ),
+                            const SizedBox(height: 20.0),
+                            AppKitSegmentedControl(
+                              size: AppKitSegmentedControlSize.small,
+                              color: Colors.teal.shade600,
+                              controller: multipleController2,
+                              labels: const [
+                                'Pizza',
+                                'Pasta',
+                                'Coke',
+                                'Beer',
+                                'Cake',
+                              ],
+                              onSelectionChanged: (p0, p1) {},
+                            ),
+                            const SizedBox(height: 20.0),
+                            AppKitSegmentedControl(
+                              size: AppKitSegmentedControlSize.mini,
+                              controller: multipleController2,
+                              labels: const [
+                                'Pizza',
+                                'Pasta',
+                                'Coke',
+                                'Beer',
+                                'Cake',
+                              ],
+                              onSelectionChanged: (p0, p1) {},
                             ),
                           ],
                         ),
@@ -154,8 +185,8 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                 CupertinoIcons.bold_italic_underline,
                                 CupertinoIcons.strikethrough,
                               ],
-                              onSelectionChanged: (value) {
-                                debugPrint('Single Selection: $value');
+                              onSelectionChanged: (p0, p1) {
+                                debugPrint('Single Selection: $p0, $p1');
                               },
                             ),
                             const SizedBox(height: 20.0),
@@ -168,9 +199,33 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                 'Underline',
                                 'Strikethrough',
                               ],
-                              onSelectionChanged: (value) {
-                                debugPrint('Single Selection: $value');
-                              },
+                              onSelectionChanged: (p0, p1) {},
+                            ),
+                            const SizedBox(height: 20.0),
+                            AppKitSegmentedControl(
+                              size: AppKitSegmentedControlSize.small,
+                              controller: singleController1,
+                              labels: const [
+                                'Left',
+                                'Center',
+                                'Right',
+                                'Underline',
+                                'Strikethrough',
+                              ],
+                              onSelectionChanged: (p0, p1) {},
+                            ),
+                            const SizedBox(height: 20.0),
+                            AppKitSegmentedControl(
+                              size: AppKitSegmentedControlSize.mini,
+                              controller: singleController1,
+                              labels: const [
+                                'Left',
+                                'Center',
+                                'Right',
+                                'Underline',
+                                'Strikethrough',
+                              ],
+                              onSelectionChanged: (p0, p1) {},
                             ),
                           ],
                         ),

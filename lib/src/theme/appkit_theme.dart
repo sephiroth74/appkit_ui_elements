@@ -31,12 +31,15 @@ class AppKitTheme extends StatelessWidget {
   }
 
   static AppKitThemeData of(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
-    return (inheritedTheme?.theme.data ?? AppKitThemeData.fromMacosTheme(MacosTheme.of(context)));
+    final _InheritedUiKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    return (inheritedTheme?.theme.data ??
+        AppKitThemeData.fromMacosTheme(MacosTheme.of(context)));
   }
 
   static AppKitThemeData? maybeOf(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    final _InheritedUiKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
     if (inheritedTheme != null) {
       return inheritedTheme.theme.data;
     } else {
@@ -49,13 +52,17 @@ class AppKitTheme extends StatelessWidget {
   }
 
   static Brightness brightnessOf(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
-    return inheritedTheme?.theme.data.brightness ?? MediaQuery.of(context).platformBrightness;
+    final _InheritedUiKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    return inheritedTheme?.theme.data.brightness ??
+        MediaQuery.of(context).platformBrightness;
   }
 
   static Brightness? maybeBrightnessOf(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
-    return inheritedTheme?.theme.data.brightness ?? MediaQuery.maybeOf(context)?.platformBrightness;
+    final _InheritedUiKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    return inheritedTheme?.theme.data.brightness ??
+        MediaQuery.maybeOf(context)?.platformBrightness;
   }
 }
 
@@ -68,7 +75,8 @@ class _InheritedUiKitTheme extends InheritedWidget {
   final AppKitTheme theme;
 
   @override
-  bool updateShouldNotify(_InheritedUiKitTheme oldWidget) => theme.data != oldWidget.theme.data;
+  bool updateShouldNotify(_InheritedUiKitTheme oldWidget) =>
+      theme.data != oldWidget.theme.data;
 }
 
 class AppKitThemeData extends Equatable with Diagnosticable {
@@ -105,11 +113,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
     isMainWindow ??= true;
-    typography ??= isDark ? MacosTypography.lightOpaque() : MacosTypography.darkOpaque();
-    canvasColor ??= isDark ? const Color.fromRGBO(40, 40, 40, 1.0) : const Color.fromRGBO(246, 246, 246, 1.0);
+    typography ??=
+        isDark ? MacosTypography.lightOpaque() : MacosTypography.darkOpaque();
+    canvasColor ??= isDark
+        ? const Color.fromRGBO(40, 40, 40, 1.0)
+        : const Color.fromRGBO(246, 246, 246, 1.0);
 
-    final controlBackgroundColor =
-        isDark ? MacosColors.controlBackgroundColor.darkColor : MacosColors.controlBackgroundColor.color;
+    final controlBackgroundColor = isDark
+        ? MacosColors.controlBackgroundColor.darkColor
+        : MacosColors.controlBackgroundColor.color;
     final controlBackgroundColorDisabled = isDark
         ? MacosColors.controlBackgroundColor.darkColor.withOpacity(0.5)
         : MacosColors.controlBackgroundColor.color.withOpacity(0.5);
@@ -122,10 +134,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         AppKitControlSize.large: 7.0,
       },
       buttonPadding: {
-        AppKitControlSize.mini: EdgeInsets.only(left: 6.0, right: 6.0, bottom: 0.5),
-        AppKitControlSize.small: EdgeInsets.only(left: 7.0, right: 7.0, bottom: 1.0),
-        AppKitControlSize.regular: EdgeInsets.only(left: 16.0, right: 16.0, top: 2.0, bottom: 3.0),
-        AppKitControlSize.large: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 1.0),
+        AppKitControlSize.mini:
+            EdgeInsets.only(left: 6.0, right: 6.0, bottom: 0.5),
+        AppKitControlSize.small:
+            EdgeInsets.only(left: 7.0, right: 7.0, bottom: 1.0),
+        AppKitControlSize.regular:
+            EdgeInsets.only(left: 16.0, right: 16.0, top: 2.0, bottom: 3.0),
+        AppKitControlSize.large:
+            EdgeInsets.only(right: 20.0, left: 20.0, bottom: 1.0),
       },
       fontSize: {
         AppKitControlSize.mini: 9.0,
@@ -140,7 +156,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         AppKitControlSize.large: Size(54.0, 26.0),
       },
       destructiveTextColor: MacosColors.systemRedColor,
-      textColor: CupertinoDynamicColor.withBrightness(color: MacosColors.white, darkColor: MacosColors.black),
+      textColor: CupertinoDynamicColor.withBrightness(
+          color: MacosColors.white, darkColor: MacosColors.black),
       overlayPressedColor: CupertinoDynamicColor.withBrightness(
         color: MacosColor.fromRGBO(0, 0, 0, 0.06),
         darkColor: MacosColor.fromRGBO(255, 255, 255, 0.15),
@@ -151,7 +168,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     helpButtonTheme ??= AppKitHelpButtonThemeData(
       color: isDark ? MacosColors.textBackgroundColor : MacosColors.textColor,
-      disabledColor: isDark ? MacosColors.textBackgroundColor.withOpacity(0.5) : MacosColors.textColor.withOpacity(0.5),
+      disabledColor: isDark
+          ? MacosColors.textBackgroundColor.withOpacity(0.5)
+          : MacosColors.textColor.withOpacity(0.5),
     );
 
     sliderTheme ??= AppKitSliderThemeData(
@@ -172,8 +191,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      dividerColorMultipleSelection: isDark ? MacosColors.systemGrayColor.darkColor : const Color(0xFFE8E8E8),
-      dividerColorSingleSelection: isDark ? MacosColors.systemGrayColor.darkColor : const Color(0xFFCCCBCB),
+      dividerColorMultipleSelection: isDark
+          ? MacosColors.systemGrayColor.darkColor
+          : const Color(0xFFE8E8E8),
+      dividerColorSingleSelection: isDark
+          ? MacosColors.systemGrayColor.darkColor
+          : const Color(0xFFCCCBCB),
     );
 
     final defaultData = AppKitThemeData.raw(
@@ -238,8 +261,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData) {
     final brightness = themeData.brightness;
     final themeAccentColor = _getMacOsThemeAccentColor(themeData.accentColor);
-    final accentColor =
-        themeAccentColor != null ? brightness.resolve(themeAccentColor.color, themeAccentColor.darkColor) : null;
+    final accentColor = themeAccentColor != null
+        ? brightness.resolve(themeAccentColor.color, themeAccentColor.darkColor)
+        : null;
 
     return AppKitThemeData(
       brightness: themeData.brightness,
@@ -331,10 +355,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       toggleButtonTheme: toggleButtonTheme ?? this.toggleButtonTheme,
       helpButtonTheme: helpButtonTheme ?? this.helpButtonTheme,
       sliderTheme: sliderTheme ?? this.sliderTheme,
-      segmentedControlTheme: segmentedControlTheme ?? this.segmentedControlTheme,
+      segmentedControlTheme:
+          segmentedControlTheme ?? this.segmentedControlTheme,
       canvasColor: canvasColor ?? this.canvasColor,
-      controlBackgroundColor: controlBackgroundColor ?? this.controlBackgroundColor,
-      controlBackgroundColorDisabled: controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
+      controlBackgroundColor:
+          controlBackgroundColor ?? this.controlBackgroundColor,
+      controlBackgroundColorDisabled:
+          controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
     );
   }
 
@@ -364,15 +391,22 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
       typography: MacosTypography.lerp(a.typography, b.typography, t),
-      pushButtonTheme: AppKitPushButtonThemeData.lerp(a.pushButtonTheme, b.pushButtonTheme, t),
-      toggleButtonTheme: AppKitToggleButtonThemeData.lerp(a.toggleButtonTheme, b.toggleButtonTheme, t),
-      helpButtonTheme: AppKitHelpButtonThemeData.lerp(a.helpButtonTheme, b.helpButtonTheme, t),
+      pushButtonTheme: AppKitPushButtonThemeData.lerp(
+          a.pushButtonTheme, b.pushButtonTheme, t),
+      toggleButtonTheme: AppKitToggleButtonThemeData.lerp(
+          a.toggleButtonTheme, b.toggleButtonTheme, t),
+      helpButtonTheme: AppKitHelpButtonThemeData.lerp(
+          a.helpButtonTheme, b.helpButtonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
-      controlBackgroundColor: Color.lerp(a.controlBackgroundColor, b.controlBackgroundColor, t)!,
-      controlBackgroundColorDisabled:
-          Color.lerp(a.controlBackgroundColorDisabled, b.controlBackgroundColorDisabled, t)!,
+      controlBackgroundColor:
+          Color.lerp(a.controlBackgroundColor, b.controlBackgroundColor, t)!,
+      controlBackgroundColorDisabled: Color.lerp(
+          a.controlBackgroundColorDisabled,
+          b.controlBackgroundColorDisabled,
+          t)!,
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
-      segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(a.segmentedControlTheme, b.segmentedControlTheme, t),
+      segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
+          a.segmentedControlTheme, b.segmentedControlTheme, t),
     );
   }
 
@@ -381,16 +415,26 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<Brightness>('brightness', brightness));
     properties.add(ColorProperty('accentColor', accentColor));
-    properties.add(FlagProperty('isMainWindow', value: isMainWindow, ifTrue: 'main window'));
-    properties.add(DiagnosticsProperty<VisualDensity>('visualDensity', visualDensity));
+    properties.add(FlagProperty('isMainWindow',
+        value: isMainWindow, ifTrue: 'main window'));
+    properties.add(
+        DiagnosticsProperty<VisualDensity>('visualDensity', visualDensity));
     properties.add(ColorProperty('canvasColor', canvasColor));
-    properties.add(DiagnosticsProperty<MacosTypography>('typography', typography));
-    properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>('pushButtonTheme', pushButtonTheme));
-    properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>('toggleButtonTheme', toggleButtonTheme));
-    properties.add(ColorProperty('controlBackgroundColor', controlBackgroundColor));
-    properties.add(ColorProperty('controlBackgroundColorDisabled', controlBackgroundColorDisabled));
-    properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>('helpButtonTheme', helpButtonTheme));
-    properties.add(DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
-    properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>('segmentedControlTheme', segmentedControlTheme));
+    properties
+        .add(DiagnosticsProperty<MacosTypography>('typography', typography));
+    properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>(
+        'pushButtonTheme', pushButtonTheme));
+    properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>(
+        'toggleButtonTheme', toggleButtonTheme));
+    properties
+        .add(ColorProperty('controlBackgroundColor', controlBackgroundColor));
+    properties.add(ColorProperty(
+        'controlBackgroundColorDisabled', controlBackgroundColorDisabled));
+    properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
+        'helpButtonTheme', helpButtonTheme));
+    properties.add(
+        DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
+    properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>(
+        'segmentedControlTheme', segmentedControlTheme));
   }
 }
