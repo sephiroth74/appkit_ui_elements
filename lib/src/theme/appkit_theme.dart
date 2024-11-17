@@ -88,12 +88,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color controlBackgroundColor;
   final Color controlBackgroundColorDisabled;
   final Color controlColorPressed;
+  final Color accentColorUnfocused;
   final MacosTypography typography;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
   final AppKitHelpButtonThemeData helpButtonTheme;
   final AppKitSliderThemeData sliderTheme;
   final AppKitSegmentedControlThemeData segmentedControlTheme;
+  final AppKitSwitchThemeData switchTheme;
+  final AppKitProgressThemeData progressTheme;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -104,12 +107,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
     AppKitSegmentedControlThemeData? segmentedControlTheme,
+    AppKitSwitchThemeData? switchTheme,
+    AppKitProgressThemeData? progressTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
     Color? controlColorPressed,
+    Color? accentColorUnfocused,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
@@ -130,6 +136,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     controlColorPressed ??= isDark
         ? MacosColors.white.withOpacity(0.1)
         : MacosColors.black.withOpacity(0.1);
+
+    accentColorUnfocused ??=
+        isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
 
     pushButtonTheme ??= const AppKitPushButtonThemeData(
       buttonRadius: {
@@ -193,6 +202,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       tickWidth: 2.0,
       discreteThumbSize: const Size(8.0, 20.0),
       continuousThumbSize: 20.0,
+      accentColorUnfocused: accentColorUnfocused,
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
@@ -202,6 +212,17 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       dividerColorSingleSelection: isDark
           ? MacosColors.systemGrayColor.darkColor
           : const Color(0xFFCCCBCB),
+    );
+
+    switchTheme ??= AppKitSwitchThemeData(
+      uncheckedColor: const Color.fromRGBO(200, 200, 200, 1.0),
+      uncheckedColorDisabled: const Color.fromRGBO(200, 200, 200, 0.5),
+    );
+
+    progressTheme ??= AppKitProgressThemeData(
+      trackColor: isDark ? const Color(0xFFe1e0de) : const Color(0xFFe1e0de),
+      color: accentColor,
+      accentColorUnfocused: accentColorUnfocused,
     );
 
     final defaultData = AppKitThemeData.raw(
@@ -215,10 +236,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: helpButtonTheme,
       sliderTheme: sliderTheme,
       segmentedControlTheme: segmentedControlTheme,
+      switchTheme: switchTheme,
+      progressTheme: progressTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlColorPressed: controlColorPressed,
+      accentColorUnfocused: accentColorUnfocused,
     );
 
     final customData = defaultData.copyWith(
@@ -236,6 +260,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: helpButtonTheme,
       sliderTheme: sliderTheme,
       segmentedControlTheme: segmentedControlTheme,
+      switchTheme: switchTheme,
+      progressTheme: progressTheme,
     );
 
     return defaultData.merge(customData);
@@ -315,10 +341,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.helpButtonTheme,
     required this.sliderTheme,
     required this.segmentedControlTheme,
+    required this.switchTheme,
+    required this.progressTheme,
     required this.canvasColor,
     required this.controlBackgroundColor,
     required this.controlBackgroundColorDisabled,
     required this.controlColorPressed,
+    required this.accentColorUnfocused,
   });
 
   @override
@@ -334,9 +363,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         helpButtonTheme,
         sliderTheme,
         segmentedControlTheme,
+        switchTheme,
+        progressTheme,
         controlBackgroundColor,
         controlBackgroundColorDisabled,
         controlColorPressed,
+        accentColorUnfocused,
       ];
 
   AppKitThemeData copyWith({
@@ -349,11 +381,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
     Color? controlColorPressed,
+    Color? accentColorUnfocused,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
     AppKitSegmentedControlThemeData? segmentedControlTheme,
+    AppKitSwitchThemeData? switchTheme,
+    AppKitProgressThemeData? progressTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -373,6 +408,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlBackgroundColorDisabled:
           controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
       controlColorPressed: controlColorPressed ?? this.controlColorPressed,
+      switchTheme: switchTheme ?? this.switchTheme,
+      progressTheme: progressTheme ?? this.progressTheme,
+      accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
     );
   }
 
@@ -393,6 +431,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
       controlColorPressed: other.controlColorPressed,
+      switchTheme: other.switchTheme,
+      progressTheme: other.progressTheme,
+      accentColorUnfocused: other.accentColorUnfocused,
     );
   }
 
@@ -421,6 +462,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.segmentedControlTheme, b.segmentedControlTheme, t),
       controlColorPressed:
           Color.lerp(a.controlColorPressed, b.controlColorPressed, t)!,
+      switchTheme: AppKitSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
+      progressTheme:
+          AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
+      accentColorUnfocused:
+          Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t)!,
     );
   }
 
@@ -451,5 +497,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>(
         'segmentedControlTheme', segmentedControlTheme));
     properties.add(ColorProperty('controlColorPressed', controlColorPressed));
+    properties.add(
+        DiagnosticsProperty<AppKitSwitchThemeData>('switchTheme', switchTheme));
+    properties.add(DiagnosticsProperty<AppKitProgressThemeData>(
+        'progressTheme', progressTheme));
+    properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
   }
 }

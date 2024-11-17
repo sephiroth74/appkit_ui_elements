@@ -2,6 +2,7 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
+import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:flutter/foundation.dart';
 
 const int _kAnimationDuration = 200;
@@ -48,9 +49,13 @@ class _AppKitSliderState extends State<AppKitSlider>
   bool get enabled => widget.onChanged != null;
 
   late AnimationController _animationController;
+
   late final Animation<double> _animationCurve;
+
   late final Tween<double> _animationTween;
+
   late Animation<double> _animation;
+
   double discreteAnchorThreshold = 0.01;
 
   @override
@@ -209,40 +214,45 @@ class _AppKitSliderState extends State<AppKitSlider>
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    final AppKitThemeData theme = AppKitTheme.of(context);
-    final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
-
-    final discreteThumbSize = sliderTheme.discreteThumbSize;
-    final continuousThumbSize = sliderTheme.continuousThumbSize;
-    final overallHeight =
-        sliderTheme.continuousThumbSize + _kHorizontalPaddingThreshold;
 
     return Semantics(
       slider: true,
       label: widget.semanticLabel,
       value: widget.value.toStringAsFixed(2),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: _kOverallMinWidth),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            double width = constraints.maxWidth;
-            if (width.isInfinite) width = _kOverallMinWidth;
+      child: UiElementColorBuilder(builder: (context, colorContainer) {
+        final AppKitThemeData theme = AppKitTheme.of(context);
+        final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
+        final discreteThumbSize = sliderTheme.discreteThumbSize;
+        final continuousThumbSize = sliderTheme.continuousThumbSize;
+        final overallHeight =
+            sliderTheme.continuousThumbSize + _kHorizontalPaddingThreshold;
+        final isMainWindow =
+            MainWindowStateListener.instance.isMainWindow.value;
 
-            double horizontalPadding;
-            if (!continous) {
-              horizontalPadding =
-                  (discreteThumbSize.width / 2) + _kHorizontalPaddingThreshold;
-            } else {
-              horizontalPadding =
-                  (continuousThumbSize / 2) + _kHorizontalPaddingThreshold;
-            }
+        return ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: _kOverallMinWidth),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double width = constraints.maxWidth;
+              if (width.isInfinite) width = _kOverallMinWidth;
 
-            width -= (horizontalPadding * 2);
+              double horizontalPadding;
+              if (!continous) {
+                horizontalPadding = (discreteThumbSize.width / 2) +
+                    _kHorizontalPaddingThreshold;
+              } else {
+                horizontalPadding =
+                    (continuousThumbSize / 2) + _kHorizontalPaddingThreshold;
+              }
 
-            return UiElementColorBuilder(builder: (context, colorContainer) {
-              final accentColor = sliderTheme.sliderColor ??
-                  theme.accentColor ??
-                  colorContainer.controlAccentColor;
+              width -= (horizontalPadding * 2);
+
+              final accentColor = isMainWindow
+                  ? (sliderTheme.sliderColor ??
+                      theme.accentColor ??
+                      colorContainer.controlAccentColor)
+                  : (sliderTheme.accentColorUnfocused ??
+                      theme.accentColorUnfocused);
 
               return Center(
                 child: SizedBox(
@@ -403,10 +413,10 @@ class _AppKitSliderState extends State<AppKitSlider>
                   ),
                 ),
               );
-            });
-          },
-        ),
-      ),
+            },
+          ),
+        );
+      }),
     );
   }
 }

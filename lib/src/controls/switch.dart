@@ -67,8 +67,6 @@ class _AppKitSwitchState extends State<AppKitSwitch>
   @override
   void initState() {
     super.initState();
-    log.i('initState(value: $checked)');
-
     isInteractive = false;
     dragStartedOnHandle = false;
 
@@ -138,8 +136,8 @@ class _AppKitSwitchState extends State<AppKitSwitch>
 
   @override
   void dispose() {
-    super.dispose();
     positionController.dispose();
+    super.dispose();
   }
 
   void _resumeAnimation() {
@@ -158,12 +156,10 @@ class _AppKitSwitchState extends State<AppKitSwitch>
   }
 
   void _handleTap() {
-    log.i('_handleTap(value: ${widget.checked})');
     widget.onChanged?.call(!checked);
   }
 
   void _handleTapDown(Offset localPosition) {
-    log.i('_handleTapDown(value: $checked)');
     setState(() {
       dragStartPosition = localPosition;
       if (checked) {
@@ -175,12 +171,10 @@ class _AppKitSwitchState extends State<AppKitSwitch>
       }
       mouseIsDown = true;
       isInteractive = true;
-      log.t('dragStartedOnHandle: $dragStartedOnHandle');
     });
   }
 
   void _handleTapUp(TapUpDetails details) {
-    log.i('_handleTapUp(value: ${widget.checked})');
     setState(() {
       mouseIsDown = false;
       isInteractive = false;
@@ -221,8 +215,6 @@ class _AppKitSwitchState extends State<AppKitSwitch>
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
-    log.i(
-        '_handleDragUpdate(enabled: $enabled, isInteractive: $isInteractive)');
     if (!isInteractive || !enabled) return;
 
     if (dragStartedOnHandle) {
@@ -291,6 +283,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
 
   @override
   Widget build(BuildContext context) {
+    debugCheckHasAppKitTheme(context);
     return Semantics(
         button: true,
         label: widget.semanticLabel,
@@ -299,11 +292,13 @@ class _AppKitSwitchState extends State<AppKitSwitch>
           builder: (context, UiElementColorContainer colorContainer) {
             final animationValue = positionCurvedAnimation.value;
             final theme = AppKitTheme.of(context);
+            final switchTheme = AppKitSwitchTheme.of(context);
+
             final enableFactor = enabled ? 1.0 : 0.5;
 
-            final backgroundColorDisabled =
-                AppKitColors.fills.opaque.primary.color.withOpacity(0.04);
-            final uncheckedColor = Color.fromRGBO(200, 200, 200, enableFactor);
+            final uncheckedColor = enabled
+                ? switchTheme.uncheckedColor
+                : switchTheme.uncheckedColorDisabled;
 
             final checkedColor = enabled
                 ? (widget.color ??
@@ -319,7 +314,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                 ? AppKitColors.fills.opaque.secondary.color.withOpacity(
                     AppKitColors.fills.opaque.secondary.color.opacity *
                         (1.0 - animationValue))
-                : backgroundColorDisabled;
+                : AppKitColors.fills.opaque.primary.color.withOpacity(0.04);
 
             final Color innerShadowColor;
             if (enabled) {

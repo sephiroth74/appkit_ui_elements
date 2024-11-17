@@ -70,6 +70,9 @@ class AppKitSliderThemeData with Diagnosticable {
   // The size of the thumb (continuous slider).
   final double continuousThumbSize;
 
+  // The color of the track that the thumb can slide along when the slider is not in the main window.
+  final Color? accentColorUnfocused;
+
   AppKitSliderThemeData({
     required this.trackColor,
     required this.thumbColor,
@@ -85,6 +88,7 @@ class AppKitSliderThemeData with Diagnosticable {
     this.sliderColor,
     this.tickColor,
     this.animationDuration,
+    this.accentColorUnfocused,
   })  : assert(discreteAnchorThreshold >= 0.0),
         assert(discreteThumbCornerRadius >= 0.0),
         assert(continuousTrackCornerRadius >= 0.0),
@@ -115,6 +119,7 @@ class AppKitSliderThemeData with Diagnosticable {
     double? tickWidth,
     Size? discreteThumbSize,
     double? continuousThumbSize,
+    Color? accentColorUnfocused,
   }) {
     return AppKitSliderThemeData(
       thumbColor: thumbColor ?? this.thumbColor,
@@ -135,6 +140,7 @@ class AppKitSliderThemeData with Diagnosticable {
       tickWidth: tickWidth ?? this.tickWidth,
       discreteThumbSize: discreteThumbSize ?? this.discreteThumbSize,
       continuousThumbSize: continuousThumbSize ?? this.continuousThumbSize,
+      accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
     );
   }
 
@@ -155,6 +161,7 @@ class AppKitSliderThemeData with Diagnosticable {
       tickWidth: other.tickWidth,
       discreteThumbSize: other.discreteThumbSize,
       continuousThumbSize: other.continuousThumbSize,
+      accentColorUnfocused: other.accentColorUnfocused,
     );
   }
 
@@ -179,6 +186,7 @@ class AppKitSliderThemeData with Diagnosticable {
     properties.add(DoubleProperty('tickWidth', tickWidth));
     properties.add(DiagnosticsProperty('discreteThumbSize', discreteThumbSize));
     properties.add(DoubleProperty('continuousThumbSize', continuousThumbSize));
+    properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
   }
 
   static AppKitSliderThemeData lerp(
@@ -207,6 +215,8 @@ class AppKitSliderThemeData with Diagnosticable {
           Size.lerp(a.discreteThumbSize, b.discreteThumbSize, t)!,
       continuousThumbSize:
           lerpDouble(a.continuousThumbSize, b.continuousThumbSize, t)!,
+      accentColorUnfocused:
+          Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t),
     );
   }
 }

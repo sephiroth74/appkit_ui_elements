@@ -55,8 +55,17 @@ class _ControlsPageState extends State<ControlsPage> {
                                 }),
                             const SizedBox(width: 16.0),
                             AppKitSwitch(
+                                checked: switchValue1,
+                                color: MacosColors.systemOrangeColor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    debugPrint('onChanged($value)');
+                                    switchValue1 = value;
+                                  });
+                                }),
+                            const SizedBox(width: 16.0),
+                            AppKitSwitch(
                               checked: switchValue1,
-                              color: MacosColors.systemOrangeColor,
                             ),
                           ],
                         ),

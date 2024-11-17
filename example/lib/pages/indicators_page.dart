@@ -46,7 +46,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                               setState(() => slider1Value = value);
                             },
                           ),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 16.0),
                           AppKitSlider(
                             style: AppKitSliderStyle.discreteFree,
                             min: 0.0,
@@ -70,7 +70,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                               setState(() => slider1Value = value);
                             },
                           ),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 16.0),
                           AppKitSlider(
                             style: AppKitSliderStyle.discreteFixed,
                             stops: const [0.0, 0.1, 0.15, 0.2, 0.9, 1.0],
@@ -79,6 +79,59 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                               debugPrint('Slider 3: $value');
                               setState(() => slider1Value = value);
                             },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20.0),
+                      const Divider(
+                        thickness: 0.5,
+                      ),
+                      const SizedBox(height: 20.0),
+                      const WidgetTitle(label: 'Progress Bars Linear'),
+                      const SizedBox(height: 20.0),
+                      Column(
+                        children: [
+                          AppKitProgress.linear(
+                            value: slider1Value,
+                            height: 12,
+                            color: MacosColors.appleMagenta,
+                          ),
+                          const SizedBox(height: 16.0),
+                          AppKitProgress.linear(value: slider1Value),
+                          const SizedBox(height: 16.0),
+                          AppKitProgress.linear(value: slider1Value, height: 3),
+                          const SizedBox(height: 16.0),
+                          AppKitProgress.linear(),
+                        ],
+                      ),
+                      const SizedBox(height: 20.0),
+                      const Divider(
+                        thickness: 0.5,
+                      ),
+                      const SizedBox(height: 20.0),
+                      const WidgetTitle(label: 'Progress Bars Circular'),
+                      const SizedBox(height: 20.0),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              AppKitProgress.circle(),
+                              const SizedBox(width: 20.0),
+                              AppKitProgress.circle(size: 24),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          Row(
+                            children: [
+                              AppKitProgress.circle(value: slider1Value),
+                              const SizedBox(width: 20.0),
+                              AppKitProgress.circle(
+                                value: slider1Value,
+                                color: MacosColors.appleMagenta,
+                                size: 24.0,
+                                strokeWidth: 6,
+                              ),
+                            ],
                           ),
                         ],
                       ),
