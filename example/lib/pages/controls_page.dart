@@ -14,10 +14,10 @@ class ControlsPage extends StatefulWidget {
 
 class _ControlsPageState extends State<ControlsPage> {
   bool? checkboxValue1 = true;
-
   bool radioButtonValue2 = true;
   bool radioButtonValue3 = false;
   double stepperValue = 50;
+  bool disclosureValue = false;
 
   bool switchValue1 = true;
 
@@ -337,13 +337,12 @@ class _ControlsPageState extends State<ControlsPage> {
                         Row(
                           children: [
                             AppKitDisclosureButton(
-                              isDown: false,
-                              onPressed: () {},
-                            ),
-                            const SizedBox(width: 16.0),
-                            AppKitDisclosureButton(
-                              onPressed: () {},
-                              isDown: true,
+                              isDown: disclosureValue,
+                              onPressed: () {
+                                setState(() {
+                                  disclosureValue = !disclosureValue;
+                                });
+                              },
                             ),
                           ],
                         ),
