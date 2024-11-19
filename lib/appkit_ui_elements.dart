@@ -20,6 +20,7 @@ export 'src/controls/color_well.dart';
 
 export 'src/enums/enums.dart';
 
+export 'src/theme/appkit_colors.dart';
 export 'src/theme/appkit_theme.dart';
 export 'src/theme/appkit_push_button_theme.dart';
 export 'src/theme/appkit_toggle_button_theme.dart';

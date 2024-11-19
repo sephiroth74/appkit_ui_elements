@@ -18,7 +18,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
       case AppKitColorPickerMode.gray:
         return const Color(0xFFA9A9A9);
       case AppKitColorPickerMode.none:
-        return const Color.fromARGB(0, 0, 0, 255);
+        return AppKitColors.systemOrange.color;
       case AppKitColorPickerMode.rgb:
         return const Color.fromARGB(255, 217, 0, 255);
       case AppKitColorPickerMode.cmyk:
@@ -92,7 +92,17 @@ class _SelectorsPageState extends State<SelectorsPage> {
                           );
                         }).toList(),
                       ),
-                      AppKitColorWell(onChanged: null),
+                      const Row(
+                        children: [
+                          SizedBox(
+                              width: 100,
+                              child: Text('Disabled: ',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis)),
+                          SizedBox(width: 8.0),
+                          AppKitColorWell(onChanged: null),
+                        ],
+                      ),
                     ],
                   );
                 },

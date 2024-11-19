@@ -7,7 +7,6 @@ import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const _kWidth = 28.0;
 const _kHeight = 20.0;
@@ -103,7 +102,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
 
     final theme = AppKitTheme.of(context);
     Color selectedColor =
-        _selectedColor ?? theme.accentColor ?? MacosColors.appleBlue;
+        _selectedColor ?? theme.accentColor ?? AppKitColors.systemBlue;
 
     if (!enabled) {
       selectedColor = selectedColor.withOpacity(selectedColor.opacity * 0.5);
