@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:appkit_ui_elements/src/theme/appkit_color_well_theme.dart';
 import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -97,6 +98,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitSegmentedControlThemeData segmentedControlTheme;
   final AppKitSwitchThemeData switchTheme;
   final AppKitProgressThemeData progressTheme;
+  final AppKitColorWellThemeData colorWellTheme;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -109,6 +111,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitSegmentedControlThemeData? segmentedControlTheme,
     AppKitSwitchThemeData? switchTheme,
     AppKitProgressThemeData? progressTheme,
+    AppKitColorWellThemeData? colorWellTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -225,6 +228,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       accentColorUnfocused: accentColorUnfocused,
     );
 
+    colorWellTheme ??= AppKitColorWellThemeData(
+      borderColor: const Color(0xFFAFAFAF),
+      gradientColors: [
+        const Color(0xFFE3E3E3),
+        const Color(0xFFF7F7F7),
+      ],
+    );
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -238,6 +249,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       segmentedControlTheme: segmentedControlTheme,
       switchTheme: switchTheme,
       progressTheme: progressTheme,
+      colorWellTheme: colorWellTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
@@ -262,6 +274,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       segmentedControlTheme: segmentedControlTheme,
       switchTheme: switchTheme,
       progressTheme: progressTheme,
+      accentColorUnfocused: accentColorUnfocused,
+      colorWellTheme: colorWellTheme,
     );
 
     return defaultData.merge(customData);
@@ -343,6 +357,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.segmentedControlTheme,
     required this.switchTheme,
     required this.progressTheme,
+    required this.colorWellTheme,
     required this.canvasColor,
     required this.controlBackgroundColor,
     required this.controlBackgroundColorDisabled,
@@ -365,6 +380,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         segmentedControlTheme,
         switchTheme,
         progressTheme,
+        colorWellTheme,
         controlBackgroundColor,
         controlBackgroundColorDisabled,
         controlColorPressed,
@@ -389,6 +405,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitSegmentedControlThemeData? segmentedControlTheme,
     AppKitSwitchThemeData? switchTheme,
     AppKitProgressThemeData? progressTheme,
+    AppKitColorWellThemeData? colorWellTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -411,6 +428,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       switchTheme: switchTheme ?? this.switchTheme,
       progressTheme: progressTheme ?? this.progressTheme,
       accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
+      colorWellTheme: colorWellTheme ?? this.colorWellTheme,
     );
   }
 
@@ -434,6 +452,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       switchTheme: other.switchTheme,
       progressTheme: other.progressTheme,
       accentColorUnfocused: other.accentColorUnfocused,
+      colorWellTheme: other.colorWellTheme,
     );
   }
 
@@ -467,6 +486,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
       accentColorUnfocused:
           Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t)!,
+      colorWellTheme:
+          AppKitColorWellThemeData.lerp(a.colorWellTheme, b.colorWellTheme, t),
     );
   }
 
@@ -502,5 +523,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     properties.add(DiagnosticsProperty<AppKitProgressThemeData>(
         'progressTheme', progressTheme));
     properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
+    properties.add(DiagnosticsProperty<AppKitColorWellThemeData>(
+        'colorWellTheme', colorWellTheme));
   }
 }

@@ -17,3 +17,32 @@ enum AppKitSliderStyle {
 }
 
 enum AppKitSegmentedControlSize { regular, small, mini }
+
+enum AppKitColorPickerMode {
+  /// No color panel mode.
+  none,
+
+  /// The grayscale-alpha color mode.
+  gray,
+
+  /// The red-green-blue color mode.
+  rgb,
+
+  /// The cyan-magenta-yellow-black color mode.
+  cmyk,
+
+  /// The hue-saturation-brightness color mode.
+  hsb,
+
+  /// The custom palette color mode.
+  customPalette,
+
+  /// The custom color list mode.
+  colorList,
+
+  /// The color wheel mode.
+  wheel,
+
+  /// The crayon picker mode.
+  crayon,
+}

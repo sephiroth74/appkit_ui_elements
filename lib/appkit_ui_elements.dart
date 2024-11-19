@@ -16,7 +16,10 @@ export 'src/controls/segmented_control.dart';
 export 'src/controls/switch.dart';
 export 'src/controls/progress_bar.dart';
 export 'src/controls/progress_circle.dart';
+export 'src/controls/color_well.dart';
+
 export 'src/enums/enums.dart';
+
 export 'src/theme/appkit_theme.dart';
 export 'src/theme/appkit_push_button_theme.dart';
 export 'src/theme/appkit_toggle_button_theme.dart';
@@ -25,6 +28,7 @@ export 'src/theme/appkit_slider_theme.dart';
 export 'src/theme/appkit_segmented_control_theme.dart';
 export 'src/theme/appkit_switch_theme.dart';
 export 'src/theme/appkit_progress_theme.dart';
+export 'src/theme/appkit_color_well_theme.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {

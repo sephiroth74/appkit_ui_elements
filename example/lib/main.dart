@@ -5,6 +5,7 @@ import 'package:example/pages/controls_page.dart';
 import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
+import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +25,7 @@ void main() async {
   if (!kIsWeb) {
     if (Platform.isMacOS) {
       await _configureMacosWindowUtils();
+
       await AppKitUiElements.ensureInitialized();
     }
   }
@@ -78,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Controls')),
                     SidebarItem(label: Text('Indicators')),
                     SidebarItem(label: Text('Segmented Controls')),
+                    SidebarItem(label: Text('Selectors')),
                   ],
                   currentIndex: pageIndex,
                   onChanged: (index) {
@@ -93,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const ControlsPage(),
           const IndicatorsPage(),
           const SegmentedControlsPage(),
+          const SelectorsPage(),
         ][pageIndex],
       ),
     );
