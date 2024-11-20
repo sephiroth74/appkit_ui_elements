@@ -1,7 +1,6 @@
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
-import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

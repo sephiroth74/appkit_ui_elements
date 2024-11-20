@@ -83,10 +83,69 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                         ],
                       ),
                       const SizedBox(height: 20.0),
-                      const Divider(
-                        thickness: 0.5,
-                      ),
+                      const Divider(thickness: 0.5),
                       const SizedBox(height: 20.0),
+                      const WidgetTitle(label: 'Circular Slider'),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          SizedBox.square(
+                            dimension: 48,
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text('${(slider1Value * 100).toInt()}',
+                                      style: MacosTheme.of(context)
+                                          .typography
+                                          .body
+                                          .copyWith(fontSize: 10)),
+                                ),
+                                AppKitCircleSlider(
+                                  size: 48,
+                                  value: slider1Value,
+                                  onChanged: (value) =>
+                                      setState(() => slider1Value = value),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 20.0),
+                          SizedBox.square(
+                            dimension: 84,
+                            child: Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text('${(slider1Value * 100).toInt()}',
+                                      style: MacosTheme.of(context)
+                                          .typography
+                                          .body
+                                          .copyWith(
+                                              fontSize: 16,
+                                              color: AppKitColors
+                                                  .text.opaque.tertiary)),
+                                ),
+                                AppKitCircleSlider(
+                                  sweepAngle: 40,
+                                  size: 84,
+                                  progressWidth: 4,
+                                  thumbRadius: 7,
+                                  trackWidth: 0.5,
+                                  trackColor:
+                                      AppKitColors.systemGray.withOpacity(0.3),
+                                  progressColor: AppKitColors.systemPurple,
+                                  value: slider1Value,
+                                  onChanged: (value) =>
+                                      setState(() => slider1Value = value),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16.0, height: 16.0),
+                      const Divider(thickness: 0.5),
                       const WidgetTitle(label: 'Progress Bars Linear'),
                       const SizedBox(height: 20.0),
                       Column(

@@ -1,7 +1,6 @@
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
-import 'package:appkit_ui_elements/src/theme/appkit_colors.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:flutter/foundation.dart';
 
@@ -372,7 +371,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                                   horizontal: horizontalPadding),
                               child: GestureDetector(
                                 onTapDown: (details) => thumbHeldDown = true,
-                                child: _ContinuousThumb(
+                                child: AppKitCircularSliderThumb(
                                   continuousThumbSize: continuousThumbSize,
                                   color: sliderTheme.thumbColor,
                                   foregroundColor: enabled && _thumbHeldDown
@@ -422,8 +421,9 @@ class _AppKitSliderState extends State<AppKitSlider>
 }
 
 /// Continuous thumb for the slider.
-class _ContinuousThumb extends StatelessWidget {
-  const _ContinuousThumb({
+class AppKitCircularSliderThumb extends StatelessWidget {
+  const AppKitCircularSliderThumb({
+    super.key,
     required this.color,
     required this.continuousThumbSize,
     this.foregroundColor,

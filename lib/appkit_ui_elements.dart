@@ -17,6 +17,7 @@ export 'src/controls/switch.dart';
 export 'src/controls/progress_bar.dart';
 export 'src/controls/progress_circle.dart';
 export 'src/controls/color_well.dart';
+export 'src/controls/circle_slider.dart';
 
 export 'src/enums/enums.dart';
 
