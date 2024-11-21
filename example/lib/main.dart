@@ -6,6 +6,7 @@ import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
 import 'package:example/pages/selectors_page.dart';
+import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -79,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Toggle Button')),
                     SidebarItem(label: Text('Controls')),
                     SidebarItem(label: Text('Indicators')),
+                    SidebarItem(label: Text('Sliders')),
                     SidebarItem(label: Text('Segmented Controls')),
                     SidebarItem(label: Text('Selectors')),
                   ],
@@ -95,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const ToggleButtonPage(),
           const ControlsPage(),
           const IndicatorsPage(),
+          const SlidersPage(),
           const SegmentedControlsPage(),
           const SelectorsPage(),
         ][pageIndex],
