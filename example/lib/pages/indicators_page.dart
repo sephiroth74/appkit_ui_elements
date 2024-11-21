@@ -101,7 +101,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                                           .body
                                           .copyWith(fontSize: 10)),
                                 ),
-                                AppKitCircleSlider(
+                                AppKitCircleSlider2(
                                   size: 48,
                                   value: slider1Value,
                                   onChanged: (value) =>
@@ -126,7 +126,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                                               color: AppKitColors
                                                   .text.opaque.tertiary)),
                                 ),
-                                AppKitCircleSlider(
+                                AppKitCircleSlider2(
                                   sweepAngle: 40,
                                   size: 84,
                                   progressWidth: 4,

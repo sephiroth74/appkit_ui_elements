@@ -19,6 +19,8 @@ class _ControlsPageState extends State<ControlsPage> {
   double stepperValue = 50;
   bool disclosureValue = false;
 
+  double sliderValue1 = 0.5;
+
   bool switchValue1 = true;
 
   @override
@@ -41,6 +43,44 @@ class _ControlsPageState extends State<ControlsPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const WidgetTitle(label: 'CircularSlider'),
+                        const SizedBox(height: 20.0),
+                        Row(
+                          children: [
+                            AppKitCircularSlider(
+                              min: 0.0,
+                              max: 1.0,
+                              semanticLabel: 'Circular Slider',
+                              tickMarks: 0,
+                              value: sliderValue1,
+                              continuous: true,
+                              onChanged: (value) {
+                                setState(() => sliderValue1 = value);
+                              },
+                            ),
+                            const SizedBox(width: 16.0),
+                            SizedBox(
+                                width: 50,
+                                child: Text(sliderValue1.toStringAsFixed(2))),
+                            const SizedBox(width: 16.0),
+                            AppKitCircularSlider(
+                              min: 0.0,
+                              max: 1.0,
+                              semanticLabel: 'Circular Slider',
+                              continuous: false,
+                              color: AppKitColors.systemGreen,
+                              tickMarks: 20,
+                              value: sliderValue1,
+                              onChanged: (value) {
+                                setState(() => sliderValue1 = value);
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 16.0, height: 16.0),
+                        const Divider(
+                          thickness: 0.5,
+                        ),
                         const WidgetTitle(label: 'Switches'),
                         const SizedBox(height: 20.0),
                         Row(

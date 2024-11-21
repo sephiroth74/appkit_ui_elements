@@ -93,6 +93,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitToggleButtonThemeData toggleButtonTheme;
   final AppKitHelpButtonThemeData helpButtonTheme;
   final AppKitSliderThemeData sliderTheme;
+  final AppKitCircularSliderThemeData circularSliderTheme;
   final AppKitSegmentedControlThemeData segmentedControlTheme;
   final AppKitSwitchThemeData switchTheme;
   final AppKitProgressThemeData progressTheme;
@@ -106,6 +107,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
+    AppKitCircularSliderThemeData? circularSliderTheme,
     AppKitSegmentedControlThemeData? segmentedControlTheme,
     AppKitSwitchThemeData? switchTheme,
     AppKitProgressThemeData? progressTheme,
@@ -206,6 +208,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       accentColorUnfocused: accentColorUnfocused,
     );
 
+    circularSliderTheme ??= AppKitCircularSliderThemeData(
+      backgroundColor:
+          isDark ? MacosColors.systemGrayColor.darkColor : Colors.white,
+      thumbColor:
+          isDark ? const Color(0x7fffffff) : Colors.black.withOpacity(0.5),
+      thumbColorUnfocused: accentColorUnfocused,
+    );
+
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
       dividerColorMultipleSelection: isDark
           ? MacosColors.systemGrayColor.darkColor
@@ -248,6 +258,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       switchTheme: switchTheme,
       progressTheme: progressTheme,
       colorWellTheme: colorWellTheme,
+      circularSliderTheme: circularSliderTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
@@ -356,6 +367,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.switchTheme,
     required this.progressTheme,
     required this.colorWellTheme,
+    required this.circularSliderTheme,
     required this.canvasColor,
     required this.controlBackgroundColor,
     required this.controlBackgroundColorDisabled,
@@ -404,6 +416,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitSwitchThemeData? switchTheme,
     AppKitProgressThemeData? progressTheme,
     AppKitColorWellThemeData? colorWellTheme,
+    AppKitCircularSliderThemeData? circularSliderTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -427,6 +440,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       progressTheme: progressTheme ?? this.progressTheme,
       accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
       colorWellTheme: colorWellTheme ?? this.colorWellTheme,
+      circularSliderTheme: circularSliderTheme ?? this.circularSliderTheme,
     );
   }
 
@@ -451,6 +465,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       progressTheme: other.progressTheme,
       accentColorUnfocused: other.accentColorUnfocused,
       colorWellTheme: other.colorWellTheme,
+      circularSliderTheme: other.circularSliderTheme,
     );
   }
 
@@ -486,6 +501,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t)!,
       colorWellTheme:
           AppKitColorWellThemeData.lerp(a.colorWellTheme, b.colorWellTheme, t),
+      circularSliderTheme: AppKitCircularSliderThemeData.lerp(
+          a.circularSliderTheme, b.circularSliderTheme, t),
     );
   }
 
@@ -523,5 +540,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
     properties.add(DiagnosticsProperty<AppKitColorWellThemeData>(
         'colorWellTheme', colorWellTheme));
+    properties.add(DiagnosticsProperty<AppKitCircularSliderThemeData>(
+        'circularSliderTheme', circularSliderTheme));
   }
 }

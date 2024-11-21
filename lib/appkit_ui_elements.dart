@@ -18,6 +18,7 @@ export 'src/controls/progress_bar.dart';
 export 'src/controls/progress_circle.dart';
 export 'src/controls/color_well.dart';
 export 'src/controls/circle_slider.dart';
+export 'src/controls/circular_slider.dart';
 
 export 'src/enums/enums.dart';
 
@@ -31,6 +32,7 @@ export 'src/theme/appkit_segmented_control_theme.dart';
 export 'src/theme/appkit_switch_theme.dart';
 export 'src/theme/appkit_progress_theme.dart';
 export 'src/theme/appkit_color_well_theme.dart';
+export 'src/theme/appkit_circular_slider_theme.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {

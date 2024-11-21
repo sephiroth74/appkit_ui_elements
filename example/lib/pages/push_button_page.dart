@@ -33,13 +33,43 @@ class _PushButtonPageState extends State<PushButtonPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            AppKitPushButton(
-                              onPressed: () {},
-                              controlSize: AppKitControlSize.large,
-                              color: MacosColors.systemYellowColor
-                                  .resolveFrom(context),
-                              type: AppKitPushButtonType.primary,
-                              child: const Text('Label'),
+                            GestureDetector(
+                              onTapDown: (details) {
+                                final ContextMenuController
+                                    contextMenuController =
+                                    ContextMenuController();
+                                contextMenuController.show(
+                                  context: context,
+                                  contextMenuBuilder: (context) {
+                                    return AdaptiveTextSelectionToolbar
+                                        .buttonItems(
+                                      buttonItems: [
+                                        ContextMenuButtonItem(
+                                          onPressed: () =>
+                                              ContextMenuController.removeAny(),
+                                          label: 'Print',
+                                        ),
+                                        ContextMenuButtonItem(
+                                          onPressed: () =>
+                                              ContextMenuController.removeAny(),
+                                          label: 'Exit',
+                                        ),
+                                      ],
+                                      anchors: TextSelectionToolbarAnchors(
+                                        primaryAnchor: details.globalPosition,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: AppKitPushButton(
+                                onPressed: () {},
+                                controlSize: AppKitControlSize.large,
+                                color: MacosColors.systemYellowColor
+                                    .resolveFrom(context),
+                                type: AppKitPushButtonType.primary,
+                                child: const Text('Label'),
+                              ),
                             ),
                             const SizedBox(width: 16.0),
                             AppKitPushButton(

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
+import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 const _kArcSweepAngle = 20.0;
 const _kSize = 48.0;
 
-class AppKitCircleSlider extends StatefulWidget {
+class AppKitCircleSlider2 extends StatefulWidget {
   final double size;
   final double value;
   final double min;
@@ -24,7 +24,7 @@ class AppKitCircleSlider extends StatefulWidget {
   final double? trackWidth;
   final double? progressWidth;
 
-  const AppKitCircleSlider({
+  const AppKitCircleSlider2({
     super.key,
     required this.value,
     this.size = _kSize,
@@ -46,10 +46,10 @@ class AppKitCircleSlider extends StatefulWidget {
             thumbRadius == null || thumbRadius > 0 || thumbRadius < size / 3);
 
   @override
-  State<AppKitCircleSlider> createState() => _AppKitCircleSliderState();
+  State<AppKitCircleSlider2> createState() => _AppKitCircleSlider2State();
 }
 
-class _AppKitCircleSliderState extends State<AppKitCircleSlider> {
+class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
   double thumbRadius = 0;
 
   double get sweepAngle => widget.sweepAngle;
@@ -171,6 +171,7 @@ class _AppKitCircleSliderState extends State<AppKitCircleSlider> {
 
   @override
   Widget build(BuildContext context) {
+    debugCheckHasAppKitTheme(context);
     return Semantics(
       slider: true,
       label: widget.semanticLabel,
