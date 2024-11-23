@@ -31,10 +31,12 @@ class AppKitRatingIndicatorThemeData with Diagnosticable {
   final Color imageColor;
   final double placeholderOpacity;
   final IconData? icon;
+  final double iconsPadding;
 
   AppKitRatingIndicatorThemeData({
     required this.imageColor,
     required this.placeholderOpacity,
+    required this.iconsPadding,
     this.icon,
   });
 
@@ -44,17 +46,20 @@ class AppKitRatingIndicatorThemeData with Diagnosticable {
     properties.add(ColorProperty('imageColor', imageColor));
     properties.add(DoubleProperty('placeholderOpacity', placeholderOpacity));
     properties.add(DiagnosticsProperty('icon', icon));
+    properties.add(DoubleProperty('iconsPadding', iconsPadding));
   }
 
   AppKitRatingIndicatorThemeData copyWith({
     Color? imageColor,
     double? placeholderOpacity,
     IconData? icon,
+    double? iconsPadding,
   }) {
     return AppKitRatingIndicatorThemeData(
       imageColor: imageColor ?? this.imageColor,
       placeholderOpacity: placeholderOpacity ?? this.placeholderOpacity,
       icon: icon ?? this.icon,
+      iconsPadding: iconsPadding ?? this.iconsPadding,
     );
   }
 
@@ -64,6 +69,7 @@ class AppKitRatingIndicatorThemeData with Diagnosticable {
       imageColor: other.imageColor,
       placeholderOpacity: other.placeholderOpacity,
       icon: other.icon,
+      iconsPadding: other.iconsPadding,
     );
   }
 
@@ -74,6 +80,7 @@ class AppKitRatingIndicatorThemeData with Diagnosticable {
       placeholderOpacity:
           lerpDouble(a?.placeholderOpacity, b?.placeholderOpacity, t)!,
       icon: t < 0.5 ? a?.icon : b?.icon,
+      iconsPadding: lerpDouble(a?.iconsPadding, b?.iconsPadding, t)!,
     );
   }
 }

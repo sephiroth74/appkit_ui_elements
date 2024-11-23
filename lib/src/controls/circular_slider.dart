@@ -255,19 +255,8 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
                 shape: BoxShape.circle,
                 color: backgroundColor,
                 boxShadow: [
-                  BoxShadow(
-                    color: colorContainer.shadowColor.withOpacity(0.4),
-                    blurRadius: 0.50,
-                    offset: const Offset(0.0, 1),
-                    blurStyle: BlurStyle.outer,
-                  ),
-                  BoxShadow(
-                    color: colorContainer.shadowColor.withOpacity(0.1),
-                    blurRadius: 0.0,
-                    spreadRadius: 0.5,
-                    blurStyle: BlurStyle.outer,
-                    offset: const Offset(0.0, 0.0),
-                  ),
+                  colorContainer.shadowPrimary,
+                  colorContainer.shadowSecondary,
                 ],
               ),
               child: Stack(

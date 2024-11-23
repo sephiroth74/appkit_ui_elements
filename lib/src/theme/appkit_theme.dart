@@ -1,3 +1,4 @@
+import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -225,6 +226,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       imageColor: AppKitColors.secondaryLabelColor,
       placeholderOpacity: 0.2,
       icon: Icons.star_sharp,
+      iconsPadding: -1.0,
     );
 
     circularSliderTheme ??= AppKitCircularSliderThemeData(
@@ -585,4 +587,21 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     properties.add(DiagnosticsProperty<AppKitRatingIndicatorThemeData>(
         'ratingIndicatorTheme', ratingIndicatorTheme));
   }
+}
+
+extension UiElementColorBuilderX on UiElementColorContainer {
+  BoxShadow get shadowPrimary => BoxShadow(
+        color: shadowColor.withOpacity(0.4),
+        blurRadius: 0.50,
+        offset: const Offset(0.0, 1),
+        blurStyle: BlurStyle.outer,
+      );
+
+  BoxShadow get shadowSecondary => BoxShadow(
+        color: shadowColor.withOpacity(0.1),
+        blurRadius: 0.0,
+        spreadRadius: 0.5,
+        blurStyle: BlurStyle.outer,
+        offset: const Offset(0.0, 0.0),
+      );
 }

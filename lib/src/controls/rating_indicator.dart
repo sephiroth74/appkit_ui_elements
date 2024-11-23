@@ -18,7 +18,7 @@ class AppKitRatingIndicator extends StatefulWidget {
   final String? semanticLabel;
   final ValueChanged<int>? onChanged;
   final double? size;
-  final double iconsPadding;
+  final double? iconsPadding;
 
   const AppKitRatingIndicator({
     super.key,
@@ -33,7 +33,7 @@ class AppKitRatingIndicator extends StatefulWidget {
     this.semanticLabel,
     this.onChanged,
     this.size,
-    this.iconsPadding = _kItemsPadding,
+    this.iconsPadding,
   })  : assert(min <= max),
         assert(value >= min && value <= max);
 
@@ -52,6 +52,11 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
 
   late int _currentValue = widget.value;
 
+  late AppKitRatingIndicatorThemeData theme =
+      AppKitRatingIndicatorTheme.of(context);
+
+  late double iconsPadding = widget.iconsPadding ?? theme.iconsPadding;
+
   set currentValue(int value) {
     if (value != _currentValue) {
       setState(() => _currentValue = value);
@@ -64,13 +69,16 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
 
   int get max => widget.max;
 
+  int get range => max - min;
+
   double get size => widget.size ?? _kSize;
 
   int get value => _currentValue;
 
-  double get width => (max - min) * size + (max - 1) * widget.iconsPadding;
+  /// The width of the widget
+  double get width => range * size + (max - 1) * iconsPadding;
 
-  bool get customPlaceholder => widget.placeholderIcon != null;
+  bool get hasCustomPlaceholder => widget.placeholderIcon != null;
 
   bool get enabled => widget.onChanged != null;
 
@@ -128,47 +136,47 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
         label: widget.semanticLabel,
         slider: true,
         value: widget.value.toString(),
-        child: SizedBox(
-            width: width,
-            height: size,
-            child: UiElementColorBuilder(builder: (context, colorContainer) {
-              final theme = AppKitRatingIndicatorTheme.of(context);
-              final placeholderOpacity = theme.placeholderOpacity;
-              final fillColor = widget.imageColor ?? theme.imageColor;
-              final placeholderColor = placeholderAlwaysVisible || _handleDown
-                  ? customPlaceholder
-                      ? widget.imageColor
-                      : widget.imageColor?.withOpacity(placeholderOpacity) ??
-                          AppKitColors.secondaryLabelColor
-                              .withOpacity(placeholderOpacity)
-                  : Colors.transparent;
+        child: UiElementColorBuilder(builder: (context, colorContainer) {
+          final placeholderOpacity = theme.placeholderOpacity;
+          final fillColor = widget.imageColor ?? theme.imageColor;
+          final placeholderColor = placeholderAlwaysVisible || _handleDown
+              ? hasCustomPlaceholder
+                  ? widget.imageColor
+                  : widget.imageColor?.withOpacity(placeholderOpacity) ??
+                      AppKitColors.secondaryLabelColor
+                          .withOpacity(placeholderOpacity)
+              : Colors.transparent;
+          final fillIcon = widget.icon ?? theme.icon ?? Icons.star_sharp;
+          final placeholderIcon =
+              widget.placeholderIcon ?? widget.icon ?? fillIcon;
 
-              final fillIcon = widget.icon ?? theme.icon ?? Icons.star_sharp;
-              final placeholderIcon =
-                  widget.placeholderIcon ?? widget.icon ?? fillIcon;
-
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onPanDown: enabled ? _onPanDown : null,
-                onPanUpdate: enabled ? _onPanUpdate : null,
-                onPanEnd: enabled ? _onPanEnd : null,
-                child: Stack(
-                  children: List.generate(widget.max, (index) {
-                    final isPlaceholder = index >= value;
-                    final icon = isPlaceholder ? placeholderIcon : fillIcon;
-                    final iconColor =
-                        isPlaceholder ? placeholderColor : fillColor;
-                    return Positioned(
-                      left: index * (size + widget.iconsPadding),
-                      child: Icon(
-                        icon,
-                        color: iconColor,
-                        size: size,
-                      ),
-                    );
-                  }),
-                ),
-              );
-            })));
+          return SizedBox(
+              width: width,
+              height: size,
+              child: Builder(builder: (context) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanDown: enabled ? _onPanDown : null,
+                  onPanUpdate: enabled ? _onPanUpdate : null,
+                  onPanEnd: enabled ? _onPanEnd : null,
+                  child: Stack(
+                    children: List.generate(widget.max, (index) {
+                      final isPlaceholder = index >= value;
+                      final icon = isPlaceholder ? placeholderIcon : fillIcon;
+                      final iconColor =
+                          isPlaceholder ? placeholderColor : fillColor;
+                      return Positioned(
+                        left: index * (size + iconsPadding),
+                        child: Icon(
+                          icon,
+                          color: iconColor,
+                          size: size,
+                        ),
+                      );
+                    }),
+                  ),
+                );
+              }));
+        }));
   }
 }
