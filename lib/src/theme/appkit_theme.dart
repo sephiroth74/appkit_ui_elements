@@ -99,6 +99,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitProgressThemeData progressTheme;
   final AppKitColorWellThemeData colorWellTheme;
   final AppKitLevelIndicatorsThemeData levelIndicatorsTheme;
+  final AppKitRatingIndicatorThemeData ratingIndicatorTheme;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -114,6 +115,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitProgressThemeData? progressTheme,
     AppKitColorWellThemeData? colorWellTheme,
     AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
+    AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -219,6 +221,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       borderRadius: 2.5,
     );
 
+    ratingIndicatorTheme ??= AppKitRatingIndicatorThemeData(
+      imageColor: AppKitColors.secondaryLabelColor,
+      placeholderOpacity: 0.2,
+      icon: Icons.star_sharp,
+    );
+
     circularSliderTheme ??= AppKitCircularSliderThemeData(
       backgroundColor:
           isDark ? MacosColors.systemGrayColor.darkColor : Colors.white,
@@ -271,6 +279,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       colorWellTheme: colorWellTheme,
       circularSliderTheme: circularSliderTheme,
       levelIndicatorsTheme: levelIndicatorsTheme,
+      ratingIndicatorTheme: ratingIndicatorTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
@@ -297,6 +306,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       progressTheme: progressTheme,
       accentColorUnfocused: accentColorUnfocused,
       colorWellTheme: colorWellTheme,
+      levelIndicatorsTheme: levelIndicatorsTheme,
+      ratingIndicatorTheme: ratingIndicatorTheme,
     );
 
     return defaultData.merge(customData);
@@ -386,6 +397,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.controlColorPressed,
     required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
+    required this.ratingIndicatorTheme,
   });
 
   @override
@@ -410,6 +422,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         accentColorUnfocused,
         circularSliderTheme,
         levelIndicatorsTheme,
+        ratingIndicatorTheme,
       ];
 
   AppKitThemeData copyWith({
@@ -433,6 +446,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitColorWellThemeData? colorWellTheme,
     AppKitCircularSliderThemeData? circularSliderTheme,
     AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
+    AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -458,6 +472,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       colorWellTheme: colorWellTheme ?? this.colorWellTheme,
       circularSliderTheme: circularSliderTheme ?? this.circularSliderTheme,
       levelIndicatorsTheme: levelIndicatorsTheme ?? this.levelIndicatorsTheme,
+      ratingIndicatorTheme: ratingIndicatorTheme ?? this.ratingIndicatorTheme,
     );
   }
 
@@ -484,6 +499,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       colorWellTheme: other.colorWellTheme,
       circularSliderTheme: other.circularSliderTheme,
       levelIndicatorsTheme: other.levelIndicatorsTheme,
+      ratingIndicatorTheme: other.ratingIndicatorTheme,
     );
   }
 
@@ -523,6 +539,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.circularSliderTheme, b.circularSliderTheme, t),
       levelIndicatorsTheme: AppKitLevelIndicatorsThemeData.lerp(
           a.levelIndicatorsTheme, b.levelIndicatorsTheme, t),
+      ratingIndicatorTheme: AppKitRatingIndicatorThemeData.lerp(
+          a.ratingIndicatorTheme, b.ratingIndicatorTheme, t),
     );
   }
 
@@ -564,5 +582,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'circularSliderTheme', circularSliderTheme));
     properties.add(DiagnosticsProperty<AppKitLevelIndicatorsThemeData>(
         'levelIndicatorsTheme', levelIndicatorsTheme));
+    properties.add(DiagnosticsProperty<AppKitRatingIndicatorThemeData>(
+        'ratingIndicatorTheme', ratingIndicatorTheme));
   }
 }

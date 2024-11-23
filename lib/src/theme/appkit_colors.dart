@@ -67,6 +67,13 @@ class AppKitColors {
 
   static const controlAccentColor = Color.fromRGBO(0, 122, 255, 1);
 
+  /// The text of a label of lesser importance than a primary label, such as
+  /// a label used to represent a subheading or additional information.
+  static const secondaryLabelColor = CupertinoDynamicColor.withBrightness(
+    color: Color.fromRGBO(0, 0, 0, 0.5),
+    darkColor: Color.fromRGBO(255, 255, 255, 0.55),
+  );
+
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static CupertinoDynamicColor systemRed =
       const CupertinoDynamicColor.withBrightnessAndContrast(

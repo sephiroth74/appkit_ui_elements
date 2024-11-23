@@ -13,6 +13,7 @@ class SlidersPage extends StatefulWidget {
 class _SlidersPageState extends State<SlidersPage> {
   double slider1Value = .5;
   double slider2Value = 5;
+  int rating1Value = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +68,50 @@ class _SlidersPageState extends State<SlidersPage> {
                         onChanged: (value) {
                           debugPrint('Level Indicator: $value');
                           setState(() => slider2Value = value);
+                        },
+                      ),
+                      const SizedBox(height: 20.0),
+                      const Divider(thickness: 0.5),
+                      const WidgetTitle(label: 'Rating Indicators'),
+                      const SizedBox(height: 20.0),
+                      AppKitRatingIndicator(
+                        min: 0,
+                        max: 10,
+                        value: rating1Value,
+                        continuous: false,
+                        semanticLabel: 'Rating Indicator 1',
+                        placeholderAlwaysVisible: true,
+                        onChanged: (value) {
+                          setState(() => rating1Value = value);
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      AppKitRatingIndicator(
+                        min: 0,
+                        max: 10,
+                        value: rating1Value,
+                        continuous: true,
+                        semanticLabel: 'Rating Indicator 2',
+                        placeholderAlwaysVisible: false,
+                        imageColor: AppKitColors.systemYellow,
+                        onChanged: (value) {
+                          setState(() => rating1Value = value);
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      AppKitRatingIndicator(
+                        min: 0,
+                        max: 10,
+                        value: rating1Value,
+                        continuous: true,
+                        icon: Icons.check_box,
+                        placeholderIcon: Icons.check_box_outline_blank_sharp,
+                        imageColor: AppKitColors.secondaryLabelColor,
+                        semanticLabel: 'Rating Indicator 3',
+                        placeholderAlwaysVisible: false,
+                        iconsPadding: -1,
+                        onChanged: (value) {
+                          setState(() => rating1Value = value);
                         },
                       ),
                       const SizedBox(height: 20.0),

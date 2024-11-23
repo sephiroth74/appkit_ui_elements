@@ -154,7 +154,6 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
       value: widget.value.toStringAsFixed(2),
       child: UiElementColorBuilder(builder: (context, colorContainer) {
         return LayoutBuilder(builder: (context, constraints) {
-          final theme = AppKitTheme.of(context);
           final levelIndicatorsTheme = AppKitLevelIndicatorsTheme.of(context);
           final normalColor =
               widget.normalColor ?? levelIndicatorsTheme.normalColor;
