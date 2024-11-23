@@ -46,3 +46,16 @@ enum AppKitColorPickerMode {
   /// The crayon picker mode.
   crayon,
 }
+
+/// Position of the tick marks in a level indicator.
+enum AppKitLevelIndicatorTickMarkPosition {
+  none,
+  above,
+  below,
+}
+
+/// Style of a level indicator.
+enum AppKitLevelIndicatorStyle {
+  continuous,
+  discrete,
+}

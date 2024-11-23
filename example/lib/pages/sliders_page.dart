@@ -12,6 +12,7 @@ class SlidersPage extends StatefulWidget {
 
 class _SlidersPageState extends State<SlidersPage> {
   double slider1Value = .5;
+  double slider2Value = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,43 @@ class _SlidersPageState extends State<SlidersPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const WidgetTitle(label: 'Level Indicators'),
+                      const SizedBox(height: 20.0),
+                      AppKitLevelIndicator(
+                        tickMarkPosition:
+                            AppKitLevelIndicatorTickMarkPosition.below,
+                        majorTickMarks: 11,
+                        minorTickMarks: 21,
+                        drawsTieredCapacityLevels: false,
+                        continuous: true,
+                        value: slider2Value,
+                        style: AppKitLevelIndicatorStyle.continuous,
+                        min: 0,
+                        max: 10,
+                        onChanged: (value) {
+                          debugPrint('Level Indicator: $value');
+                          setState(() => slider2Value = value);
+                        },
+                      ),
+                      const SizedBox(height: 20.0),
+                      AppKitLevelIndicator(
+                        tickMarkPosition:
+                            AppKitLevelIndicatorTickMarkPosition.none,
+                        majorTickMarks: 3,
+                        minorTickMarks: 21,
+                        drawsTieredCapacityLevels: false,
+                        continuous: false,
+                        value: slider2Value,
+                        style: AppKitLevelIndicatorStyle.discrete,
+                        min: 0,
+                        max: 10,
+                        onChanged: (value) {
+                          debugPrint('Level Indicator: $value');
+                          setState(() => slider2Value = value);
+                        },
+                      ),
+                      const SizedBox(height: 20.0),
+                      const Divider(thickness: 0.5),
                       const WidgetTitle(label: 'Linear Sliders'),
                       const SizedBox(height: 20.0),
                       Column(

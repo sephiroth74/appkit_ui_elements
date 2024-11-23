@@ -70,7 +70,7 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
 
   late AnimationController positionController;
 
-  late Animation<double> positionCurvedAnimation;
+  late CurvedAnimation positionCurvedAnimation;
 
   late Tween<double> positionTween;
 
@@ -109,6 +109,7 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
 
   @override
   void dispose() {
+    positionCurvedAnimation.dispose();
     positionController.dispose();
     super.dispose();
   }
