@@ -6,6 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 
+///
+/// https://www.figma.com/design/IX6ph2VWrJiRoMTI1Byz0K/Apple-Design-Resources---macOS-(Community)?node-id=0-1745&node-type=frame&t=2SWN7P0O7eB3nXKr-0
+///
+/// colors:
+/// https://developer.apple.com/design/human-interface-guidelines/color#system-colors
 class AppKitTheme extends StatelessWidget {
   final AppKitThemeData data;
   final Widget child;
@@ -24,22 +29,22 @@ class AppKitTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _InheritedUiKitTheme(
+    return _InheritedAppKitTheme(
       theme: this,
       child: child,
     );
   }
 
   static AppKitThemeData of(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme =
-        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     return (inheritedTheme?.theme.data ??
         AppKitThemeData.fromMacosTheme(MacosTheme.of(context)));
   }
 
   static AppKitThemeData? maybeOf(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme =
-        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     if (inheritedTheme != null) {
       return inheritedTheme.theme.data;
     } else {
@@ -52,22 +57,22 @@ class AppKitTheme extends StatelessWidget {
   }
 
   static Brightness brightnessOf(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme =
-        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     return inheritedTheme?.theme.data.brightness ??
         MediaQuery.of(context).platformBrightness;
   }
 
   static Brightness? maybeBrightnessOf(BuildContext context) {
-    final _InheritedUiKitTheme? inheritedTheme =
-        context.dependOnInheritedWidgetOfExactType<_InheritedUiKitTheme>();
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     return inheritedTheme?.theme.data.brightness ??
         MediaQuery.maybeOf(context)?.platformBrightness;
   }
 }
 
-class _InheritedUiKitTheme extends InheritedWidget {
-  const _InheritedUiKitTheme({
+class _InheritedAppKitTheme extends InheritedWidget {
+  const _InheritedAppKitTheme({
     required this.theme,
     required super.child,
   });
@@ -75,7 +80,7 @@ class _InheritedUiKitTheme extends InheritedWidget {
   final AppKitTheme theme;
 
   @override
-  bool updateShouldNotify(_InheritedUiKitTheme oldWidget) =>
+  bool updateShouldNotify(_InheritedAppKitTheme oldWidget) =>
       theme.data != oldWidget.theme.data;
 }
 
@@ -89,7 +94,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color controlBackgroundColorDisabled;
   final Color controlColorPressed;
   final Color accentColorUnfocused;
-  final MacosTypography typography;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
   final AppKitHelpButtonThemeData helpButtonTheme;
@@ -101,11 +105,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitColorWellThemeData colorWellTheme;
   final AppKitLevelIndicatorsThemeData levelIndicatorsTheme;
   final AppKitRatingIndicatorThemeData ratingIndicatorTheme;
+  final AppKitTooltipThemeData tooltipTheme;
+  final AppKitTypography typography;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
     VisualDensity? visualDensity,
-    MacosTypography? typography,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
@@ -117,6 +122,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitColorWellThemeData? colorWellTheme,
     AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
     AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
+    AppKitTooltipThemeData? tooltipTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -124,16 +130,17 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlBackgroundColorDisabled,
     Color? controlColorPressed,
     Color? accentColorUnfocused,
+    AppKitTypography? typography,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
     isMainWindow ??= true;
-    typography ??=
-        isDark ? MacosTypography.lightOpaque() : MacosTypography.darkOpaque();
     canvasColor ??= isDark
         ? const Color.fromRGBO(40, 40, 40, 1.0)
         : const Color.fromRGBO(246, 246, 246, 1.0);
+    typography ??=
+        isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
 
     controlBackgroundColor ??= isDark
         ? MacosColors.controlBackgroundColor.darkColor
@@ -265,6 +272,47 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ],
     );
 
+    tooltipTheme ??= AppKitTooltipThemeData(
+        verticalOffset: 18.0,
+        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+        margin: EdgeInsets.zero,
+        preferBelow: true,
+        waitDuration: const Duration(seconds: 1),
+        showDuration: const Duration(seconds: 10),
+        minHeight: 24.0,
+        textStyle: typography.callout.copyWith(
+          fontSize: 13.0,
+          color: const Color(0xFF4D4D4D),
+        ),
+        decoration: () {
+          const radius = BorderRadius.all(Radius.circular(2.0));
+          final shadow = [
+            BoxShadow(
+              offset: const Offset(0, 0),
+              blurRadius: 0.0,
+              spreadRadius: 0.5,
+              color: CupertinoColors.black.withOpacity(0.12),
+            ),
+            BoxShadow(
+              color: CupertinoColors.black.withOpacity(0.2),
+              offset: const Offset(0, 2),
+              spreadRadius: 0,
+              blurRadius: 6,
+            ),
+          ];
+          final border = Border.all(
+            width: 0.5,
+            color: const Color(0xFF4D4D4D),
+          );
+
+          return BoxDecoration(
+            color: const Color(0xFFF6F6F6),
+            borderRadius: radius,
+            boxShadow: shadow,
+            border: border,
+          );
+        }());
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -287,6 +335,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlColorPressed: controlColorPressed,
       accentColorUnfocused: accentColorUnfocused,
+      tooltipTheme: tooltipTheme,
     );
 
     final customData = defaultData.copyWith(
@@ -310,6 +359,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       colorWellTheme: colorWellTheme,
       levelIndicatorsTheme: levelIndicatorsTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
+      tooltipTheme: tooltipTheme,
     );
 
     return defaultData.merge(customData);
@@ -341,7 +391,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
   factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData) {
     final brightness = themeData.brightness;
-    final themeAccentColor = _getMacOsThemeAccentColor(themeData.accentColor);
+    final themeAccentColor = _getThemeAccentColor(themeData.accentColor);
     final accentColor = themeAccentColor != null
         ? brightness.resolve(themeAccentColor.color, themeAccentColor.darkColor)
         : null;
@@ -352,29 +402,29 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: themeData.isMainWindow,
       visualDensity: themeData.visualDensity,
       canvasColor: themeData.canvasColor,
-      typography: themeData.typography,
+      typography: AppKitTypography.fromMacosTypograhpy(themeData.typography),
     );
   }
 
-  static CupertinoDynamicColor? _getMacOsThemeAccentColor(AccentColor? color) {
+  static CupertinoDynamicColor? _getThemeAccentColor(AccentColor? color) {
     if (null == color) return null;
     switch (color) {
       case AccentColor.blue:
-        return MacosColors.systemBlueColor;
+        return AppKitColors.systemBlue;
       case AccentColor.purple:
-        return MacosColors.systemPurpleColor;
+        return AppKitColors.systemPurple;
       case AccentColor.pink:
-        return MacosColors.systemPinkColor;
+        return AppKitColors.systemPink;
       case AccentColor.red:
-        return MacosColors.systemRedColor;
+        return AppKitColors.systemRed;
       case AccentColor.orange:
-        return MacosColors.systemOrangeColor;
+        return AppKitColors.systemOrange;
       case AccentColor.yellow:
-        return MacosColors.systemYellowColor;
+        return AppKitColors.systemYellow;
       case AccentColor.green:
-        return MacosColors.systemGreenColor;
+        return AppKitColors.systemGreen;
       case AccentColor.graphite:
-        return MacosColors.systemGrayColor;
+        return AppKitColors.systemGray;
     }
   }
 
@@ -400,6 +450,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
     required this.ratingIndicatorTheme,
+    required this.tooltipTheme,
   });
 
   @override
@@ -425,6 +476,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         circularSliderTheme,
         levelIndicatorsTheme,
         ratingIndicatorTheme,
+        tooltipTheme,
       ];
 
   AppKitThemeData copyWith({
@@ -432,7 +484,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? accentColor,
     bool? isMainWindow,
     VisualDensity? visualDensity,
-    MacosTypography? typography,
+    AppKitTypography? typography,
     Color? canvasColor,
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
@@ -449,6 +501,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitCircularSliderThemeData? circularSliderTheme,
     AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
     AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
+    AppKitTooltipThemeData? tooltipTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -475,6 +528,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       circularSliderTheme: circularSliderTheme ?? this.circularSliderTheme,
       levelIndicatorsTheme: levelIndicatorsTheme ?? this.levelIndicatorsTheme,
       ratingIndicatorTheme: ratingIndicatorTheme ?? this.ratingIndicatorTheme,
+      tooltipTheme: tooltipTheme ?? this.tooltipTheme,
     );
   }
 
@@ -502,6 +556,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       circularSliderTheme: other.circularSliderTheme,
       levelIndicatorsTheme: other.levelIndicatorsTheme,
       ratingIndicatorTheme: other.ratingIndicatorTheme,
+      tooltipTheme: other.tooltipTheme,
     );
   }
 
@@ -511,7 +566,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       accentColor: t < 0.5 ? a.accentColor : b.accentColor,
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
-      typography: MacosTypography.lerp(a.typography, b.typography, t),
+      typography: AppKitTypography.lerp(a.typography, b.typography, t),
       pushButtonTheme: AppKitPushButtonThemeData.lerp(
           a.pushButtonTheme, b.pushButtonTheme, t),
       toggleButtonTheme: AppKitToggleButtonThemeData.lerp(
@@ -543,6 +598,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.levelIndicatorsTheme, b.levelIndicatorsTheme, t),
       ratingIndicatorTheme: AppKitRatingIndicatorThemeData.lerp(
           a.ratingIndicatorTheme, b.ratingIndicatorTheme, t),
+      tooltipTheme:
+          AppKitTooltipThemeData.lerp(a.tooltipTheme, b.tooltipTheme, t),
     );
   }
 
@@ -557,7 +614,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         DiagnosticsProperty<VisualDensity>('visualDensity', visualDensity));
     properties.add(ColorProperty('canvasColor', canvasColor));
     properties
-        .add(DiagnosticsProperty<MacosTypography>('typography', typography));
+        .add(DiagnosticsProperty<AppKitTypography>('typography', typography));
     properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>(
         'pushButtonTheme', pushButtonTheme));
     properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>(
@@ -586,6 +643,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'levelIndicatorsTheme', levelIndicatorsTheme));
     properties.add(DiagnosticsProperty<AppKitRatingIndicatorThemeData>(
         'ratingIndicatorTheme', ratingIndicatorTheme));
+    properties.add(DiagnosticsProperty<AppKitTooltipThemeData>(
+        'tooltipTheme', tooltipTheme));
   }
 }
 

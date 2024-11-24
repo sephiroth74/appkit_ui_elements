@@ -33,35 +33,9 @@ class _PushButtonPageState extends State<PushButtonPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            GestureDetector(
-                              onTapDown: (details) {
-                                final ContextMenuController
-                                    contextMenuController =
-                                    ContextMenuController();
-                                contextMenuController.show(
-                                  context: context,
-                                  contextMenuBuilder: (context) {
-                                    return AdaptiveTextSelectionToolbar
-                                        .buttonItems(
-                                      buttonItems: [
-                                        ContextMenuButtonItem(
-                                          onPressed: () =>
-                                              ContextMenuController.removeAny(),
-                                          label: 'Print',
-                                        ),
-                                        ContextMenuButtonItem(
-                                          onPressed: () =>
-                                              ContextMenuController.removeAny(),
-                                          label: 'Exit',
-                                        ),
-                                      ],
-                                      anchors: TextSelectionToolbarAnchors(
-                                        primaryAnchor: details.globalPosition,
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                            AppKitTooltip.plain(
+                              message:
+                                  'This is a tooltip with a somewhat long message.',
                               child: AppKitPushButton(
                                 onPressed: () {},
                                 controlSize: AppKitControlSize.large,
@@ -72,11 +46,47 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               ),
                             ),
                             const SizedBox(width: 16.0),
-                            AppKitPushButton(
-                              onPressed: () {},
-                              controlSize: AppKitControlSize.large,
-                              type: AppKitPushButtonType.primary,
-                              child: const Text('Label'),
+                            AppKitTooltip.rich(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 12.0),
+                              softWrap: false,
+                              useMousePosition: false,
+                              message: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Rich Tooltip: \n',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppKitColors.systemGray
+                                          .resolveFrom(context),
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                  const TextSpan(text: 'This is a '),
+                                  TextSpan(
+                                    text: 'tooltip',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        backgroundColor:
+                                            Colors.yellow.withOpacity(0.5)),
+                                  ),
+                                  const TextSpan(
+                                      text:
+                                          ' with a somewhat long message.\n\n'),
+                                  const TextSpan(
+                                    text:
+                                        'Tooltip can also contains rich text.',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                ],
+                              ),
+                              child: AppKitPushButton(
+                                onPressed: () {},
+                                controlSize: AppKitControlSize.large,
+                                type: AppKitPushButtonType.primary,
+                                child: const Text('Label'),
+                              ),
                             ),
                             const SizedBox(width: 16.0),
                             AppKitPushButton(

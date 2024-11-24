@@ -21,6 +21,7 @@ export 'src/controls/circle_slider.dart';
 export 'src/controls/circular_slider.dart';
 export 'src/controls/level_indicators.dart';
 export 'src/controls/rating_indicator.dart';
+export 'src/controls/tooltip.dart';
 
 export 'src/enums/enums.dart';
 
@@ -37,6 +38,8 @@ export 'src/theme/appkit_color_well_theme.dart';
 export 'src/theme/appkit_circular_slider_theme.dart';
 export 'src/theme/appkit_level_indicators_theme.dart';
 export 'src/theme/appkit_rating_indicator_theme.dart';
+export 'src/theme/appkit_tooltip_theme.dart';
+export 'src/theme/appkit_typography.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {

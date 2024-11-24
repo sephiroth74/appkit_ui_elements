@@ -67,6 +67,12 @@ class AppKitColors {
 
   static const controlAccentColor = Color.fromRGBO(0, 122, 255, 1);
 
+  /// The text of a label containing primary content.
+  static const labelColor = CupertinoDynamicColor.withBrightness(
+    color: Color.fromRGBO(0, 0, 0, 0.85),
+    darkColor: Color.fromRGBO(255, 255, 255, 0.85),
+  );
+
   /// The text of a label of lesser importance than a primary label, such as
   /// a label used to represent a subheading or additional information.
   static const secondaryLabelColor = CupertinoDynamicColor.withBrightness(
@@ -220,12 +226,13 @@ class AppKitColor with Diagnosticable {
       CupertinoDynamicColor.withBrightness(
           color: quinary.darkColor, darkColor: quinary.color);
 
-  AppKitColor(
-      {required this.primary,
-      required this.secondary,
-      required this.tertiary,
-      required this.quaternary,
-      required this.quinary});
+  AppKitColor({
+    required this.primary,
+    required this.secondary,
+    required this.tertiary,
+    required this.quaternary,
+    required this.quinary,
+  });
 
   AppKitColor copyWith(
       {CupertinoDynamicColor? primary,
