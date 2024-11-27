@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/theme.dart';
 import 'package:example/widgets/widget_title.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +19,27 @@ class _ControlsPageState extends State<ControlsPage> {
   bool radioButtonValue3 = false;
   double stepperValue = 50;
   bool disclosureValue = false;
-
   double sliderValue1 = 0.5;
-
   bool switchValue1 = true;
+
+  FocusNode? focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // focusNode = FocusNode();
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   debugPrint('requestFocus()');
+    //   focusNode?.requestFocus();
+    // });
+  }
+
+  @override
+  void dispose() {
+    focusNode?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +60,54 @@ class _ControlsPageState extends State<ControlsPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const WidgetTitle(label: 'Popup Button'),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          AppKitPopupButton(
+                            value: '2',
+                            onSelected: (value) {
+                              debugPrint('onSelected($value)');
+                            },
+                            menuBuilder: (context) {
+                              return AppKitContextMenu<String>(entries: [
+                                AppKitContextMenuItem(
+                                    title: 'Item 1',
+                                    value: '1',
+                                    itemState: MenuItemState.on,
+                                    image: CupertinoIcons.calendar_badge_minus),
+                                AppKitContextMenuItem(
+                                    title: 'Item 2',
+                                    value: '2',
+                                    itemState: MenuItemState.off),
+                                AppKitContextMenuItem(
+                                    title: 'Item 3',
+                                    value: '3',
+                                    itemState: MenuItemState.mixed),
+                                AppKitContextMenuItem(
+                                    title: 'Item 4', value: '4'),
+                                const AppKitContextMenuDivider(),
+                                AppKitContextMenuItem<String>(
+                                    enabled: true,
+                                    title: 'Submenu',
+                                    items: [
+                                      AppKitContextMenuItem(
+                                          title: 'Submenu Item 1', value: '5'),
+                                      AppKitContextMenuItem(
+                                          title: 'Submenu Item 2', value: '6'),
+                                      const AppKitContextMenuDivider(),
+                                      AppKitContextMenuItem(
+                                          title: 'Submenu Item 3', value: '7'),
+                                    ])
+                              ]);
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16.0, height: 16.0),
+                      const Divider(
+                        thickness: 0.5,
+                      ),
                       const WidgetTitle(label: 'Switches'),
                       const SizedBox(height: 20.0),
                       Row(

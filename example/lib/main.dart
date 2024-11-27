@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       menus: const [],
       child: MacosWindow(
         sidebar: Sidebar(
+            top: const MacosSearchField(),
             builder: (context, scrollController) {
               return SidebarItems(
                   scrollController: scrollController,

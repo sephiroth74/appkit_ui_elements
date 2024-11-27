@@ -39,7 +39,8 @@ class AppKitTheme extends StatelessWidget {
     final _InheritedAppKitTheme? inheritedTheme =
         context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     return (inheritedTheme?.theme.data ??
-        AppKitThemeData.fromMacosTheme(MacosTheme.of(context)));
+        AppKitThemeData.fromMacosTheme(MacosTheme.of(context),
+            highContrast: MediaQuery.of(context).highContrast));
   }
 
   static AppKitThemeData? maybeOf(BuildContext context) {
@@ -50,7 +51,8 @@ class AppKitTheme extends StatelessWidget {
     } else {
       final parentTheme = MacosTheme.maybeOf(context);
       if (parentTheme != null) {
-        return AppKitThemeData.fromMacosTheme(parentTheme);
+        return AppKitThemeData.fromMacosTheme(parentTheme,
+            highContrast: MediaQuery.maybeOf(context)?.highContrast ?? false);
       }
     }
     return null;
@@ -389,7 +391,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 
-  factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData) {
+  factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData,
+      {bool highContrast = false}) {
     final brightness = themeData.brightness;
     final themeAccentColor = _getThemeAccentColor(themeData.accentColor);
     final accentColor = themeAccentColor != null

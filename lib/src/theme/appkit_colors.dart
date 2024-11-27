@@ -65,6 +65,21 @@ class AppKitColors {
             color: Color(0xFFBFBFBF), darkColor: Color(0xFF414141)),
       ));
 
+  static AppKitMaterial materials = AppKitMaterial(
+    ultraThick: const AppKitMaterialColor.withBrightness(
+        color: Color(0xD6F6F6F6), darkColor: Color(0x80000000), blur: 30),
+    thick: const AppKitMaterialColor.withBrightness(
+        color: Color(0xB8F6F6F6), darkColor: Color(0x66000000), blur: 30),
+    medium: const AppKitMaterialColor.withBrightness(
+        color: Color(0x99F6F6F6), darkColor: Color(0x4A000000), blur: 30),
+    thin: const AppKitMaterialColor.withBrightness(
+        color: Color(0x7AF6F6F6), darkColor: Color(0x33000000), blur: 30),
+    ultraThin: const AppKitMaterialColor.withBrightness(
+        color: Color(0x5CF6F6F6), darkColor: Color(0x1A000000), blur: 30),
+    selectionFocus: const AppKitMaterialColor.withBrightness(
+        color: Color(0xBF0A82FF), darkColor: Color(0xBF0A82FF), blur: 30),
+  );
+
   static const controlAccentColor = Color.fromRGBO(0, 122, 255, 1);
 
   /// The text of a label containing primary content.
@@ -184,6 +199,39 @@ class AppKitColors {
     highContrastColor: Color.fromRGBO(132, 132, 137, 1),
     darkHighContrastColor: Color.fromRGBO(162, 162, 167, 1),
   );
+}
+
+class AppKitMaterial {
+  final AppKitMaterialColor ultraThick;
+  final AppKitMaterialColor thick;
+  final AppKitMaterialColor medium;
+  final AppKitMaterialColor thin;
+  final AppKitMaterialColor ultraThin;
+  final AppKitMaterialColor selectionFocus;
+
+  AppKitMaterial(
+      {required this.ultraThick,
+      required this.thick,
+      required this.medium,
+      required this.thin,
+      required this.ultraThin,
+      required this.selectionFocus});
+}
+
+class AppKitMaterialColor extends CupertinoDynamicColor {
+  final double blur;
+
+  const AppKitMaterialColor.withBrightnessAndContrast(
+      {required super.color,
+      required super.darkColor,
+      required super.highContrastColor,
+      required super.darkHighContrastColor,
+      required this.blur})
+      : super.withBrightnessAndContrast();
+
+  const AppKitMaterialColor.withBrightness(
+      {required super.color, required super.darkColor, required this.blur})
+      : super.withBrightness();
 }
 
 class AppKitColorContainer {

@@ -21,6 +21,7 @@ dependencies:
   uuid: ^4.5.1
 
   plugin_platform_interface: any
+  collection: ^1.18.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

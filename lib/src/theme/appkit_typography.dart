@@ -6,7 +6,8 @@ import 'package:macos_ui/macos_ui.dart';
 
 const _kDefaultFontFamily = '.AppleSystemUIFont';
 
-///  * <https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/typography/>
+/// https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/typography
+/// https://www.figma.com/design/IX6ph2VWrJiRoMTI1Byz0K/Apple-Design-Resources---macOS-(Community)?node-id=0-1745&node-type=frame&t=xFExY8cQrcYvWzzF-0
 class AppKitTypography extends Equatable with Diagnosticable {
   factory AppKitTypography({
     required Color color,
