@@ -91,51 +91,74 @@ class _ControlsPageState extends State<ControlsPage> {
                     children: [
                       const WidgetTitle(label: 'Popup Button'),
                       const SizedBox(height: 20.0),
-                      Row(
+                      Column(
                         children: [
-                          AppKitPopupButton(
-                            menuEdge: AppKitMenuEdge.auto,
-                            style: AppKitPopupButtonStyle.push,
-                            width: 100,
-                            value: popupValue,
-                            onItemSelected: (value) {
-                              setState(() {
-                                if (value?.value != null) {
-                                  popupValue = value!.value!;
-                                }
-                              });
-                            },
-                            menuBuilder: popupMenuBuilder,
+                          Row(
+                            children: [
+                              AppKitPopupButton(
+                                menuEdge: AppKitMenuEdge.auto,
+                                style: AppKitPopupButtonStyle.push,
+                                width: 100,
+                                value: popupValue,
+                                onItemSelected: (value) {
+                                  setState(() {
+                                    if (value?.value != null) {
+                                      popupValue = value!.value!;
+                                    }
+                                  });
+                                },
+                                menuBuilder: popupMenuBuilder,
+                              ),
+                              const SizedBox(width: 16.0),
+                              AppKitPopupButton(
+                                menuEdge: AppKitMenuEdge.right,
+                                style: AppKitPopupButtonStyle.bevel,
+                                width: 100,
+                                value: popupValue,
+                                onItemSelected: (value) {
+                                  setState(() {
+                                    if (value?.value != null) {
+                                      popupValue = value!.value!;
+                                    }
+                                  });
+                                },
+                                menuBuilder: popupMenuBuilder,
+                              ),
+                              const SizedBox(width: 16.0),
+                              AppKitPopupButton(
+                                menuEdge: AppKitMenuEdge.top,
+                                style: AppKitPopupButtonStyle.plain,
+                                width: 100,
+                                value: popupValue,
+                                onItemSelected: (value) {
+                                  setState(() {
+                                    if (value?.value != null) {
+                                      popupValue = value!.value!;
+                                    }
+                                  });
+                                },
+                                menuBuilder: popupMenuBuilder,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 16.0),
-                          AppKitPopupButton(
-                            menuEdge: AppKitMenuEdge.right,
-                            style: AppKitPopupButtonStyle.bevel,
-                            width: 100,
-                            value: popupValue,
-                            onItemSelected: (value) {
-                              setState(() {
-                                if (value?.value != null) {
-                                  popupValue = value!.value!;
-                                }
-                              });
-                            },
-                            menuBuilder: popupMenuBuilder,
-                          ),
-                          const SizedBox(width: 16.0),
-                          AppKitPopupButton(
-                            menuEdge: AppKitMenuEdge.top,
-                            style: AppKitPopupButtonStyle.plain,
-                            width: 100,
-                            value: popupValue,
-                            onItemSelected: (value) {
-                              setState(() {
-                                if (value?.value != null) {
-                                  popupValue = value!.value!;
-                                }
-                              });
-                            },
-                            menuBuilder: popupMenuBuilder,
+                          const SizedBox(height: 16.0),
+                          Row(
+                            children: [
+                              AppKitPopupButton(
+                                menuEdge: AppKitMenuEdge.bottom,
+                                style: AppKitPopupButtonStyle.inline,
+                                width: 100,
+                                value: popupValue,
+                                onItemSelected: (value) {
+                                  setState(() {
+                                    if (value?.value != null) {
+                                      popupValue = value!.value!;
+                                    }
+                                  });
+                                },
+                                menuBuilder: popupMenuBuilder,
+                              ),
+                            ],
                           ),
                         ],
                       ),

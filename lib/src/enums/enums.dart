@@ -101,4 +101,5 @@ enum AppKitPopupButtonStyle {
   push,
   bevel,
   plain,
+  inline,
 }
