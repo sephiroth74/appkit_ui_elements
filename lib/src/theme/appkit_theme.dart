@@ -108,6 +108,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitLevelIndicatorsThemeData levelIndicatorsTheme;
   final AppKitRatingIndicatorThemeData ratingIndicatorTheme;
   final AppKitTooltipThemeData tooltipTheme;
+  final AppKitPopupButtonThemeData popupButtonTheme;
   final AppKitTypography typography;
 
   factory AppKitThemeData({
@@ -125,6 +126,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
     AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
     AppKitTooltipThemeData? tooltipTheme,
+    AppKitPopupButtonThemeData? popupButtonTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -315,6 +317,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           );
         }());
 
+    popupButtonTheme ??= AppKitPopupButtonThemeData();
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -338,6 +342,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlColorPressed: controlColorPressed,
       accentColorUnfocused: accentColorUnfocused,
       tooltipTheme: tooltipTheme,
+      popupButtonTheme: popupButtonTheme,
     );
 
     final customData = defaultData.copyWith(
@@ -362,6 +367,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       levelIndicatorsTheme: levelIndicatorsTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       tooltipTheme: tooltipTheme,
+      popupButtonTheme: popupButtonTheme,
     );
 
     return defaultData.merge(customData);
@@ -454,6 +460,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.levelIndicatorsTheme,
     required this.ratingIndicatorTheme,
     required this.tooltipTheme,
+    required this.popupButtonTheme,
   });
 
   @override
@@ -480,6 +487,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         levelIndicatorsTheme,
         ratingIndicatorTheme,
         tooltipTheme,
+        popupButtonTheme,
       ];
 
   AppKitThemeData copyWith({
@@ -505,6 +513,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
     AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
     AppKitTooltipThemeData? tooltipTheme,
+    AppKitPopupButtonThemeData? popupButtonTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -532,6 +541,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       levelIndicatorsTheme: levelIndicatorsTheme ?? this.levelIndicatorsTheme,
       ratingIndicatorTheme: ratingIndicatorTheme ?? this.ratingIndicatorTheme,
       tooltipTheme: tooltipTheme ?? this.tooltipTheme,
+      popupButtonTheme: popupButtonTheme ?? this.popupButtonTheme,
     );
   }
 
@@ -560,6 +570,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       levelIndicatorsTheme: other.levelIndicatorsTheme,
       ratingIndicatorTheme: other.ratingIndicatorTheme,
       tooltipTheme: other.tooltipTheme,
+      popupButtonTheme: other.popupButtonTheme,
     );
   }
 
@@ -603,6 +614,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.ratingIndicatorTheme, b.ratingIndicatorTheme, t),
       tooltipTheme:
           AppKitTooltipThemeData.lerp(a.tooltipTheme, b.tooltipTheme, t),
+      popupButtonTheme: AppKitPopupButtonThemeData.lerp(
+          a.popupButtonTheme, b.popupButtonTheme, t),
     );
   }
 
@@ -648,6 +661,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'ratingIndicatorTheme', ratingIndicatorTheme));
     properties.add(DiagnosticsProperty<AppKitTooltipThemeData>(
         'tooltipTheme', tooltipTheme));
+    properties.add(DiagnosticsProperty<AppKitPopupButtonThemeData>(
+        'popupButtonTheme', popupButtonTheme));
   }
 }
 

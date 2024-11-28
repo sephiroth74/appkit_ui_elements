@@ -2,6 +2,7 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 typedef ContextMenuBuilder<T> = AppKitContextMenu<T> Function(
@@ -45,10 +46,17 @@ List<BoxShadow> _getElevatedShadow(
     ];
 
 Widget _defaultItemBuilder<T>(
-    BuildContext context, AppKitContextMenuItem<T>? value) {
+    BuildContext context, AppKitContextMenuItem<T>? value, bool enabled) {
   if (value == null) {
     return const SizedBox();
   }
+
+  Color textColor =
+      AppKitTheme.of(context).typography.body.color ?? AppKitColors.labelColor;
+  if (!enabled) {
+    textColor = textColor.withOpacity(0.5);
+  }
+
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -58,14 +66,16 @@ Widget _defaultItemBuilder<T>(
           child: Icon(
             value.image,
             size: 12.0,
-            color: AppKitTheme.of(context).typography.body.color,
+            color: textColor,
           ),
         ),
       Flexible(
         child: Text(
           value.title,
-          style:
-              AppKitTheme.of(context).typography.body.copyWith(fontSize: 13.0),
+          style: AppKitTheme.of(context)
+              .typography
+              .body
+              .copyWith(fontSize: 13.0, color: textColor),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -86,7 +96,7 @@ class AppKitPopupButton<T> extends StatefulWidget {
   const AppKitPopupButton({
     super.key,
     required this.width,
-    required this.onItemSelected,
+    this.onItemSelected,
     this.menuBuilder,
     this.value,
     this.itemBuilder,
@@ -111,6 +121,20 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
   bool _isHovered = false;
 
   late AppKitContextMenu<T> _contextMenu;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('value', widget.value));
+    properties.add(DiagnosticsProperty('enabled', enabled));
+    properties.add(DiagnosticsProperty('style', style));
+    properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
+    properties.add(DiagnosticsProperty('width', widget.width));
+    properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
+    properties
+        .add(DiagnosticsProperty('onItemSelected', widget.onItemSelected));
+    properties.add(DiagnosticsProperty('itemBuilder', widget.itemBuilder));
+  }
 
   AppKitContextMenuItem<T>? get _selectedItem {
     return _contextMenu.findItemByValue(widget.value);
@@ -206,7 +230,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               isMainWindow: isMainWindow,
               isBevel: style == AppKitPopupButtonStyle.bevel,
               child: itemBuilder?.call(context, value) ??
-                  _defaultItemBuilder(context, _selectedItem),
+                  _defaultItemBuilder(context, _selectedItem, enabled),
             );
           } else if (style == AppKitPopupButtonStyle.plain) {
             return _PlainButtonStyleWidget<T>(
@@ -221,7 +245,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               isMainWindow: isMainWindow,
               isHovered: _isHovered,
               child: itemBuilder?.call(context, value) ??
-                  _defaultItemBuilder(context, _selectedItem),
+                  _defaultItemBuilder(context, _selectedItem, enabled),
             );
           }
 
@@ -305,6 +329,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
     final enabledFactor = enabled ? 1.0 : 0.5;
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
 
     Color caretBackgroundColor;
     Color caretArrowColor;
@@ -314,11 +339,18 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       caretArrowColor = AppKitColors.labelColor
           .withOpacity(AppKitColors.labelColor.opacity * enabledFactor);
     } else {
-      caretArrowColor = isMainWindow
-          ? Colors.white.withOpacity(enabledFactor)
+      caretBackgroundColor = popupButtonTheme.elevatedButtonColor ??
+          theme.accentColor ??
+          colorContainer.controlAccentColor;
+
+      final carteBackgroundColorLiminance =
+          caretBackgroundColor.computeLuminance();
+
+      caretArrowColor = isMainWindow && enabled
+          ? carteBackgroundColorLiminance > 0.5
+              ? Colors.black.withOpacity(enabledFactor)
+              : Colors.white.withOpacity(enabledFactor)
           : Colors.black.withOpacity(enabledFactor);
-      caretBackgroundColor =
-          theme.accentColor ?? colorContainer.controlAccentColor;
 
       if (contextMenuOpened) {
         final hslColor = HSLColor.fromColor(caretBackgroundColor);
@@ -366,7 +398,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                 width: _kCaretButtonSize,
                 height: _kCaretButtonSize,
                 child: DecoratedBox(
-                  decoration: isMainWindow
+                  decoration: isMainWindow && enabled
                       ? BoxDecoration(
                           color: caretBackgroundColor,
                           borderRadius:
@@ -465,6 +497,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
     final enabledFactor = enabled ? 1.0 : 0.5;
 
     Color controlBackgroundColor;
@@ -478,10 +511,11 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
       caretBackgroundColor = Colors.transparent;
       controlBackgroundColor = theme.controlBackgroundColor;
     } else {
-      controlBackgroundColor = Colors.transparent;
       caretBackgroundColor = contextMenuOpened
           ? Colors.transparent
-          : AppKitColors.systemGray.withOpacity(0.2);
+          : popupButtonTheme.plainButtonColor ??
+              AppKitColors.systemGray.withOpacity(enabled ? 0.2 : 0.1);
+      controlBackgroundColor = Colors.transparent;
     }
 
     return Container(
