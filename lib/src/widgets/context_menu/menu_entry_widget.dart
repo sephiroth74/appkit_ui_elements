@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_entry.dart';
 import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_item.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -7,7 +8,12 @@ import 'context_menu_state.dart';
 
 class MenuEntryWidget<T> extends StatefulWidget {
   final AppKitContextMenuEntry<T> entry;
-  const MenuEntryWidget({super.key, required this.entry});
+  final bool focused;
+  const MenuEntryWidget({
+    super.key,
+    required this.entry,
+    this.focused = false,
+  });
 
   @override
   State<MenuEntryWidget<T>> createState() => _MenuEntryWidgetState<T>();
@@ -21,6 +27,13 @@ class _MenuEntryWidgetState<T> extends State<MenuEntryWidget<T>> {
   @override
   void initState() {
     focusNode = FocusNode();
+
+    if (widget.focused) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        focusNode.requestFocus();
+      });
+    }
+
     super.initState();
   }
 
@@ -38,6 +51,7 @@ class _MenuEntryWidgetState<T> extends State<MenuEntryWidget<T>> {
             final item = entry as AppKitContextMenuItem;
 
             return Focus(
+              autofocus: !widget.focused,
               focusNode: item.isFocusMaintained ? null : focusNode,
               onFocusChange: (value) {
                 if (value) {

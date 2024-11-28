@@ -1,13 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu.dart';
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_entry.dart';
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_item.dart';
 import 'package:flutter/widgets.dart';
-
-import 'context_menu_provider.dart';
-import 'context_menu_widget.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 64);
 const _kAnimationCount = 4;
@@ -24,6 +20,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   AppKitContextMenuItem<T>? _selectedItem;
 
   bool _isPositionVerified = false;
+
+  final AppKitMenuEdge _menuEdge;
 
   AlignmentGeometry _spawnAlignment = AlignmentDirectional.topEnd;
 
@@ -43,12 +41,18 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   int _selectionTicks = -1;
 
+  final HashMap<AppKitContextMenuEntry<T>, Rect> _itemLayouts = HashMap();
+
   AppKitContextMenuState({
     required this.menu,
     this.parentItem,
+    AppKitContextMenuItem<T>? focusedEntry,
+    AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   })  : _parentItemRect = null,
         _isSubmenu = false,
-        selfClose = null;
+        _focusedEntry = focusedEntry,
+        selfClose = null,
+        _menuEdge = menuEdge;
 
   AppKitContextMenuState.submenu({
     required this.menu,
@@ -56,9 +60,11 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     this.parentItem,
     AlignmentGeometry? spawnAlignmen,
     Rect? parentItemRect,
+    AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   })  : _spawnAlignment = spawnAlignmen ?? AlignmentDirectional.topEnd,
         _parentItemRect = parentItemRect,
-        _isSubmenu = true;
+        _isSubmenu = true,
+        _menuEdge = menuEdge;
 
   List<AppKitContextMenuEntry<T>> get entries => menu.entries;
 
@@ -194,15 +200,16 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   void verifyPosition(BuildContext context) {
     if (isPositionVerified) return;
 
-    focusScopeNode.requestFocus();
+    // focusScopeNode.requestFocus();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final boundaries = calculateContextMenuBoundaries(
-        context,
-        menu,
-        parentItemRect,
-        _spawnAlignment,
-        _isSubmenu,
+        context: context,
+        menu: menu,
+        parentRect: parentItemRect,
+        spawnAlignment: _spawnAlignment,
+        isSubmenu: _isSubmenu,
+        menuEdge: _menuEdge,
       );
 
       menu.position = boundaries.pos;
@@ -210,7 +217,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
       notifyListeners();
       _isPositionVerified = true;
-      focusScopeNode.nextFocus();
+      if (_isPositionVerified) focusScopeNode.requestFocus();
     });
   }
 
@@ -232,5 +239,11 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   void dispose() {
     close();
     super.dispose();
+  }
+
+  void setItemLayout(AppKitContextMenuItem<T> item, Rect bounds) {
+    if (_itemLayouts[item] == bounds) return;
+    _itemLayouts[item] = bounds;
+    notifyListeners();
   }
 }

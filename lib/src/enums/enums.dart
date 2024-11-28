@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 /// @see https://docs-assets.developer.apple.com/published/accf80df231061eac66e07e5377e0d31/SwiftUI-View-controlSize@2x.png
 enum AppKitControlSize {
   mini,
@@ -58,4 +60,45 @@ enum AppKitLevelIndicatorTickMarkPosition {
 enum AppKitLevelIndicatorStyle {
   continuous,
   discrete,
+}
+
+enum AppKitItemState {
+  on,
+  off,
+  mixed;
+
+  bool get isOn => this == AppKitItemState.on;
+  bool get isOff => this == AppKitItemState.off;
+  bool get isMixed => this == AppKitItemState.mixed;
+}
+
+enum AppKitMenuEdge {
+  auto,
+  left,
+  right,
+  top,
+  bottom;
+
+  bool get isLeft => this == AppKitMenuEdge.left;
+
+  Offset getRectPosition(Rect rect) {
+    switch (this) {
+      case AppKitMenuEdge.left:
+        return rect.topLeft;
+      case AppKitMenuEdge.right:
+        return rect.topRight;
+      case AppKitMenuEdge.top:
+        return rect.topLeft;
+      case AppKitMenuEdge.bottom:
+        return rect.bottomLeft;
+      default:
+        return rect.bottomLeft;
+    }
+  }
+}
+
+enum AppKitPopupButtonStyle {
+  push,
+  bevel,
+  plain,
 }

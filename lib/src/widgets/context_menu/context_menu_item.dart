@@ -1,6 +1,5 @@
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +8,10 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   final IconData? image;
   final IconData? onImage;
   final IconData? offImage;
+  final IconData? mixedImage;
   final T? value;
-  final MenuItemState itemState;
-  final AlignmentGeometry imageAlignment;
+  final AppKitItemState itemState;
+  final AppKitMenuImageAlignment imageAlignment;
   final TextAlign textAlign;
 
   final List<AppKitContextMenuEntry<T>>? items;
@@ -23,10 +23,11 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     this.image,
     this.onImage,
     this.offImage,
+    this.mixedImage,
     this.items,
     this.onSelected,
-    this.itemState = MenuItemState.off,
-    this.imageAlignment = Alignment.centerLeft,
+    this.itemState = AppKitItemState.off,
+    this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
     super.enabled = true,
   });
@@ -41,10 +42,11 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     required this.items,
     this.onSelected,
     super.enabled = true,
-    this.imageAlignment = Alignment.centerLeft,
+    required this.imageAlignment,
     this.textAlign = TextAlign.start,
   })  : value = null,
-        itemState = MenuItemState.off,
+        itemState = AppKitItemState.off,
+        mixedImage = null,
         onImage = null,
         offImage = null;
 
@@ -61,7 +63,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
       menuState.animateSelectedItem(this, () {
         menuState.setSelectedItem(this);
         if (Navigator.canPop(context)) {
-          Navigator.pop(context, value);
+          Navigator.pop(context, this);
         }
       });
     }
@@ -85,12 +87,12 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         menuState.focusedEntry == this || menuState.selectedItem == this;
 
     final IconData icon;
-    if (itemState == MenuItemState.on) {
+    if (itemState == AppKitItemState.on) {
       icon = onImage ?? CupertinoIcons.check_mark;
-    } else if (itemState == MenuItemState.off) {
+    } else if (itemState == AppKitItemState.off) {
       icon = offImage ?? CupertinoIcons.check_mark;
     } else {
-      icon = image ?? CupertinoIcons.minus;
+      icon = mixedImage ?? CupertinoIcons.minus;
     }
 
     Color textColor = selectedOrFocused && enabled
@@ -112,12 +114,48 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
             menuState.focusedEntry == this &&
             menuState.selectionTicks % 2 == 0;
 
-        if (menuState.focusedEntry == this) {
-          logger.i('Focused entry: $this');
-          logger.d('is animating: ${menuState.isSelectionAnimating}');
-          logger.d('animation ticks: ${menuState.selectionTicks}');
-          logger.d('isSelectionAnimating: $isSelectionAnimating');
-        }
+        final statusIconWidget = Padding(
+          padding: const EdgeInsets.only(top: 3.0, right: 4.0),
+          child: Icon(
+            icon,
+            size: 12,
+            color: iconColor,
+          ),
+        );
+
+        final imageWidget = Padding(
+          padding: EdgeInsets.only(
+              top: 3.0,
+              right:
+                  imageAlignment == AppKitMenuImageAlignment.start ? 4.0 : 0.0,
+              left: imageAlignment == AppKitMenuImageAlignment.end ? 4.0 : 0.0),
+          child: Icon(
+            image,
+            size: 12,
+            color: textColor,
+          ),
+        );
+
+        final subMenuIconWidget = Padding(
+          padding: const EdgeInsets.only(top: 3.0, left: 6.0),
+          child: Icon(
+            CupertinoIcons.right_chevron,
+            size: 12,
+            color: textColor,
+          ),
+        );
+
+        final textWidget = Text(
+          textAlign: textAlign,
+          softWrap: true,
+          title,
+          maxLines: 1,
+          style: theme.typography.body.copyWith(
+            fontSize: 13,
+            color: textColor,
+          ),
+          overflow: TextOverflow.ellipsis,
+        );
 
         return DecoratedBox(
           decoration: BoxDecoration(
@@ -130,61 +168,22 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
             padding: const EdgeInsets.only(
                 left: 3.0, top: 3.0, right: 3.0, bottom: 3.0),
             child: Row(
+              textDirection: Directionality.of(context),
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 3.0),
-                  child: Icon(
-                    icon,
-                    size: 12,
-                    color: iconColor,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                if (image != null &&
-                    imageAlignment == Alignment.centerLeft) ...[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0, right: 4.0),
-                    child: Icon(
-                      image,
-                      size: 12,
-                      color: iconColor,
-                    ),
-                  ),
-                ],
-                Text(
-                  textAlign: textAlign,
-                  softWrap: true,
-                  title,
-                  maxLines: 1,
-                  style: theme.typography.body.copyWith(
-                    fontSize: 13,
-                    color: textColor,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (image != null &&
-                    imageAlignment == Alignment.centerRight) ...[
+                // Left to right
+                statusIconWidget,
+                if (textAlign == TextAlign.right || textAlign == TextAlign.end)
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0, left: 4.0),
-                    child: Icon(
-                      image,
-                      size: 12,
-                      color: iconColor,
-                    ),
-                  ),
+                if (image != null &&
+                    imageAlignment == AppKitMenuImageAlignment.start) ...[
+                  imageWidget,
                 ],
-                if (isSubmenuItem) ...[
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0, left: 6.0),
-                    child: Icon(
-                      CupertinoIcons.right_chevron,
-                      size: 12,
-                      color: textColor,
-                    ),
-                  ),
-                ]
+                textWidget,
+                if (image != null &&
+                    imageAlignment == AppKitMenuImageAlignment.end) ...[
+                  imageWidget,
+                ],
+                if (isSubmenuItem) ...[const Spacer(), subMenuIconWidget]
               ],
             ),
           ),
@@ -193,3 +192,5 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     );
   }
 }
+
+enum AppKitMenuImageAlignment { start, end }

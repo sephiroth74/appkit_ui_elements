@@ -58,7 +58,8 @@ class AppKitContextMenuWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     for (final item in state.entries)
-                      MenuEntryWidget(entry: item)
+                      MenuEntryWidget(
+                          entry: item, focused: menuState.focusedEntry == item),
                   ],
                 ),
               ),

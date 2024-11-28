@@ -1,29 +1,97 @@
-import 'dart:math';
-
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
+import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 
 typedef ContextMenuBuilder<T> = AppKitContextMenu<T> Function(
     BuildContext context);
+typedef SelectedItemBuilder<T> = Widget Function(BuildContext context, T value);
+
+const _kBorderRadius = 5.0;
+const _kHeight = 20.0;
+const _kCareWidth = 5.5;
+const _kCaretHeight = 10.0;
+const _kCaretButtonSize = 16.0;
+const _kCaretDefaultPadding = 20.0;
+
+const _kMenuPaddingRight =
+    EdgeInsets.only(left: 7.0, top: 1.0, right: 2.0, bottom: 2.0);
+const _kMenuPaddingLeft =
+    EdgeInsets.only(left: 2.0, top: 1.0, right: 7.0, bottom: 2.0);
+
+final _kPressedDecoration = BoxDecoration(
+  color: Colors.black.withOpacity(0.05),
+  borderRadius: BorderRadius.circular(_kBorderRadius),
+);
+
+List<BoxShadow> _getElevatedShadow(
+        BuildContext context, UiElementColorContainer colorContainer) =>
+    [
+      BoxShadow(
+        blurStyle: BlurStyle.outer,
+        color: colorContainer.shadowColor.withOpacity(0.3),
+        blurRadius: 1.25,
+        spreadRadius: 0.0,
+        offset: const Offset(0, 0.5),
+      ),
+      BoxShadow(
+        blurStyle: BlurStyle.outer,
+        offset: const Offset(0.0, 0.0),
+        blurRadius: 0.0,
+        spreadRadius: 0.5,
+        color: colorContainer.shadowColor.withOpacity(0.05),
+      )
+    ];
+
+Widget _defaultItemBuilder<T>(
+    BuildContext context, AppKitContextMenuItem<T>? value) {
+  if (value == null) {
+    return const SizedBox();
+  }
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      if (value.image != null)
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0, top: 3.0),
+          child: Icon(
+            value.image,
+            size: 12.0,
+            color: AppKitTheme.of(context).typography.body.color,
+          ),
+        ),
+      Flexible(
+        child: Text(
+          value.title,
+          style:
+              AppKitTheme.of(context).typography.body.copyWith(fontSize: 13.0),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
+  );
+}
 
 class AppKitPopupButton<T> extends StatefulWidget {
   final ContextMenuBuilder<T>? menuBuilder;
   final T? value;
-  final ValueChanged<T?>? onSelected;
+  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
+  final SelectedItemBuilder<T?>? itemBuilder;
+  final double width;
+  final AppKitMenuEdge menuEdge;
+  final AppKitPopupButtonStyle style;
 
   const AppKitPopupButton({
     super.key,
+    required this.width,
+    required this.onItemSelected,
     this.menuBuilder,
     this.value,
-    this.onSelected,
+    this.itemBuilder,
+    this.menuEdge = AppKitMenuEdge.bottom,
+    this.style = AppKitPopupButtonStyle.push,
   });
 
   @override
@@ -31,571 +99,446 @@ class AppKitPopupButton<T> extends StatefulWidget {
 }
 
 class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
-  _PopupRoute<T>? _route;
+  bool get enabled =>
+      widget.onItemSelected != null && widget.menuBuilder != null;
 
-  bool get enabled => widget.onSelected != null && widget.menuBuilder != null;
+  TextStyle get textStyle => AppKitTheme.of(context).typography.body;
+
+  AppKitPopupButtonStyle get style => widget.style;
+
+  bool _isMenuOpened = false;
+
+  bool _isHovered = false;
+
+  late AppKitContextMenu<T> _contextMenu;
+
+  AppKitContextMenuItem<T>? get _selectedItem {
+    return _contextMenu.findItemByValue(widget.value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _contextMenu = widget.menuBuilder!(context);
+  }
 
   @override
   void dispose() {
-    _route?._dismiss();
-    _route = null;
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant AppKitPopupButton<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _contextMenu = widget.menuBuilder!(context);
+  }
+
+  void _handleMouseEnter(_) {
+    setState(() {
+      _isHovered = true;
+    });
+  }
+
+  void _handleMouseExit(_) {
+    setState(() {
+      _isHovered = false;
+    });
   }
 
   void handleTap() async {
-    logger.i('handleTap');
     final itemRect = context.getWidgetBounds();
     if (null != itemRect && widget.menuBuilder != null) {
-      final contextMenu = widget.menuBuilder!(context);
-      final menu = contextMenu.copyWith(
-          position: contextMenu.position ?? itemRect.bottomLeft);
-      final value = await showContextMenu(
+      final menu = _contextMenu.copyWith(
+          position: _contextMenu.position ??
+              widget.menuEdge.getRectPosition(itemRect));
+      setState(() {
+        _isMenuOpened = true;
+      });
+
+      final value = await showContextMenu<T>(
         context,
         contextMenu: menu,
-        transitionDuration: const Duration(milliseconds: 1000),
+        transitionDuration: const Duration(milliseconds: 200),
         barrierDismissible: true,
         opaque: false,
+        selectedItem: _selectedItem,
+        menuEdge: widget.menuEdge,
       );
-      logger.t('value: $value');
+
+      setState(() {
+        _isMenuOpened = false;
+      });
+
+      widget.onItemSelected?.call(value);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: enabled ? handleTap : null,
-      child: Container(
-        width: 100,
-        height: 22,
-        decoration: BoxDecoration(
-          color: const Color(0xFFE0E0E0),
-          borderRadius: BorderRadius.circular(4),
-        ),
+    debugCheckHasAppKitTheme(context);
+
+    return MouseRegion(
+      onEnter: enabled ? _handleMouseEnter : null,
+      onExit: enabled ? _handleMouseExit : null,
+      child: GestureDetector(
+        onTap: enabled ? handleTap : null,
+        child: UiElementColorBuilder(builder: (context, colorContainer) {
+          final isMainWindow =
+              MainWindowStateListener.instance.isMainWindow.value;
+
+          const height = _kHeight;
+          final width = widget.width;
+          final menuEdge = widget.menuEdge;
+          final itemBuilder = widget.itemBuilder;
+          final value = widget.value;
+
+          if (style == AppKitPopupButtonStyle.push ||
+              style == AppKitPopupButtonStyle.bevel) {
+            return _PushButtonStyleWidget<T>(
+              width: width,
+              height: height,
+              menuEdge: menuEdge,
+              value: value,
+              onItemSelected: widget.onItemSelected,
+              enabled: enabled,
+              colorContainer: colorContainer,
+              contextMenuOpened: _isMenuOpened,
+              isMainWindow: isMainWindow,
+              isBevel: style == AppKitPopupButtonStyle.bevel,
+              child: itemBuilder?.call(context, value) ??
+                  _defaultItemBuilder(context, _selectedItem),
+            );
+          } else if (style == AppKitPopupButtonStyle.plain) {
+            return _PlainButtonStyleWidget<T>(
+              width: width,
+              height: height,
+              menuEdge: menuEdge,
+              value: value,
+              onItemSelected: widget.onItemSelected,
+              enabled: enabled,
+              colorContainer: colorContainer,
+              contextMenuOpened: _isMenuOpened,
+              isMainWindow: isMainWindow,
+              isHovered: _isHovered,
+              child: itemBuilder?.call(context, value) ??
+                  _defaultItemBuilder(context, _selectedItem),
+            );
+          }
+
+          return const SizedBox();
+        }),
       ),
     );
   }
 }
 
-class _PopupRoute<T> extends PopupRoute {
-  final Rect parentRect;
-  final ContextMenuBuilder menuBuilder;
-  final T? value;
-
-  @override
-  Color? get barrierColor => null;
-
-  @override
-  bool get barrierDismissible => true;
-
-  @override
-  String? barrierLabel;
-
-  _PopupRoute({
-    required this.parentRect,
-    required this.menuBuilder,
-    this.value,
+class _UpDownCaretsPainter2 extends CustomPainter {
+  const _UpDownCaretsPainter2({
+    required this.color,
+    // ignore: unused_element
+    this.strokeWidth = 1.75,
   });
 
+  final Color color;
+  final double strokeWidth;
+
   @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        logger.i('_PopupRoute:LayoutBuilder:constraints: $constraints');
+  void paint(Canvas canvas, Size size) {
+    /// Draw carets
+    final path1 = Path()
+      ..moveTo(0, size.height / 2 - 2.0)
+      ..lineTo(size.width / 2, 0)
+      ..lineTo(size.width, size.height / 2 - 2.0)
+      ..moveTo(0, size.height / 2 + 2.0)
+      ..lineTo(size.width / 2, size.height)
+      ..lineTo(size.width, size.height / 2 + 2.0);
 
-        return MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          removeBottom: true,
-          removeLeft: true,
-          removeRight: true,
-          child: _PopupMenu(
-              parentRect: parentRect,
-              /*route: this, */ menuBuilder: menuBuilder,
-              value: value),
-        );
-      },
-    );
-  }
+    final paint = Paint()
+      ..color = color
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
+      ..style = PaintingStyle.stroke
+      ..isAntiAlias = true
+      ..strokeWidth = strokeWidth;
 
-  void _dismiss() {
-    if (isActive) navigator?.removeRoute(this);
+    canvas.drawPath(path1, paint);
   }
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 200);
+  bool shouldRepaint(_UpDownCaretsPainter2 oldDelegate) {
+    return color != oldDelegate.color || strokeWidth != oldDelegate.strokeWidth;
+  }
+
+  @override
+  bool shouldRebuildSemantics(_UpDownCaretsPainter2 oldDelegate) => false;
 }
 
-class _PopupMenu<T> extends StatefulWidget {
-  final Rect parentRect;
-  // final PopupRoute<dynamic> route;
-  final ContextMenuBuilder<T> menuBuilder;
+class _PushButtonStyleWidget<T> extends StatelessWidget {
+  final double width;
+  final double height;
+  final AppKitMenuEdge menuEdge;
   final T? value;
-
-  const _PopupMenu({
-    required this.parentRect,
-    // required this.route,
-    required this.menuBuilder,
-    this.value,
-  });
-
-  @override
-  State<_PopupMenu> createState() => _PopupMenuState<T>();
-}
-
-class _PopupMenuState<T> extends State<_PopupMenu>
-    with SingleTickerProviderStateMixin {
-  Size? _childSize;
-  late CurvedAnimation _fadeOpacity;
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-
-    _fadeOpacity = CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.0, 0.25),
-      reverseCurve: const Interval(0.75, 1.0),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomSingleChildLayout(
-      delegate: _PopupLayoutDelegate(
-          childSize: _childSize, parentRect: widget.parentRect),
-      child: Stack(
-        fit: StackFit.loose,
-        children: [
-          AppKitMeasureSingleChildWidget(
-            onLayout: (size) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  logger.t('child size: $size');
-                  _childSize = size;
-                });
-              });
-            },
-            child: FadeTransition(
-              opacity: _fadeOpacity,
-              child: AppKitOverlayFilterWidget(
-                backgroundBlur: 80,
-                borderRadius: BorderRadius.circular(6),
-                color: AppKitColors.materials.medium.withOpacity(1.0),
-                child: Builder(builder: (context) {
-                  return const SizedBox();
-                }),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PopupLayoutDelegate extends SingleChildLayoutDelegate {
-  final Size? childSize;
-  final Rect parentRect;
-
-  _PopupLayoutDelegate({required this.childSize, required this.parentRect});
-
-  @override
-  Offset getPositionForChild(Size size, Size _) {
-    logger.i(
-        '_PopupLayoutDelegate:getPositionForChild:size: $size, childSize: $childSize');
-
-    if (childSize != null) {
-      if (parentRect.centerRight.dx + childSize!.width < size.width) {
-        logger.t('parent center right');
-        return parentRect.topRight;
-      } else if (parentRect.centerLeft.dx - childSize!.width > 0) {
-        logger.t('parent center left');
-        return parentRect.centerLeft - Offset(childSize!.width, 0);
-      } else {
-        logger.t('parent top center');
-        return parentRect.topCenter -
-            Offset(childSize!.width / 2, childSize!.height);
-      }
-    }
-
-    return parentRect.topRight;
-  }
-
-  @override
-  Size getSize(BoxConstraints constraints) {
-    logger.i(
-        '_PopupLayoutDelegate:getSize: $constraints, childSize: $childSize, parentRect: $parentRect');
-
-    if (null != childSize) {
-      return Size(min(max(childSize!.width, 100), constraints.maxWidth),
-          min(childSize!.height, constraints.maxHeight));
-    }
-
-    return Size.zero;
-  }
-
-  @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    return constraints;
-  }
-
-  @override
-  bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate) {
-    logger.i('_PopupLayoutDelegate:shouldRelayout');
-    return (oldDelegate is _PopupLayoutDelegate &&
-            oldDelegate.childSize != childSize) ||
-        childSize == null;
-  }
-}
-
-class RenderMenuItem extends RenderProxyBox {
-  RenderMenuItem(this.onLayout, [RenderBox? child]) : super(child);
-
-  ValueChanged<Size> onLayout;
-
-  @override
-  void performLayout() {
-    super.performLayout();
-    onLayout(size);
-  }
-}
-
-abstract class MenuEntry<T> {
+  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
   final bool enabled;
+  final UiElementColorContainer colorContainer;
+  final bool contextMenuOpened;
+  final bool isMainWindow;
+  final Widget child;
+  final bool isBevel;
 
-  MenuEntry({required this.enabled});
-}
-
-// ignore: must_be_immutable
-final class Menu<T> {
-  final List<MenuEntry<T>> children;
-  Menu({required this.children});
-}
-
-class MenuItemDivider<T> extends MenuEntry<T> {
-  MenuItemDivider() : super(enabled: false);
-}
-
-class MenuItem<T> extends MenuEntry<T> {
-  final String title;
-  final IconData? image;
-  final IconData? onImage;
-  final IconData? offImage;
-  final T value;
-  final MenuItemState state;
-  final AlignmentGeometry imageAlignment;
-  final TextAlign textAlign;
-
-  MenuItem({
-    required this.title,
-    required this.value,
-    this.image,
-    this.onImage,
-    this.offImage,
-    super.enabled = true,
-    this.state = MenuItemState.off,
-    this.imageAlignment = Alignment.centerRight,
-    this.textAlign = TextAlign.left,
-  });
-}
-
-class SubMenu<T> extends MenuEntry<T> {
-  final String title;
-  final ContextMenuBuilder<T> menuBuilder;
-
-  SubMenu({
-    required this.title,
-    required this.menuBuilder,
-    super.enabled = true,
-  });
-}
-
-enum MenuItemState {
-  on,
-  off,
-  mixed;
-
-  bool get isOn => this == MenuItemState.on;
-  bool get isOff => this == MenuItemState.off;
-  bool get isMixed => this == MenuItemState.mixed;
-}
-
-// ignore: must_be_immutable
-class _MenuRenderer<T> extends StatefulWidget {
-  final List<MenuEntry<T>> children;
-  final int selectedIndex;
-
-  _MenuRenderer.fromMenu(
-      {super.key, required Menu<T> menu, this.selectedIndex = -1})
-      : children = menu.children;
-
-  const _MenuRenderer({
+  const _PushButtonStyleWidget({
     super.key,
-    required this.children,
-    this.selectedIndex = -1,
-  });
-
-  @override
-  State<_MenuRenderer<T>> createState() => _MenuRendererState<T>();
-}
-
-class _MenuRendererState<T> extends State<_MenuRenderer<T>> {
-  late int _selectedIndex = widget.selectedIndex;
-
-  _PopupRoute<T>? _route;
-
-  void onOpenSubMenu(ContextMenuBuilder<T> menuBuilder) {
-    logger.i('onOpenSubMenu');
-    final RenderBox itemBox = context.findRenderObject()! as RenderBox;
-    final Offset itemRect = itemBox.localToGlobal(Offset.zero);
-
-    final widgetRect = Rect.fromLTRB(
-      itemRect.dx,
-      itemRect.dy,
-      itemRect.dx + itemBox.size.width,
-      itemRect.dy + itemBox.size.height,
-    );
-
-    logger.t('widgetRect: $widgetRect');
-
-    _route = _PopupRoute<T>(
-        parentRect: widgetRect, menuBuilder: menuBuilder, value: null);
-    final NavigatorState navigator = Navigator.of(context);
-    navigator.push(_route!).then((value) {
-      logger.t('route completed: $value');
-      _route?._dismiss();
-      _route = null;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _handlePointerEvent(PointerEvent event) {
-    debugPrint('pointer event: $event');
-    // check if the pointer event is over one of the menu items
-    // if not, close the menu
-
-    final box = context.findRenderObject();
-    debugPrint('box: $box');
-  }
-
-  @override
-  void dispose() {
-    _route?._dismiss();
-    _route = null;
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return UiElementColorBuilder(builder: (context, colorContainer) {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: IntrinsicWidth(
-          child: Container(
-            constraints: const BoxConstraints(minWidth: 150),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.children.mapIndexed((index, entry) {
-                final bool selected = _selectedIndex == index && entry.enabled;
-                debugPrint(
-                    'index: $index, selected: $selected, entry: $entry, enabled: ${entry.enabled}');
-                if (entry is MenuItem<T>) {
-                  return _MenuItemRenderer(
-                    title: entry.title,
-                    image: entry.image,
-                    enabled: entry.enabled,
-                    state: entry.state,
-                    selected: selected,
-                    imageAlignment: entry.imageAlignment,
-                    textAlign: entry.textAlign,
-                    onImage: entry.onImage,
-                    offImage: entry.offImage,
-                    onEnter: (event) {
-                      setState(() {
-                        debugPrint('onEnter: $index');
-                        _selectedIndex = index;
-                      });
-                    },
-                    onExit: (event) {},
-                  );
-                } else if (entry is MenuItemDivider<T>) {
-                  return const Divider(
-                    thickness: 0.5,
-                    indent: 6,
-                    endIndent: 6,
-                  );
-                } else if (entry is SubMenu<T>) {
-                  return _MenuItemRenderer(
-                    title: entry.title,
-                    hasSubMenu: true,
-                    enabled: entry.enabled,
-                    state: MenuItemState.off,
-                    selected: selected,
-                    onEnter: (event) {
-                      setState(() {
-                        debugPrint('onEnter: $index');
-                        _route?._dismiss();
-                        _route = null;
-
-                        _selectedIndex = index;
-                        onOpenSubMenu(entry.menuBuilder);
-                      });
-                    },
-                    onExit: (event) {
-                      debugPrint('onExit: $index');
-                      // _route?._dismiss();
-                      // _route = null;
-                    },
-                  );
-                } else {
-                  return const SizedBox();
-                }
-              }).toList(),
-            ),
-          ),
-        ),
-      );
-    });
-  }
-}
-
-class _MenuItemRenderer extends StatelessWidget {
-  final String title;
-  final IconData? image;
-  final IconData? onImage;
-  final IconData? offImage;
-  final bool enabled;
-  final MenuItemState state;
-  final AlignmentGeometry imageAlignment;
-  final TextAlign textAlign;
-  final bool selected;
-  final PointerEnterEventListener? onEnter;
-  final PointerExitEventListener? onExit;
-  final bool hasSubMenu;
-
-  const _MenuItemRenderer({
-    required this.title,
-    this.image,
-    this.onImage,
-    this.offImage,
-    this.enabled = true,
-    this.state = MenuItemState.off,
-    this.imageAlignment = Alignment.centerRight,
-    this.textAlign = TextAlign.left,
-    this.selected = false,
-    this.hasSubMenu = false,
-    this.onEnter,
-    this.onExit,
+    required this.width,
+    required this.height,
+    required this.menuEdge,
+    required this.value,
+    required this.enabled,
+    required this.colorContainer,
+    required this.contextMenuOpened,
+    required this.isMainWindow,
+    required this.child,
+    this.onItemSelected,
+    this.isBevel = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
+    final enabledFactor = enabled ? 1.0 : 0.5;
 
-    final IconData icon;
-    if (state == MenuItemState.on) {
-      icon = onImage ?? CupertinoIcons.check_mark;
-    } else if (state == MenuItemState.off) {
-      icon = offImage ?? CupertinoIcons.check_mark;
+    Color caretBackgroundColor;
+    Color caretArrowColor;
+
+    if (isBevel) {
+      caretBackgroundColor = Colors.transparent;
+      caretArrowColor = AppKitColors.labelColor
+          .withOpacity(AppKitColors.labelColor.opacity * enabledFactor);
     } else {
-      icon = image ?? CupertinoIcons.minus;
+      caretArrowColor = isMainWindow
+          ? Colors.white.withOpacity(enabledFactor)
+          : Colors.black.withOpacity(enabledFactor);
+      caretBackgroundColor =
+          theme.accentColor ?? colorContainer.controlAccentColor;
+
+      if (contextMenuOpened) {
+        final hslColor = HSLColor.fromColor(caretBackgroundColor);
+        caretBackgroundColor =
+            (hslColor.withLightness(hslColor.lightness / 1.1)).toColor();
+      }
+
+      if (!enabled) {
+        caretBackgroundColor = caretBackgroundColor
+            .withOpacity(caretBackgroundColor.opacity * 0.5);
+      }
     }
 
-    Color textColor = selected && enabled
-        ? AppKitColors.labelColor.darkColor
-        : AppKitColors.labelColor;
-    if (!enabled) {
-      textColor = textColor.withOpacity(0.3);
-    }
-
-    final Color iconColor = state.isOff ? Colors.transparent : textColor;
-
-    return MouseRegion(
-      onEnter: enabled ? onEnter : null,
-      onExit: enabled ? onExit : null,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: selected
-              ? AppKitColors.systemBlue.color.withOpacity(0.7)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(5),
+    return Container(
+      height: height,
+      width: width,
+      foregroundDecoration:
+          contextMenuOpened ? _kPressedDecoration : const BoxDecoration(),
+      decoration: BoxDecoration(
+          color: enabled
+              ? theme.controlBackgroundColor
+              : theme.controlBackgroundColorDisabled,
+          borderRadius: BorderRadius.circular(_kBorderRadius),
+          boxShadow: _getElevatedShadow(context, colorContainer)),
+      child: Padding(
+        padding: menuEdge.isLeft ? _kMenuPaddingLeft : _kMenuPaddingRight,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              left: menuEdge.isLeft ? _kCaretDefaultPadding : 0.0,
+              right: menuEdge.isLeft ? 0 : _kCaretDefaultPadding,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 2.0),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return SizedBox(width: constraints.maxWidth, child: child);
+                }),
+              ),
+            ),
+            Positioned(
+              left: menuEdge.isLeft ? 0.0 : null,
+              right: menuEdge.isLeft ? null : 0.0,
+              top: 1.0,
+              child: SizedBox(
+                width: _kCaretButtonSize,
+                height: _kCaretButtonSize,
+                child: DecoratedBox(
+                  decoration: isMainWindow
+                      ? BoxDecoration(
+                          color: caretBackgroundColor,
+                          borderRadius:
+                              BorderRadius.circular(_kBorderRadius - 1),
+                          boxShadow: isBevel
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: colorContainer.controlAccentColor
+                                        .withOpacity(0.06),
+                                    blurRadius: 1.5,
+                                    spreadRadius: 0.0,
+                                    offset: const Offset(0, 0.5),
+                                  ),
+                                  BoxShadow(
+                                    offset: const Offset(0.0, 1.0),
+                                    blurRadius: 1.0,
+                                    spreadRadius: 0.0,
+                                    color: colorContainer.controlAccentColor
+                                        .withOpacity(0.06),
+                                  ),
+                                  BoxShadow(
+                                    offset: const Offset(0.0, 0.5),
+                                    blurRadius: 0.5,
+                                    spreadRadius: 0.0,
+                                    color: colorContainer.controlAccentColor
+                                        .withOpacity(0.12),
+                                  )
+                                ])
+                      : const BoxDecoration(),
+                  child: DecoratedBox(
+                    decoration: isMainWindow && !isBevel
+                        ? BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(_kBorderRadius - 1),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white.withOpacity(0.17),
+                                Colors.white.withOpacity(0.0),
+                              ],
+                            ),
+                          )
+                        : const BoxDecoration(),
+                    child: Center(
+                      child: SizedBox(
+                        width: _kCareWidth,
+                        height: _kCaretHeight,
+                        child: CustomPaint(
+                          painter: _UpDownCaretsPainter2(
+                            color: caretArrowColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 3.0, top: 3.0, right: 12.0, bottom: 3.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 3.0),
-                child: Icon(
-                  icon,
-                  size: 12,
-                  color: iconColor,
+      ),
+    );
+  }
+}
+
+class _PlainButtonStyleWidget<T> extends StatelessWidget {
+  final double width;
+  final double height;
+  final AppKitMenuEdge menuEdge;
+  final T? value;
+  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
+  final bool enabled;
+  final UiElementColorContainer colorContainer;
+  final bool contextMenuOpened;
+  final bool isMainWindow;
+  final Widget child;
+  final bool isHovered;
+
+  const _PlainButtonStyleWidget({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.menuEdge,
+    required this.value,
+    required this.enabled,
+    required this.colorContainer,
+    required this.contextMenuOpened,
+    required this.isMainWindow,
+    required this.child,
+    this.onItemSelected,
+    this.isHovered = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppKitTheme.of(context);
+    final enabledFactor = enabled ? 1.0 : 0.5;
+
+    Color controlBackgroundColor;
+    Color caretBackgroundColor;
+    Color caretArrowColor;
+
+    caretArrowColor = AppKitColors.labelColor
+        .withOpacity(AppKitColors.labelColor.opacity * enabledFactor);
+
+    if (isHovered) {
+      caretBackgroundColor = Colors.transparent;
+      controlBackgroundColor = theme.controlBackgroundColor;
+    } else {
+      controlBackgroundColor = Colors.transparent;
+      caretBackgroundColor = contextMenuOpened
+          ? Colors.transparent
+          : AppKitColors.systemGray.withOpacity(0.2);
+    }
+
+    return Container(
+      height: height,
+      width: width,
+      foregroundDecoration:
+          contextMenuOpened ? _kPressedDecoration : const BoxDecoration(),
+      decoration: BoxDecoration(
+          color: controlBackgroundColor,
+          borderRadius: BorderRadius.circular(_kBorderRadius),
+          boxShadow:
+              isHovered ? _getElevatedShadow(context, colorContainer) : null),
+      child: Padding(
+        padding: menuEdge.isLeft ? _kMenuPaddingLeft : _kMenuPaddingRight,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              left: menuEdge.isLeft ? _kCaretDefaultPadding : 0.0,
+              right: menuEdge.isLeft ? 0 : _kCaretDefaultPadding,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 2.0),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return SizedBox(width: constraints.maxWidth, child: child);
+                }),
+              ),
+            ),
+            Positioned(
+              left: menuEdge.isLeft ? 0.0 : null,
+              right: menuEdge.isLeft ? null : 0.0,
+              top: 1.0,
+              child: SizedBox(
+                width: _kCaretButtonSize,
+                height: _kCaretButtonSize,
+                child: DecoratedBox(
+                  decoration: isMainWindow
+                      ? BoxDecoration(
+                          color: caretBackgroundColor,
+                          borderRadius:
+                              BorderRadius.circular(_kBorderRadius - 1),
+                        )
+                      : const BoxDecoration(),
+                  child: Center(
+                    child: SizedBox(
+                      width: _kCareWidth,
+                      height: _kCaretHeight,
+                      child: CustomPaint(
+                        painter: _UpDownCaretsPainter2(
+                          color: caretArrowColor,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(width: 4),
-              if (image != null && imageAlignment == Alignment.centerLeft) ...[
-                Padding(
-                  padding: const EdgeInsets.only(top: 3.0, right: 4.0),
-                  child: Icon(
-                    image,
-                    size: 12,
-                    color: iconColor,
-                  ),
-                ),
-              ],
-              Text(
-                textAlign: textAlign,
-                softWrap: true,
-                title,
-                maxLines: 1,
-                style: theme.typography.body.copyWith(
-                  fontSize: 13,
-                  color: textColor,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (image != null && imageAlignment == Alignment.centerRight) ...[
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 3.0, left: 4.0),
-                  child: Icon(
-                    image,
-                    size: 12,
-                    color: iconColor,
-                  ),
-                ),
-              ],
-              if (hasSubMenu) ...[
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 3.0, left: 4.0),
-                  child: Icon(
-                    CupertinoIcons.right_chevron,
-                    size: 12,
-                    color: textColor,
-                  ),
-                ),
-              ]
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

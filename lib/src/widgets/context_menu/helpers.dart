@@ -1,12 +1,10 @@
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu.dart';
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_state.dart';
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_widget.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/widgets.dart';
 
 /// Shows the root context menu popup.
-Future<T?> showContextMenu<T>(
+Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
   BuildContext context, {
-  required AppKitContextMenu contextMenu,
+  required AppKitContextMenu<T> contextMenu,
   RouteSettings? routeSettings,
   bool? opaque,
   bool? barrierDismissible,
@@ -17,11 +15,14 @@ Future<T?> showContextMenu<T>(
   RouteTransitionsBuilder? transitionsBuilder,
   bool allowSnapshotting = true,
   bool maintainState = false,
+  AppKitContextMenuItem<T>? selectedItem,
+  AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
 }) async {
-  final menuState = AppKitContextMenuState(menu: contextMenu);
-  return await Navigator.push<T>(
+  final menuState = AppKitContextMenuState<T>(
+      menu: contextMenu, focusedEntry: selectedItem, menuEdge: menuEdge);
+  return await Navigator.push<AppKitContextMenuItem<T>>(
     context,
-    PageRouteBuilder<T>(
+    PageRouteBuilder<AppKitContextMenuItem<T>>(
       pageBuilder: (context, animation, secondaryAnimation) {
         return Stack(
           children: [AppKitContextMenuWidget(menuState: menuState)],

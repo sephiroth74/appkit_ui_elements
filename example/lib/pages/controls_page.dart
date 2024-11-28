@@ -24,15 +24,44 @@ class _ControlsPageState extends State<ControlsPage> {
 
   FocusNode? focusNode;
 
+  String popupValue = '2';
+  ContextMenuBuilder<String> get popupMenuBuilder => (context) {
+        return AppKitContextMenu<String>(
+          entries: [
+            AppKitContextMenuItem(
+                title: 'Item 1',
+                value: '1',
+                itemState: popupValue == '1'
+                    ? AppKitItemState.on
+                    : AppKitItemState.off,
+                imageAlignment: AppKitMenuImageAlignment.start,
+                textAlign: TextAlign.start,
+                image: CupertinoIcons.alarm),
+            AppKitContextMenuItem(
+                title: 'Item 2',
+                value: '2',
+                itemState: popupValue == '2'
+                    ? AppKitItemState.on
+                    : AppKitItemState.off),
+            AppKitContextMenuItem(
+                title: 'Item 3',
+                value: '3',
+                itemState: popupValue == '3'
+                    ? AppKitItemState.on
+                    : AppKitItemState.off),
+            AppKitContextMenuItem(
+                title: 'Item 4',
+                value: '4',
+                itemState: popupValue == '4'
+                    ? AppKitItemState.on
+                    : AppKitItemState.off),
+          ],
+        );
+      };
+
   @override
   void initState() {
     super.initState();
-
-    // focusNode = FocusNode();
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   debugPrint('requestFocus()');
-    //   focusNode?.requestFocus();
-    // });
   }
 
   @override
@@ -65,42 +94,48 @@ class _ControlsPageState extends State<ControlsPage> {
                       Row(
                         children: [
                           AppKitPopupButton(
-                            value: '2',
-                            onSelected: (value) {
-                              debugPrint('onSelected($value)');
+                            menuEdge: AppKitMenuEdge.auto,
+                            style: AppKitPopupButtonStyle.push,
+                            width: 100,
+                            value: popupValue,
+                            onItemSelected: (value) {
+                              setState(() {
+                                if (value?.value != null) {
+                                  popupValue = value!.value!;
+                                }
+                              });
                             },
-                            menuBuilder: (context) {
-                              return AppKitContextMenu<String>(entries: [
-                                AppKitContextMenuItem(
-                                    title: 'Item 1',
-                                    value: '1',
-                                    itemState: MenuItemState.on,
-                                    image: CupertinoIcons.calendar_badge_minus),
-                                AppKitContextMenuItem(
-                                    title: 'Item 2',
-                                    value: '2',
-                                    itemState: MenuItemState.off),
-                                AppKitContextMenuItem(
-                                    title: 'Item 3',
-                                    value: '3',
-                                    itemState: MenuItemState.mixed),
-                                AppKitContextMenuItem(
-                                    title: 'Item 4', value: '4'),
-                                const AppKitContextMenuDivider(),
-                                AppKitContextMenuItem<String>(
-                                    enabled: true,
-                                    title: 'Submenu',
-                                    items: [
-                                      AppKitContextMenuItem(
-                                          title: 'Submenu Item 1', value: '5'),
-                                      AppKitContextMenuItem(
-                                          title: 'Submenu Item 2', value: '6'),
-                                      const AppKitContextMenuDivider(),
-                                      AppKitContextMenuItem(
-                                          title: 'Submenu Item 3', value: '7'),
-                                    ])
-                              ]);
+                            menuBuilder: popupMenuBuilder,
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitPopupButton(
+                            menuEdge: AppKitMenuEdge.right,
+                            style: AppKitPopupButtonStyle.bevel,
+                            width: 100,
+                            value: popupValue,
+                            onItemSelected: (value) {
+                              setState(() {
+                                if (value?.value != null) {
+                                  popupValue = value!.value!;
+                                }
+                              });
                             },
+                            menuBuilder: popupMenuBuilder,
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitPopupButton(
+                            menuEdge: AppKitMenuEdge.top,
+                            style: AppKitPopupButtonStyle.plain,
+                            width: 100,
+                            value: popupValue,
+                            onItemSelected: (value) {
+                              setState(() {
+                                if (value?.value != null) {
+                                  popupValue = value!.value!;
+                                }
+                              });
+                            },
+                            menuBuilder: popupMenuBuilder,
                           ),
                         ],
                       ),

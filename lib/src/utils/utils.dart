@@ -65,22 +65,25 @@ extension BuildContextExtensions on BuildContext {
 /// Calculates the position of the context menu based on the position of the
 /// menu and the position of the parent menu. To prevent the menu from
 /// extending beyond the screen boundaries.
-({Offset pos, AlignmentGeometry alignment}) calculateContextMenuBoundaries(
-  BuildContext context,
-  AppKitContextMenu menu,
+({Offset pos, AlignmentGeometry alignment}) calculateContextMenuBoundaries({
+  required BuildContext context,
+  required AppKitContextMenu menu,
   Rect? parentRect,
-  AlignmentGeometry spawnAlignment,
-  bool isSubmenu,
-) {
+  required AlignmentGeometry spawnAlignment,
+  required bool isSubmenu,
+  AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
+}) {
   final screenSize = MediaQuery.of(context).size;
   final safeScreenRect = (Offset.zero & screenSize).deflate(8.0);
   final menuRect = context.getWidgetBounds()!;
   AlignmentGeometry nextSpawnAlignment = spawnAlignment;
 
-  // final parentRect = menu.parentItemRect;
-
   double x = menuRect.left;
   double y = menuRect.top;
+
+  if (menuEdge == AppKitMenuEdge.left) {
+    x -= menuRect.width;
+  }
 
   bool isWidthExceed() => x + menuRect.width > screenSize.width || x < 0;
 

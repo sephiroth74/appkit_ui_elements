@@ -1,8 +1,7 @@
-import 'package:appkit_ui_elements/src/widgets/context_menu/helpers.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'context_menu_entry.dart';
 
 class AppKitContextMenu<T> {
   Offset? position;
@@ -17,7 +16,30 @@ class AppKitContextMenu<T> {
     this.minWidth = 150,
   });
 
-  Future<T?> show(BuildContext context) {
+  AppKitContextMenuItem<T>? findItemByValue(T? value) {
+    for (final entry in entries) {
+      if (entry is AppKitContextMenuItem<T>) {
+        if (entry.value == value) {
+          return entry;
+        }
+        if (entry.items != null) {
+          final item = entry.items!.firstWhereOrNull((e) {
+            if (e is AppKitContextMenuItem) {
+              return (e as AppKitContextMenuItem).value == value;
+            } else {
+              return false;
+            }
+          });
+          if (item != null) {
+            return item as AppKitContextMenuItem<T>;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<AppKitContextMenuItem<T>?> show(BuildContext context) {
     return showContextMenu(context, contextMenu: this);
   }
 
