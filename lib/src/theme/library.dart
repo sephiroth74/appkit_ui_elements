@@ -14,3 +14,4 @@ export 'appkit_rating_indicator_theme.dart';
 export 'appkit_tooltip_theme.dart';
 export 'appkit_typography.dart';
 export 'appkit_popup_button_theme.dart';
+export 'appkit_context_menu_theme.dart';

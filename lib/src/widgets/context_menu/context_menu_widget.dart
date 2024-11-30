@@ -49,10 +49,15 @@ class AppKitContextMenuWidget extends StatelessWidget {
       tween: Tween(begin: 0.0, end: 1.0),
       duration: transitionDuration,
       builder: (context, value, child) {
+        final theme = AppKitContextMenuTheme.of(context);
+
         return AppKitOverlayFilterWidget(
-          backgroundBlur: 2,
-          borderRadius: _kBorderRadius,
-          color: AppKitColors.materials.medium.withOpacity(0.9),
+          backgroundBlur: theme.backgroundBlur,
+          borderRadius: BorderRadius.circular(theme.borderRadius),
+          color: theme.backgroundColor ??
+              AppKitColors.materials.medium
+                  .resolveFrom(context)
+                  .withOpacity(0.9),
           child: Opacity(
             opacity: value,
             child: Container(

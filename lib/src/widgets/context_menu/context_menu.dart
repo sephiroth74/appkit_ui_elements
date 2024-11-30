@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -14,31 +13,36 @@ class AppKitContextMenu<T> {
     required this.entries,
     this.position,
     this.maxWidth = 350,
-    this.minWidth = 150,
+    this.minWidth = 50,
     this.size,
   });
 
-  AppKitContextMenuItem<T>? findItemByValue(T? value) {
+  AppKitContextMenuItem<T>? _firstWhereOrNull(
+      List<AppKitContextMenuEntry<T>> entries,
+      bool Function(AppKitContextMenuItem<T> element) test) {
     for (final entry in entries) {
       if (entry is AppKitContextMenuItem<T>) {
-        if (entry.value == value) {
+        if (test(entry)) {
           return entry;
         }
         if (entry.items != null) {
-          final item = entry.items!.firstWhereOrNull((e) {
-            if (e is AppKitContextMenuItem) {
-              return (e as AppKitContextMenuItem).value == value;
-            } else {
-              return false;
-            }
-          });
+          final item = _firstWhereOrNull(entry.items!, test);
           if (item != null) {
-            return item as AppKitContextMenuItem<T>;
+            return item;
           }
         }
       }
     }
     return null;
+  }
+
+  AppKitContextMenuItem<T>? firstWhereOrNull(
+      bool Function(AppKitContextMenuItem<T> element) test) {
+    return _firstWhereOrNull(entries, test);
+  }
+
+  AppKitContextMenuItem<T>? findItemByValue(T? value) {
+    return _firstWhereOrNull(entries, (e) => e.value == value);
   }
 
   Future<AppKitContextMenuItem<T>?> show(BuildContext context) {

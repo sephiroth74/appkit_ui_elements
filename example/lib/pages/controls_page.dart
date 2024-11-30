@@ -21,22 +21,26 @@ class _ControlsPageState extends State<ControlsPage> {
   bool disclosureValue = false;
   double sliderValue1 = 0.5;
   bool switchValue1 = true;
+  double popupButtonWidth = 125.0;
 
   FocusNode? focusNode;
 
-  String popupValue = '2';
+  AppKitContextMenuItem<String>? popupSelectedItem;
+
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
+          maxWidth: 200,
           entries: [
             for (var i = 0; i < 7; i++)
               if (i % 5 == 0 && i > 0)
                 const AppKitContextMenuDivider()
               else
                 AppKitContextMenuItem(
-                  title: 'Item $i',
+                  title: i == 6 ? 'Very long item with value $i' : 'Item $i',
+                  enabled: i != 4,
                   value: '$i',
                   image: i == 0 ? CupertinoIcons.airplane : null,
-                  itemState: popupValue == '$i'
+                  itemState: popupSelectedItem?.value == '$i'
                       ? AppKitItemState.on
                       : AppKitItemState.off,
                 ),
@@ -46,6 +50,8 @@ class _ControlsPageState extends State<ControlsPage> {
 
   @override
   void initState() {
+    popupSelectedItem = popupMenuBuilder(context).entries.elementAt(1)
+        as AppKitContextMenuItem<String>?;
     super.initState();
   }
 
@@ -81,14 +87,15 @@ class _ControlsPageState extends State<ControlsPage> {
                           Row(
                             children: [
                               AppKitPopupButton(
+                                hint: 'Select an item',
                                 menuEdge: AppKitMenuEdge.auto,
                                 style: AppKitPopupButtonStyle.push,
-                                width: 100,
-                                value: popupValue,
+                                width: popupButtonWidth,
+                                selectedItem: popupSelectedItem,
                                 onItemSelected: (value) {
                                   setState(() {
-                                    if (value?.value != null) {
-                                      popupValue = value!.value!;
+                                    if (value != null) {
+                                      popupSelectedItem = value;
                                     }
                                   });
                                 },
@@ -98,12 +105,12 @@ class _ControlsPageState extends State<ControlsPage> {
                               AppKitPopupButton(
                                 menuEdge: AppKitMenuEdge.right,
                                 style: AppKitPopupButtonStyle.bevel,
-                                width: 100,
-                                value: popupValue,
+                                width: popupButtonWidth,
+                                selectedItem: popupSelectedItem,
                                 onItemSelected: (value) {
                                   setState(() {
-                                    if (value?.value != null) {
-                                      popupValue = value!.value!;
+                                    if (value != null) {
+                                      popupSelectedItem = value;
                                     }
                                   });
                                 },
@@ -117,12 +124,12 @@ class _ControlsPageState extends State<ControlsPage> {
                               AppKitPopupButton(
                                 menuEdge: AppKitMenuEdge.bottom,
                                 style: AppKitPopupButtonStyle.inline,
-                                width: 100,
-                                value: popupValue,
+                                width: popupButtonWidth,
+                                selectedItem: popupSelectedItem,
                                 onItemSelected: (value) {
                                   setState(() {
-                                    if (value?.value != null) {
-                                      popupValue = value!.value!;
+                                    if (value != null) {
+                                      popupSelectedItem = value;
                                     }
                                   });
                                 },
@@ -132,12 +139,12 @@ class _ControlsPageState extends State<ControlsPage> {
                               AppKitPopupButton(
                                 menuEdge: AppKitMenuEdge.top,
                                 style: AppKitPopupButtonStyle.plain,
-                                width: 100,
-                                value: popupValue,
+                                width: popupButtonWidth,
+                                selectedItem: popupSelectedItem,
                                 onItemSelected: (value) {
                                   setState(() {
-                                    if (value?.value != null) {
-                                      popupValue = value!.value!;
+                                    if (value != null) {
+                                      popupSelectedItem = value;
                                     }
                                   });
                                 },

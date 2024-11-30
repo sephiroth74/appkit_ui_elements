@@ -15,9 +15,8 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   final TextAlign textAlign;
 
   final List<AppKitContextMenuEntry<T>>? items;
-  final VoidCallback? onSelected;
 
-  AppKitContextMenuItem({
+  const AppKitContextMenuItem({
     this.value,
     required this.title,
     this.image,
@@ -25,7 +24,6 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     this.offImage,
     this.mixedImage,
     this.items,
-    this.onSelected,
     this.itemState = AppKitItemState.off,
     this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
@@ -36,13 +34,26 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   @override
   String toString() => 'ContextMenuItem($title)';
 
-  AppKitContextMenuItem.submenu({
+  @override
+  List<Object?> get props =>
+      super.props +
+      [
+        value,
+        title,
+        image,
+        onImage,
+        offImage,
+        mixedImage,
+        imageAlignment,
+        textAlign
+      ];
+
+  const AppKitContextMenuItem.submenu({
     required this.title,
     this.image,
     required this.items,
-    this.onSelected,
     super.enabled = true,
-    required this.imageAlignment,
+    this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
   })  : value = null,
         itemState = AppKitItemState.off,
@@ -50,14 +61,14 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         onImage = null,
         offImage = null;
 
-  bool get isSubmenuItem => items != null;
+  bool get hasSubmenu => items != null;
 
   bool get isFocusMaintained => false;
 
   void _handleItemSelection(BuildContext context) {
     final menuState = AppKitContextMenuState.of(context);
 
-    if (isSubmenuItem) {
+    if (hasSubmenu) {
       _toggleSubmenu(context, menuState);
     } else {
       menuState.animateSelectedItem(this, () {
@@ -67,7 +78,6 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         }
       });
     }
-    onSelected?.call();
   }
 
   void _toggleSubmenu(BuildContext context, AppKitContextMenuState menuState) {
@@ -168,6 +178,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
             padding: const EdgeInsets.only(
                 left: 3.0, top: 3.0, right: 3.0, bottom: 3.0),
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               textDirection: Directionality.of(context),
               children: [
                 // Left to right
@@ -178,12 +189,13 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
                     imageAlignment == AppKitMenuImageAlignment.start) ...[
                   imageWidget,
                 ],
-                textWidget,
+                Flexible(child: textWidget),
                 if (image != null &&
                     imageAlignment == AppKitMenuImageAlignment.end) ...[
                   imageWidget,
                 ],
-                if (isSubmenuItem) ...[const Spacer(), subMenuIconWidget]
+                if (hasSubmenu) ...[const Spacer(), subMenuIconWidget],
+                const SizedBox(width: 12),
               ],
             ),
           ),

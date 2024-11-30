@@ -87,7 +87,7 @@ class _MenuEntryWidgetState<T> extends State<MenuEntryWidget<T>> {
   ) {
     if (widget.entry is AppKitContextMenuItem) {
       final item = widget.entry as AppKitContextMenuItem;
-      final isSubmenuItem = item.isSubmenuItem;
+      final isSubmenuItem = item.hasSubmenu;
       final isOpenedSubmenu = menuState.isOpened(item);
       final isFocused = menuState.isFocused(item);
 

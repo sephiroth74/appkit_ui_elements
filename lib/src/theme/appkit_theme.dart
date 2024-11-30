@@ -109,6 +109,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitRatingIndicatorThemeData ratingIndicatorTheme;
   final AppKitTooltipThemeData tooltipTheme;
   final AppKitPopupButtonThemeData popupButtonTheme;
+  final AppKitContextMenuThemeData contextMenuTheme;
   final AppKitTypography typography;
 
   factory AppKitThemeData({
@@ -127,6 +128,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
     AppKitTooltipThemeData? tooltipTheme,
     AppKitPopupButtonThemeData? popupButtonTheme,
+    AppKitContextMenuThemeData? contextMenuTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -322,6 +324,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       elevatedButtonColor: accentColor,
     );
 
+    contextMenuTheme ??= AppKitContextMenuThemeData(
+      backgroundBlur: 2.0,
+      borderRadius: 6.0,
+      backgroundColor: isDark
+          ? AppKitColors.materials.medium.darkColor.withOpacity(0.59)
+          : AppKitColors.materials.medium.withOpacity(0.95),
+    );
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -346,6 +356,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       accentColorUnfocused: accentColorUnfocused,
       tooltipTheme: tooltipTheme,
       popupButtonTheme: popupButtonTheme,
+      contextMenuTheme: contextMenuTheme,
     );
 
     final customData = defaultData.copyWith(
@@ -371,6 +382,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ratingIndicatorTheme: ratingIndicatorTheme,
       tooltipTheme: tooltipTheme,
       popupButtonTheme: popupButtonTheme,
+      contextMenuTheme: contextMenuTheme,
     );
 
     return defaultData.merge(customData);
@@ -464,6 +476,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.ratingIndicatorTheme,
     required this.tooltipTheme,
     required this.popupButtonTheme,
+    required this.contextMenuTheme,
   });
 
   @override
@@ -491,6 +504,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         ratingIndicatorTheme,
         tooltipTheme,
         popupButtonTheme,
+        contextMenuTheme,
       ];
 
   AppKitThemeData copyWith({
@@ -517,6 +531,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
     AppKitTooltipThemeData? tooltipTheme,
     AppKitPopupButtonThemeData? popupButtonTheme,
+    AppKitContextMenuThemeData? contextMenuTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -545,6 +560,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ratingIndicatorTheme: ratingIndicatorTheme ?? this.ratingIndicatorTheme,
       tooltipTheme: tooltipTheme ?? this.tooltipTheme,
       popupButtonTheme: popupButtonTheme ?? this.popupButtonTheme,
+      contextMenuTheme: contextMenuTheme ?? this.contextMenuTheme,
     );
   }
 
@@ -574,6 +590,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ratingIndicatorTheme: other.ratingIndicatorTheme,
       tooltipTheme: other.tooltipTheme,
       popupButtonTheme: other.popupButtonTheme,
+      contextMenuTheme: other.contextMenuTheme,
     );
   }
 
@@ -619,6 +636,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           AppKitTooltipThemeData.lerp(a.tooltipTheme, b.tooltipTheme, t),
       popupButtonTheme: AppKitPopupButtonThemeData.lerp(
           a.popupButtonTheme, b.popupButtonTheme, t),
+      contextMenuTheme: AppKitContextMenuThemeData.lerp(
+          a.contextMenuTheme, b.contextMenuTheme, t),
     );
   }
 
@@ -666,6 +685,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'tooltipTheme', tooltipTheme));
     properties.add(DiagnosticsProperty<AppKitPopupButtonThemeData>(
         'popupButtonTheme', popupButtonTheme));
+    properties.add(DiagnosticsProperty<AppKitContextMenuThemeData>(
+        'contextMenuTheme', contextMenuTheme));
   }
 }
 
