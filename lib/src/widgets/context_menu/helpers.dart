@@ -25,7 +25,12 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
     PageRouteBuilder<AppKitContextMenuItem<T>>(
       pageBuilder: (context, animation, secondaryAnimation) {
         return Stack(
-          children: [AppKitContextMenuWidget(menuState: menuState)],
+          children: [
+            AppKitContextMenuWidget(
+              menuState: menuState,
+              transitionDuration: transitionDuration,
+            )
+          ],
         );
       },
       settings: routeSettings ?? const RouteSettings(name: "context-menu"),

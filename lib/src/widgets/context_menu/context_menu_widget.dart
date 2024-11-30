@@ -1,12 +1,17 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
 
+const _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
+
 class AppKitContextMenuWidget extends StatelessWidget {
   final AppKitContextMenuState menuState;
+  final Duration transitionDuration;
   const AppKitContextMenuWidget({
     super.key,
     required this.menuState,
-  });
+    Duration? transitionDuration,
+  }) : transitionDuration =
+            transitionDuration ?? const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +47,12 @@ class AppKitContextMenuWidget extends StatelessWidget {
   Widget _buildMenuView(BuildContext context, AppKitContextMenuState state) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 150),
+      duration: transitionDuration,
       builder: (context, value, child) {
         return AppKitOverlayFilterWidget(
-          backgroundBlur: 80,
-          borderRadius: BorderRadius.circular(6),
-          color: AppKitColors.materials.medium.withOpacity(1.0),
+          backgroundBlur: 2,
+          borderRadius: _kBorderRadius,
+          color: AppKitColors.materials.medium.withOpacity(0.9),
           child: Opacity(
             opacity: value,
             child: Container(

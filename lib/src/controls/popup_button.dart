@@ -5,6 +5,8 @@ import 'package:appkit_ui_elements/src/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+const _kContextMenuTrasitionDuration = Duration(milliseconds: 200);
+
 typedef ContextMenuBuilder<T> = AppKitContextMenu<T> Function(
     BuildContext context);
 typedef SelectedItemBuilder<T> = Widget Function(BuildContext context, T value);
@@ -183,7 +185,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
       final value = await showContextMenu<T>(
         context,
         contextMenu: menu,
-        transitionDuration: const Duration(milliseconds: 200),
+        transitionDuration: _kContextMenuTrasitionDuration,
         barrierDismissible: true,
         opaque: false,
         selectedItem: _selectedItem,

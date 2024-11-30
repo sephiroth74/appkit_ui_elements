@@ -55,6 +55,18 @@ class _ControlsPageState extends State<ControlsPage> {
                 itemState: popupValue == '4'
                     ? AppKitItemState.on
                     : AppKitItemState.off),
+            AppKitContextMenuItem(
+                title: 'Item 5',
+                value: '5',
+                itemState: popupValue == '5'
+                    ? AppKitItemState.on
+                    : AppKitItemState.off),
+            AppKitContextMenuItem(
+                title: 'Item 6',
+                value: '6',
+                itemState: popupValue == '6'
+                    ? AppKitItemState.on
+                    : AppKitItemState.off),
           ],
         );
       };
