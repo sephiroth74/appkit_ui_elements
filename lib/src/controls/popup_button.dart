@@ -9,23 +9,6 @@ typedef ContextMenuBuilder<T> = AppKitContextMenu<T> Function(
     BuildContext context);
 typedef SelectedItemBuilder<T> = Widget Function(BuildContext context, T value);
 
-const _kBorderRadius = 5.0;
-const _kHeight = 20.0;
-const _kCareWidth = 5.5;
-const _kCaretHeight = 10.0;
-const _kCaretButtonSize = 16.0;
-const _kCaretDefaultPadding = 20.0;
-
-const _kMenuPaddingRight =
-    EdgeInsets.only(left: 7.0, top: 1.0, right: 2.0, bottom: 2.0);
-const _kMenuPaddingLeft =
-    EdgeInsets.only(left: 2.0, top: 1.0, right: 7.0, bottom: 2.0);
-
-final _kPressedDecoration = BoxDecoration(
-  color: Colors.black.withOpacity(0.05),
-  borderRadius: BorderRadius.circular(_kBorderRadius),
-);
-
 List<BoxShadow> _getElevatedShadow(
         BuildContext context, UiElementColorContainer colorContainer) =>
     [
@@ -226,7 +209,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
           final isMainWindow =
               MainWindowStateListener.instance.isMainWindow.value;
 
-          const height = _kHeight;
+          final height = style.height;
           final width = widget.width;
           final menuEdge = widget.menuEdge;
           final itemBuilder = widget.itemBuilder;
@@ -252,7 +235,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               colorContainer: colorContainer,
               contextMenuOpened: _isMenuOpened,
               isMainWindow: isMainWindow,
-              isBevel: style == AppKitPopupButtonStyle.bevel,
+              style: style,
               child: child,
             );
           } else if (style == AppKitPopupButtonStyle.plain) {
@@ -344,7 +327,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
   final bool contextMenuOpened;
   final bool isMainWindow;
   final Widget child;
-  final bool isBevel;
+  final AppKitPopupButtonStyle style;
 
   const _PushButtonStyleWidget({
     super.key,
@@ -357,8 +340,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     required this.contextMenuOpened,
     required this.isMainWindow,
     required this.child,
+    required this.style,
     this.onItemSelected,
-    this.isBevel = false,
   });
 
   @override
@@ -366,9 +349,12 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     final theme = AppKitTheme.of(context);
     final enabledFactor = enabled ? 1.0 : 0.5;
     final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    final bool isBevel = style == AppKitPopupButtonStyle.bevel;
 
     Color caretBackgroundColor;
     Color caretArrowColor;
+    double caretButtonSize = style.caretButtonSize;
+    final caretSize = style.caretSize;
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
@@ -404,21 +390,21 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       height: height,
       width: width,
       foregroundDecoration:
-          contextMenuOpened ? _kPressedDecoration : const BoxDecoration(),
+          contextMenuOpened ? style.pressedDecoration : const BoxDecoration(),
       decoration: BoxDecoration(
           color: enabled
               ? theme.controlBackgroundColor
               : theme.controlBackgroundColorDisabled,
-          borderRadius: BorderRadius.circular(_kBorderRadius),
+          borderRadius: BorderRadius.circular(style.borderRadius),
           boxShadow: _getElevatedShadow(context, colorContainer)),
       child: Padding(
-        padding: menuEdge.isLeft ? _kMenuPaddingLeft : _kMenuPaddingRight,
+        padding: style.getPadding(menuEdge),
         child: Stack(
           fit: StackFit.expand,
           children: [
             Positioned(
-              left: menuEdge.isLeft ? _kCaretDefaultPadding : 0.0,
-              right: menuEdge.isLeft ? 0 : _kCaretDefaultPadding,
+              left: menuEdge.isLeft ? caretButtonSize + 4.0 : 0.0,
+              right: menuEdge.isLeft ? 0 : caretButtonSize + 4.0,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 2.0),
                 child: LayoutBuilder(builder: (context, constraints) {
@@ -431,14 +417,14 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
               right: menuEdge.isLeft ? null : 0.0,
               top: 1.0,
               child: SizedBox(
-                width: _kCaretButtonSize,
-                height: _kCaretButtonSize,
+                width: caretButtonSize,
+                height: caretButtonSize,
                 child: DecoratedBox(
                   decoration: isMainWindow && enabled
                       ? BoxDecoration(
                           color: caretBackgroundColor,
                           borderRadius:
-                              BorderRadius.circular(_kBorderRadius - 1),
+                              BorderRadius.circular(style.borderRadius - 1),
                           boxShadow: isBevel
                               ? null
                               : [
@@ -469,7 +455,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                     decoration: isMainWindow && !isBevel
                         ? BoxDecoration(
                             borderRadius:
-                                BorderRadius.circular(_kBorderRadius - 1),
+                                BorderRadius.circular(style.borderRadius - 1),
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
@@ -482,8 +468,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                         : const BoxDecoration(),
                     child: Center(
                       child: SizedBox(
-                        width: _kCareWidth,
-                        height: _kCaretHeight,
+                        width: caretSize.width,
+                        height: caretSize.height,
                         child: CustomPaint(
                           painter: _UpDownCaretsPainter2(
                             color: caretArrowColor,
@@ -514,6 +500,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
   final bool isMainWindow;
   final Widget child;
   final bool isHovered;
+  final AppKitPopupButtonStyle style = AppKitPopupButtonStyle.plain;
 
   const _PlainButtonStyleWidget({
     super.key,
@@ -539,6 +526,8 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     Color controlBackgroundColor;
     Color caretBackgroundColor;
     Color caretArrowColor;
+    final caretButtonSize = style.caretButtonSize;
+    final caretSize = style.caretSize;
 
     caretArrowColor = AppKitColors.labelColor
         .withOpacity(AppKitColors.labelColor.opacity * enabledFactor);
@@ -558,20 +547,20 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
       height: height,
       width: width,
       foregroundDecoration:
-          contextMenuOpened ? _kPressedDecoration : const BoxDecoration(),
+          contextMenuOpened ? style.pressedDecoration : const BoxDecoration(),
       decoration: BoxDecoration(
           color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(_kBorderRadius),
+          borderRadius: BorderRadius.circular(style.borderRadius),
           boxShadow:
               isHovered ? _getElevatedShadow(context, colorContainer) : null),
       child: Padding(
-        padding: menuEdge.isLeft ? _kMenuPaddingLeft : _kMenuPaddingRight,
+        padding: style.getPadding(menuEdge),
         child: Stack(
           fit: StackFit.expand,
           children: [
             Positioned(
-              left: menuEdge.isLeft ? _kCaretDefaultPadding : 0.0,
-              right: menuEdge.isLeft ? 0 : _kCaretDefaultPadding,
+              left: menuEdge.isLeft ? caretButtonSize + 4.0 : 0.0,
+              right: menuEdge.isLeft ? 0 : caretButtonSize + 4.0,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 2.0),
                 child: LayoutBuilder(builder: (context, constraints) {
@@ -584,20 +573,20 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
               right: menuEdge.isLeft ? null : 0.0,
               top: 1.0,
               child: SizedBox(
-                width: _kCaretButtonSize,
-                height: _kCaretButtonSize,
+                width: caretButtonSize,
+                height: caretButtonSize,
                 child: DecoratedBox(
                   decoration: isMainWindow
                       ? BoxDecoration(
                           color: caretBackgroundColor,
                           borderRadius:
-                              BorderRadius.circular(_kBorderRadius - 1),
+                              BorderRadius.circular(style.borderRadius - 1),
                         )
                       : const BoxDecoration(),
                   child: Center(
                     child: SizedBox(
-                      width: _kCareWidth,
-                      height: _kCaretHeight,
+                      width: caretSize.width,
+                      height: caretSize.height,
                       child: CustomPaint(
                         painter: _UpDownCaretsPainter2(
                           color: caretArrowColor,
@@ -627,6 +616,7 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
   final bool isMainWindow;
   final Widget child;
   final bool isHovered;
+  final AppKitPopupButtonStyle style = AppKitPopupButtonStyle.inline;
 
   const _InlineButtonStyleWidget({
     super.key,
@@ -645,14 +635,14 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppKitTheme.of(context);
-    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
     final enabledFactor = enabled ? 0.5 : 0.35;
 
     Color controlBackgroundColor;
     Color caretBackgroundColor = Colors.transparent;
     Color caretArrowColor;
     const borderRadius = BorderRadius.all(Radius.circular(12.5));
+    final caretSize = style.caretSize;
+    final caretButtonSize = style.caretButtonSize;
 
     caretArrowColor = AppKitColors.labelColor
         .withOpacity(isMainWindow ? enabledFactor : 0.35);
@@ -663,31 +653,21 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
       controlBackgroundColor = Colors.black.withOpacity(0.05);
     }
 
-    const _kMenuPaddingRight =
-        EdgeInsets.only(left: 7.5, top: 4.5, right: 5.5, bottom: 0.0);
-    const _kMenuPaddingLeft =
-        EdgeInsets.only(left: 5.5, top: 4.5, right: 7.5, bottom: 0.0);
-    const _kCaretButtonSize = 13.0;
-    final _kPressedDecoration = BoxDecoration(
-      color: Colors.black.withOpacity(0.05),
-      borderRadius: borderRadius,
-    );
-
     return Container(
       height: 25.0,
       width: width,
       foregroundDecoration:
-          contextMenuOpened ? _kPressedDecoration : const BoxDecoration(),
+          contextMenuOpened ? style.pressedDecoration : const BoxDecoration(),
       decoration: BoxDecoration(
           color: controlBackgroundColor, borderRadius: borderRadius),
       child: Padding(
-        padding: menuEdge.isLeft ? _kMenuPaddingLeft : _kMenuPaddingRight,
+        padding: style.getPadding(menuEdge),
         child: Stack(
           fit: StackFit.expand,
           children: [
             Positioned(
-              left: menuEdge.isLeft ? _kCaretDefaultPadding : 0.0,
-              right: menuEdge.isLeft ? 0 : _kCaretDefaultPadding,
+              left: menuEdge.isLeft ? caretButtonSize + 4.0 : 0.0,
+              right: menuEdge.isLeft ? 0 : caretButtonSize + 4.0,
               child: Padding(
                 padding: const EdgeInsets.only(top: 1.5),
                 child: LayoutBuilder(builder: (context, constraints) {
@@ -700,20 +680,20 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
               right: menuEdge.isLeft ? null : 0.0,
               top: 1.5,
               child: SizedBox(
-                width: _kCaretButtonSize,
-                height: _kCaretButtonSize,
+                width: caretButtonSize,
+                height: caretButtonSize,
                 child: DecoratedBox(
                   decoration: isMainWindow
                       ? BoxDecoration(
                           color: caretBackgroundColor,
                           borderRadius:
-                              BorderRadius.circular(_kBorderRadius - 1),
+                              BorderRadius.circular(style.borderRadius - 1),
                         )
                       : const BoxDecoration(),
                   child: Center(
                     child: SizedBox(
-                      width: _kCareWidth,
-                      height: _kCaretHeight,
+                      width: caretSize.width,
+                      height: caretSize.height,
                       child: CustomPaint(
                         painter: _UpDownCaretsPainter2(
                           color: caretArrowColor,
@@ -728,5 +708,91 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension AppKitPopupButtonStyleX on AppKitPopupButtonStyle {
+  EdgeInsets getPadding(AppKitMenuEdge menuEdge) {
+    switch (this) {
+      case AppKitPopupButtonStyle.push:
+      case AppKitPopupButtonStyle.bevel:
+      case AppKitPopupButtonStyle.plain:
+        return menuEdge.isLeft
+            ? const EdgeInsets.only(
+                left: 2.0, top: 1.0, right: 7.0, bottom: 2.0)
+            : const EdgeInsets.only(
+                left: 7.0, top: 1.0, right: 2.0, bottom: 2.0);
+
+      case AppKitPopupButtonStyle.inline:
+        return menuEdge.isLeft
+            ? const EdgeInsets.only(
+                left: 7.5, top: 4.5, right: 5.5, bottom: 0.0)
+            : const EdgeInsets.only(
+                left: 5.5, top: 4.5, right: 7.5, bottom: 0.0);
+    }
+  }
+
+  double get caretButtonSize {
+    switch (this) {
+      case AppKitPopupButtonStyle.push:
+      case AppKitPopupButtonStyle.bevel:
+      case AppKitPopupButtonStyle.plain:
+        return 16.0;
+
+      case AppKitPopupButtonStyle.inline:
+        return 13.0;
+    }
+  }
+
+  Size get caretSize {
+    switch (this) {
+      case AppKitPopupButtonStyle.push:
+      case AppKitPopupButtonStyle.bevel:
+      case AppKitPopupButtonStyle.plain:
+      case AppKitPopupButtonStyle.inline:
+        return const Size(5.5, 10.0);
+    }
+  }
+
+  double get borderRadius {
+    switch (this) {
+      case AppKitPopupButtonStyle.push:
+      case AppKitPopupButtonStyle.bevel:
+      case AppKitPopupButtonStyle.plain:
+        return 5.0;
+
+      case AppKitPopupButtonStyle.inline:
+        return 12.5;
+    }
+  }
+
+  double get height {
+    switch (this) {
+      case AppKitPopupButtonStyle.push:
+      case AppKitPopupButtonStyle.bevel:
+      case AppKitPopupButtonStyle.plain:
+        return 20.0;
+
+      case AppKitPopupButtonStyle.inline:
+        return 25.0;
+    }
+  }
+
+  BoxDecoration get pressedDecoration {
+    switch (this) {
+      case AppKitPopupButtonStyle.push:
+      case AppKitPopupButtonStyle.bevel:
+      case AppKitPopupButtonStyle.plain:
+        return BoxDecoration(
+          color: Colors.black.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(borderRadius),
+        );
+
+      case AppKitPopupButtonStyle.inline:
+        return BoxDecoration(
+          color: Colors.black.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(borderRadius),
+        );
+    }
   }
 }
