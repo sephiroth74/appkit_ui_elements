@@ -54,7 +54,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
   bool get isFocusMaintained => false;
 
-  void handleItemSelection(BuildContext context) {
+  void _handleItemSelection(BuildContext context) {
     final menuState = AppKitContextMenuState.of(context);
 
     if (isSubmenuItem) {
@@ -105,7 +105,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     final Color iconColor = itemState.isOff ? Colors.transparent : textColor;
 
     return GestureDetector(
-      onTap: () => handleItemSelection(context),
+      onTap: () => enabled ? _handleItemSelection(context) : null,
       child: UiElementColorBuilder(builder: (context, colorContainer) {
         final accentColor =
             theme.accentColor ?? colorContainer.controlAccentColor;

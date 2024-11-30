@@ -37,6 +37,7 @@ class _ControlsPageState extends State<ControlsPage> {
                 imageAlignment: AppKitMenuImageAlignment.start,
                 textAlign: TextAlign.start,
                 image: CupertinoIcons.alarm),
+            const AppKitContextMenuDivider(),
             AppKitContextMenuItem(
                 title: 'Item 2',
                 value: '2',
@@ -61,7 +62,9 @@ class _ControlsPageState extends State<ControlsPage> {
                 itemState: popupValue == '5'
                     ? AppKitItemState.on
                     : AppKitItemState.off),
+            const AppKitContextMenuDivider(),
             AppKitContextMenuItem(
+                enabled: false,
                 title: 'Item 6',
                 value: '6',
                 itemState: popupValue == '6'

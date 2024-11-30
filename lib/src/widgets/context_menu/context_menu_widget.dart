@@ -31,8 +31,8 @@ class AppKitContextMenuWidget extends StatelessWidget {
               child: FocusScope(
                 autofocus: true,
                 node: state.focusScopeNode,
-                child: Opacity(
-                  opacity: state.isPositionVerified ? 1.0 : 0.0,
+                child: Visibility(
+                  visible: state.isPositionVerified,
                   child: _buildMenuView(context, state),
                 ),
               ),
@@ -64,7 +64,9 @@ class AppKitContextMenuWidget extends StatelessWidget {
                   children: [
                     for (final item in state.entries)
                       MenuEntryWidget(
-                          entry: item, focused: menuState.focusedEntry == item),
+                          enabled: menuState.isVerified,
+                          entry: item,
+                          focused: menuState.focusedEntry == item),
                   ],
                 ),
               ),

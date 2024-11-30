@@ -86,6 +86,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   bool get isPositionVerified => _isPositionVerified;
 
+  bool get isVerified => isPositionVerified;
+
   bool get isSubmenuOpen => overlayController.isShowing;
 
   AlignmentGeometry get spawnAlignment => _spawnAlignment;
@@ -217,7 +219,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
       notifyListeners();
       _isPositionVerified = true;
-      if (_isPositionVerified) focusScopeNode.requestFocus();
+      if (isVerified) focusScopeNode.requestFocus();
     });
   }
 

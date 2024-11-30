@@ -9,10 +9,12 @@ import 'context_menu_state.dart';
 class MenuEntryWidget<T> extends StatefulWidget {
   final AppKitContextMenuEntry<T> entry;
   final bool focused;
+  final bool enabled;
   const MenuEntryWidget({
     super.key,
     required this.entry,
     this.focused = false,
+    this.enabled = true,
   });
 
   @override
@@ -22,13 +24,15 @@ class MenuEntryWidget<T> extends StatefulWidget {
 class _MenuEntryWidgetState<T> extends State<MenuEntryWidget<T>> {
   late final FocusNode focusNode;
 
+  bool get enabled => widget.enabled && widget.entry.enabled;
+
   AppKitContextMenuEntry get entry => widget.entry;
 
   @override
   void initState() {
     focusNode = FocusNode();
 
-    if (widget.focused) {
+    if (widget.focused && enabled) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         focusNode.requestFocus();
       });
@@ -42,22 +46,25 @@ class _MenuEntryWidgetState<T> extends State<MenuEntryWidget<T>> {
     final menuState = AppKitContextMenuState.of(context);
 
     return MouseRegion(
-      onEnter: (event) => _onMouseEnter(context, event, menuState),
+      onEnter: (event) =>
+          enabled ? _onMouseEnter(context, event, menuState) : null,
       onExit: (event) => widget.entry.onMouseExit(event, menuState),
-      onHover: (event) => _onMouseHover(event, menuState),
+      onHover: (event) => enabled ? _onMouseHover(event, menuState) : null,
       child: Builder(
         builder: (_) {
           if (entry is AppKitContextMenuItem) {
             final item = entry as AppKitContextMenuItem;
 
             return Focus(
-              autofocus: !widget.focused,
+              autofocus: false,
               focusNode: item.isFocusMaintained ? null : focusNode,
-              onFocusChange: (value) {
-                if (value) {
-                  _ensureFocused(item, menuState, focusNode);
-                }
-              },
+              onFocusChange: enabled
+                  ? (value) {
+                      if (value) {
+                        _ensureFocused(item, menuState, focusNode);
+                      }
+                    }
+                  : null,
               child: item.builder(context, menuState, focusNode),
             );
           } else {
