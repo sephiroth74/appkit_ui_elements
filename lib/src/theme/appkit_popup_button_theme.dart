@@ -27,11 +27,11 @@ class AppKitPopupButtonTheme extends InheritedTheme {
 
 class AppKitPopupButtonThemeData with Diagnosticable {
   final Color? elevatedButtonColor;
-  final Color? plainButtonColor;
+  final Color plainButtonColor;
 
   AppKitPopupButtonThemeData({
     this.elevatedButtonColor,
-    this.plainButtonColor,
+    required this.plainButtonColor,
   });
 
   @override
@@ -64,7 +64,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     return AppKitPopupButtonThemeData(
       elevatedButtonColor:
           Color.lerp(a.elevatedButtonColor, b.elevatedButtonColor, t),
-      plainButtonColor: Color.lerp(a.plainButtonColor, b.plainButtonColor, t),
+      plainButtonColor: Color.lerp(a.plainButtonColor, b.plainButtonColor, t)!,
     );
   }
 }

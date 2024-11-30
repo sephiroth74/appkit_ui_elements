@@ -185,3 +185,16 @@ Rect getScreenRect(BuildContext context) {
       .size;
   return Offset.zero & size;
 }
+
+extension ColorX on Color {
+  Color multiplyOpacity(double factor) {
+    assert(opacity >= 0.0);
+    if (factor == 1.0) {
+      return this;
+    } else if (factor == 0.0) {
+      return withAlpha(0);
+    }
+    final alpha = (opacity * factor).round().clamp(0, 255);
+    return withAlpha(alpha);
+  }
+}

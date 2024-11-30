@@ -91,6 +91,7 @@ class AppKitPopupButton<T> extends StatefulWidget {
   final double width;
   final AppKitMenuEdge menuEdge;
   final AppKitPopupButtonStyle style;
+  final Color? color;
 
   const AppKitPopupButton({
     super.key,
@@ -98,6 +99,7 @@ class AppKitPopupButton<T> extends StatefulWidget {
     this.onItemSelected,
     this.menuBuilder,
     this.value,
+    this.color,
     this.itemBuilder,
     this.menuEdge = AppKitMenuEdge.bottom,
     this.style = AppKitPopupButtonStyle.push,
@@ -236,6 +238,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               contextMenuOpened: _isMenuOpened,
               isMainWindow: isMainWindow,
               style: style,
+              color: widget.color,
               child: child,
             );
           } else if (style == AppKitPopupButtonStyle.plain) {
@@ -328,6 +331,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
   final bool isMainWindow;
   final Widget child;
   final AppKitPopupButtonStyle style;
+  final Color? color;
 
   const _PushButtonStyleWidget({
     super.key,
@@ -342,6 +346,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     required this.child,
     required this.style,
     this.onItemSelected,
+    this.color,
   });
 
   @override
@@ -361,7 +366,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       caretArrowColor = AppKitColors.labelColor
           .withOpacity(AppKitColors.labelColor.opacity * enabledFactor);
     } else {
-      caretBackgroundColor = popupButtonTheme.elevatedButtonColor ??
+      caretBackgroundColor = color ??
+          popupButtonTheme.elevatedButtonColor ??
           theme.accentColor ??
           colorContainer.controlAccentColor;
 
@@ -538,8 +544,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     } else {
       caretBackgroundColor = contextMenuOpened
           ? Colors.transparent
-          : popupButtonTheme.plainButtonColor ??
-              AppKitColors.systemGray.withOpacity(enabled ? 0.2 : 0.1);
+          : popupButtonTheme.plainButtonColor.multiplyOpacity(enabledFactor);
       controlBackgroundColor = Colors.transparent;
     }
 

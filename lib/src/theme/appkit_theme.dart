@@ -317,7 +317,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           );
         }());
 
-    popupButtonTheme ??= AppKitPopupButtonThemeData();
+    popupButtonTheme ??= AppKitPopupButtonThemeData(
+      plainButtonColor: AppKitColors.systemGray.withOpacity(0.2),
+      elevatedButtonColor: accentColor,
+    );
 
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
