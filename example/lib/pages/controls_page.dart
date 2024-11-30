@@ -93,6 +93,46 @@ class _ControlsPageState extends State<ControlsPage> {
                       const SizedBox(height: 20.0),
                       Column(
                         children: [
+                          AppKitPopupButton(
+                            hint: 'Select an item',
+                            controlSize: AppKitControlSize.large,
+                            width: popupButtonWidth,
+                            selectedItem: popupSelectedItem,
+                            onItemSelected:
+                                switchValue1 ? _onPopupItemSelected : null,
+                            menuBuilder: popupMenuBuilder,
+                          ),
+                          const SizedBox(height: 16.0),
+                          AppKitPopupButton(
+                            hint: 'Select an item',
+                            controlSize: AppKitControlSize.regular,
+                            width: popupButtonWidth,
+                            selectedItem: popupSelectedItem,
+                            onItemSelected:
+                                switchValue1 ? _onPopupItemSelected : null,
+                            menuBuilder: popupMenuBuilder,
+                          ),
+                          const SizedBox(height: 16.0),
+                          AppKitPopupButton(
+                            hint: 'Select an item',
+                            controlSize: AppKitControlSize.small,
+                            width: popupButtonWidth,
+                            selectedItem: popupSelectedItem,
+                            onItemSelected:
+                                switchValue1 ? _onPopupItemSelected : null,
+                            menuBuilder: popupMenuBuilder,
+                          ),
+                          const SizedBox(height: 16.0),
+                          AppKitPopupButton(
+                            hint: 'Select an item',
+                            controlSize: AppKitControlSize.mini,
+                            width: popupButtonWidth,
+                            selectedItem: popupSelectedItem,
+                            onItemSelected:
+                                switchValue1 ? _onPopupItemSelected : null,
+                            menuBuilder: popupMenuBuilder,
+                          ),
+                          const SizedBox(height: 16.0),
                           Row(
                             children: [
                               AppKitPopupButton(

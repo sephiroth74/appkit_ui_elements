@@ -41,6 +41,7 @@ class AppKitPopupButton<T> extends StatefulWidget {
   final AppKitPopupButtonStyle style;
   final Color? color;
   final String? hint;
+  final AppKitControlSize controlSize;
 
   const AppKitPopupButton({
     super.key,
@@ -53,6 +54,7 @@ class AppKitPopupButton<T> extends StatefulWidget {
     this.itemBuilder,
     this.menuEdge = AppKitMenuEdge.bottom,
     this.style = AppKitPopupButtonStyle.push,
+    this.controlSize = AppKitControlSize.regular,
   });
 
   @override
@@ -66,6 +68,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
   TextStyle get textStyle => AppKitTheme.of(context).typography.body;
 
   AppKitPopupButtonStyle get style => widget.style;
+
+  AppKitControlSize get controlSize => widget.controlSize;
 
   bool _isMenuOpened = false;
 
@@ -111,15 +115,16 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
     _contextMenu = widget.menuBuilder!(context);
   }
 
-  Widget _defaultItemBuilder({required BuildContext context}) {
+  Widget _defaultItemBuilder(
+      {required BuildContext context, required double controlHeight}) {
     bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
 
     String title = selectedItem?.title ?? '';
     final icon = selectedItem?.image;
 
     EdgeInsets iconPadding = style == AppKitPopupButtonStyle.inline
-        ? const EdgeInsets.only(right: 4.0, top: 2.0)
-        : const EdgeInsets.only(right: 4.0, top: 3.0);
+        ? EdgeInsets.only(right: 4.0, top: controlHeight * 0.08)
+        : EdgeInsets.only(right: 4.0, top: controlHeight * 0.15);
 
     if (selectedItem == null) {
       if (widget.hint != null) {
@@ -129,14 +134,11 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
       }
     }
 
-    TextStyle textStyle = AppKitTheme.of(context).typography.body;
+    final TextStyle textStyle =
+        style.getTextStyle(AppKitTheme.of(context), controlSize);
     Color textColor;
 
     if (style == AppKitPopupButtonStyle.inline) {
-      textStyle = AppKitTheme.of(context)
-          .typography
-          .subheadline
-          .copyWith(fontWeight: FontWeight.w500);
       textColor = (textStyle.color ?? AppKitColors.labelColor).withOpacity(0.7);
       if (!isMainWindow) {
         textColor = textColor.withOpacity(0.5);
@@ -159,7 +161,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               padding: iconPadding,
               child: Icon(
                 icon,
-                size: 12.0,
+                size: (textStyle.fontSize! - 1),
                 color: textColor,
               ),
             ),
@@ -228,14 +230,15 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
         child: UiElementColorBuilder(builder: (context, colorContainer) {
           final isMainWindow =
               MainWindowStateListener.instance.isMainWindow.value;
+          final popupButtonTheme = AppKitPopupButtonTheme.of(context);
 
-          final height = style.height;
+          final height = style.getHeight(popupButtonTheme, controlSize);
           final width = widget.width;
           final menuEdge = widget.menuEdge;
           final itemBuilder = widget.itemBuilder;
 
           final child = itemBuilder?.call(context, widget.selectedItem) ??
-              _defaultItemBuilder(context: context);
+              _defaultItemBuilder(context: context, controlHeight: height);
 
           if (style == AppKitPopupButtonStyle.push ||
               style == AppKitPopupButtonStyle.bevel) {
@@ -249,6 +252,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               contextMenuOpened: _isMenuOpened,
               isMainWindow: isMainWindow,
               style: style,
+              controlSize: controlSize,
               color: widget.color,
               child: child,
             );
@@ -262,6 +266,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               colorContainer: colorContainer,
               contextMenuOpened: _isMenuOpened,
               isMainWindow: isMainWindow,
+              controlSize: controlSize,
               isHovered: _isHovered,
               child: child,
             );
@@ -274,6 +279,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
               enabled: enabled,
               colorContainer: colorContainer,
               contextMenuOpened: _isMenuOpened,
+              controlSize: controlSize,
               isMainWindow: isMainWindow,
               isHovered: _isHovered,
               child: child,
@@ -290,8 +296,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
 class _UpDownCaretsPainter2 extends CustomPainter {
   const _UpDownCaretsPainter2({
     required this.color,
-    // ignore: unused_element
-    this.strokeWidth = 1.75,
+    required this.strokeWidth,
   });
 
   final Color color;
@@ -299,14 +304,16 @@ class _UpDownCaretsPainter2 extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final padding = size.height / 5.0;
+
     /// Draw carets
     final path1 = Path()
-      ..moveTo(0, size.height / 2 - 2.0)
+      ..moveTo(0, size.height / 2 - padding)
       ..lineTo(size.width / 2, 0)
-      ..lineTo(size.width, size.height / 2 - 2.0)
-      ..moveTo(0, size.height / 2 + 2.0)
+      ..lineTo(size.width, size.height / 2 - padding)
+      ..moveTo(0, size.height / 2 + padding)
       ..lineTo(size.width / 2, size.height)
-      ..lineTo(size.width, size.height / 2 + 2.0);
+      ..lineTo(size.width, size.height / 2 + padding);
 
     final paint = Paint()
       ..color = color
@@ -339,6 +346,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
   final bool isMainWindow;
   final Widget child;
   final AppKitPopupButtonStyle style;
+  final AppKitControlSize controlSize;
   final Color? color;
 
   const _PushButtonStyleWidget({
@@ -350,6 +358,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     required this.colorContainer,
     required this.contextMenuOpened,
     required this.isMainWindow,
+    required this.controlSize,
     required this.child,
     required this.style,
     this.onItemSelected,
@@ -365,11 +374,13 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
     Color caretBackgroundColor;
     Color arrowsColor;
-    double caretButtonSize = style.caretButtonSize;
-    final caretSize = style.caretSize;
+    double caretButtonSize =
+        style.getCaretButtonSize(popupButtonTheme, controlSize);
+    final caretSize = style.getCaretSize(controlSize);
     final controlBackgroundColor = enabled
         ? theme.controlBackgroundColor
         : theme.controlBackgroundColorDisabled;
+    final borderRadius = style.getBorderRadius(popupButtonTheme, controlSize);
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
@@ -404,14 +415,18 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      foregroundDecoration:
-          contextMenuOpened ? style.pressedDecoration : const BoxDecoration(),
+      foregroundDecoration: contextMenuOpened
+          ? BoxDecoration(
+              color: style.pressedBackgroundColor,
+              borderRadius: BorderRadius.circular(borderRadius),
+            )
+          : const BoxDecoration(),
       decoration: BoxDecoration(
           color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(style.borderRadius),
+          borderRadius: BorderRadius.circular(borderRadius),
           boxShadow: _getElevatedShadow(context, colorContainer)),
       child: Padding(
-        padding: style.getPadding(menuEdge),
+        padding: style.getContainerPadding(menuEdge, controlSize),
         child: LayoutBuilder(builder: (context, parentConstraints) {
           return Row(
             mainAxisSize: MainAxisSize.max,
@@ -419,7 +434,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 2.5, right: 4.0),
+                  padding: style.getChildPadding(controlSize),
                   child: LayoutBuilder(builder: (context, constraints) {
                     return SizedBox(
                         width: constraints.maxWidth,
@@ -435,8 +450,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                   decoration: isMainWindow && enabled
                       ? BoxDecoration(
                           color: caretBackgroundColor,
-                          borderRadius:
-                              BorderRadius.circular(style.borderRadius - 1),
+                          borderRadius: BorderRadius.circular(borderRadius - 1),
                           boxShadow: isBevel
                               ? null
                               : [
@@ -467,7 +481,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                     decoration: isMainWindow && !isBevel
                         ? BoxDecoration(
                             borderRadius:
-                                BorderRadius.circular(style.borderRadius - 1),
+                                BorderRadius.circular(borderRadius - 1),
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
@@ -485,6 +499,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                         child: CustomPaint(
                           painter: _UpDownCaretsPainter2(
                             color: arrowsColor,
+                            strokeWidth: style.getCaretStrokeWidth(controlSize),
                           ),
                         ),
                       ),
@@ -512,6 +527,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
   final Widget child;
   final bool isHovered;
   final AppKitPopupButtonStyle style = AppKitPopupButtonStyle.plain;
+  final AppKitControlSize controlSize;
 
   const _PlainButtonStyleWidget({
     super.key,
@@ -522,6 +538,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     required this.colorContainer,
     required this.contextMenuOpened,
     required this.isMainWindow,
+    required this.controlSize,
     required this.child,
     this.onItemSelected,
     this.isHovered = false,
@@ -535,9 +552,11 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 
     final Color controlBackgroundColor;
     final Color caretBackgroundColor;
-    final caretButtonSize = style.caretButtonSize;
-    final caretSize = style.caretSize;
+    final caretButtonSize =
+        style.getCaretButtonSize(popupButtonTheme, controlSize);
+    final caretSize = style.getCaretSize(controlSize);
 
+    final borderRadius = style.getBorderRadius(popupButtonTheme, controlSize);
     final arrowsColor =
         style.getArrowsColor(context).multiplyOpacity(enabledFactor);
 
@@ -554,15 +573,19 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      foregroundDecoration:
-          contextMenuOpened ? style.pressedDecoration : const BoxDecoration(),
+      foregroundDecoration: contextMenuOpened
+          ? BoxDecoration(
+              color: style.pressedBackgroundColor,
+              borderRadius: BorderRadius.circular(borderRadius),
+            )
+          : const BoxDecoration(),
       decoration: BoxDecoration(
           color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(style.borderRadius),
+          borderRadius: BorderRadius.circular(borderRadius),
           boxShadow:
               isHovered ? _getElevatedShadow(context, colorContainer) : null),
       child: Padding(
-        padding: style.getPadding(menuEdge),
+        padding: style.getContainerPadding(menuEdge, controlSize),
         child: LayoutBuilder(builder: (context, parentConstraints) {
           return Row(
             mainAxisSize: MainAxisSize.max,
@@ -570,7 +593,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 2.5, right: 4.0),
+                  padding: style.getChildPadding(controlSize),
                   child: LayoutBuilder(builder: (context, constraints) {
                     return SizedBox(
                         width: constraints.maxWidth,
@@ -585,7 +608,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: caretBackgroundColor,
-                    borderRadius: BorderRadius.circular(style.borderRadius - 1),
+                    borderRadius: BorderRadius.circular(borderRadius - 1),
                   ),
                   child: Center(
                     child: SizedBox(
@@ -594,6 +617,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
                       child: CustomPaint(
                         painter: _UpDownCaretsPainter2(
                           color: arrowsColor,
+                          strokeWidth: style.getCaretStrokeWidth(controlSize),
                         ),
                       ),
                     ),
@@ -620,6 +644,7 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
   final Widget child;
   final bool isHovered;
   final AppKitPopupButtonStyle style = AppKitPopupButtonStyle.inline;
+  final AppKitControlSize controlSize;
 
   const _InlineButtonStyleWidget({
     super.key,
@@ -630,6 +655,7 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     required this.colorContainer,
     required this.contextMenuOpened,
     required this.isMainWindow,
+    required this.controlSize,
     required this.child,
     this.onItemSelected,
     this.isHovered = false,
@@ -638,13 +664,16 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabledFactor = enabled ? 0.5 : 0.35;
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
 
     final Color controlBackgroundColor;
-    final caretSize = style.caretSize;
-    final caretButtonSize = style.caretButtonSize;
+    final caretSize = style.getCaretSize(controlSize);
+    final caretButtonSize =
+        style.getCaretButtonSize(popupButtonTheme, controlSize);
     final arrowsColor = style
         .getArrowsColor(context)
         .withOpacity(isMainWindow ? enabledFactor : 0.35);
+    final borderRadius = style.getBorderRadius(popupButtonTheme, controlSize);
 
     if (isHovered) {
       controlBackgroundColor = Colors.black.withOpacity(0.2);
@@ -653,15 +682,19 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     }
 
     return Container(
-      height: style.height,
+      height: height,
       width: width,
-      foregroundDecoration:
-          contextMenuOpened ? style.pressedDecoration : const BoxDecoration(),
+      foregroundDecoration: contextMenuOpened
+          ? BoxDecoration(
+              color: style.pressedBackgroundColor,
+              borderRadius: BorderRadius.circular(borderRadius),
+            )
+          : const BoxDecoration(),
       decoration: BoxDecoration(
           color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(style.borderRadius)),
+          borderRadius: BorderRadius.circular(borderRadius)),
       child: Padding(
-        padding: style.getPadding(menuEdge),
+        padding: style.getContainerPadding(menuEdge, controlSize),
         child: LayoutBuilder(builder: (context, parentConstraints) {
           return Row(
             mainAxisSize: MainAxisSize.max,
@@ -669,7 +702,7 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 2.0, bottom: 3.0),
+                  padding: style.getChildPadding(controlSize),
                   child: LayoutBuilder(builder: (context, constraints) {
                     return SizedBox(
                         width: parentConstraints.maxWidth,
@@ -690,6 +723,7 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
                       child: CustomPaint(
                         painter: _UpDownCaretsPainter2(
                           color: arrowsColor,
+                          strokeWidth: style.getCaretStrokeWidth(controlSize),
                         ),
                       ),
                     ),
@@ -705,7 +739,8 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
 }
 
 extension AppKitPopupButtonStyleX on AppKitPopupButtonStyle {
-  EdgeInsets getPadding(AppKitMenuEdge menuEdge) {
+  EdgeInsets getContainerPadding(
+      AppKitMenuEdge menuEdge, AppKitControlSize controlSize) {
     switch (this) {
       case AppKitPopupButtonStyle.push:
       case AppKitPopupButtonStyle.bevel:
@@ -723,72 +758,112 @@ extension AppKitPopupButtonStyleX on AppKitPopupButtonStyle {
     }
   }
 
-  double get caretButtonSize {
+  EdgeInsets getChildPadding(AppKitControlSize controlSize) {
+    switch (controlSize) {
+      case AppKitControlSize.mini:
+        return const EdgeInsets.only(bottom: 0.5, right: 4.0);
+      case AppKitControlSize.small:
+        return const EdgeInsets.only(bottom: 1, right: 4.0);
+      case AppKitControlSize.regular:
+        return this == AppKitPopupButtonStyle.inline
+            ? const EdgeInsets.only(bottom: 2.5, right: 4.0)
+            : const EdgeInsets.only(top: 2.0, bottom: 3.0);
+      case AppKitControlSize.large:
+        return const EdgeInsets.only(bottom: 3, right: 4.0);
+    }
+  }
+
+  double getCaretButtonSize(
+      AppKitPopupButtonThemeData theme, AppKitControlSize controlSize) {
     switch (this) {
       case AppKitPopupButtonStyle.push:
       case AppKitPopupButtonStyle.bevel:
       case AppKitPopupButtonStyle.plain:
-        return 16.0;
+        return getHeight(theme, controlSize) - 4;
 
       case AppKitPopupButtonStyle.inline:
         return 13.0;
     }
   }
 
-  Size get caretSize {
-    switch (this) {
-      case AppKitPopupButtonStyle.push:
-      case AppKitPopupButtonStyle.bevel:
-      case AppKitPopupButtonStyle.plain:
-      case AppKitPopupButtonStyle.inline:
-        return const Size(5.5, 10.0);
+  Size getCaretSize(AppKitControlSize controlSize) {
+    switch (controlSize) {
+      case AppKitControlSize.mini:
+        return const Size(3, 5.5);
+      case AppKitControlSize.small:
+        return const Size(5, 8);
+      case AppKitControlSize.regular:
+        return const Size(5.5, 10);
+      case AppKitControlSize.large:
+        return const Size(7.5, 12.5);
     }
   }
 
-  double get borderRadius {
-    switch (this) {
-      case AppKitPopupButtonStyle.push:
-      case AppKitPopupButtonStyle.bevel:
-      case AppKitPopupButtonStyle.plain:
-        return 5.5;
-
-      case AppKitPopupButtonStyle.inline:
-        return 12.5;
+  double getCaretStrokeWidth(AppKitControlSize controlSize) {
+    switch (controlSize) {
+      case AppKitControlSize.mini:
+        return 1.0;
+      case AppKitControlSize.small:
+        return 1.25;
+      case AppKitControlSize.regular:
+        return 1.75;
+      case AppKitControlSize.large:
+        return 1.75;
     }
   }
 
-  double get height {
+  double getBorderRadius(
+      AppKitPopupButtonThemeData theme, AppKitControlSize constrolSize) {
     switch (this) {
       case AppKitPopupButtonStyle.push:
       case AppKitPopupButtonStyle.bevel:
       case AppKitPopupButtonStyle.plain:
-        return 20.0;
+        switch (constrolSize) {
+          case AppKitControlSize.mini:
+            return 3;
+          case AppKitControlSize.small:
+            return 5;
+          case AppKitControlSize.regular:
+            return 5.5;
+          case AppKitControlSize.large:
+            return 6.0;
+        }
 
       case AppKitPopupButtonStyle.inline:
-        return 25.0;
+        return getHeight(theme, constrolSize) / 2.0;
+    }
+  }
+
+  double getHeight(
+      AppKitPopupButtonThemeData theme, AppKitControlSize controlSize) {
+    final height = theme.height[controlSize]!;
+
+    if (this == AppKitPopupButtonStyle.inline) {
+      return height * 1.25;
+    } else {
+      return height;
     }
   }
 
   Color get pressedBackgroundColor => Colors.black.withOpacity(0.05);
 
-  BoxDecoration get pressedDecoration {
-    switch (this) {
-      case AppKitPopupButtonStyle.push:
-      case AppKitPopupButtonStyle.bevel:
-      case AppKitPopupButtonStyle.plain:
-        return BoxDecoration(
-          color: pressedBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
-        );
-
-      case AppKitPopupButtonStyle.inline:
-        return BoxDecoration(
-          color: pressedBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
-        );
-    }
-  }
-
   Color getArrowsColor(BuildContext context) =>
       AppKitColors.labelColor.resolveFrom(context);
+
+  TextStyle getTextStyle(AppKitThemeData theme, AppKitControlSize controlSize) {
+    final style = this == AppKitPopupButtonStyle.inline
+        ? theme.typography.subheadline.copyWith(fontWeight: FontWeight.w500)
+        : theme.typography.body;
+
+    switch (controlSize) {
+      case AppKitControlSize.mini:
+        return style.copyWith(fontSize: 9.0);
+      case AppKitControlSize.small:
+        return style.copyWith(fontSize: 10.0);
+      case AppKitControlSize.regular:
+        return style;
+      case AppKitControlSize.large:
+        return style.copyWith(fontSize: 14.0);
+    }
+  }
 }

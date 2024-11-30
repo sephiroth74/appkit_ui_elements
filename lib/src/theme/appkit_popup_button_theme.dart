@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -28,10 +30,12 @@ class AppKitPopupButtonTheme extends InheritedTheme {
 class AppKitPopupButtonThemeData with Diagnosticable {
   final Color? elevatedButtonColor;
   final Color plainButtonColor;
+  Map<AppKitControlSize, double> height;
 
   AppKitPopupButtonThemeData({
     this.elevatedButtonColor,
     required this.plainButtonColor,
+    required this.height,
   });
 
   @override
@@ -39,15 +43,19 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('elevatedButtonColor', elevatedButtonColor));
     properties.add(ColorProperty('plainButtonColor', plainButtonColor));
+    properties.add(
+        DiagnosticsProperty<Map<AppKitControlSize, double>>('height', height));
   }
 
   AppKitPopupButtonThemeData copyWith({
     Color? elevatedButtonColor,
     Color? plainButtonColor,
+    Map<AppKitControlSize, double>? height,
   }) {
     return AppKitPopupButtonThemeData(
       elevatedButtonColor: elevatedButtonColor ?? this.elevatedButtonColor,
       plainButtonColor: plainButtonColor ?? this.plainButtonColor,
+      height: height ?? this.height,
     );
   }
 
@@ -56,6 +64,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     return copyWith(
       elevatedButtonColor: other.elevatedButtonColor,
       plainButtonColor: other.plainButtonColor,
+      height: other.height,
     );
   }
 
@@ -65,6 +74,16 @@ class AppKitPopupButtonThemeData with Diagnosticable {
       elevatedButtonColor:
           Color.lerp(a.elevatedButtonColor, b.elevatedButtonColor, t),
       plainButtonColor: Color.lerp(a.plainButtonColor, b.plainButtonColor, t)!,
+      height: Map.fromEntries(
+        a.height.entries.map(
+          (entry) {
+            return MapEntry(
+              entry.key,
+              lerpDouble(entry.value, b.height[entry.key], t)!,
+            );
+          },
+        ),
+      ),
     );
   }
 }

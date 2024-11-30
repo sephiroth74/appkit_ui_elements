@@ -322,6 +322,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     popupButtonTheme ??= AppKitPopupButtonThemeData(
       plainButtonColor: AppKitColors.systemGray.withOpacity(0.2),
       elevatedButtonColor: accentColor,
+      height: {
+        AppKitControlSize.mini: 14.0,
+        AppKitControlSize.small: 17.0,
+        AppKitControlSize.regular: 20.0,
+        AppKitControlSize.large: 29.0,
+      },
     );
 
     contextMenuTheme ??= AppKitContextMenuThemeData(
