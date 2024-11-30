@@ -203,7 +203,8 @@ extension ColorX on Color {
     } else if (factor == 0.0) {
       return withAlpha(0);
     }
-    final alpha = (opacity * factor).round().clamp(0, 255);
+    final newOpacity = (opacity * factor).clamp(0, 1.0);
+    final alpha = (newOpacity * 255).round();
     return withAlpha(alpha);
   }
 }

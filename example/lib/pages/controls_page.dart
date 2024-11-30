@@ -48,6 +48,15 @@ class _ControlsPageState extends State<ControlsPage> {
         );
       };
 
+  void _onPopupItemSelected(AppKitContextMenuItem<String>? value) {
+    setState(() {
+      if (value != null) {
+        popupSelectedItem =
+            popupMenuBuilder(context).findItemByValue(value.value);
+      }
+    });
+  }
+
   @override
   void initState() {
     popupSelectedItem = popupMenuBuilder(context).entries.elementAt(1)
@@ -92,13 +101,8 @@ class _ControlsPageState extends State<ControlsPage> {
                                 style: AppKitPopupButtonStyle.push,
                                 width: popupButtonWidth,
                                 selectedItem: popupSelectedItem,
-                                onItemSelected: (value) {
-                                  setState(() {
-                                    if (value != null) {
-                                      popupSelectedItem = value;
-                                    }
-                                  });
-                                },
+                                onItemSelected:
+                                    switchValue1 ? _onPopupItemSelected : null,
                                 menuBuilder: popupMenuBuilder,
                               ),
                               const SizedBox(width: 16.0),
@@ -126,13 +130,8 @@ class _ControlsPageState extends State<ControlsPage> {
                                 style: AppKitPopupButtonStyle.inline,
                                 width: popupButtonWidth,
                                 selectedItem: popupSelectedItem,
-                                onItemSelected: (value) {
-                                  setState(() {
-                                    if (value != null) {
-                                      popupSelectedItem = value;
-                                    }
-                                  });
-                                },
+                                onItemSelected:
+                                    switchValue1 ? _onPopupItemSelected : null,
                                 menuBuilder: popupMenuBuilder,
                               ),
                               const SizedBox(width: 16.0),
@@ -141,13 +140,8 @@ class _ControlsPageState extends State<ControlsPage> {
                                 style: AppKitPopupButtonStyle.plain,
                                 width: popupButtonWidth,
                                 selectedItem: popupSelectedItem,
-                                onItemSelected: (value) {
-                                  setState(() {
-                                    if (value != null) {
-                                      popupSelectedItem = value;
-                                    }
-                                  });
-                                },
+                                onItemSelected:
+                                    switchValue1 ? _onPopupItemSelected : null,
                                 menuBuilder: popupMenuBuilder,
                               ),
                             ],
