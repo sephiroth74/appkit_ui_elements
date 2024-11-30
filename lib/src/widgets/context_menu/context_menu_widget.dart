@@ -31,8 +31,8 @@ class AppKitContextMenuWidget extends StatelessWidget {
               child: FocusScope(
                 autofocus: true,
                 node: state.focusScopeNode,
-                child: Visibility(
-                  visible: state.isPositionVerified,
+                child: Opacity(
+                  opacity: state.isPositionVerified ? 1.0 : 0.0,
                   child: _buildMenuView(context, state),
                 ),
               ),
@@ -58,16 +58,26 @@ class AppKitContextMenuWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(5),
               constraints: BoxConstraints(
-                  maxWidth: state.maxWidth, minWidth: state.minWidth),
-              child: IntrinsicWidth(
-                child: Column(
-                  children: [
-                    for (final item in state.entries)
-                      MenuEntryWidget(
-                          enabled: menuState.isVerified,
-                          entry: item,
-                          focused: menuState.focusedEntry == item),
-                  ],
+                  maxWidth: state.maxWidth,
+                  minWidth: state.minWidth,
+                  maxHeight: state.size?.height ?? double.infinity),
+              child: ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: SingleChildScrollView(
+                  clipBehavior: Clip.antiAlias,
+                  primary: true,
+                  child: IntrinsicWidth(
+                    child: Column(
+                      children: [
+                        for (final item in state.entries)
+                          MenuEntryWidget(
+                              enabled: menuState.isVerified,
+                              entry: item,
+                              focused: menuState.focusedEntry == item),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

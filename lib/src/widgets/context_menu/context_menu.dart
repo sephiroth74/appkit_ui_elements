@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 class AppKitContextMenu<T> {
   Offset? position;
+  Size? size;
   double maxWidth;
   double minWidth;
   List<AppKitContextMenuEntry<T>> entries;
@@ -14,6 +15,7 @@ class AppKitContextMenu<T> {
     this.position,
     this.maxWidth = 350,
     this.minWidth = 150,
+    this.size,
   });
 
   AppKitContextMenuItem<T>? findItemByValue(T? value) {
@@ -47,11 +49,13 @@ class AppKitContextMenu<T> {
     Offset? position,
     List<AppKitContextMenuEntry<T>>? entries,
     double? maxWidth,
+    Size? size,
   }) {
     return AppKitContextMenu<T>(
       position: position ?? this.position,
       entries: entries ?? this.entries,
       maxWidth: maxWidth ?? this.maxWidth,
+      size: size ?? this.size,
     );
   }
 }

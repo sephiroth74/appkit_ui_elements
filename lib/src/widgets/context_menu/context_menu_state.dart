@@ -70,6 +70,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   Offset get position => menu.position ?? Offset.zero;
 
+  Size? get size => menu.size;
+
   double get maxWidth => menu.maxWidth;
 
   double get minWidth => menu.minWidth;
@@ -215,6 +217,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
       );
 
       menu.position = boundaries.pos;
+      menu.size = boundaries.size;
       _spawnAlignment = boundaries.alignment;
 
       notifyListeners();

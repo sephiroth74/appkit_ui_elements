@@ -69,7 +69,7 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
               filter: ImageFilter.blur(
                   sigmaX: backgroundBlur,
                   sigmaY: backgroundBlur,
-                  tileMode: TileMode.decal),
+                  tileMode: TileMode.clamp),
               child: child,
             ),
           ),

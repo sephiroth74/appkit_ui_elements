@@ -28,48 +28,18 @@ class _ControlsPageState extends State<ControlsPage> {
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
           entries: [
-            AppKitContextMenuItem(
-                title: 'Item 1',
-                value: '1',
-                itemState: popupValue == '1'
-                    ? AppKitItemState.on
-                    : AppKitItemState.off,
-                imageAlignment: AppKitMenuImageAlignment.start,
-                textAlign: TextAlign.start,
-                image: CupertinoIcons.alarm),
-            const AppKitContextMenuDivider(),
-            AppKitContextMenuItem(
-                title: 'Item 2',
-                value: '2',
-                itemState: popupValue == '2'
-                    ? AppKitItemState.on
-                    : AppKitItemState.off),
-            AppKitContextMenuItem(
-                title: 'Item 3',
-                value: '3',
-                itemState: popupValue == '3'
-                    ? AppKitItemState.on
-                    : AppKitItemState.off),
-            AppKitContextMenuItem(
-                title: 'Item 4',
-                value: '4',
-                itemState: popupValue == '4'
-                    ? AppKitItemState.on
-                    : AppKitItemState.off),
-            AppKitContextMenuItem(
-                title: 'Item 5',
-                value: '5',
-                itemState: popupValue == '5'
-                    ? AppKitItemState.on
-                    : AppKitItemState.off),
-            const AppKitContextMenuDivider(),
-            AppKitContextMenuItem(
-                enabled: false,
-                title: 'Item 6',
-                value: '6',
-                itemState: popupValue == '6'
-                    ? AppKitItemState.on
-                    : AppKitItemState.off),
+            for (var i = 0; i < 7; i++)
+              if (i % 5 == 0 && i > 0)
+                const AppKitContextMenuDivider()
+              else
+                AppKitContextMenuItem(
+                  title: 'Item $i',
+                  value: '$i',
+                  image: i == 0 ? CupertinoIcons.airplane : null,
+                  itemState: popupValue == '$i'
+                      ? AppKitItemState.on
+                      : AppKitItemState.off,
+                ),
           ],
         );
       };

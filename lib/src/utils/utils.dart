@@ -65,7 +65,8 @@ extension BuildContextExtensions on BuildContext {
 /// Calculates the position of the context menu based on the position of the
 /// menu and the position of the parent menu. To prevent the menu from
 /// extending beyond the screen boundaries.
-({Offset pos, AlignmentGeometry alignment}) calculateContextMenuBoundaries({
+({Offset pos, Size? size, AlignmentGeometry alignment})
+    calculateContextMenuBoundaries({
   required BuildContext context,
   required AppKitContextMenu menu,
   Rect? parentRect,
@@ -75,11 +76,12 @@ extension BuildContextExtensions on BuildContext {
 }) {
   final screenSize = MediaQuery.of(context).size;
   final safeScreenRect = (Offset.zero & screenSize).deflate(8.0);
-  final menuRect = context.getWidgetBounds()!;
+  Rect menuRect = context.getWidgetBounds()!;
   AlignmentGeometry nextSpawnAlignment = spawnAlignment;
 
   double x = menuRect.left;
   double y = menuRect.top;
+  Size? menuSize;
 
   if (menuEdge == AppKitMenuEdge.left) {
     x -= menuRect.width;
@@ -160,7 +162,14 @@ extension BuildContextExtensions on BuildContext {
     }
   }
 
-  return (pos: Offset(x, y), alignment: nextSpawnAlignment);
+  final globalMenuRect = Rect.fromLTWH(x, y, menuRect.width, menuRect.height);
+
+  if (globalMenuRect.bottom > safeScreenRect.bottom) {
+    menuRect = globalMenuRect.copyWith(bottom: safeScreenRect.bottom - y);
+    menuSize = menuRect.size;
+  }
+
+  return (pos: Offset(x, y), size: menuSize, alignment: nextSpawnAlignment);
 }
 
 bool hasSameFocusNodeId(String line1, String line2) {
@@ -196,5 +205,16 @@ extension ColorX on Color {
     }
     final alpha = (opacity * factor).round().clamp(0, 255);
     return withAlpha(alpha);
+  }
+}
+
+extension RectX on Rect {
+  Rect copyWith({double? left, double? top, double? right, double? bottom}) {
+    return Rect.fromLTRB(
+      left ?? this.left,
+      top ?? this.top,
+      right ?? this.right,
+      bottom ?? this.bottom,
+    );
   }
 }
