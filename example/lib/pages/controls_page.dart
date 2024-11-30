@@ -124,10 +124,14 @@ class _ControlsPageState extends State<ControlsPage> {
                                 },
                                 menuBuilder: popupMenuBuilder,
                               ),
-                              const SizedBox(width: 16.0),
+                            ],
+                          ),
+                          const SizedBox(height: 16.0),
+                          Row(
+                            children: [
                               AppKitPopupButton(
-                                menuEdge: AppKitMenuEdge.top,
-                                style: AppKitPopupButtonStyle.plain,
+                                menuEdge: AppKitMenuEdge.bottom,
+                                style: AppKitPopupButtonStyle.inline,
                                 width: 100,
                                 value: popupValue,
                                 onItemSelected: (value) {
@@ -139,14 +143,10 @@ class _ControlsPageState extends State<ControlsPage> {
                                 },
                                 menuBuilder: popupMenuBuilder,
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 16.0),
-                          Row(
-                            children: [
+                              const SizedBox(width: 16.0),
                               AppKitPopupButton(
-                                menuEdge: AppKitMenuEdge.bottom,
-                                style: AppKitPopupButtonStyle.inline,
+                                menuEdge: AppKitMenuEdge.top,
+                                style: AppKitPopupButtonStyle.plain,
                                 width: 100,
                                 value: popupValue,
                                 onItemSelected: (value) {
