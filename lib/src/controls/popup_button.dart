@@ -42,6 +42,9 @@ class AppKitPopupButton<T> extends StatefulWidget {
   final Color? color;
   final String? hint;
   final AppKitControlSize controlSize;
+  final String? semanticLabel;
+  final FocusNode? focusNode;
+  final bool canRequestFocus;
 
   const AppKitPopupButton({
     super.key,
@@ -52,16 +55,20 @@ class AppKitPopupButton<T> extends StatefulWidget {
     this.color,
     this.hint,
     this.itemBuilder,
+    this.semanticLabel,
+    this.focusNode,
     this.menuEdge = AppKitMenuEdge.bottom,
     this.style = AppKitPopupButtonStyle.push,
     this.controlSize = AppKitControlSize.regular,
+    this.canRequestFocus = false,
   });
 
   @override
   State<AppKitPopupButton<T>> createState() => _AppKitPopupButtonState<T>();
 }
 
-class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
+class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
+    with SingleTickerProviderStateMixin {
   bool get enabled =>
       widget.onItemSelected != null && widget.menuBuilder != null;
 
@@ -77,6 +84,11 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
 
   late AppKitContextMenu<T> _contextMenu;
 
+  FocusNode? _focusNode;
+
+  FocusNode get _effectiveFocusNode =>
+      widget.focusNode ?? (_focusNode ??= FocusNode());
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -90,6 +102,12 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
     properties.add(DiagnosticsProperty('itemBuilder', widget.itemBuilder));
     properties.add(DiagnosticsProperty('color', widget.color));
     properties.add(DiagnosticsProperty('selectedItem', widget.selectedItem));
+    properties.add(DiagnosticsProperty('hint', widget.hint));
+    properties.add(DiagnosticsProperty('controlSize', widget.controlSize));
+    properties.add(DiagnosticsProperty('semanticLabel', widget.semanticLabel));
+    properties.add(DiagnosticsProperty('focusNode', widget.focusNode));
+    properties
+        .add(DiagnosticsProperty('canRequestFocus', widget.canRequestFocus));
   }
 
   AppKitContextMenuItem<T>? get selectedItem => widget.selectedItem;
@@ -102,10 +120,13 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
       assert(_contextMenu.firstWhereOrNull((e) => e == widget.selectedItem) !=
           null);
     }
+
+    _effectiveFocusNode.canRequestFocus = widget.canRequestFocus && enabled;
   }
 
   @override
   void dispose() {
+    _focusNode?.dispose();
     super.dispose();
   }
 
@@ -113,6 +134,11 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
   void didUpdateWidget(covariant AppKitPopupButton<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     _contextMenu = widget.menuBuilder!(context);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   Widget _defaultItemBuilder(
@@ -203,6 +229,9 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
           position: _contextMenu.position ??
               widget.menuEdge.getRectPosition(itemRect));
       setState(() {
+        if (_effectiveFocusNode.canRequestFocus) {
+          _effectiveFocusNode.requestFocus();
+        }
         _isMenuOpened = true;
       });
 
@@ -228,73 +257,87 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
 
-    return MouseRegion(
-      onEnter: enabled ? _handleMouseEnter : null,
-      onExit: enabled ? _handleMouseExit : null,
-      child: GestureDetector(
-        onTap: enabled ? _handleTap : null,
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
-          final isMainWindow =
-              MainWindowStateListener.instance.isMainWindow.value;
-          final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    return Semantics(
+      enabled: enabled,
+      button: true,
+      label: widget.semanticLabel,
+      child: MouseRegion(
+        onEnter: enabled ? _handleMouseEnter : null,
+        onExit: enabled ? _handleMouseExit : null,
+        child: GestureDetector(
+          onTap: enabled ? _handleTap : null,
+          child: UiElementColorBuilder(builder: (context, colorContainer) {
+            final isMainWindow =
+                MainWindowStateListener.instance.isMainWindow.value;
+            final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+            final height = style.getHeight(
+                theme: popupButtonTheme, controlSize: controlSize);
+            final width = widget.width;
+            final menuEdge = widget.menuEdge;
+            final itemBuilder = widget.itemBuilder;
+            final borderRadius = style.getBorderRadius(
+                theme: popupButtonTheme, controlSize: controlSize);
 
-          final height = style.getHeight(
-              theme: popupButtonTheme, controlSize: controlSize);
-          final width = widget.width;
-          final menuEdge = widget.menuEdge;
-          final itemBuilder = widget.itemBuilder;
+            return AppKitFocusRingContainer(
+              focusNode: _effectiveFocusNode,
+              borderRadius: borderRadius,
+              canRequestFocus: widget.canRequestFocus && enabled,
+              child: Builder(builder: (context) {
+                final child = itemBuilder?.call(context, widget.selectedItem) ??
+                    _defaultItemBuilder(
+                        context: context, controlHeight: height);
 
-          final child = itemBuilder?.call(context, widget.selectedItem) ??
-              _defaultItemBuilder(context: context, controlHeight: height);
+                if (style == AppKitPopupButtonStyle.push ||
+                    style == AppKitPopupButtonStyle.bevel) {
+                  return _PushButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    isMainWindow: isMainWindow,
+                    style: style,
+                    controlSize: controlSize,
+                    color: widget.color,
+                    child: child,
+                  );
+                } else if (style == AppKitPopupButtonStyle.plain) {
+                  return _PlainButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    isMainWindow: isMainWindow,
+                    controlSize: controlSize,
+                    isHovered: _isHovered,
+                    child: child,
+                  );
+                } else if (style == AppKitPopupButtonStyle.inline) {
+                  return _InlineButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    controlSize: controlSize,
+                    isMainWindow: isMainWindow,
+                    isHovered: _isHovered,
+                    child: child,
+                  );
+                }
 
-          if (style == AppKitPopupButtonStyle.push ||
-              style == AppKitPopupButtonStyle.bevel) {
-            return _PushButtonStyleWidget<T>(
-              width: width,
-              height: height,
-              menuEdge: menuEdge,
-              onItemSelected: widget.onItemSelected,
-              enabled: enabled,
-              colorContainer: colorContainer,
-              contextMenuOpened: _isMenuOpened,
-              isMainWindow: isMainWindow,
-              style: style,
-              controlSize: controlSize,
-              color: widget.color,
-              child: child,
+                return const SizedBox();
+              }),
             );
-          } else if (style == AppKitPopupButtonStyle.plain) {
-            return _PlainButtonStyleWidget<T>(
-              width: width,
-              height: height,
-              menuEdge: menuEdge,
-              onItemSelected: widget.onItemSelected,
-              enabled: enabled,
-              colorContainer: colorContainer,
-              contextMenuOpened: _isMenuOpened,
-              isMainWindow: isMainWindow,
-              controlSize: controlSize,
-              isHovered: _isHovered,
-              child: child,
-            );
-          } else if (style == AppKitPopupButtonStyle.inline) {
-            return _InlineButtonStyleWidget<T>(
-              width: width,
-              height: height,
-              menuEdge: menuEdge,
-              onItemSelected: widget.onItemSelected,
-              enabled: enabled,
-              colorContainer: colorContainer,
-              contextMenuOpened: _isMenuOpened,
-              controlSize: controlSize,
-              isMainWindow: isMainWindow,
-              isHovered: _isHovered,
-              child: child,
-            );
-          }
-
-          return const SizedBox();
-        }),
+          }),
+        ),
       ),
     );
   }

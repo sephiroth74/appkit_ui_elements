@@ -198,7 +198,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
   }
 }
 
-class AppKitPopupThemeSizeData {
+class AppKitPopupThemeSizeData with Diagnosticable {
   final double height;
   final TextStyle textStyle;
   final TextStyle inlineTextStyle;
@@ -276,6 +276,26 @@ class AppKitPopupThemeSizeData {
       containerPadding: other.containerPadding,
       inlineContainerPadding: other.inlineContainerPadding,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DoubleProperty('height', height));
+    properties.add(DiagnosticsProperty<TextStyle>('textStyle', textStyle));
+    properties.add(
+        DiagnosticsProperty<TextStyle>('inlineTextStyle', inlineTextStyle));
+    properties.add(DoubleProperty('borderRadius', borderRadius));
+    properties.add(DoubleProperty('arrowsStrokeWidth', arrowsStrokeWidth));
+    properties.add(DiagnosticsProperty<Size>('arrowsSize', arrowsSize));
+    properties
+        .add(DiagnosticsProperty<EdgeInsets>('childPadding', childPadding));
+    properties.add(DiagnosticsProperty<EdgeInsets>(
+        'inlineChildPadding', inlineChildPadding));
+    properties.add(
+        DiagnosticsProperty<EdgeInsets>('containerPadding', containerPadding));
+    properties.add(DiagnosticsProperty<EdgeInsets>(
+        'inlineContainerPadding', inlineContainerPadding));
   }
 
   static AppKitPopupThemeSizeData lerp(

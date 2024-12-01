@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:rxdart/rxdart.dart';
@@ -8,6 +10,55 @@ import 'package:rxdart/rxdart.dart';
 class MainWindowStreamBuilder extends StreamBuilder {
   MainWindowStreamBuilder({super.key, required super.builder})
       : super(stream: MainWindowStateListener.instance.isMainWindow);
+}
+
+class MainWindowListener extends StatefulWidget {
+  final Widget child;
+  final ValueChanged<bool>? onMainWindowChanged;
+
+  const MainWindowListener({
+    super.key,
+    required this.child,
+    required this.onMainWindowChanged,
+  });
+
+  @override
+  State<MainWindowListener> createState() => _MainWindowListenerState();
+}
+
+class _MainWindowListenerState extends State<MainWindowListener> {
+  late StreamSubscription<bool> _subscription;
+  late bool _isMainWindow;
+
+  @override
+  void initState() {
+    super.initState();
+    _isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+    _subscription =
+        MainWindowStateListener.instance.isMainWindow.listen((isMainWindow) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (_isMainWindow == isMainWindow) return;
+        _isMainWindow = isMainWindow;
+        widget.onMainWindowChanged?.call(isMainWindow);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant MainWindowListener oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
 }
 
 class MainWindowStateListener {

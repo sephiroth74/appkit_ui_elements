@@ -3,6 +3,7 @@ import 'package:example/theme.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -59,9 +60,14 @@ class _ControlsPageState extends State<ControlsPage> {
 
   @override
   void initState() {
+    // focusNode = FocusNode();
     // popupSelectedItem = popupMenuBuilder(context).entries.elementAt(1)
     // as AppKitContextMenuItem<String>?;
     super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      // focusNode!.requestFocus();
+    });
   }
 
   @override
@@ -95,10 +101,15 @@ class _ControlsPageState extends State<ControlsPage> {
                         children: [AppKitControlSize.regular]
                             .map((controlSize) => [
                                   Row(
-                                    children: AppKitPopupButtonStyle.values
+                                    children: [
+                                      AppKitPopupButtonStyle.push,
+                                      AppKitPopupButtonStyle.inline
+                                    ]
                                         .map((style) => [
                                               AppKitPopupButton(
+                                                canRequestFocus: false,
                                                 hint: 'Select an item',
+                                                focusNode: focusNode,
                                                 controlSize: controlSize,
                                                 width: popupButtonWidth,
                                                 selectedItem: popupSelectedItem,

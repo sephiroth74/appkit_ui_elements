@@ -80,7 +80,15 @@ class AppKitColors {
         color: Color(0xBF0A82FF), darkColor: Color(0xBF0A82FF), blur: 30),
   );
 
-  static const controlAccentColor = Color.fromRGBO(0, 122, 255, 1);
+  static const controlAccentColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF007AFF),
+    darkColor: Color(0xFF0A84FF),
+  );
+
+  static const focusRingColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xBF0A82FF),
+    darkColor: Color(0xBF0A82FF),
+  );
 
   /// The text of a label containing primary content.
   static const labelColor = CupertinoDynamicColor.withBrightness(
