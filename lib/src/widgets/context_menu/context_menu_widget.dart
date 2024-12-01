@@ -65,7 +65,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
               constraints: BoxConstraints(
                   maxWidth: state.maxWidth,
                   minWidth: state.minWidth,
-                  maxHeight: state.size?.height ?? double.infinity),
+                  maxHeight: state.size?.height.abs() ?? double.infinity),
               child: ScrollConfiguration(
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),

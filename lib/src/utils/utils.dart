@@ -165,7 +165,7 @@ extension BuildContextExtensions on BuildContext {
   final globalMenuRect = Rect.fromLTWH(x, y, menuRect.width, menuRect.height);
 
   if (globalMenuRect.bottom > safeScreenRect.bottom) {
-    menuRect = globalMenuRect.copyWith(bottom: safeScreenRect.bottom - y);
+    menuRect = globalMenuRect.shift(Offset(0, safeScreenRect.bottom - y));
     menuSize = menuRect.size;
   }
 

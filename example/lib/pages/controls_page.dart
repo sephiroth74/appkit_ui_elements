@@ -39,7 +39,7 @@ class _ControlsPageState extends State<ControlsPage> {
                   title: i == 6 ? 'Very long item with value $i' : 'Item $i',
                   enabled: i != 4,
                   value: '$i',
-                  image: i == 0 ? CupertinoIcons.airplane : null,
+                  image: i == 0 ? CupertinoIcons.alarm : null,
                   itemState: popupSelectedItem?.value == '$i'
                       ? AppKitItemState.on
                       : AppKitItemState.off,
@@ -92,101 +92,31 @@ class _ControlsPageState extends State<ControlsPage> {
                       const WidgetTitle(label: 'Popup Button'),
                       const SizedBox(height: 20.0),
                       Column(
-                        children: [
-                          AppKitPopupButton(
-                            hint: 'Select an item',
-                            controlSize: AppKitControlSize.large,
-                            width: popupButtonWidth,
-                            selectedItem: popupSelectedItem,
-                            onItemSelected:
-                                switchValue1 ? _onPopupItemSelected : null,
-                            menuBuilder: popupMenuBuilder,
-                          ),
-                          const SizedBox(height: 16.0),
-                          AppKitPopupButton(
-                            hint: 'Select an item',
-                            controlSize: AppKitControlSize.regular,
-                            width: popupButtonWidth,
-                            selectedItem: popupSelectedItem,
-                            onItemSelected:
-                                switchValue1 ? _onPopupItemSelected : null,
-                            menuBuilder: popupMenuBuilder,
-                          ),
-                          const SizedBox(height: 16.0),
-                          AppKitPopupButton(
-                            hint: 'Select an item',
-                            controlSize: AppKitControlSize.small,
-                            width: popupButtonWidth,
-                            selectedItem: popupSelectedItem,
-                            onItemSelected:
-                                switchValue1 ? _onPopupItemSelected : null,
-                            menuBuilder: popupMenuBuilder,
-                          ),
-                          const SizedBox(height: 16.0),
-                          AppKitPopupButton(
-                            hint: 'Select an item',
-                            controlSize: AppKitControlSize.mini,
-                            width: popupButtonWidth,
-                            selectedItem: popupSelectedItem,
-                            onItemSelected:
-                                switchValue1 ? _onPopupItemSelected : null,
-                            menuBuilder: popupMenuBuilder,
-                          ),
-                          const SizedBox(height: 16.0),
-                          Row(
-                            children: [
-                              AppKitPopupButton(
-                                hint: 'Select an item',
-                                menuEdge: AppKitMenuEdge.auto,
-                                style: AppKitPopupButtonStyle.push,
-                                width: popupButtonWidth,
-                                selectedItem: popupSelectedItem,
-                                onItemSelected:
-                                    switchValue1 ? _onPopupItemSelected : null,
-                                menuBuilder: popupMenuBuilder,
-                              ),
-                              const SizedBox(width: 16.0),
-                              AppKitPopupButton(
-                                menuEdge: AppKitMenuEdge.right,
-                                style: AppKitPopupButtonStyle.bevel,
-                                width: popupButtonWidth,
-                                selectedItem: popupSelectedItem,
-                                onItemSelected: (value) {
-                                  setState(() {
-                                    if (value != null) {
-                                      popupSelectedItem = value;
-                                    }
-                                  });
-                                },
-                                menuBuilder: popupMenuBuilder,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16.0),
-                          Row(
-                            children: [
-                              AppKitPopupButton(
-                                menuEdge: AppKitMenuEdge.bottom,
-                                style: AppKitPopupButtonStyle.inline,
-                                width: popupButtonWidth,
-                                selectedItem: popupSelectedItem,
-                                onItemSelected:
-                                    switchValue1 ? _onPopupItemSelected : null,
-                                menuBuilder: popupMenuBuilder,
-                              ),
-                              const SizedBox(width: 16.0),
-                              AppKitPopupButton(
-                                menuEdge: AppKitMenuEdge.top,
-                                style: AppKitPopupButtonStyle.plain,
-                                width: popupButtonWidth,
-                                selectedItem: popupSelectedItem,
-                                onItemSelected:
-                                    switchValue1 ? _onPopupItemSelected : null,
-                                menuBuilder: popupMenuBuilder,
-                              ),
-                            ],
-                          ),
-                        ],
+                        children: [AppKitControlSize.regular]
+                            .map((controlSize) => [
+                                  Row(
+                                    children: AppKitPopupButtonStyle.values
+                                        .map((style) => [
+                                              AppKitPopupButton(
+                                                hint: 'Select an item',
+                                                controlSize: controlSize,
+                                                width: popupButtonWidth,
+                                                selectedItem: popupSelectedItem,
+                                                onItemSelected: switchValue1
+                                                    ? _onPopupItemSelected
+                                                    : null,
+                                                menuBuilder: popupMenuBuilder,
+                                                style: style,
+                                              ),
+                                              const SizedBox(width: 8.0)
+                                            ])
+                                        .expand((element) => element)
+                                        .toList(),
+                                  ),
+                                  const SizedBox(height: 16.0)
+                                ])
+                            .expand((element) => element)
+                            .toList(),
                       ),
                       const SizedBox(width: 16.0, height: 16.0),
                       const Divider(
