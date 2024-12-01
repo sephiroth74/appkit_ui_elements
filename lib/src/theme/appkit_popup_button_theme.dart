@@ -216,11 +216,11 @@ class AppKitPopupThemeSizeData {
 
   double get arrowsButtonSize => height - 4;
 
-  double get iconSize => textStyle.fontSize! - 1;
+  double get iconSize => textStyle.fontSize! * 1.2;
 
-  double get inlineIconsSize => inlineTextStyle.fontSize! - 1;
+  double get inlineIconsSize => inlineTextStyle.fontSize! * 1.2;
 
-  EdgeInsets get iconPadding => const EdgeInsets.only(right: 4.0);
+  EdgeInsets get iconPadding => const EdgeInsets.only(right: 4.0, top: 0.0);
 
   AppKitPopupThemeSizeData({
     required this.height,

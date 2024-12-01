@@ -160,6 +160,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>> {
       return Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           if (icon != null)
             Padding(

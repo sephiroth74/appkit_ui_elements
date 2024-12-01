@@ -40,7 +40,9 @@ class _ControlsPageState extends State<ControlsPage> {
                   enabled: i != 4,
                   value: '$i',
                   image: i == 0 ? CupertinoIcons.alarm : null,
-                  itemState: popupSelectedItem?.value == '$i' ? AppKitItemState.on : AppKitItemState.off,
+                  itemState: popupSelectedItem?.value == '$i'
+                      ? AppKitItemState.on
+                      : AppKitItemState.off,
                 ),
           ],
         );
@@ -49,7 +51,8 @@ class _ControlsPageState extends State<ControlsPage> {
   void _onPopupItemSelected(AppKitContextMenuItem<String>? value) {
     setState(() {
       if (value != null) {
-        popupSelectedItem = popupMenuBuilder(context).findItemByValue(value.value);
+        popupSelectedItem =
+            popupMenuBuilder(context).findItemByValue(value.value);
       }
     });
   }
@@ -99,7 +102,9 @@ class _ControlsPageState extends State<ControlsPage> {
                                                 controlSize: controlSize,
                                                 width: popupButtonWidth,
                                                 selectedItem: popupSelectedItem,
-                                                onItemSelected: switchValue1 ? _onPopupItemSelected : null,
+                                                onItemSelected: switchValue1
+                                                    ? _onPopupItemSelected
+                                                    : null,
                                                 menuBuilder: popupMenuBuilder,
                                                 style: style,
                                               ),
@@ -253,11 +258,13 @@ class _ControlsPageState extends State<ControlsPage> {
                               Row(
                                 children: [
                                   AppKitRadioButton<bool>(
-                                    groupValue: radioButtonValue2 && radioButtonValue3
-                                        ? true
-                                        : !radioButtonValue2 && !radioButtonValue3
-                                            ? false
-                                            : null,
+                                    groupValue:
+                                        radioButtonValue2 && radioButtonValue3
+                                            ? true
+                                            : !radioButtonValue2 &&
+                                                    !radioButtonValue3
+                                                ? false
+                                                : null,
                                     value: true,
                                     onChanged: (value) {
                                       setState(() {
@@ -274,7 +281,8 @@ class _ControlsPageState extends State<ControlsPage> {
                               Row(
                                 children: [
                                   AppKitRadioButton<bool>(
-                                    groupValue: !radioButtonValue2 && !radioButtonValue3,
+                                    groupValue: !radioButtonValue2 &&
+                                        !radioButtonValue3,
                                     value: true,
                                     onChanged: (value) {
                                       setState(() {
@@ -426,7 +434,8 @@ class _ControlsPageState extends State<ControlsPage> {
                       const SizedBox(height: 20.0),
                       Row(
                         children: [
-                          SizedBox(width: 100, child: Text('Value: $stepperValue')),
+                          SizedBox(
+                              width: 100, child: Text('Value: $stepperValue')),
                           const SizedBox(width: 16.0),
                           AppKitStepper(
                             value: stepperValue,
