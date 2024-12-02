@@ -150,7 +150,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (widget.icon != null)
+          if (widget.icon != null &&
+              widget.imageAlignment == AppKitMenuImageAlignment.start)
             Padding(
               padding: iconPadding,
               child: Icon(
@@ -160,12 +161,23 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
               ),
             ),
           if (widget.title != null)
-            Flexible(
+            Expanded(
               child: Text(
                 widget.title!,
                 style: textStyle.copyWith(color: textColor),
+                textAlign: widget.textAlign,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          if (widget.icon != null &&
+              widget.imageAlignment == AppKitMenuImageAlignment.end)
+            Padding(
+              padding: iconPadding.invertHorizontally(),
+              child: Icon(
+                widget.icon,
+                size: iconSize,
+                color: textColor,
               ),
             ),
         ],

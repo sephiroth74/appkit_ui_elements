@@ -183,7 +183,12 @@ class _ControlsPageState extends State<ControlsPage> {
                                         .map((style) => [
                                               AppKitPulldownButton(
                                                 canRequestFocus: false,
-                                                title: 'Make a selection',
+                                                title: 'Open menu',
+                                                textAlign: TextAlign.start,
+                                                imageAlignment:
+                                                    AppKitMenuImageAlignment
+                                                        .start,
+                                                icon: Icons.open_in_new,
                                                 focusNode: focusNode,
                                                 controlSize: controlSize,
                                                 width: popupButtonWidth,
