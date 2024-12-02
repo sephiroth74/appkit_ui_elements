@@ -109,8 +109,10 @@ class AppKitTextField extends StatefulWidget {
     this.onSubmitted,
     this.onEditingComplete,
     this.onTap,
-  })  : smartDashesType = smartDashesType ?? (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
-        smartQuotesType = smartQuotesType ?? (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled);
+  })  : smartDashesType = smartDashesType ??
+            (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
+        smartQuotesType = smartQuotesType ??
+            (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled);
 
   @override
   State<AppKitTextField> createState() => _AppKitTextFieldState();
@@ -127,26 +129,32 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
   bool _showSelectionHandles = false;
 
-  final TextSelectionControls cupertinoDesktopTextSelectionControls = CupertinoDesktopTextSelectionControls();
+  final TextSelectionControls cupertinoDesktopTextSelectionControls =
+      CupertinoDesktopTextSelectionControls();
 
-  TextEditingController get _effectiveController => widget.controller ?? _controller!.value;
+  TextEditingController get _effectiveController =>
+      widget.controller ?? _controller!.value;
 
-  FocusNode get _effectiveFocusNode => widget.focusNode ?? (_focusNode ??= FocusNode());
+  FocusNode get _effectiveFocusNode =>
+      widget.focusNode ?? (_focusNode ??= FocusNode());
 
   EditableTextState get _editableText => editableTextKey.currentState!;
 
   bool get enabled => widget.enabled;
 
   MaxLengthEnforcement get _effectiveMaxLengthEnforcement =>
-      widget.maxLengthEnforcement ?? LengthLimitingTextInputFormatter.getDefaultMaxLengthEnforcement();
+      widget.maxLengthEnforcement ??
+      LengthLimitingTextInputFormatter.getDefaultMaxLengthEnforcement();
 
   TextAlignVertical get textAlignVertical => widget.textAlignVertical;
 
   bool get _hasDecoration {
-    return widget.placeholder != null || widget.clearButtonMode != AppKitOverlayVisibilityMode.never;
+    return widget.placeholder != null ||
+        widget.clearButtonMode != AppKitOverlayVisibilityMode.never;
   }
 
-  late final _TextFieldSelectionGestureDetectorBuilder _selectionGestureDetectorBuilder =
+  late final _TextFieldSelectionGestureDetectorBuilder
+      _selectionGestureDetectorBuilder =
       _TextFieldSelectionGestureDetectorBuilder(state: this);
 
   @override
@@ -155,7 +163,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     if (widget.controller == null) {
       _createLocalController();
     }
-    _effectiveFocusNode.canRequestFocus = widget.enabled && widget.canRequestFocus;
+    _effectiveFocusNode.canRequestFocus =
+        widget.enabled && widget.canRequestFocus;
     _effectiveFocusNode.addListener(_handleFocusChanged);
   }
 
@@ -177,12 +186,15 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       _controller!.dispose();
       _controller = null;
     }
-    _effectiveFocusNode.canRequestFocus = widget.enabled && widget.canRequestFocus;
+    _effectiveFocusNode.canRequestFocus =
+        widget.enabled && widget.canRequestFocus;
   }
 
   void _createLocalController([TextEditingValue? value]) {
     assert(_controller == null);
-    _controller = value == null ? RestorableTextEditingController() : RestorableTextEditingController.fromValue(value);
+    _controller = value == null
+        ? RestorableTextEditingController()
+        : RestorableTextEditingController.fromValue(value);
     if (!restorePending) {
       _registerController();
     }
@@ -289,8 +301,9 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       child: editableText,
       builder: (BuildContext context, TextEditingValue? text, Widget? child) {
         return Row(
-          crossAxisAlignment:
-              widget.maxLines == null || widget.maxLines! > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+          crossAxisAlignment: widget.maxLines == null || widget.maxLines! > 1
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.center,
           children: [
             // Insert a prefix at the front if the prefix visibility mode matches
             // the current text state.
@@ -315,7 +328,9 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             Expanded(
               child: Stack(
                 fit: StackFit.passthrough,
-                alignment: widget.maxLines == null || widget.maxLines! > 1 ? Alignment.topCenter : Alignment.center,
+                alignment: widget.maxLines == null || widget.maxLines! > 1
+                    ? Alignment.topCenter
+                    : Alignment.center,
                 children: <Widget>[
                   if (widget.placeholder != null && text.text.isEmpty)
                     SizedBox(
@@ -345,7 +360,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                       ? () {
                           // Special handle onChanged for ClearButton
                           // Also call onChanged when the clear button is tapped.
-                          final bool textChanged = _effectiveController.text.isNotEmpty;
+                          final bool textChanged =
+                              _effectiveController.text.isNotEmpty;
                           _effectiveController.clear();
                           if (widget.onChanged != null && textChanged) {
                             widget.onChanged!(_effectiveController.text);
@@ -380,7 +396,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     assert(debugCheckHasAppKitTheme(context));
 
     final TextEditingController controller = _effectiveController;
-    TextSelectionControls? textSelectionControls = widget.selectionControls ?? cupertinoDesktopTextSelectionControls;
+    TextSelectionControls? textSelectionControls =
+        widget.selectionControls ?? cupertinoDesktopTextSelectionControls;
 
     final List<TextInputFormatter> formatters = <TextInputFormatter>[
       ...?widget.inputFormatters,
@@ -397,10 +414,14 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     final textStyle = theme.typography.body.merge(resolvedStyle);
 
     return UiElementColorBuilder(builder: (context, colorContainer) {
-      final placeholderStyle =
-          widget.placeholderStyle ?? theme.typography.body.copyWith(color: colorContainer.placeholderTextColor);
-      final Color selectionColor = AppKitColors.fills.opaque.primary.resolveFrom(context).withOpacity(0.2);
-      final Color cursorColor = theme.brightness.isDark ? Colors.white : Colors.black;
+      final placeholderStyle = widget.placeholderStyle ??
+          theme.typography.body
+              .copyWith(color: colorContainer.placeholderTextColor);
+      final Color selectionColor = AppKitColors.fills.opaque.primary
+          .resolveFrom(context)
+          .withOpacity(0.2);
+      final Color cursorColor =
+          theme.brightness.isDark ? Colors.white : Colors.black;
 
       final Widget paddedEditable = Padding(
         padding: widget.padding,
@@ -431,7 +452,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               minLines: widget.minLines,
               expands: widget.expands,
               selectionColor: selectionColor,
-              selectionControls: selectionEnabled ? textSelectionControls : null,
+              selectionControls:
+                  selectionEnabled ? textSelectionControls : null,
               onChanged: widget.onChanged,
               onSelectionChanged: _handleSelectionChanged,
               onEditingComplete: widget.onEditingComplete,
@@ -446,7 +468,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               // cursorOffset: cursorOffset,
               paintCursorAboveText: true,
               autocorrectionTextRectColor: selectionColor,
-              backgroundCursorColor: const Color(0xcccccc), //AppKitColors.systemGray.resolveFrom(context),
+              backgroundCursorColor: const Color(
+                  0x00cccccc), //AppKitColors.systemGray.resolveFrom(context),
               selectionHeightStyle: widget.selectionHeightStyle,
               selectionWidthStyle: widget.selectionWidthStyle,
               scrollPadding: widget.scrollPadding,
@@ -470,14 +493,15 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             ? null
             : () {
                 if (!controller.selection.isValid) {
-                  controller.selection = TextSelection.collapsed(offset: controller.text.length);
+                  controller.selection =
+                      TextSelection.collapsed(offset: controller.text.length);
                 }
                 _requestKeyboard();
               },
         child: IgnorePointer(
           ignoring: !enabled,
           child: Container(
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
             child: _selectionGestureDetectorBuilder.buildGestureDetector(
               behavior: HitTestBehavior.translucent,
               child: Align(
@@ -528,7 +552,8 @@ enum AppKitOverlayVisibilityMode {
   always,
 }
 
-class _TextFieldSelectionGestureDetectorBuilder extends TextSelectionGestureDetectorBuilder {
+class _TextFieldSelectionGestureDetectorBuilder
+    extends TextSelectionGestureDetectorBuilder {
   _TextFieldSelectionGestureDetectorBuilder({
     required _AppKitTextFieldState state,
   })  : _state = state,
@@ -543,8 +568,10 @@ class _TextFieldSelectionGestureDetectorBuilder extends TextSelectionGestureDete
     // this handler. If the clear button widget recognizes the up event,
     // then do not handle it.
     if (_state._clearGlobalKey.currentContext != null) {
-      final RenderBox renderBox = _state._clearGlobalKey.currentContext!.findRenderObject()! as RenderBox;
-      final Offset localOffset = renderBox.globalToLocal(details.globalPosition);
+      final RenderBox renderBox = _state._clearGlobalKey.currentContext!
+          .findRenderObject()! as RenderBox;
+      final Offset localOffset =
+          renderBox.globalToLocal(details.globalPosition);
       if (renderBox.hitTest(BoxHitTestResult(), position: localOffset)) {
         return;
       }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/pages/controls_page.dart';
+import 'package:example/pages/fields_page.dart';
 import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
@@ -9,7 +10,6 @@ import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
@@ -84,6 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Sliders')),
                     SidebarItem(label: Text('Segmented Controls')),
                     SidebarItem(label: Text('Selectors')),
+                    SidebarItem(
+                        leading: Icon(
+                          Icons.text_fields,
+                          size: 13,
+                        ),
+                        label: Text('Fields')),
                   ],
                   currentIndex: pageIndex,
                   onChanged: (index) {
@@ -101,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const SlidersPage(),
           const SegmentedControlsPage(),
           const SelectorsPage(),
+          const FieldsPage(),
         ][pageIndex],
       ),
     );
