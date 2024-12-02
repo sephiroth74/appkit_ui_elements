@@ -1,8 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
 
-const _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
-
 class AppKitContextMenuWidget extends StatelessWidget {
   final AppKitContextMenuState menuState;
   final Duration transitionDuration;

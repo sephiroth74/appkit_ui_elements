@@ -4,7 +4,7 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter/material.dart';
 
 const _kSize = 21.0;
 const _kWidthRatio = 1.5;
@@ -62,19 +62,19 @@ class _AppKitStepperState extends State<AppKitStepper> {
     final AppKitThemeData theme = AppKitTheme.of(context);
     final enabledFactor = widget.enabled ? 1.0 : 0.5;
     final controlBorderColor = theme.brightness.isDark
-        ? MacosColors.white.withOpacity(0.2 * enabledFactor)
-        : MacosColors.black.withOpacity(0.2 * enabledFactor);
+        ? Colors.white.withOpacity(0.2 * enabledFactor)
+        : Colors.black.withOpacity(0.2 * enabledFactor);
 
     final borderRadius = widget.height / _kBorderRadiusRatio;
     final borderWidth = widget.height / 40;
 
     final iconColor = !theme.brightness.isDark
         ? widget.enabled
-            ? MacosColors.labelColor.color
-            : MacosColors.tertiaryLabelColor.color
+            ? AppKitColors.labelColor.color
+            : AppKitColors.text.opaque.tertiary.color
         : widget.enabled
-            ? MacosColors.labelColor.darkColor
-            : MacosColors.tertiaryLabelColor.darkColor;
+            ? AppKitColors.labelColor.darkColor
+            : AppKitColors.text.opaque.tertiary.darkColor;
 
     return Semantics(
       label: widget.semanticLabel,
@@ -94,14 +94,12 @@ class _AppKitStepperState extends State<AppKitStepper> {
                   borderRadius: BorderRadius.circular(borderRadius),
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          MacosColors.black.withOpacity(0.15 * enabledFactor),
+                      color: Colors.black.withOpacity(0.15 * enabledFactor),
                       offset: Offset(0, widget.height / 80),
                       blurRadius: widget.height / 80,
                     ),
                     BoxShadow(
-                      color:
-                          MacosColors.black.withOpacity(0.05 * enabledFactor),
+                      color: Colors.black.withOpacity(0.05 * enabledFactor),
                       offset: Offset(0, widget.height / 20),
                       blurRadius: widget.height / 26.666,
                     ),
@@ -116,7 +114,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
                       foregroundDecoration:
                           _isPointerDown && _isPointerIncreasing
                               ? BoxDecoration(
-                                  color: MacosColors.black.withOpacity(0.1),
+                                  color: Colors.black.withOpacity(0.1),
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(borderRadius),
                                       topRight: Radius.circular(borderRadius)))
@@ -162,7 +160,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
                         foregroundDecoration: _isPointerDown &&
                                 !_isPointerIncreasing
                             ? BoxDecoration(
-                                color: MacosColors.black.withOpacity(0.1),
+                                color: Colors.black.withOpacity(0.1),
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(borderRadius),
                                     bottomRight: Radius.circular(borderRadius)))
@@ -212,8 +210,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                         colors: [
-                          MacosColors.black.withOpacity(0),
-                          MacosColors.black.withOpacity(0.05 * enabledFactor),
+                          Colors.black.withOpacity(0),
+                          Colors.black.withOpacity(0.05 * enabledFactor),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -232,8 +230,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                         colors: [
-                          MacosColors.black.withOpacity(0),
-                          MacosColors.black.withOpacity(0.05 * enabledFactor),
+                          Colors.black.withOpacity(0),
+                          Colors.black.withOpacity(0.05 * enabledFactor),
                         ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
@@ -250,8 +248,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
                       height: widget.height / 10,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color:
-                            MacosColors.black.withOpacity(0.05 * enabledFactor),
+                        color: Colors.black.withOpacity(0.05 * enabledFactor),
                       )),
                     ),
                   ),
@@ -265,8 +262,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
                       height: widget.height / 20,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color: MacosColors.black
-                            .withOpacity(0.125 * enabledFactor),
+                        color: Colors.black.withOpacity(0.125 * enabledFactor),
                       )),
                     ),
                   ),

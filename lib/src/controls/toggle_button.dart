@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class AppKitToggleButton extends StatefulWidget {
   const AppKitToggleButton({
@@ -145,8 +144,8 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
         ? BoxDecoration(
             borderRadius: borderRadius,
             gradient: LinearGradient(colors: [
-              MacosColors.white.withOpacity(0.39),
-              MacosColors.white.withOpacity(0.0),
+              Colors.white.withOpacity(0.39),
+              Colors.white.withOpacity(0.0),
             ], transform: const GradientRotation(pi / 2)))
         : const BoxDecoration();
   }
@@ -390,11 +389,11 @@ class _BoxDecorationBuilder {
       gradient: LinearGradient(
         colors: [
           CupertinoDynamicColor.withBrightness(
-              color: MacosColors.black.withOpacity(0.0),
-              darkColor: MacosColors.white.withOpacity(0.0)),
+              color: Colors.black.withOpacity(0.0),
+              darkColor: Colors.white.withOpacity(0.0)),
           CupertinoDynamicColor.withBrightness(
-              color: MacosColors.black.withOpacity(0.3),
-              darkColor: MacosColors.white.withOpacity(0.3)),
+              color: Colors.black.withOpacity(0.3),
+              darkColor: Colors.white.withOpacity(0.3)),
         ],
         transform: const GradientRotation(pi / 2),
       ),

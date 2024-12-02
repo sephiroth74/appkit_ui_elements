@@ -229,3 +229,14 @@ extension EdgeInsetsX on EdgeInsets {
     return EdgeInsets.only(left: left, right: right, top: bottom, bottom: top);
   }
 }
+
+extension BrightnessX on Brightness {
+  /// Check if the brightness is dark or not.
+  bool get isDark => this == Brightness.dark;
+
+  /// Resolves the given colors based on the current brightness.
+  T resolve<T>(T light, T dark) {
+    if (isDark) return dark;
+    return light;
+  }
+}
