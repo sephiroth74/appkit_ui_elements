@@ -103,3 +103,5 @@ enum AppKitPopupButtonStyle {
   plain,
   inline,
 }
+
+typedef AppKitPulldownButtonStyle = AppKitPopupButtonStyle;

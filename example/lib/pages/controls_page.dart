@@ -49,6 +49,39 @@ class _ControlsPageState extends State<ControlsPage> {
         );
       };
 
+  ContextMenuBuilder<int> get pullDownMenuBuilder => (context) {
+        return AppKitContextMenu<int>(
+          maxWidth: 200,
+          entries: [
+            const AppKitContextMenuItem(
+                title: 'Cut', value: 0, enabled: true, image: Icons.cut),
+            const AppKitContextMenuItem(
+                title: 'Copy', value: 1, enabled: true, image: Icons.copy),
+            const AppKitContextMenuItem(
+                title: 'Paste', value: 2, enabled: true, image: Icons.paste),
+            const AppKitContextMenuDivider(),
+            const AppKitContextMenuItem(
+                title: 'Select All', value: 3, enabled: true),
+            const AppKitContextMenuItem(
+                title: 'Select None', value: 3, enabled: true),
+            const AppKitContextMenuDivider(),
+            const AppKitContextMenuItem(
+                title: 'Other...',
+                value: 6,
+                enabled: true,
+                items: [
+                  AppKitContextMenuItem(
+                      title: 'Submenu Item 1', value: 7, enabled: true),
+                  AppKitContextMenuItem(
+                      title: 'Submenu Item 2', value: 8, enabled: true),
+                  AppKitContextMenuDivider(),
+                  AppKitContextMenuItem(
+                      title: 'Submenu Item 3', value: 9, enabled: false),
+                ]),
+          ],
+        );
+      };
+
   void _onPopupItemSelected(AppKitContextMenuItem<String>? value) {
     setState(() {
       if (value != null) {
@@ -119,6 +152,47 @@ class _ControlsPageState extends State<ControlsPage> {
                                                     ? _onPopupItemSelected
                                                     : null,
                                                 menuBuilder: popupMenuBuilder,
+                                                style: style,
+                                              ),
+                                              const SizedBox(width: 8.0)
+                                            ])
+                                        .expand((element) => element)
+                                        .toList(),
+                                  ),
+                                  const SizedBox(height: 16.0)
+                                ])
+                            .expand((element) => element)
+                            .toList(),
+                      ),
+                      const SizedBox(width: 16.0, height: 16.0),
+                      const Divider(
+                        thickness: 0.5,
+                      ),
+                      const WidgetTitle(label: 'Pull Down Button'),
+                      const SizedBox(height: 20.0),
+                      Column(
+                        children: [AppKitControlSize.regular]
+                            .map((controlSize) => [
+                                  Row(
+                                    children: [
+                                      AppKitPulldownButtonStyle.push,
+                                      AppKitPulldownButtonStyle.bevel,
+                                      AppKitPulldownButtonStyle.plain,
+                                      AppKitPulldownButtonStyle.inline,
+                                    ]
+                                        .map((style) => [
+                                              AppKitPulldownButton(
+                                                canRequestFocus: false,
+                                                title: 'Make a selection',
+                                                focusNode: focusNode,
+                                                controlSize: controlSize,
+                                                width: popupButtonWidth,
+                                                onItemSelected: (value) {
+                                                  debugPrint(
+                                                      'onItemSelected($value)');
+                                                },
+                                                menuBuilder:
+                                                    pullDownMenuBuilder,
                                                 style: style,
                                               ),
                                               const SizedBox(width: 8.0)

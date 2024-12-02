@@ -32,7 +32,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
   @override
   @override
-  String toString() => 'ContextMenuItem($title)';
+  String toString() => 'ContextMenuItem(title: $title, value: $value)';
 
   @override
   List<Object?> get props =>
