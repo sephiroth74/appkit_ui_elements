@@ -104,104 +104,104 @@ class AppKitColors {
   );
 
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
-  static CupertinoDynamicColor systemRed =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemRed =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 59, 48, 1),
     darkColor: Color.fromRGBO(255, 69, 58, 1),
     highContrastColor: Color.fromRGBO(255, 49, 38, 1),
     darkHighContrastColor: Color.fromRGBO(255, 79, 68, 1),
   );
 
-  static CupertinoDynamicColor systemOrange =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemOrange =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 149, 0, 1),
     darkColor: Color.fromRGBO(255, 159, 10, 1),
     highContrastColor: Color.fromRGBO(245, 139, 0, 1),
     darkHighContrastColor: Color.fromRGBO(255, 169, 20, 1),
   );
 
-  static CupertinoDynamicColor systemYellow =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemYellow =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 204, 0, 1),
     darkColor: Color.fromRGBO(255, 214, 10, 1),
     highContrastColor: Color.fromRGBO(245, 194, 0, 1),
     darkHighContrastColor: Color.fromRGBO(255, 224, 20, 1),
   );
 
-  static CupertinoDynamicColor systemGreen =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemGreen =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(40, 205, 65, 1),
     darkColor: Color.fromRGBO(50, 215, 75, 1),
     highContrastColor: Color.fromRGBO(30, 195, 55, 1),
     darkHighContrastColor: Color.fromRGBO(60, 225, 85, 1),
   );
 
-  static CupertinoDynamicColor systemMint =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemMint =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(0, 199, 190, 1),
     darkColor: Color.fromRGBO(102, 212, 207, 1),
     highContrastColor: Color.fromRGBO(10, 189, 180, 1),
     darkHighContrastColor: Color.fromRGBO(108, 224, 219, 1),
   );
 
-  static CupertinoDynamicColor systemTeal =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemTeal =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(89, 173, 196, 1),
     darkColor: Color.fromRGBO(106, 196, 220, 1),
     highContrastColor: Color.fromRGBO(46, 167, 189, 1),
     darkHighContrastColor: Color.fromRGBO(68, 212, 237, 1),
   );
 
-  static CupertinoDynamicColor systemCyan =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemCyan =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(85, 190, 240, 1),
     darkColor: Color.fromRGBO(90, 200, 245, 1),
     highContrastColor: Color.fromRGBO(65, 175, 220, 1),
     darkHighContrastColor: Color.fromRGBO(90, 205, 250, 1),
   );
 
-  static CupertinoDynamicColor systemBlue =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemBlue =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(0, 122, 255, 1),
     darkColor: Color.fromRGBO(10, 132, 255, 1),
     highContrastColor: Color.fromRGBO(0, 122, 245, 1),
     darkHighContrastColor: Color.fromRGBO(20, 142, 255, 1),
   );
 
-  static CupertinoDynamicColor systemIndigo =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemIndigo =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(88, 86, 214, 1),
     darkColor: Color.fromRGBO(94, 92, 230, 1),
     highContrastColor: Color.fromRGBO(84, 82, 204, 1),
     darkHighContrastColor: Color.fromRGBO(99, 97, 242, 1),
   );
 
-  static CupertinoDynamicColor systemPurple =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemPurple =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(175, 82, 222, 1),
     darkColor: Color.fromRGBO(191, 90, 242, 1),
     highContrastColor: Color.fromRGBO(159, 75, 201, 1),
     darkHighContrastColor: Color.fromRGBO(204, 101, 255, 1),
   );
 
-  static CupertinoDynamicColor systemPink =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemPink =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 45, 85, 1),
     darkColor: Color.fromRGBO(255, 55, 95, 1),
     highContrastColor: Color.fromRGBO(245, 35, 75, 1),
     darkHighContrastColor: Color.fromRGBO(255, 65, 105, 1),
   );
 
-  static CupertinoDynamicColor systemBrown =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemBrown =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(162, 132, 94, 1),
     darkColor: Color.fromRGBO(172, 142, 104, 1),
     highContrastColor: Color.fromRGBO(152, 122, 84, 1),
     darkHighContrastColor: Color.fromRGBO(182, 152, 114, 1),
   );
 
-  static CupertinoDynamicColor systemGray =
-      const CupertinoDynamicColor.withBrightnessAndContrast(
+  static const CupertinoDynamicColor systemGray =
+      CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(142, 142, 147, 1),
     darkColor: Color.fromRGBO(152, 152, 157, 1),
     highContrastColor: Color.fromRGBO(132, 132, 137, 1),

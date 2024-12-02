@@ -103,7 +103,9 @@ class _ControlsPageState extends State<ControlsPage> {
                                   Row(
                                     children: [
                                       AppKitPopupButtonStyle.push,
-                                      AppKitPopupButtonStyle.inline
+                                      AppKitPopupButtonStyle.bevel,
+                                      AppKitPopupButtonStyle.plain,
+                                      AppKitPopupButtonStyle.inline,
                                     ]
                                         .map((style) => [
                                               AppKitPopupButton(

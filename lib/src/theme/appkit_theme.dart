@@ -94,7 +94,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color canvasColor;
   final Color controlBackgroundColor;
   final Color controlBackgroundColorDisabled;
-  final Color controlColorPressed;
+  final CupertinoDynamicColor controlBackgroundPressedColor;
   final Color accentColorUnfocused;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
@@ -133,8 +133,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? accentColor,
     bool? isMainWindow,
     Color? controlBackgroundColor,
+    CupertinoDynamicColor? controlBackgroundPressedColor,
     Color? controlBackgroundColorDisabled,
-    Color? controlColorPressed,
     Color? accentColorUnfocused,
     AppKitTypography? typography,
   }) {
@@ -151,12 +151,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     controlBackgroundColor ??= isDark
         ? MacosColors.controlBackgroundColor.darkColor
         : MacosColors.controlBackgroundColor.color;
+
     controlBackgroundColorDisabled ??= isDark
         ? MacosColors.controlBackgroundColor.darkColor.withOpacity(0.5)
         : MacosColors.controlBackgroundColor.color.withOpacity(0.5);
-    controlColorPressed ??= isDark
-        ? MacosColors.white.withOpacity(0.1)
-        : MacosColors.black.withOpacity(0.1);
+
+    controlBackgroundPressedColor ??=
+        const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.06),
+            darkColor: Color.fromRGBO(255, 255, 255, 0.15));
 
     accentColorUnfocused ??=
         isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
@@ -190,12 +193,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         AppKitControlSize.regular: Size(48.0, 22.0),
         AppKitControlSize.large: Size(54.0, 26.0),
       },
-      destructiveTextColor: MacosColors.systemRedColor,
+      destructiveTextColor: AppKitColors.systemRed,
       textColor: CupertinoDynamicColor.withBrightness(
-          color: MacosColors.white, darkColor: MacosColors.black),
+          color: Colors.white, darkColor: Colors.black),
       overlayPressedColor: CupertinoDynamicColor.withBrightness(
-        color: MacosColor.fromRGBO(0, 0, 0, 0.06),
-        darkColor: MacosColor.fromRGBO(255, 255, 255, 0.15),
+        color: Color.fromRGBO(0, 0, 0, 0.06),
+        darkColor: Color.fromRGBO(255, 255, 255, 0.15),
       ),
     );
 
@@ -353,7 +356,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
-      controlColorPressed: controlColorPressed,
+      controlBackgroundPressedColor: controlBackgroundPressedColor,
       accentColorUnfocused: accentColorUnfocused,
       tooltipTheme: tooltipTheme,
       popupButtonTheme: popupButtonTheme,
@@ -369,7 +372,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: typography,
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
-      controlColorPressed: controlColorPressed,
+      controlBackgroundPressedColor: controlBackgroundPressedColor,
       pushButtonTheme: pushButtonTheme,
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
@@ -471,7 +474,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.canvasColor,
     required this.controlBackgroundColor,
     required this.controlBackgroundColorDisabled,
-    required this.controlColorPressed,
+    required this.controlBackgroundPressedColor,
     required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
     required this.ratingIndicatorTheme,
@@ -498,7 +501,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         colorWellTheme,
         controlBackgroundColor,
         controlBackgroundColorDisabled,
-        controlColorPressed,
+        controlBackgroundPressedColor,
         accentColorUnfocused,
         circularSliderTheme,
         levelIndicatorsTheme,
@@ -517,7 +520,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? canvasColor,
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
-    Color? controlColorPressed,
+    CupertinoDynamicColor? controlBackgroundPressedColor,
     Color? accentColorUnfocused,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
@@ -551,7 +554,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           controlBackgroundColor ?? this.controlBackgroundColor,
       controlBackgroundColorDisabled:
           controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
-      controlColorPressed: controlColorPressed ?? this.controlColorPressed,
+      controlBackgroundPressedColor:
+          controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
       switchTheme: switchTheme ?? this.switchTheme,
       progressTheme: progressTheme ?? this.progressTheme,
       accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
@@ -581,7 +585,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: other.helpButtonTheme,
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
-      controlColorPressed: other.controlColorPressed,
+      controlBackgroundPressedColor: other.controlBackgroundPressedColor,
       switchTheme: other.switchTheme,
       progressTheme: other.progressTheme,
       accentColorUnfocused: other.accentColorUnfocused,
@@ -618,8 +622,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
       segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
           a.segmentedControlTheme, b.segmentedControlTheme, t),
-      controlColorPressed:
-          Color.lerp(a.controlColorPressed, b.controlColorPressed, t)!,
+      controlBackgroundPressedColor: CupertinoDynamicColor.withBrightness(
+        color: Color.lerp(a.controlBackgroundPressedColor.color,
+            b.controlBackgroundPressedColor.color, t)!,
+        darkColor: Color.lerp(a.controlBackgroundPressedColor.darkColor,
+            b.controlBackgroundPressedColor.darkColor, t)!,
+      ),
       switchTheme: AppKitSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
       progressTheme:
           AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
@@ -668,7 +676,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
     properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>(
         'segmentedControlTheme', segmentedControlTheme));
-    properties.add(ColorProperty('controlColorPressed', controlColorPressed));
+    properties.add(ColorProperty(
+        'controlBackgroundPressedColor', controlBackgroundPressedColor));
     properties.add(
         DiagnosticsProperty<AppKitSwitchThemeData>('switchTheme', switchTheme));
     properties.add(DiagnosticsProperty<AppKitProgressThemeData>(

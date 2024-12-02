@@ -112,10 +112,8 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
       opacity,
     )!;
 
-    return widget.enabled
-        ? luminance(blendedBackgroundColor, textColor: textColor)
-        : luminance(blendedBackgroundColor, textColor: textColor)
-            .withOpacity(0.25);
+    return luminance(blendedBackgroundColor, textColor: textColor)
+        .withOpacity(0.25);
   }
 
   BoxDecoration _getBackgroundBoxDecoration({

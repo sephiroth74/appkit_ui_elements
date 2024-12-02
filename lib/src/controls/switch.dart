@@ -352,8 +352,9 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                         enabled && statusController.value > 0.0
                             ? BoxDecoration(
                                 color: Color.lerp(
-                                    theme.controlColorPressed.withOpacity(0.0),
-                                    theme.controlColorPressed,
+                                    theme.controlBackgroundPressedColor
+                                        .withOpacity(0.0),
+                                    theme.controlBackgroundPressedColor,
                                     statusController.value),
                                 borderRadius: BorderRadius.circular(
                                     _kBorderRadius * _kFactor))

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/widgets.dart';
 
 const _kFocusRingSize = 15.0;
@@ -10,24 +11,47 @@ const _kFocusRingSizeEnd = 3.0;
 const _kFocusAnimationDuration = 150;
 
 class AppKitFocusRingContainer extends StatefulWidget {
-  final String? semanticLabel;
   final FocusNode? focusNode;
   final bool canRequestFocus;
   final bool autofocus;
   final Widget child;
   final double borderRadius;
   final double focusRingSize;
+  final bool enabled;
+  final SemanticsProperties semanticsProperties;
+  final bool descendantsAreFocusable;
 
-  const AppKitFocusRingContainer({
+  AppKitFocusRingContainer({
     super.key,
     required this.child,
     required this.borderRadius,
-    this.semanticLabel,
     this.focusNode,
+    this.focusRingSize = _kFocusRingSizeEnd,
     this.canRequestFocus = true,
     this.autofocus = false,
-    this.focusRingSize = _kFocusRingSizeEnd,
-  });
+    this.enabled = true,
+    this.descendantsAreFocusable = true,
+    String? label,
+    bool? checked,
+    bool? mixed,
+    bool? selected,
+    bool? toggled,
+    bool? button,
+    bool? slider,
+    bool? textField,
+    bool? readOnly,
+  }) : semanticsProperties = SemanticsProperties(
+          label: label,
+          enabled: enabled,
+          checked: checked,
+          mixed: mixed,
+          selected: selected,
+          toggled: toggled,
+          button: button,
+          slider: slider,
+          textField: textField,
+          readOnly: readOnly,
+        );
 
   @override
   State<AppKitFocusRingContainer> createState() =>
@@ -56,6 +80,8 @@ class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
 
   FocusNode get _effectiveFocusNode =>
       widget.focusNode ?? (_focusNode ??= FocusNode());
+
+  bool get enabled => _effectiveFocusNode.canRequestFocus && widget.enabled;
 
   @override
   void initState() {
@@ -157,12 +183,19 @@ class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.canRequestFocus) {
-      return widget.child;
-    }
     return Semantics(
-      label: widget.semanticLabel,
-      onFocus: widget.canRequestFocus
+      label: widget.semanticsProperties.label,
+      enabled: widget.enabled,
+      button: widget.semanticsProperties.button,
+      textField: widget.semanticsProperties.textField,
+      slider: widget.semanticsProperties.slider,
+      value: widget.semanticsProperties.value,
+      checked: widget.semanticsProperties.checked,
+      toggled: widget.semanticsProperties.toggled,
+      selected: widget.semanticsProperties.selected,
+      readOnly: widget.semanticsProperties.readOnly,
+      mixed: widget.semanticsProperties.mixed,
+      onFocus: enabled
           ? () {
               if (_effectiveFocusNode.canRequestFocus &&
                   !_effectiveFocusNode.hasFocus) {
@@ -171,23 +204,26 @@ class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
             }
           : null,
       onDidGainAccessibilityFocus:
-          widget.canRequestFocus ? _handleDidGainAccessibilityFocus : null,
+          enabled ? _handleDidGainAccessibilityFocus : null,
       onDidLoseAccessibilityFocus:
-          widget.canRequestFocus ? _handleDidLoseAccessibilityFocus : null,
+          enabled ? _handleDidLoseAccessibilityFocus : null,
       child: Focus(
           focusNode: _effectiveFocusNode,
-          canRequestFocus: _effectiveFocusNode.canRequestFocus,
-          autofocus: widget.canRequestFocus && widget.autofocus,
-          descendantsAreFocusable: false,
+          canRequestFocus: enabled,
+          autofocus: enabled && widget.autofocus,
+          descendantsAreFocusable: enabled && widget.descendantsAreFocusable,
           child: Builder(builder: (context) {
+            if (!enabled) {
+              return widget.child;
+            }
+
             final focusRingColor = AppKitColors.focusRingColor
                 .resolveFrom(context)
                 .multiplyOpacity(_alphaAnimation.value);
 
             return CustomPaint(
                 painter: _FocusRingPainter(
-                  focused:
-                      _isFocused && _isMainWindow && widget.canRequestFocus,
+                  focused: _isFocused && _isMainWindow && enabled,
                   color: focusRingColor,
                   delta: _sizeAnimation.value,
                   radius: widget.borderRadius,
