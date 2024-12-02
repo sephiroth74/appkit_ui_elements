@@ -31,7 +31,6 @@ class AppKitToggleButtonTheme extends InheritedTheme {
 }
 
 class AppKitToggleButtonThemeData with Diagnosticable {
-  final CupertinoDynamicColor textColor;
   final Map<AppKitControlSize, double> buttonRadius;
   final Map<AppKitControlSize, EdgeInsets> buttonPadding;
   final Map<AppKitControlSize, double> fontSize;
@@ -39,7 +38,6 @@ class AppKitToggleButtonThemeData with Diagnosticable {
   final CupertinoDynamicColor overlayPressedColor;
 
   const AppKitToggleButtonThemeData({
-    required this.textColor,
     required this.buttonRadius,
     required this.buttonPadding,
     required this.fontSize,
@@ -57,7 +55,6 @@ class AppKitToggleButtonThemeData with Diagnosticable {
     CupertinoDynamicColor? overlayPressedColor,
   }) {
     return AppKitToggleButtonThemeData(
-      textColor: textColor ?? this.textColor,
       buttonRadius: buttonRadius ?? this.buttonRadius,
       buttonPadding: buttonPadding ?? this.buttonPadding,
       fontSize: fontSize ?? this.fontSize,
@@ -69,7 +66,6 @@ class AppKitToggleButtonThemeData with Diagnosticable {
   AppKitToggleButtonThemeData merge(AppKitToggleButtonThemeData? other) {
     if (other == null) return this;
     return copyWith(
-      textColor: other.textColor,
       buttonRadius: other.buttonRadius,
       buttonPadding: other.buttonPadding,
       fontSize: other.fontSize,
@@ -79,8 +75,7 @@ class AppKitToggleButtonThemeData with Diagnosticable {
   }
 
   AppKitToggleButtonThemeData.copyFrom(AppKitPushButtonThemeData other)
-      : textColor = other.textColor,
-        buttonRadius = other.buttonRadius,
+      : buttonRadius = other.buttonRadius,
         buttonPadding = other.buttonPadding,
         fontSize = other.fontSize,
         buttonSize = other.buttonSize,
@@ -97,18 +92,12 @@ class AppKitToggleButtonThemeData with Diagnosticable {
         'fontSize', fontSize));
     properties.add(DiagnosticsProperty<Map<AppKitControlSize, Size>>(
         'buttonSize', buttonSize));
-    properties.add(
-        DiagnosticsProperty<CupertinoDynamicColor>('textColor', textColor));
     properties.add(ColorProperty('overlayPressedColor', overlayPressedColor));
   }
 
   static AppKitToggleButtonThemeData lerp(
       AppKitToggleButtonThemeData a, AppKitToggleButtonThemeData b, double t) {
     return AppKitToggleButtonThemeData(
-      textColor: CupertinoDynamicColor.withBrightness(
-        color: Color.lerp(a.textColor.color, b.textColor.color, t)!,
-        darkColor: Color.lerp(a.textColor.darkColor, b.textColor.darkColor, t)!,
-      ),
       buttonRadius: Map.fromEntries(
         a.buttonRadius.entries.map((entry) {
           return MapEntry(entry.key,

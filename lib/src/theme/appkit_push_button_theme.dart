@@ -31,7 +31,6 @@ class AppKitPushButtonTheme extends InheritedTheme {
 }
 
 class AppKitPushButtonThemeData with Diagnosticable {
-  final CupertinoDynamicColor textColor;
   final CupertinoDynamicColor destructiveTextColor;
   final Map<AppKitControlSize, double> buttonRadius;
   final Map<AppKitControlSize, EdgeInsets> buttonPadding;
@@ -40,7 +39,6 @@ class AppKitPushButtonThemeData with Diagnosticable {
   final CupertinoDynamicColor overlayPressedColor;
 
   const AppKitPushButtonThemeData({
-    required this.textColor,
     required this.destructiveTextColor,
     required this.buttonRadius,
     required this.buttonPadding,
@@ -60,7 +58,6 @@ class AppKitPushButtonThemeData with Diagnosticable {
     CupertinoDynamicColor? overlayPressedColor,
   }) {
     return AppKitPushButtonThemeData(
-      textColor: textColor ?? this.textColor,
       destructiveTextColor: destructiveTextColor ?? this.destructiveTextColor,
       buttonRadius: buttonRadius ?? this.buttonRadius,
       buttonPadding: buttonPadding ?? this.buttonPadding,
@@ -73,7 +70,6 @@ class AppKitPushButtonThemeData with Diagnosticable {
   AppKitPushButtonThemeData merge(AppKitPushButtonThemeData? other) {
     if (other == null) return this;
     return copyWith(
-      textColor: other.textColor,
       buttonRadius: other.buttonRadius,
       buttonPadding: other.buttonPadding,
       fontSize: other.fontSize,
@@ -93,8 +89,6 @@ class AppKitPushButtonThemeData with Diagnosticable {
         'fontSize', fontSize));
     properties.add(DiagnosticsProperty<Map<AppKitControlSize, Size>>(
         'buttonSize', buttonSize));
-    properties.add(
-        DiagnosticsProperty<CupertinoDynamicColor>('textColor', textColor));
     properties.add(DiagnosticsProperty<CupertinoDynamicColor>(
         'destructiveTextColor', destructiveTextColor));
     properties.add(ColorProperty('overlayPressedColor', overlayPressedColor));
@@ -103,10 +97,6 @@ class AppKitPushButtonThemeData with Diagnosticable {
   static AppKitPushButtonThemeData lerp(
       AppKitPushButtonThemeData a, AppKitPushButtonThemeData b, double t) {
     return AppKitPushButtonThemeData(
-      textColor: CupertinoDynamicColor.withBrightness(
-        color: Color.lerp(a.textColor.color, b.textColor.color, t)!,
-        darkColor: Color.lerp(a.textColor.darkColor, b.textColor.darkColor, t)!,
-      ),
       destructiveTextColor: CupertinoDynamicColor.withBrightness(
         color: Color.lerp(
             a.destructiveTextColor.color, b.destructiveTextColor.color, t)!,

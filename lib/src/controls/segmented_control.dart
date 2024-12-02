@@ -113,7 +113,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
             theme.accentColor ??
             colorContainer.controlAccentColor;
         final backgroundColor = multiSelectionStyle
-            ? theme.controlBackgroundColor
+            ? colorContainer.controlBackgroundColor
             : AppKitColors.fills.opaque.quinaryInverted;
         final borderRadius = widget.size.getborderRadius(singleSelectionStyle);
         final constraints = widget.size.constraints;

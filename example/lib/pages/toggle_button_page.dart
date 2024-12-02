@@ -52,10 +52,10 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                                   button1Value = value;
                                 });
                               },
-                              controlSize: AppKitControlSize.large,
+                              controlSize: AppKitControlSize.regular,
                               type: AppKitToggleButtonType.primary,
-                              childOff: const Text('Label (off)'),
-                              childOn: const Text('Label (on)'),
+                              childOff: const Text('Label'),
+                              childOn: const Text('Label'),
                             ),
                           ],
                         ),
@@ -78,10 +78,10 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                                   button2Value = value;
                                 });
                               },
-                              controlSize: AppKitControlSize.large,
+                              controlSize: AppKitControlSize.regular,
                               type: AppKitToggleButtonType.secondary,
-                              childOff: const Text('Label (off)'),
-                              childOn: const Text('Label (on)'),
+                              childOff: const Text('Label'),
+                              childOn: const Text('Label'),
                             ),
                           ],
                         ),
@@ -102,11 +102,11 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               onChanged: (value) => setState(() {
                                 button3Value = value;
                               }),
-                              controlSize: AppKitControlSize.large,
+                              controlSize: AppKitControlSize.regular,
                               type: AppKitToggleButtonType.primary,
                               color: MacosColors.applePurple,
-                              childOff: const Text('Label (off)'),
-                              childOn: const Text('Label (on)'),
+                              childOff: const Text('Label'),
+                              childOn: const Text('Label'),
                             ),
                           ],
                         ),
@@ -127,11 +127,33 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               onChanged: (value) => setState(() {
                                 button4Value = value;
                               }),
-                              controlSize: AppKitControlSize.large,
+                              controlSize: AppKitControlSize.regular,
                               type: AppKitToggleButtonType.secondary,
                               color: MacosColors.applePurple,
-                              childOff: const Text('Label (off)'),
-                              childOn: const Text('Label (on)'),
+                              childOff: const Text('Label'),
+                              childOn: const Text('Label'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 16.0, height: 16.0),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const SizedBox(
+                                width: 200,
+                                child: Text('Secondary (color)',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis)),
+                            const SizedBox(width: 16.0),
+                            AppKitToggleButton(
+                              key: const Key('button4'),
+                              isOn: button4Value,
+                              onChanged: null,
+                              controlSize: AppKitControlSize.regular,
+                              type: AppKitToggleButtonType.primary,
+                              childOff: const Text('Label'),
+                              childOn: const Text('Label'),
                             ),
                           ],
                         ),

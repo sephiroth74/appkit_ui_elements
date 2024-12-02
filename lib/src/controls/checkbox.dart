@@ -134,14 +134,16 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
               child: SizedBox.expand(
                 child: _DecoratedContainer(
                   isDown: buttonHeldDown,
-                  color:
-                      isMainWindow ? accentColor : theme.controlBackgroundColor,
+                  color: isMainWindow
+                      ? accentColor
+                      : colorContainer.controlBackgroundColor,
                   value: widget.value,
                   enabled: widget.enabled,
                   theme: theme,
                   size: widget.size,
                   isMainWindow: isMainWindow,
                   isDark: theme.brightness == Brightness.dark,
+                  colorContainer: colorContainer,
                 ),
               ),
             );
@@ -156,11 +158,12 @@ class _DecoratedContainer extends StatelessWidget {
   final Color color;
   final bool? value;
   final bool enabled;
-  final AppKitThemeData theme;
   final double size;
   final bool isMainWindow;
   final bool isDark;
   final bool isDown;
+  final AppKitThemeData theme;
+  final UiElementColorContainer colorContainer;
 
   const _DecoratedContainer({
     required this.color,
@@ -171,6 +174,7 @@ class _DecoratedContainer extends StatelessWidget {
     required this.isMainWindow,
     required this.isDark,
     required this.isDown,
+    required this.colorContainer,
   });
 
   @override
@@ -184,13 +188,12 @@ class _DecoratedContainer extends StatelessWidget {
         : MacosColors.tertiaryLabelColor;
 
     return Container(
-      foregroundDecoration: isDown
-          ? BoxDecoration(color: MacosColors.black.withOpacity(0.1))
-          : null,
+      foregroundDecoration:
+          isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: !enabled
-              ? theme.controlBackgroundColor.withOpacity(0.5)
+              ? colorContainer.controlBackgroundColor.withOpacity(0.5)
               : value != false && isMainWindow
                   ? color
                   : null,
@@ -201,8 +204,8 @@ class _DecoratedContainer extends StatelessWidget {
                 color: MacosColors.black.withOpacity(0.1),
               ),
               BoxShadow(
-                color:
-                    theme.controlBackgroundColor.withOpacity(enabled ? 1 : 0.5),
+                color: colorContainer.controlBackgroundColor
+                    .withOpacity(enabled ? 1 : 0.5),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),
@@ -216,8 +219,8 @@ class _DecoratedContainer extends StatelessWidget {
                 ? GradientBoxBorder(
                     gradient: LinearGradient(
                       colors: [
-                        MacosColors.black.withOpacity(0.2),
-                        MacosColors.black.withOpacity(0.15),
+                        Colors.black.withOpacity(0.2),
+                        Colors.black.withOpacity(0.15),
                       ],
                       transform: const GradientRotation(pi / 2),
                     ),
@@ -228,8 +231,8 @@ class _DecoratedContainer extends StatelessWidget {
             gradient: value != false && isMainWindow
                 ? LinearGradient(
                     colors: [
-                      MacosColors.white.withOpacity(0.17),
-                      MacosColors.white.withOpacity(0),
+                      Colors.white.withOpacity(0.17),
+                      Colors.white.withOpacity(0),
                     ],
                     transform: const GradientRotation(pi / 2),
                   )

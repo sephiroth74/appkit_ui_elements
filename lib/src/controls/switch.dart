@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const _kWidth = 26.0;
 const _kHeight = 15.0;
@@ -307,7 +306,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
 
             final accentColor = enabled
                 ? Color.lerp(uncheckedColor, checkedColor, animationValue)!
-                : theme.controlBackgroundColorDisabled.withOpacity(0.2);
+                : colorContainer.controlBackgroundColor.withOpacity(0.2);
 
             final containerBackgroundColor = enabled
                 ? AppKitColors.fills.opaque.secondary.color.withOpacity(
@@ -413,7 +412,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                                   height: _kHandleSize * _kFactor,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: MacosColors.black
+                                      color: Colors.black
                                           .withOpacity(0.08 * enableFactor),
                                       shape: BoxShape.circle,
                                     ),
@@ -422,16 +421,16 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                           color: enabled
-                                              ? theme.controlBackgroundColor
-                                              : theme
-                                                  .controlBackgroundColorDisabled
-                                                  .withOpacity(0.75),
+                                              ? colorContainer
+                                                  .controlBackgroundColor
+                                              : colorContainer
+                                                  .controlBackgroundColor
+                                                  .multiplyOpacity(0.75),
                                           shape: BoxShape.circle,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: MacosColors.black
-                                                  .withOpacity(
-                                                      enabled ? 0.12 : 0.02),
+                                              color: Colors.black.withOpacity(
+                                                  enabled ? 0.12 : 0.02),
                                               blurStyle: BlurStyle.outer,
                                               spreadRadius: 0.0,
                                               blurRadius: 0.25 * _kFactor,

@@ -221,7 +221,6 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
         width: size,
         height: size,
         child: UiElementColorBuilder(builder: (context, colorContainer) {
-          final theme = AppKitTheme.of(context);
           final isMainWindow =
               MainWindowStateListener.instance.isMainWindow.value;
           final sliderTheme = AppKitCircularSliderTheme.of(context);
@@ -236,7 +235,7 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
 
           var backgroundColor = enabled
               ? sliderTheme.backgroundColor
-              : theme.controlBackgroundColor.withOpacity(0.5);
+              : colorContainer.controlBackgroundColor.withOpacity(0.5);
 
           if (isMainWindow) {
             thumbColor =

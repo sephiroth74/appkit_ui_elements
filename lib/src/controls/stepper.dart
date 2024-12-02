@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:flutter/foundation.dart';
@@ -87,185 +88,192 @@ class _AppKitStepperState extends State<AppKitStepper> {
           onPanCancel: widget.enabled ? _onPanCancel : null,
           onPanUpdate: widget.enabled ? _onPanUpdate : null,
           onPanStart: widget.enabled ? _onPanStart : null,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius),
-                boxShadow: [
-                  BoxShadow(
-                    color: MacosColors.black.withOpacity(0.15 * enabledFactor),
-                    offset: Offset(0, widget.height / 80),
-                    blurRadius: widget.height / 80,
-                  ),
-                  BoxShadow(
-                    color: MacosColors.black.withOpacity(0.05 * enabledFactor),
-                    offset: Offset(0, widget.height / 20),
-                    blurRadius: widget.height / 26.666,
-                  ),
-                ]),
-            child: Stack(
-              children: [
-                // Top Stepper
-                SizedBox(
-                  width: widget.width,
-                  height: widget.height / 2,
-                  child: Container(
-                    foregroundDecoration: _isPointerDown && _isPointerIncreasing
-                        ? BoxDecoration(
-                            color: MacosColors.black.withOpacity(0.1),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(borderRadius),
-                                topRight: Radius.circular(borderRadius)))
-                        : null,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: widget.enabled
-                            ? theme.controlBackgroundColor
-                            : theme.controlBackgroundColorDisabled,
-                        border: Border(
-                          top: BorderSide(
-                              color: controlBorderColor, width: borderWidth),
-                          left: BorderSide(
-                              color: controlBorderColor, width: borderWidth),
-                          right: BorderSide(
-                              color: controlBorderColor, width: borderWidth),
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(borderRadius),
-                          topRight: Radius.circular(borderRadius),
-                        ),
-                      ),
-                      child: CustomPaint(
-                        painter: IconButtonPainter(
-                          color: iconColor,
-                          icon: AppKitControlButtonIcon.disclosureUp,
-                          offset: Offset(0, -widget.height / 10),
-                          size: widget.height / 2,
-                        ),
-                      ),
+          child: UiElementColorBuilder(builder: (context, colorContainer) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          MacosColors.black.withOpacity(0.15 * enabledFactor),
+                      offset: Offset(0, widget.height / 80),
+                      blurRadius: widget.height / 80,
                     ),
-                  ),
-                ),
-
-                // Bottom Stepper
-                Positioned(
-                  bottom: 0,
-                  child: SizedBox(
+                    BoxShadow(
+                      color:
+                          MacosColors.black.withOpacity(0.05 * enabledFactor),
+                      offset: Offset(0, widget.height / 20),
+                      blurRadius: widget.height / 26.666,
+                    ),
+                  ]),
+              child: Stack(
+                children: [
+                  // Top Stepper
+                  SizedBox(
                     width: widget.width,
                     height: widget.height / 2,
                     child: Container(
-                      foregroundDecoration: _isPointerDown &&
-                              !_isPointerIncreasing
-                          ? BoxDecoration(
-                              color: MacosColors.black.withOpacity(0.1),
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(borderRadius),
-                                  bottomRight: Radius.circular(borderRadius)))
-                          : null,
+                      foregroundDecoration:
+                          _isPointerDown && _isPointerIncreasing
+                              ? BoxDecoration(
+                                  color: MacosColors.black.withOpacity(0.1),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(borderRadius),
+                                      topRight: Radius.circular(borderRadius)))
+                              : null,
                       child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: widget.enabled
-                                ? theme.controlBackgroundColor
-                                : theme.controlBackgroundColorDisabled,
-                            border: Border(
-                              left: BorderSide(
-                                  color: controlBorderColor,
-                                  width: borderWidth),
-                              right: BorderSide(
-                                  color: controlBorderColor,
-                                  width: borderWidth),
-                              bottom: BorderSide(
-                                  color: controlBorderColor,
-                                  width: borderWidth),
-                            ),
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(borderRadius),
-                              bottomRight: Radius.circular(borderRadius),
-                            ),
+                        decoration: BoxDecoration(
+                          color: widget.enabled
+                              ? colorContainer.controlBackgroundColor
+                              : colorContainer.controlBackgroundColor
+                                  .multiplyOpacity(0.5),
+                          border: Border(
+                            top: BorderSide(
+                                color: controlBorderColor, width: borderWidth),
+                            left: BorderSide(
+                                color: controlBorderColor, width: borderWidth),
+                            right: BorderSide(
+                                color: controlBorderColor, width: borderWidth),
                           ),
-                          child: CustomPaint(
-                            painter: IconButtonPainter(
-                              color: iconColor,
-                              icon: AppKitControlButtonIcon.disclosureDown,
-                              offset: Offset(0, -widget.height / 10),
-                              size: widget.height / 2,
-                            ),
-                          )),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(borderRadius),
+                            topRight: Radius.circular(borderRadius),
+                          ),
+                        ),
+                        child: CustomPaint(
+                          painter: IconButtonPainter(
+                            color: iconColor,
+                            icon: AppKitControlButtonIcon.disclosureUp,
+                            offset: Offset(0, -widget.height / 10),
+                            size: widget.height / 2,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
 
-                // Top Gradient
-                Positioned(
-                  bottom: widget.height / 2,
-                  left: borderWidth,
-                  child: SizedBox(
-                    width: widget.width - borderWidth * 2,
-                    height: widget.height / 5,
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                      colors: [
-                        MacosColors.black.withOpacity(0),
-                        MacosColors.black.withOpacity(0.05 * enabledFactor),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ))),
+                  // Bottom Stepper
+                  Positioned(
+                    bottom: 0,
+                    child: SizedBox(
+                      width: widget.width,
+                      height: widget.height / 2,
+                      child: Container(
+                        foregroundDecoration: _isPointerDown &&
+                                !_isPointerIncreasing
+                            ? BoxDecoration(
+                                color: MacosColors.black.withOpacity(0.1),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(borderRadius),
+                                    bottomRight: Radius.circular(borderRadius)))
+                            : null,
+                        child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: widget.enabled
+                                  ? colorContainer.controlBackgroundColor
+                                  : colorContainer.controlBackgroundColor
+                                      .multiplyOpacity(0.5),
+                              border: Border(
+                                left: BorderSide(
+                                    color: controlBorderColor,
+                                    width: borderWidth),
+                                right: BorderSide(
+                                    color: controlBorderColor,
+                                    width: borderWidth),
+                                bottom: BorderSide(
+                                    color: controlBorderColor,
+                                    width: borderWidth),
+                              ),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(borderRadius),
+                                bottomRight: Radius.circular(borderRadius),
+                              ),
+                            ),
+                            child: CustomPaint(
+                              painter: IconButtonPainter(
+                                color: iconColor,
+                                icon: AppKitControlButtonIcon.disclosureDown,
+                                offset: Offset(0, -widget.height / 10),
+                                size: widget.height / 2,
+                              ),
+                            )),
+                      ),
+                    ),
                   ),
-                ),
 
-                // Bottom Gradient
-                Positioned(
-                  top: widget.height / 2,
-                  left: borderWidth,
-                  child: SizedBox(
-                    width: widget.width - borderWidth * 2,
-                    height: widget.height / 5,
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                      colors: [
-                        MacosColors.black.withOpacity(0),
-                        MacosColors.black.withOpacity(0.05 * enabledFactor),
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ))),
-                  ),
-                ),
-
-                // Filler
-                Positioned(
-                  top: (widget.height / 2) - (widget.height / 20),
-                  left: borderWidth,
-                  child: SizedBox(
-                    width: widget.width - borderWidth * 2,
-                    height: widget.height / 10,
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                      color:
+                  // Top Gradient
+                  Positioned(
+                    bottom: widget.height / 2,
+                    left: borderWidth,
+                    child: SizedBox(
+                      width: widget.width - borderWidth * 2,
+                      height: widget.height / 5,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                        colors: [
+                          MacosColors.black.withOpacity(0),
                           MacosColors.black.withOpacity(0.05 * enabledFactor),
-                    )),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ))),
+                    ),
                   ),
-                ),
 
-                // Separator
-                Positioned(
-                  top: (widget.height / 2) - (widget.height / 40),
-                  left: borderWidth,
-                  child: SizedBox(
-                    width: widget.width - borderWidth * 2,
-                    height: widget.height / 20,
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                      color:
-                          MacosColors.black.withOpacity(0.125 * enabledFactor),
-                    )),
+                  // Bottom Gradient
+                  Positioned(
+                    top: widget.height / 2,
+                    left: borderWidth,
+                    child: SizedBox(
+                      width: widget.width - borderWidth * 2,
+                      height: widget.height / 5,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                        colors: [
+                          MacosColors.black.withOpacity(0),
+                          MacosColors.black.withOpacity(0.05 * enabledFactor),
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ))),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
+
+                  // Filler
+                  Positioned(
+                    top: (widget.height / 2) - (widget.height / 20),
+                    left: borderWidth,
+                    child: SizedBox(
+                      width: widget.width - borderWidth * 2,
+                      height: widget.height / 10,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                        color:
+                            MacosColors.black.withOpacity(0.05 * enabledFactor),
+                      )),
+                    ),
+                  ),
+
+                  // Separator
+                  Positioned(
+                    top: (widget.height / 2) - (widget.height / 40),
+                    left: borderWidth,
+                    child: SizedBox(
+                      width: widget.width - borderWidth * 2,
+                      height: widget.height / 20,
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                        color: MacosColors.black
+                            .withOpacity(0.125 * enabledFactor),
+                      )),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
         ),
       ),
     );

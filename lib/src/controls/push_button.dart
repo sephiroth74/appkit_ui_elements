@@ -6,6 +6,7 @@ import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:macos_ui/macos_ui.dart';
 
@@ -60,10 +61,12 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
     required Color accentColor,
     required bool isDark,
     required bool isMainWindow,
+    required UiElementColorContainer colorContainer,
   }) {
     final bool enabled = widget.enabled;
 
     return _BoxDecorationBuilder.buildBoxDecoration(
+      colorContainer: colorContainer,
       theme: theme,
       accentColor: accentColor,
       isEnabled: enabled,
@@ -76,16 +79,17 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
   Color _getForegroundColor({
     required AppKitThemeData theme,
     required AppKitPushButtonThemeData buttonTheme,
+    required UiElementColorContainer colorContainer,
     required Color backgroundColor,
     required bool isMainWindow,
   }) {
     final opacity = backgroundColor.opacity;
     final isPrimary = widget.type == AppKitPushButtonType.primary;
 
-    final CupertinoDynamicColor textColor;
+    final Color textColor;
 
     if (!widget.enabled || !isMainWindow) {
-      textColor = buttonTheme.textColor;
+      textColor = colorContainer.disabledControlTextColor;
     } else {
       if (widget.color != null && !isPrimary) {
         textColor = CupertinoDynamicColor.withBrightness(
@@ -96,7 +100,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
         switch (widget.type) {
           case AppKitPushButtonType.primary:
           case AppKitPushButtonType.secondary:
-            textColor = buttonTheme.textColor;
+            textColor = colorContainer.controlTextColor;
             break;
 
           case AppKitPushButtonType.destructive:
@@ -112,8 +116,8 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
       opacity,
     )!;
 
-    return luminance(blendedBackgroundColor, textColor: textColor)
-        .withOpacity(0.25);
+    final luminance = blendedBackgroundColor.computeLuminance();
+    return luminance > 0.5 ? textColor : Colors.white;
   }
 
   BoxDecoration _getBackgroundBoxDecoration({
@@ -121,8 +125,10 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
     required Color accentColor,
     required bool isMainWindow,
     required bool isDark,
+    required UiElementColorContainer colorContainer,
   }) {
     return _BoxDecorationBuilder.buildBoxDecoration(
+      colorContainer: colorContainer,
       theme: theme,
       accentColor: accentColor,
       isEnabled: widget.enabled,
@@ -242,24 +248,28 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
                   accentColor: accentColor,
                   isDark: theme.brightness.isDark,
                   isMainWindow: isMainWindow,
+                  colorContainer: colorContainer,
                 );
                 final Color foregroundColor = _getForegroundColor(
                   theme: theme,
                   buttonTheme: buttonTheme,
                   backgroundColor: backgroundColor,
                   isMainWindow: isMainWindow,
+                  colorContainer: colorContainer,
                 );
+
                 final baseStyle =
                     theme.typography.body.copyWith(color: foregroundColor);
                 final borderRadius = _getBorderRadius(buttonTheme);
 
                 return DecoratedBox(
                   decoration: _getBackgroundBoxDecoration(
-                    theme: theme,
-                    accentColor: backgroundColor,
-                    isMainWindow: isMainWindow,
-                    isDark: theme.brightness.isDark,
-                  ).copyWith(
+                          theme: theme,
+                          accentColor: backgroundColor,
+                          isMainWindow: isMainWindow,
+                          isDark: theme.brightness.isDark,
+                          colorContainer: colorContainer)
+                      .copyWith(
                     borderRadius: borderRadius,
                   ),
                   child: DecoratedBox(
@@ -306,14 +316,15 @@ class _BoxDecorationBuilder {
     required bool isDark,
     required bool isMainWindow,
     required AppKitPushButtonType type,
+    required UiElementColorContainer colorContainer,
   }) {
     final isPrimary = type == AppKitPushButtonType.primary && isMainWindow;
-    final controlBackgroundColor = theme.controlBackgroundColor;
+    final controlBackgroundColor = colorContainer.controlBackgroundColor;
     final color = isPrimary && isEnabled
         ? accentColor
         : (isEnabled
             ? controlBackgroundColor
-            : controlBackgroundColor.withOpacity(0.5));
+            : controlBackgroundColor.multiplyOpacity(0.5));
     return BoxDecoration(
       border: _getBoxBorder(
           accentColor: accentColor,

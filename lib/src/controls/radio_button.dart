@@ -131,9 +131,11 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
               ),
               child: SizedBox.expand(
                 child: _DecoratedContainer(
+                  colorContainer: colorContainer,
                   isDown: buttonHeldDown,
-                  color:
-                      isMainWindow ? accentColor : theme.controlBackgroundColor,
+                  color: isMainWindow
+                      ? accentColor
+                      : colorContainer.controlBackgroundColor,
                   value: widget.groupValue == null
                       ? null
                       : widget.groupValue == widget.value,
@@ -161,6 +163,7 @@ class _DecoratedContainer extends StatelessWidget {
   final bool isMainWindow;
   final bool isDark;
   final bool isDown;
+  final UiElementColorContainer colorContainer;
 
   const _DecoratedContainer({
     required this.color,
@@ -171,6 +174,7 @@ class _DecoratedContainer extends StatelessWidget {
     required this.isMainWindow,
     required this.isDark,
     required this.isDown,
+    required this.colorContainer,
   });
 
   @override
@@ -189,7 +193,7 @@ class _DecoratedContainer extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: !enabled
-              ? theme.controlBackgroundColor.withOpacity(0.5)
+              ? colorContainer.controlBackgroundColor.multiplyOpacity(0.5)
               : value != false && isMainWindow
                   ? color
                   : null,
@@ -199,8 +203,8 @@ class _DecoratedContainer extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
               ),
               BoxShadow(
-                color:
-                    theme.controlBackgroundColor.withOpacity(enabled ? 1 : 0.5),
+                color: colorContainer.controlBackgroundColor
+                    .multiplyOpacity(enabled ? 1 : 0.5),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),

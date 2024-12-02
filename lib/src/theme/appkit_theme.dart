@@ -92,8 +92,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final bool isMainWindow;
   final VisualDensity visualDensity;
   final Color canvasColor;
-  final Color controlBackgroundColor;
-  final Color controlBackgroundColorDisabled;
   final CupertinoDynamicColor controlBackgroundPressedColor;
   final Color accentColorUnfocused;
   final AppKitPushButtonThemeData pushButtonTheme;
@@ -194,8 +192,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         AppKitControlSize.large: Size(54.0, 26.0),
       },
       destructiveTextColor: AppKitColors.systemRed,
-      textColor: CupertinoDynamicColor.withBrightness(
-          color: Colors.white, darkColor: Colors.black),
       overlayPressedColor: CupertinoDynamicColor.withBrightness(
         color: Color.fromRGBO(0, 0, 0, 0.06),
         darkColor: Color.fromRGBO(255, 255, 255, 0.15),
@@ -354,8 +350,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       levelIndicatorsTheme: levelIndicatorsTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       canvasColor: canvasColor,
-      controlBackgroundColor: controlBackgroundColor,
-      controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       accentColorUnfocused: accentColorUnfocused,
       tooltipTheme: tooltipTheme,
@@ -472,8 +466,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.colorWellTheme,
     required this.circularSliderTheme,
     required this.canvasColor,
-    required this.controlBackgroundColor,
-    required this.controlBackgroundColorDisabled,
     required this.controlBackgroundPressedColor,
     required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
@@ -499,8 +491,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         switchTheme,
         progressTheme,
         colorWellTheme,
-        controlBackgroundColor,
-        controlBackgroundColorDisabled,
         controlBackgroundPressedColor,
         accentColorUnfocused,
         circularSliderTheme,
@@ -550,10 +540,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       segmentedControlTheme:
           segmentedControlTheme ?? this.segmentedControlTheme,
       canvasColor: canvasColor ?? this.canvasColor,
-      controlBackgroundColor:
-          controlBackgroundColor ?? this.controlBackgroundColor,
-      controlBackgroundColorDisabled:
-          controlBackgroundColorDisabled ?? this.controlBackgroundColorDisabled,
       controlBackgroundPressedColor:
           controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
       switchTheme: switchTheme ?? this.switchTheme,
@@ -580,8 +566,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: other.canvasColor,
       pushButtonTheme: other.pushButtonTheme,
       toggleButtonTheme: other.toggleButtonTheme,
-      controlBackgroundColor: other.controlBackgroundColor,
-      controlBackgroundColorDisabled: other.controlBackgroundColorDisabled,
       helpButtonTheme: other.helpButtonTheme,
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
@@ -613,12 +597,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: AppKitHelpButtonThemeData.lerp(
           a.helpButtonTheme, b.helpButtonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
-      controlBackgroundColor:
-          Color.lerp(a.controlBackgroundColor, b.controlBackgroundColor, t)!,
-      controlBackgroundColorDisabled: Color.lerp(
-          a.controlBackgroundColorDisabled,
-          b.controlBackgroundColorDisabled,
-          t)!,
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
       segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
           a.segmentedControlTheme, b.segmentedControlTheme, t),
@@ -666,10 +644,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'pushButtonTheme', pushButtonTheme));
     properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>(
         'toggleButtonTheme', toggleButtonTheme));
-    properties
-        .add(ColorProperty('controlBackgroundColor', controlBackgroundColor));
-    properties.add(ColorProperty(
-        'controlBackgroundColorDisabled', controlBackgroundColorDisabled));
     properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
         'helpButtonTheme', helpButtonTheme));
     properties.add(

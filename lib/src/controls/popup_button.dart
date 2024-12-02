@@ -425,8 +425,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     final caretSize =
         style.getCaretSize(theme: popupButtonTheme, controlSize: controlSize);
     final controlBackgroundColor = enabled
-        ? theme.controlBackgroundColor
-        : theme.controlBackgroundColorDisabled;
+        ? colorContainer.controlBackgroundColor
+        : colorContainer.controlBackgroundColor.multiplyOpacity(0.5);
     final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
 
@@ -620,7 +620,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 
     if (isHovered) {
       caretBackgroundColor = Colors.transparent;
-      controlBackgroundColor = theme.controlBackgroundColor;
+      controlBackgroundColor = colorContainer.controlBackgroundColor;
     } else {
       caretBackgroundColor = contextMenuOpened
           ? Colors.transparent
@@ -634,7 +634,8 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: style.getPressedBackgroundColor(
-                  theme: theme, backgroundColor: theme.controlBackgroundColor),
+                  theme: theme,
+                  backgroundColor: colorContainer.controlBackgroundColor),
               borderRadius: BorderRadius.circular(borderRadius),
             )
           : const BoxDecoration(),
