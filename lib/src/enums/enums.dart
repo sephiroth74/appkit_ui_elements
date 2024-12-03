@@ -105,3 +105,10 @@ enum AppKitPopupButtonStyle {
 }
 
 typedef AppKitPulldownButtonStyle = AppKitPopupButtonStyle;
+
+enum AppKitOverlayVisibilityMode {
+  never,
+  editing,
+  notEditing,
+  always,
+}

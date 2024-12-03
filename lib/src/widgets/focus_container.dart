@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
 import 'package:flutter/semantics.dart';
@@ -14,9 +13,8 @@ const _kFocusAnimationDuration = 150;
 class AppKitFocusContainer extends StatefulWidget {
   final FocusNode? focusNode;
   final bool canRequestFocus;
-  final bool autofocus;
   final Widget child;
-  final double borderRadius;
+  final BorderRadiusGeometry? borderRadius;
   final double focusRingSize;
   final bool enabled;
   final SemanticsProperties semanticsProperties;
@@ -30,7 +28,6 @@ class AppKitFocusContainer extends StatefulWidget {
     this.focusNode,
     this.focusRingSize = _kFocusRingSizeEnd,
     this.canRequestFocus = true,
-    this.autofocus = false,
     this.enabled = true,
     this.descendantsAreFocusable = true,
     this.descendantsAreTraversable = true,
@@ -81,7 +78,8 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
   late StreamSubscription<bool> _mainWindowListener;
 
   FocusNode get _effectiveFocusNode =>
-      widget.focusNode ?? (_focusNode ??= FocusNode());
+      widget.focusNode ??
+      (_focusNode ??= FocusNode()..canRequestFocus = widget.canRequestFocus);
 
   bool get enabled => _effectiveFocusNode.canRequestFocus && widget.enabled;
 
@@ -89,12 +87,13 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
   void initState() {
     super.initState();
 
-    _effectiveFocusNode.canRequestFocus = widget.canRequestFocus;
-    _effectiveFocusNode.addListener(_handleFocusChanged);
+    // _effectiveFocusNode.canRequestFocus = widget.canRequestFocus;
+    if (enabled) {
+      _effectiveFocusNode.addListener(_handleFocusChanged);
+    }
 
     _mainWindowListener = MainWindowStateListener.instance.isMainWindow
         .listen((value) => _handleFocusChanged());
-
     _isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
     _isFocused = _effectiveFocusNode.hasPrimaryFocus;
 
@@ -131,10 +130,13 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
-      (oldWidget.focusNode ?? _focusNode)?.removeListener(_handleFocusChanged);
-      (widget.focusNode ?? _focusNode)?.addListener(_handleFocusChanged);
+      // (oldWidget.focusNode ?? _focusNode)?.removeListener(_handleFocusChanged);
+      // (widget.focusNode ?? _focusNode)?.addListener(_handleFocusChanged);
+
+      _effectiveFocusNode.removeListener(_handleFocusChanged);
+      if (enabled) _effectiveFocusNode.addListener(_handleFocusChanged);
     }
-    _effectiveFocusNode.canRequestFocus = widget.canRequestFocus;
+    // _effectiveFocusNode.canRequestFocus = widget.canRequestFocus;
   }
 
   @override
@@ -147,7 +149,7 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     if (!mounted) return;
 
     // logger.d(
-    //     '[Focus changed] has focus: ${_effectiveFocusNode.hasFocus}, has primary focus: ${_effectiveFocusNode.hasPrimaryFocus}');
+    // '[Focus changed] has focus: ${_effectiveFocusNode.hasFocus}, has primary focus: ${_effectiveFocusNode.hasPrimaryFocus}');
 
     final bool isFocused =
         _effectiveFocusNode.hasFocus && _effectiveFocusNode.hasPrimaryFocus;
@@ -208,39 +210,32 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
                 _effectiveFocusNode.requestFocus();
               }
             }
-          : null,
+          : () {},
       onDidGainAccessibilityFocus:
           enabled ? _handleDidGainAccessibilityFocus : null,
       onDidLoseAccessibilityFocus:
           enabled ? _handleDidLoseAccessibilityFocus : null,
-      child: FocusScope(
-          includeSemantics: false,
-          skipTraversal: false,
-          // parentNode: _effectiveFocusNode,
-          // parentNode: _effectiveFocusNode,
-          canRequestFocus: enabled,
-          autofocus: enabled && widget.autofocus,
-          descendantsAreFocusable: enabled && widget.descendantsAreFocusable,
-          descendantsAreTraversable:
-              enabled && widget.descendantsAreTraversable,
-          child: Builder(builder: (context) {
-            if (!enabled) {
-              return widget.child;
-            }
+      child: Builder(builder: (context) {
+        if (!enabled) {
+          return widget.child;
+        }
 
-            final focusRingColor = AppKitColors.focusRingColor
-                .resolveFrom(context)
-                .multiplyOpacity(_alphaAnimation.value);
+        final focusRingColor = AppKitColors.focusRingColor
+            .resolveFrom(context)
+            .multiplyOpacity(_alphaAnimation.value);
 
-            return CustomPaint(
-                painter: _FocusRingPainter(
-                  focused: _isFocused && _isMainWindow && enabled,
-                  color: focusRingColor,
-                  delta: _sizeAnimation.value,
-                  radius: widget.borderRadius,
-                ),
-                child: widget.child);
-          })),
+        return CustomPaint(
+            isComplex: true,
+            painter: _FocusRingPainter(
+              textDirection: Directionality.of(context),
+              focused: _isFocused && _isMainWindow && enabled,
+              color: focusRingColor,
+              delta: _sizeAnimation.value,
+              // radius: widget.borderRadius,
+              borderRadius: widget.borderRadius,
+            ),
+            child: widget.child);
+      }),
     );
   }
 }
@@ -248,16 +243,24 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
 class _FocusRingPainter extends CustomPainter {
   final bool focused;
   final Color color;
-  final double radius;
+  // final double radius;
   final double delta;
   final Paint _paint;
+  final BorderRadiusGeometry? borderRadius;
+  final TextDirection textDirection;
   final Paint _clearPaint = Paint()..blendMode = BlendMode.clear;
+
+  @override
+  bool? hitTest(Offset position) {
+    return false;
+  }
 
   _FocusRingPainter({
     required this.focused,
     required this.color,
     required this.delta,
-    required this.radius,
+    required this.borderRadius,
+    required this.textDirection,
   }) : _paint = Paint()
           ..color = color
           ..style = PaintingStyle.fill;
@@ -268,8 +271,10 @@ class _FocusRingPainter extends CustomPainter {
       return;
     }
 
-    final rrect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(radius));
+    // create the rect with the border radius
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final rrect = borderRadius?.resolve(textDirection).toRRect(rect) ??
+        RRect.fromRectAndRadius(rect, Radius.zero);
 
     final inflatedRect = rrect.inflate(delta);
 
@@ -286,6 +291,7 @@ class _FocusRingPainter extends CustomPainter {
         (oldDelegate.focused != focused ||
             oldDelegate.color != color ||
             oldDelegate.delta != delta ||
-            oldDelegate.radius != radius);
+            oldDelegate.borderRadius != borderRadius ||
+            oldDelegate.textDirection != textDirection);
   }
 }

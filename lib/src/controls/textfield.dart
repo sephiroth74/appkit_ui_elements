@@ -5,10 +5,14 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
+
+const _kBezelBorderRadius = 1.0;
+const _kRoundedBorderRadius = 6.0;
+const int _kiOSHorizontalCursorOffsetPixels = -2;
 
 class AppKitTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -24,9 +28,7 @@ class AppKitTextField extends StatefulWidget {
   final StrutStyle? strutStyle;
   final TextAlign textAlign;
   final TextAlignVertical textAlignVertical;
-  final bool readOnly;
   final bool autofocus;
-  final bool canRequestFocus;
   final bool autocorrect;
   final SmartDashesType smartDashesType;
   final SmartQuotesType smartQuotesType;
@@ -56,6 +58,14 @@ class AppKitTextField extends StatefulWidget {
   final Color? cursorColor;
   final double cursorWidth;
   final double? cursorHeight;
+  final bool showCursor;
+  final AppKitTextFieldBorderStyle borderStyle;
+  final Radius cursorRadius;
+  final Offset? cursorOffset;
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
+  final AppKitTextFieldBehavior behavior;
+  final Color? backgroundColor;
+  final BoxDecoration? decoration;
 
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -68,7 +78,8 @@ class AppKitTextField extends StatefulWidget {
     super.key,
     this.controller,
     this.focusNode,
-    this.padding = const EdgeInsets.all(8.0),
+    this.padding =
+        const EdgeInsets.only(left: 3.5, right: 3.5, top: 1.0, bottom: 3.0),
     this.placeholder,
     this.title,
     this.style,
@@ -79,13 +90,12 @@ class AppKitTextField extends StatefulWidget {
     this.strutStyle,
     this.textAlign = TextAlign.start,
     this.textAlignVertical = TextAlignVertical.top,
-    this.readOnly = false,
-    this.autofocus = true,
-    this.canRequestFocus = true,
+    this.behavior = AppKitTextFieldBehavior.editable,
+    this.autofocus = false,
     this.autocorrect = false,
     SmartDashesType? smartDashesType,
     SmartQuotesType? smartQuotesType,
-    this.enableSuggestions = true,
+    this.enableSuggestions = false,
     this.maxLines,
     this.minLines,
     this.maxLength,
@@ -111,6 +121,13 @@ class AppKitTextField extends StatefulWidget {
     this.cursorColor,
     this.cursorWidth = 2.0,
     this.cursorHeight,
+    this.showCursor = true,
+    this.cursorRadius = const Radius.circular(2.0),
+    this.backgroundColor,
+    this.decoration,
+    this.cursorOffset,
+    this.borderStyle = AppKitTextFieldBorderStyle.line,
+    this.contextMenuBuilder = _defaultContextMenuBuilder,
     this.onChanged,
     this.onSubmitted,
     this.onEditingComplete,
@@ -170,7 +187,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       _createLocalController();
     }
     _effectiveFocusNode.canRequestFocus =
-        widget.enabled && widget.canRequestFocus;
+        widget.enabled && widget.behavior.canRequestFocus;
     _effectiveFocusNode.addListener(_handleFocusChanged);
   }
 
@@ -193,7 +210,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       _controller = null;
     }
     _effectiveFocusNode.canRequestFocus =
-        widget.enabled && widget.canRequestFocus;
+        widget.enabled && widget.behavior.canRequestFocus;
   }
 
   void _createLocalController([TextEditingValue? value]) {
@@ -230,9 +247,9 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       case AppKitOverlayVisibilityMode.always:
         return true;
       case AppKitOverlayVisibilityMode.editing:
-        return hasText;
+        return hasText && _effectiveFocusNode.hasFocus;
       case AppKitOverlayVisibilityMode.notEditing:
-        return !hasText;
+        return !_effectiveFocusNode.hasFocus;
     }
   }
 
@@ -295,7 +312,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       return editableText;
     }
 
-    Color iconsColor = colorContainer.controlTextColor;
+    Color iconsColor =
+        colorContainer.secondaryLabelColor.multiplyOpacity(enabled ? 1.0 : 0.5);
 
     if (!enabled) {
       iconsColor = iconsColor.withOpacity(0.2);
@@ -364,6 +382,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                   key: _clearGlobalKey,
                   onTap: enabled
                       ? () {
+                          debugPrint('onTap');
                           // Special handle onChanged for ClearButton
                           // Also call onChanged when the clear button is tapped.
                           final bool textChanged =
@@ -372,14 +391,15 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                           if (widget.onChanged != null && textChanged) {
                             widget.onChanged!(_effectiveController.text);
                           }
+                          FocusScope.of(context).unfocus();
+                          // _effectiveFocusNode.unfocus();
                         }
                       : null,
                   child: Padding(
                     padding: EdgeInsets.only(
+                      top: widget.padding.top,
                       left: 6.0,
                       right: 6.0,
-                      top: widget.padding.top,
-                      bottom: widget.padding.bottom,
                     ),
                     child: Icon(
                       CupertinoIcons.clear_thick_circled,
@@ -424,8 +444,18 @@ class _AppKitTextFieldState extends State<AppKitTextField>
           theme.typography.body
               .copyWith(color: colorContainer.placeholderTextColor);
       final Color selectionColor = colorContainer.selectedTextBackgroundColor;
+
       final Color cursorColor = widget.cursorColor ??
-          (theme.brightness.isDark ? Colors.white : Colors.black);
+          colorContainer.selectedContentBackgroundColor.withOpacity(1.0);
+
+      final Offset cursorOffset = widget.cursorOffset ??
+          Offset(
+            _kiOSHorizontalCursorOffsetPixels /
+                MediaQuery.of(context).devicePixelRatio,
+            0,
+          );
+
+      final decoration = _getBoxDecoration(colorContainer);
 
       final Widget paddedEditable = Padding(
         padding: widget.padding,
@@ -435,8 +465,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             child: EditableText(
               key: editableTextKey,
               controller: controller,
-              readOnly: widget.readOnly,
-              showCursor: true, // widget.showCursor
+              readOnly: widget.behavior.readOnly,
+              showCursor: widget.showCursor && !widget.behavior.readOnly,
               showSelectionHandles: _showSelectionHandles,
               focusNode: _effectiveFocusNode,
               keyboardType: widget.keyboardType,
@@ -445,7 +475,10 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               style: textStyle,
               strutStyle: widget.strutStyle,
               textAlign: widget.textAlign,
-              autofocus: widget.autofocus,
+              autofocus: widget.autofocus &&
+                  widget.enabled &&
+                  _effectiveFocusNode.canRequestFocus &&
+                  widget.behavior != AppKitTextFieldBehavior.none,
               obscuringCharacter: widget.obscuringCharacter,
               obscureText: widget.obscureText,
               autocorrect: widget.autocorrect,
@@ -466,10 +499,10 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               rendererIgnoresPointer: true,
               cursorWidth: widget.cursorWidth,
               cursorHeight: widget.cursorHeight,
-              // cursorRadius: widget.cursorRadius,
+              cursorRadius: widget.cursorRadius,
               cursorColor: cursorColor,
               cursorOpacityAnimates: true,
-              // cursorOffset: cursorOffset,
+              cursorOffset: cursorOffset,
               paintCursorAboveText: true,
               autocorrectionTextRectColor: selectionColor,
               backgroundCursorColor: const Color(
@@ -481,11 +514,12 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               dragStartBehavior: widget.dragStartBehavior,
               scrollController: widget.scrollController,
               scrollPhysics: widget.scrollPhysics,
-              enableInteractiveSelection: widget.enableInteractiveSelection,
+              enableInteractiveSelection: widget.enableInteractiveSelection &&
+                  widget.behavior != AppKitTextFieldBehavior.none,
               autofillHints: widget.autofillHints,
               restorationId: 'editable',
               mouseCursor: SystemMouseCursors.text,
-              // contextMenuBuilder: widget.contextMenuBuilder,
+              contextMenuBuilder: widget.contextMenuBuilder,
             ),
           ),
         ),
@@ -493,7 +527,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
       return Semantics(
         enabled: enabled,
-        onTap: !enabled || widget.readOnly
+        onTap: !enabled || widget.behavior.readOnly
             ? null
             : () {
                 if (!controller.selection.isValid) {
@@ -503,35 +537,98 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                 _requestKeyboard();
               },
         child: IgnorePointer(
-          ignoring: !enabled,
+          ignoring: !enabled || !widget.behavior.canRequestFocus,
           child: AppKitFocusContainer(
-            borderRadius: 0.0,
+            borderRadius:
+                decoration.borderRadius, //widget.borderStyle.borderRadius,
             textField: true,
-            canRequestFocus: _effectiveFocusNode.canRequestFocus && enabled,
-            autofocus: widget.autofocus && enabled,
-            descendantsAreFocusable: true,
             focusNode: _effectiveFocusNode,
-            child: Container(
-              decoration: const BoxDecoration(),
-              child: _selectionGestureDetectorBuilder.buildGestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: Align(
-                  alignment: Alignment(-1.0, textAlignVertical.y),
-                  widthFactor: 1.0,
-                  heightFactor: 1.0,
-                  child: _addTextDependentAttachments(
-                    editableText: paddedEditable,
-                    textStyle: textStyle,
-                    placeholderStyle: placeholderStyle,
-                    colorContainer: colorContainer,
+            enabled: enabled && _effectiveFocusNode.canRequestFocus,
+            child: UiElementColorBuilder(builder: (context, colotContainer) {
+              return Container(
+                decoration: decoration,
+                child: _selectionGestureDetectorBuilder.buildGestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: Align(
+                    alignment: Alignment(-1.0, textAlignVertical.y),
+                    widthFactor: 1.0,
+                    heightFactor: 1.0,
+                    child: _addTextDependentAttachments(
+                      editableText: paddedEditable,
+                      textStyle: textStyle,
+                      placeholderStyle: placeholderStyle,
+                      colorContainer: colorContainer,
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ),
       );
     });
+  }
+
+  BoxDecoration _getBoxDecoration(UiElementColorContainer colorContainer) {
+    final backgroundColor = widget.backgroundColor ??
+        (enabled
+            ? colorContainer.controlBackgroundColor
+            : colorContainer.controlBackgroundColor.withOpacity(0.5));
+    const borderWidth = 1.0;
+    final borderRadius = widget.borderStyle.borderRadius;
+
+    if (widget.decoration != null) {
+      return widget.decoration!;
+    }
+
+    switch (widget.borderStyle) {
+      case AppKitTextFieldBorderStyle.none:
+        return BoxDecoration(color: backgroundColor);
+
+      case AppKitTextFieldBorderStyle.line:
+        return BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.zero,
+          border: Border.all(
+            color: colorContainer.shadowColor.withOpacity(0.3),
+            width: borderWidth,
+          ),
+        );
+
+      case AppKitTextFieldBorderStyle.bezel:
+        return BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: GradientBoxBorder(
+              gradient: LinearGradient(
+                colors: [
+                  AppKitColors.text.opaque.tertiary.multiplyOpacity(0.6),
+                  AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.9, 1.0],
+              ),
+              width: borderWidth),
+        );
+
+      case AppKitTextFieldBorderStyle.rounded:
+        return BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: GradientBoxBorder(
+              gradient: LinearGradient(
+                colors: [
+                  AppKitColors.text.opaque.tertiary.multiplyOpacity(0.6),
+                  AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.9, 1.0],
+              ),
+              width: borderWidth),
+        );
+    }
   }
 
   @override
@@ -555,13 +652,6 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
   @override
   bool get selectionEnabled => widget.selectionEnabled;
-}
-
-enum AppKitOverlayVisibilityMode {
-  never,
-  editing,
-  notEditing,
-  always,
 }
 
 class _TextFieldSelectionGestureDetectorBuilder
@@ -602,4 +692,44 @@ class _TextFieldSelectionGestureDetectorBuilder
     _state._requestKeyboard();
     super.onDragSelectionEnd(details);
   }
+}
+
+enum AppKitTextFieldBorderStyle {
+  none,
+  line,
+  bezel,
+  rounded;
+
+  double get borderRadius {
+    switch (this) {
+      case AppKitTextFieldBorderStyle.none:
+      case AppKitTextFieldBorderStyle.line:
+        return 0.0;
+      case AppKitTextFieldBorderStyle.bezel:
+        return _kBezelBorderRadius;
+      case AppKitTextFieldBorderStyle.rounded:
+        return _kRoundedBorderRadius;
+    }
+  }
+}
+
+Widget _defaultContextMenuBuilder(
+  BuildContext context,
+  EditableTextState editableTextState,
+) {
+  return CupertinoAdaptiveTextSelectionToolbar.editableText(
+    editableTextState: editableTextState,
+  );
+}
+
+enum AppKitTextFieldBehavior {
+  selectable,
+  editable,
+  none;
+
+  bool get canRequestFocus => this != AppKitTextFieldBehavior.none;
+
+  bool get readOnly =>
+      this == AppKitTextFieldBehavior.selectable ||
+      this == AppKitTextFieldBehavior.none;
 }
