@@ -130,6 +130,7 @@ class _FieldsPageState extends State<FieldsPage> {
                             ],
                           ),
                         ),
+                        MacosIcon(icon)
                       ],
                     ),
                   );

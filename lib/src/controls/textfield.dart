@@ -4,14 +4,13 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
-const _kBezelBorderRadius = 1.0;
-const _kRoundedBorderRadius = 6.0;
 const int _kiOSHorizontalCursorOffsetPixels = -2;
 
 class AppKitTextField extends StatefulWidget {
@@ -648,6 +647,98 @@ class _AppKitTextFieldState extends State<AppKitTextField>
   }
 
   @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<TextEditingController>(
+        'controller', widget.controller,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<FocusNode>('focusNode', widget.focusNode,
+        defaultValue: null));
+    properties.add(DiagnosticsProperty<EdgeInsets>('padding', widget.padding));
+    properties.add(StringProperty('placeholder', widget.placeholder));
+    properties.add(StringProperty('title', widget.title));
+    properties.add(DiagnosticsProperty<TextStyle>('style', widget.style));
+    properties.add(DiagnosticsProperty<TextStyle>(
+        'placeholderStyle', widget.placeholderStyle));
+    properties.add(EnumProperty<TextAlign>('textAlign', widget.textAlign));
+    properties.add(DiagnosticsProperty<TextAlignVertical>(
+        'textAlignVertical', widget.textAlignVertical));
+    properties.add(DiagnosticsProperty<TextInputType>(
+        'keyboardType', widget.keyboardType));
+    properties.add(DiagnosticsProperty<TextInputAction>(
+        'textInputAction', widget.textInputAction));
+    properties.add(EnumProperty<TextCapitalization>(
+        'textCapitalization', widget.textCapitalization));
+    properties
+        .add(DiagnosticsProperty<StrutStyle>('strutStyle', widget.strutStyle));
+    properties.add(DiagnosticsProperty<bool>('autofocus', widget.autofocus));
+    properties
+        .add(DiagnosticsProperty<bool>('autocorrect', widget.autocorrect));
+    properties.add(DiagnosticsProperty<SmartDashesType>(
+        'smartDashesType', widget.smartDashesType));
+    properties.add(DiagnosticsProperty<SmartQuotesType>(
+        'smartQuotesType', widget.smartQuotesType));
+    properties.add(DiagnosticsProperty<bool>(
+        'enableSuggestions', widget.enableSuggestions));
+    properties.add(DiagnosticsProperty<int>('maxLines', widget.maxLines));
+    properties.add(DiagnosticsProperty<int>('minLines', widget.minLines));
+    properties.add(DiagnosticsProperty<int>('maxLength', widget.maxLength));
+    properties.add(DiagnosticsProperty<bool>('expands', widget.expands));
+    properties.add(DiagnosticsProperty<MaxLengthEnforcement>(
+        'maxLengthEnforcement', widget.maxLengthEnforcement));
+    properties.add(IterableProperty<TextInputFormatter>(
+        'inputFormatters', widget.inputFormatters));
+    properties.add(DiagnosticsProperty<bool>('enabled', widget.enabled));
+    properties.add(EnumProperty<ui.BoxHeightStyle>(
+        'selectionHeightStyle', widget.selectionHeightStyle));
+    properties.add(EnumProperty<ui.BoxWidthStyle>(
+        'selectionWidthStyle', widget.selectionWidthStyle));
+    properties.add(
+        DiagnosticsProperty<EdgeInsets>('scrollPadding', widget.scrollPadding));
+    properties.add(DiagnosticsProperty<bool>(
+        'enableInteractiveSelection', widget.enableInteractiveSelection));
+    properties.add(DiagnosticsProperty<TextSelectionControls>(
+        'selectionControls', widget.selectionControls));
+    properties.add(EnumProperty<DragStartBehavior>(
+        'dragStartBehavior', widget.dragStartBehavior));
+    properties.add(DiagnosticsProperty<ScrollController>(
+        'scrollController', widget.scrollController));
+    properties.add(DiagnosticsProperty<ScrollPhysics>(
+        'scrollPhysics', widget.scrollPhysics));
+    properties
+        .add(IterableProperty<String>('autofillHints', widget.autofillHints));
+    properties.add(StringProperty('restorationId', widget.restorationId));
+    properties.add(EnumProperty<AppKitOverlayVisibilityMode>(
+        'clearButtonMode', widget.clearButtonMode));
+    properties
+        .add(StringProperty('obscuringCharacter', widget.obscuringCharacter));
+    properties
+        .add(DiagnosticsProperty<bool>('obscureText', widget.obscureText));
+    properties.add(DiagnosticsProperty<Widget>('prefix', widget.prefix));
+    properties.add(EnumProperty<AppKitOverlayVisibilityMode>(
+        'prefixMode', widget.prefixMode));
+    properties
+        .add(DiagnosticsProperty<Color>('cursorColor', widget.cursorColor));
+    properties.add(DoubleProperty('cursorWidth', widget.cursorWidth));
+    properties.add(DoubleProperty('cursorHeight', widget.cursorHeight));
+    properties.add(DiagnosticsProperty<bool>('showCursor', widget.showCursor));
+    properties.add(EnumProperty<AppKitTextFieldBorderStyle>(
+        'borderStyle', widget.borderStyle));
+    properties
+        .add(DiagnosticsProperty<Radius>('cursorRadius', widget.cursorRadius));
+    properties
+        .add(DiagnosticsProperty<Offset>('cursorOffset', widget.cursorOffset));
+    properties.add(DiagnosticsProperty<EditableTextContextMenuBuilder>(
+        'contextMenuBuilder', widget.contextMenuBuilder));
+    properties.add(DiagnosticsProperty<AppKitTextFieldBehavior>(
+        'behavior', widget.behavior));
+    properties.add(
+        DiagnosticsProperty<Color>('backgroundColor', widget.backgroundColor));
+    properties.add(
+        DiagnosticsProperty<BoxDecoration>('decoration', widget.decoration));
+  }
+
+  @override
   bool get wantKeepAlive => _controller?.value.text.isNotEmpty == true;
 
   @override
@@ -694,25 +785,6 @@ class _TextFieldSelectionGestureDetectorBuilder
   }
 }
 
-enum AppKitTextFieldBorderStyle {
-  none,
-  line,
-  bezel,
-  rounded;
-
-  double get borderRadius {
-    switch (this) {
-      case AppKitTextFieldBorderStyle.none:
-      case AppKitTextFieldBorderStyle.line:
-        return 0.0;
-      case AppKitTextFieldBorderStyle.bezel:
-        return _kBezelBorderRadius;
-      case AppKitTextFieldBorderStyle.rounded:
-        return _kRoundedBorderRadius;
-    }
-  }
-}
-
 Widget _defaultContextMenuBuilder(
   BuildContext context,
   EditableTextState editableTextState,
@@ -720,16 +792,4 @@ Widget _defaultContextMenuBuilder(
   return CupertinoAdaptiveTextSelectionToolbar.editableText(
     editableTextState: editableTextState,
   );
-}
-
-enum AppKitTextFieldBehavior {
-  selectable,
-  editable,
-  none;
-
-  bool get canRequestFocus => this != AppKitTextFieldBehavior.none;
-
-  bool get readOnly =>
-      this == AppKitTextFieldBehavior.selectable ||
-      this == AppKitTextFieldBehavior.none;
 }

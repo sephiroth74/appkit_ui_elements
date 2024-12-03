@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
+const _kBezelBorderRadius = 1.0;
+const _kRoundedBorderRadius = 6.0;
+
 /// @see https://docs-assets.developer.apple.com/published/accf80df231061eac66e07e5377e0d31/SwiftUI-View-controlSize@2x.png
 enum AppKitControlSize {
   mini,
@@ -111,4 +114,35 @@ enum AppKitOverlayVisibilityMode {
   editing,
   notEditing,
   always,
+}
+
+enum AppKitTextFieldBehavior {
+  selectable,
+  editable,
+  none;
+
+  bool get canRequestFocus => this != AppKitTextFieldBehavior.none;
+
+  bool get readOnly =>
+      this == AppKitTextFieldBehavior.selectable ||
+      this == AppKitTextFieldBehavior.none;
+}
+
+enum AppKitTextFieldBorderStyle {
+  none,
+  line,
+  bezel,
+  rounded;
+
+  double get borderRadius {
+    switch (this) {
+      case AppKitTextFieldBorderStyle.none:
+      case AppKitTextFieldBorderStyle.line:
+        return 0.0;
+      case AppKitTextFieldBorderStyle.bezel:
+        return _kBezelBorderRadius;
+      case AppKitTextFieldBorderStyle.rounded:
+        return _kRoundedBorderRadius;
+    }
+  }
 }
