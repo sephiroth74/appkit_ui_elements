@@ -417,9 +417,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       final placeholderStyle = widget.placeholderStyle ??
           theme.typography.body
               .copyWith(color: colorContainer.placeholderTextColor);
-      final Color selectionColor = AppKitColors.fills.opaque.primary
-          .resolveFrom(context)
-          .withOpacity(0.2);
+      final Color selectionColor =
+          colorContainer.selectedTextColor.withOpacity(0.2);
       final Color cursorColor =
           theme.brightness.isDark ? Colors.white : Colors.black;
 

@@ -35,6 +35,7 @@ class _FieldsPageState extends State<FieldsPage> {
                       SizedBox(
                           width: 200,
                           child: AppKitTextField(
+                            placeholder: 'Placeholder',
                             expands: false,
                             maxLines: 1,
                             keyboardType: TextInputType.text,

@@ -6,22 +6,58 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-const _kWidth = 26.0;
-const _kHeight = 15.0;
-const _kFactor = 1.0;
-const _kHandleSize = 14.0;
-const _kHandlePadding = 1.0;
-const _kBorderRadius = 11.0;
 const _kAnimationDuration = 200;
 const _kStatusAnimationDuration = 100;
 
-final log = logger;
+extension _AppKitControlSizeX on AppKitControlSize {
+  Size get size {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return const Size(17.0, 10.0);
+      case AppKitControlSize.small:
+        return const Size(22.0, 13.0);
+      case AppKitControlSize.regular:
+        return const Size(26.0, 15.0);
+      case AppKitControlSize.large:
+        return const Size(38.0, 22.0);
+    }
+  }
+
+  double get handleSize {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return 9.0;
+      case AppKitControlSize.small:
+        return 12.0;
+      case AppKitControlSize.regular:
+        return 14.0;
+      case AppKitControlSize.large:
+        return 21.0;
+    }
+  }
+
+  double get handlePadding {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return 1.0;
+      case AppKitControlSize.small:
+        return 1.0;
+      case AppKitControlSize.regular:
+        return 1.0;
+      case AppKitControlSize.large:
+        return 1.0;
+    }
+  }
+
+  double get borderRadius => size.height / 2;
+}
 
 class AppKitSwitch extends StatefulWidget {
   final bool checked;
   final String? semanticLabel;
   final ValueChanged<bool>? onChanged;
   final Color? color;
+  final AppKitControlSize size;
 
   const AppKitSwitch({
     super.key,
@@ -29,6 +65,7 @@ class AppKitSwitch extends StatefulWidget {
     this.onChanged,
     this.semanticLabel,
     this.color,
+    this.size = AppKitControlSize.regular,
   });
 
   @override
@@ -61,6 +98,14 @@ class _AppKitSwitchState extends State<AppKitSwitch>
   late Animation<double> positionCurvedAnimation;
 
   late AnimationController statusController;
+
+  late final Size _size = widget.size.size;
+
+  late final double _handleSize = widget.size.handleSize;
+
+  late final double _handlePadding = widget.size.handlePadding;
+
+  double get _borderRadius => widget.size.borderRadius;
 
   @override
   void initState() {
@@ -121,6 +166,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
         'onChanged', widget.onChanged));
     properties.add(StringProperty('semanticLabel', widget.semanticLabel));
     properties.add(ColorProperty('color', widget.color));
+    properties.add(EnumProperty<AppKitControlSize>('size', widget.size));
   }
 
   @override
@@ -161,11 +207,11 @@ class _AppKitSwitchState extends State<AppKitSwitch>
     setState(() {
       dragStartPosition = localPosition;
       if (checked) {
-        dragStartedOnHandle = localPosition.dx >
-            ((_kWidth - _kHandleSize - _kHandlePadding) * _kFactor);
+        dragStartedOnHandle =
+            localPosition.dx > ((_size.width - _handleSize - _handlePadding));
       } else {
         dragStartedOnHandle =
-            localPosition.dx < ((_kHandleSize + _kHandlePadding) * _kFactor);
+            localPosition.dx < ((_handleSize + _handlePadding));
       }
       mouseIsDown = true;
       isInteractive = true;
@@ -216,7 +262,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
     if (!isInteractive || !enabled) return;
 
     if (dragStartedOnHandle) {
-      if (details.localPosition.dx < ((_kWidth * _kFactor) / 2)) {
+      if (details.localPosition.dx < ((_size.width) / 2)) {
         if (!positionController.isAnimating ||
             positionController.status != AnimationStatus.reverse) {
           _animateTo(false);
@@ -229,8 +275,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
       }
     } else {
       if (checked) {
-        if (dragStartPosition.dx - details.localPosition.dx >
-            _kHandleSize * _kFactor) {
+        if (dragStartPosition.dx - details.localPosition.dx > _handleSize) {
           dragStartedOnHandle = true;
           if (!positionController.isAnimating ||
               positionController.status != AnimationStatus.reverse) {
@@ -238,8 +283,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
           }
         }
       } else {
-        if (details.localPosition.dx - dragStartPosition.dx >
-            _kHandleSize * _kFactor) {
+        if (details.localPosition.dx - dragStartPosition.dx > _handleSize) {
           dragStartedOnHandle = true;
           if (!positionController.isAnimating ||
               positionController.status != AnimationStatus.forward) {
@@ -344,29 +388,26 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                     : null,
                 dragStartBehavior: DragStartBehavior.start,
                 child: SizedBox(
-                  width: _kWidth * _kFactor,
-                  height: _kHeight * _kFactor,
+                  width: _size.width,
+                  height: _size.height,
                   child: Container(
-                    foregroundDecoration:
-                        enabled && statusController.value > 0.0
-                            ? BoxDecoration(
-                                color: Color.lerp(
-                                    theme.controlBackgroundPressedColor
-                                        .withOpacity(0.0),
-                                    theme.controlBackgroundPressedColor,
-                                    statusController.value),
-                                borderRadius: BorderRadius.circular(
-                                    _kBorderRadius * _kFactor))
-                            : null,
+                    foregroundDecoration: enabled &&
+                            statusController.value > 0.0
+                        ? BoxDecoration(
+                            color: Color.lerp(
+                                theme.controlBackgroundPressedColor
+                                    .withOpacity(0.0),
+                                theme.controlBackgroundPressedColor,
+                                statusController.value),
+                            borderRadius: BorderRadius.circular(_borderRadius))
+                        : null,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(_kBorderRadius * _kFactor),
+                      borderRadius: BorderRadius.circular(_borderRadius),
                       color: containerBackgroundColor,
                     ),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(_kBorderRadius * _kFactor),
+                        borderRadius: BorderRadius.circular(_borderRadius),
                         boxShadow: [
                           BoxShadow(
                             color: innerShadowColor,
@@ -374,15 +415,14 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                           BoxShadow(
                             blurStyle: BlurStyle.normal,
                             color: accentColor,
-                            spreadRadius: -1.0 * _kFactor,
-                            blurRadius: 1.0 * _kFactor,
+                            spreadRadius: -1.0,
+                            blurRadius: 1.0,
                           ),
                         ],
                       ),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(_kBorderRadius * _kFactor),
+                          borderRadius: BorderRadius.circular(_borderRadius),
                           gradient: enabled
                               ? LinearGradient(
                                   begin: Alignment.topCenter,
@@ -397,27 +437,25 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                               : null,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(
-                              (_kHandlePadding / 2) * _kFactor),
+                          padding: EdgeInsets.all((_handlePadding / 2)),
                           child: Stack(
                             children: [
                               Positioned(
                                 left: animationValue *
-                                    ((_kWidth -
-                                            _kHandleSize -
-                                            _kHandlePadding) *
-                                        _kFactor),
+                                    ((_size.width -
+                                        _handleSize -
+                                        _handlePadding)),
                                 child: SizedBox(
-                                  width: _kHandleSize * _kFactor,
-                                  height: _kHandleSize * _kFactor,
+                                  width: _handleSize,
+                                  height: _handleSize,
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.black
                                           .withOpacity(0.08 * enableFactor),
                                       shape: BoxShape.circle,
                                     ),
-                                    padding: const EdgeInsets.all(
-                                        (_kHandlePadding / 2) * _kFactor),
+                                    padding:
+                                        EdgeInsets.all((_handlePadding / 2)),
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                           color: enabled
@@ -433,9 +471,8 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                                                   enabled ? 0.12 : 0.02),
                                               blurStyle: BlurStyle.outer,
                                               spreadRadius: 0.0,
-                                              blurRadius: 0.25 * _kFactor,
-                                              offset: const Offset(
-                                                  0.0, 0.2 * _kFactor),
+                                              blurRadius: 0.25,
+                                              offset: const Offset(0.0, 0.2),
                                             ),
                                           ]),
                                     ),

@@ -221,26 +221,30 @@ class _ControlsPageState extends State<ControlsPage> {
                           AppKitTooltip.plain(
                             message: 'This is a tooltip',
                             child: AppKitSwitch(
+                                size: AppKitControlSize.large,
                                 checked: switchValue1,
                                 onChanged: (value) {
-                                  setState(() {
-                                    debugPrint('onChanged($value)');
-                                    switchValue1 = value;
-                                  });
+                                  setState(() => switchValue1 = value);
                                 }),
                           ),
                           const SizedBox(width: 16.0),
                           AppKitSwitch(
+                              size: AppKitControlSize.regular,
                               checked: switchValue1,
-                              color: MacosColors.systemOrangeColor,
                               onChanged: (value) {
-                                setState(() {
-                                  debugPrint('onChanged($value)');
-                                  switchValue1 = value;
-                                });
+                                setState(() => switchValue1 = value);
                               }),
                           const SizedBox(width: 16.0),
                           AppKitSwitch(
+                              size: AppKitControlSize.small,
+                              checked: switchValue1,
+                              color: MacosColors.systemOrangeColor,
+                              onChanged: (value) {
+                                setState(() => switchValue1 = value);
+                              }),
+                          const SizedBox(width: 16.0),
+                          AppKitSwitch(
+                            size: AppKitControlSize.mini,
                             checked: switchValue1,
                           ),
                         ],
