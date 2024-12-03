@@ -44,8 +44,10 @@ class AppKitToggleButton extends StatefulWidget {
     properties.add(EnumProperty<AppKitControlSize>('controlSize', controlSize));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
     properties.add(StringProperty('semanticLabel', semanticLabel));
-    properties.add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
-    properties.add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
+    properties
+        .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
+    properties
+        .add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
     properties.add(DiagnosticsProperty<Color>('color', color));
   }
 
@@ -85,11 +87,16 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     required bool isMainWindow,
     required UiElementColorContainer colorContainer,
   }) {
-    final bool isPrimary = widget.type == AppKitToggleButtonType.primary && isMainWindow;
-    final bgColor = (widget.enabled && isPrimary && widget.isOn) ? accentColor : backgroundColor;
+    final bool isPrimary =
+        widget.type == AppKitToggleButtonType.primary && isMainWindow;
+    final bgColor = (widget.enabled && isPrimary && widget.isOn)
+        ? accentColor
+        : backgroundColor;
     final opacity = bgColor.opacity;
 
-    final textColor = ((widget.isOn && !isPrimary) ? accentColor : colorContainer.controlTextColor)
+    final textColor = ((widget.isOn && !isPrimary)
+            ? accentColor
+            : colorContainer.controlTextColor)
         .multiplyOpacity(widget.enabled ? 1.0 : 0.25);
 
     final blendedBackgroundColor = Color.lerp(
@@ -100,7 +107,9 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
     final luminance = blendedBackgroundColor.computeLuminance();
 
-    return luminance > 0.5 ? textColor : Colors.white.multiplyOpacity(widget.enabled ? 1 : 0.25);
+    return luminance > 0.5
+        ? textColor
+        : Colors.white.multiplyOpacity(widget.enabled ? 1 : 0.25);
     // : luminance > 0.5
     //     ? colorContainer.controlTextColor.withOpacity(0.25)
     //     : Colors.white.withOpacity(0.25);
@@ -147,7 +156,9 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     required BorderRadiusGeometry borderRadius,
   }) {
     final isDark = theme.brightness.isDark;
-    final color = isDark ? buttonTheme.overlayPressedColor.darkColor : buttonTheme.overlayPressedColor.color;
+    final color = isDark
+        ? buttonTheme.overlayPressedColor.darkColor
+        : buttonTheme.overlayPressedColor.color;
     return BoxDecoration(
       color: color,
       borderRadius: borderRadius,
@@ -158,16 +169,24 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     return BorderRadius.circular(theme.buttonRadius[widget.controlSize] ?? 0.0);
   }
 
-  EdgeInsetsGeometry _getButtonPadding({required AppKitToggleButtonThemeData theme, EdgeInsetsGeometry? padding}) {
-    return (theme.buttonPadding[widget.controlSize] ?? EdgeInsets.zero).add(padding ?? EdgeInsets.zero);
+  EdgeInsetsGeometry _getButtonPadding(
+      {required AppKitToggleButtonThemeData theme,
+      EdgeInsetsGeometry? padding}) {
+    return (theme.buttonPadding[widget.controlSize] ?? EdgeInsets.zero)
+        .add(padding ?? EdgeInsets.zero);
   }
 
-  TextStyle _textStyle({required AppKitToggleButtonThemeData theme, required TextStyle baseStyle}) {
+  TextStyle _textStyle(
+      {required AppKitToggleButtonThemeData theme,
+      required TextStyle baseStyle}) {
     final fontSize = theme.fontSize[widget.controlSize];
-    return fontSize != null ? baseStyle.copyWith(fontSize: fontSize) : baseStyle;
+    return fontSize != null
+        ? baseStyle.copyWith(fontSize: fontSize)
+        : baseStyle;
   }
 
-  BoxConstraints _getButtonConstraints({required AppKitToggleButtonThemeData theme}) {
+  BoxConstraints _getButtonConstraints(
+      {required AppKitToggleButtonThemeData theme}) {
     return BoxConstraints(
       minHeight: theme.buttonSize[widget.controlSize]?.height ?? 0.0,
       minWidth: theme.buttonSize[widget.controlSize]?.width ?? 0.0,
@@ -198,7 +217,8 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
     final bool enabled = widget.enabled;
     final AppKitThemeData theme = AppKitTheme.of(context);
-    final AppKitToggleButtonThemeData buttonTheme = AppKitToggleButtonTheme.of(context);
+    final AppKitToggleButtonThemeData buttonTheme =
+        AppKitToggleButtonTheme.of(context);
 
     return MouseRegion(
       cursor: widget.mouseCursor,
@@ -218,8 +238,11 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
           child: ConstrainedBox(
               constraints: _getButtonConstraints(theme: buttonTheme),
               child: UiElementColorBuilder(builder: (context, colorContainer) {
-                final Color accentColor = widget.color ?? theme.accentColor ?? colorContainer.controlAccentColor;
-                final isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+                final Color accentColor = widget.color ??
+                    theme.accentColor ??
+                    colorContainer.controlAccentColor;
+                final isMainWindow =
+                    MainWindowStateListener.instance.isMainWindow.value;
 
                 final Color backgroundColor = _getBackgroundColor(
                   theme: theme,
@@ -236,7 +259,8 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                     isDark: theme.brightness.isDark,
                     isMainWindow: isMainWindow,
                     colorContainer: colorContainer);
-                final baseStyle = theme.typography.body.copyWith(color: foregroundColor);
+                final baseStyle =
+                    theme.typography.body.copyWith(color: foregroundColor);
                 final borderRadius = _getBorderRadius(buttonTheme);
 
                 return DecoratedBox(
@@ -251,7 +275,9 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                   ),
                   child: DecoratedBox(
                     decoration: _getForegroundBoxDecoration(
-                        buttonTheme: buttonTheme, isMainWindow: isMainWindow, borderRadius: borderRadius),
+                        buttonTheme: buttonTheme,
+                        isMainWindow: isMainWindow,
+                        borderRadius: borderRadius),
                     child: Container(
                       foregroundDecoration: buttonHeldDown
                           ? _getForegroundPressedBoxDecoration(
@@ -261,14 +287,18 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                             )
                           : const BoxDecoration(),
                       child: Padding(
-                        padding: _getButtonPadding(theme: buttonTheme, padding: widget.padding),
+                        padding: _getButtonPadding(
+                            theme: buttonTheme, padding: widget.padding),
                         child: Align(
                           alignment: Alignment.center,
                           widthFactor: 1.0,
                           heightFactor: 1.0,
                           child: DefaultTextStyle(
-                              style: _textStyle(theme: buttonTheme, baseStyle: baseStyle),
-                              child: widget.isOn ? widget.childOn : widget.childOff),
+                              style: _textStyle(
+                                  theme: buttonTheme, baseStyle: baseStyle),
+                              child: widget.isOn
+                                  ? widget.childOn
+                                  : widget.childOff),
                         ),
                       ),
                     ),
@@ -334,11 +364,14 @@ class _BoxDecorationBuilder {
     required UiElementColorContainer colorContainer,
   }) {
     final isPrimary = type == AppKitToggleButtonType.primary && isMainWindow;
-    final controlBackgroundColor =
-        isEnabled ? colorContainer.controlBackgroundColor : colorContainer.controlBackgroundColor.withOpacity(0.5);
+    final controlBackgroundColor = isEnabled
+        ? colorContainer.controlBackgroundColor
+        : colorContainer.controlBackgroundColor.withOpacity(0.5);
     return isPrimary && isEnabled && isOn
         ? accentColor
-        : (isEnabled ? controlBackgroundColor : controlBackgroundColor.withOpacity(0.5));
+        : (isEnabled
+            ? controlBackgroundColor
+            : controlBackgroundColor.withOpacity(0.5));
   }
 
   static BoxBorder? _getBoxBorder({
@@ -349,7 +382,8 @@ class _BoxDecorationBuilder {
     required bool isOn,
     required AppKitToggleButtonType type,
   }) {
-    final isPrimary = (type == AppKitToggleButtonType.primary && isMainWindow && isOn);
+    final isPrimary =
+        (type == AppKitToggleButtonType.primary && isMainWindow && isOn);
     if (isPrimary || !isEnabled) return null;
     return GradientBoxBorder(
       gradient: LinearGradient(
@@ -372,7 +406,8 @@ class _BoxDecorationBuilder {
     required bool isMainWindow,
     required AppKitToggleButtonType type,
   }) {
-    final isPrimary = (type == AppKitToggleButtonType.primary && isMainWindow && isOn);
+    final isPrimary =
+        (type == AppKitToggleButtonType.primary && isMainWindow && isOn);
     if (!isPrimary || !isEnabled) {
       return [
         const BoxShadow(

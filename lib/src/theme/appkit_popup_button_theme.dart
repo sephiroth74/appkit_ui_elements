@@ -58,15 +58,15 @@ class AppKitPopupButtonThemeData with Diagnosticable {
 
     // large
     final largeSize = AppKitPopupThemeSizeData(
-      height: 31.0,
+      height: 30.0,
       textStyle: typography.body.copyWith(fontSize: 13.5),
       inlineTextStyle: inlineTextStyle.copyWith(fontSize: 13.5),
-      borderRadius: 6.0,
+      borderRadius: 6.5,
       arrowsStrokeWidth: 1.75,
       arrowsSize: const Size(7.5, 12.5),
       childPadding: const EdgeInsets.only(bottom: 2.0, right: 4.0),
       inlineChildPadding: const EdgeInsets.only(bottom: 2.0, right: 1.0),
-      containerPadding: const EdgeInsets.only(left: 9.0, right: 2.0),
+      containerPadding: const EdgeInsets.only(left: 9.0, right: 3.0),
       inlineContainerPadding:
           const EdgeInsets.only(left: 10.0, top: 0.5, right: 4.5, bottom: 0.5),
     );
@@ -88,7 +88,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
 
     // small
     final smallSize = AppKitPopupThemeSizeData(
-      height: 17.0,
+      height: 18.0,
       textStyle: typography.body.copyWith(fontSize: 10.0),
       inlineTextStyle: inlineTextStyle.copyWith(fontSize: 10.0), // TBD
       borderRadius: 5.0,
@@ -96,14 +96,14 @@ class AppKitPopupButtonThemeData with Diagnosticable {
       arrowsSize: const Size(5.0, 8.0),
       childPadding: const EdgeInsets.only(bottom: 1.0, right: 4.0),
       inlineChildPadding: const EdgeInsets.only(bottom: 1.5, right: 1.0),
-      containerPadding: const EdgeInsets.only(left: 6.0, right: 2.0),
+      containerPadding: const EdgeInsets.only(left: 6.0, right: 3.0),
       inlineContainerPadding:
           const EdgeInsets.only(left: 7.5, top: 0.5, right: 4.5, bottom: 0.5),
     );
 
     // mini
     final miniSize = AppKitPopupThemeSizeData(
-        height: 14.0,
+        height: 15.0,
         textStyle: typography.body.copyWith(fontSize: 9.0),
         inlineTextStyle: inlineTextStyle.copyWith(fontSize: 9.0), // TBD
         borderRadius: 3.0,
@@ -111,7 +111,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
         arrowsSize: const Size(3.0, 5.5),
         childPadding: const EdgeInsets.only(bottom: 0.5, right: 4.0),
         inlineChildPadding: const EdgeInsets.only(bottom: 1.0, right: 1.0),
-        containerPadding: const EdgeInsets.only(left: 5.0, right: 2.0),
+        containerPadding: const EdgeInsets.only(left: 5.0, right: 3.0),
         inlineContainerPadding: const EdgeInsets.only(
             left: 7.5, top: 0.5, right: 4.5, bottom: 0.5));
 

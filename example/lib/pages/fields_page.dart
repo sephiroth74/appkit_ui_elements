@@ -56,15 +56,18 @@ class _FieldsPageState extends State<FieldsPage> {
                         autofocus: false,
                         behavior: AppKitTextFieldBehavior.editable,
                         onChanged: (value) => debugPrint('on changed: $value'),
-                        onEditingComplete: () => debugPrint('on editing complete'),
-                        onSubmitted: (value) => debugPrint('on submitted: $value'),
+                        onEditingComplete: () =>
+                            debugPrint('on editing complete'),
+                        onSubmitted: (value) =>
+                            debugPrint('on submitted: $value'),
                         onTap: () => debugPrint('on tap'),
                       )),
                       const SizedBox(height: 16.0),
                       // 2
                       Flexible(
                           child: AppKitTextField(
-                        backgroundColor: AppKitColors.systemCyan.withOpacity(0.1),
+                        backgroundColor:
+                            AppKitColors.systemCyan.withOpacity(0.1),
                         controller: textFieldController,
                         padding: const EdgeInsets.all(8.0),
                         enabled: textFieldEnabled,
@@ -119,10 +122,13 @@ class _FieldsPageState extends State<FieldsPage> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Flexible(child: Text('Enable/Disable text fields')),
+                        const Flexible(
+                            child: Text('Enable/Disable text fields')),
                         const SizedBox(width: 16.0),
                         AppKitSwitch(
-                            checked: textFieldEnabled, onChanged: (value) => setState(() => textFieldEnabled = value)),
+                            checked: textFieldEnabled,
+                            onChanged: (value) =>
+                                setState(() => textFieldEnabled = value)),
                       ],
                     ),
                   ),

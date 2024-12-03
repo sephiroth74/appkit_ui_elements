@@ -10,6 +10,7 @@ import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
@@ -83,7 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Indicators')),
                     SidebarItem(label: Text('Sliders')),
                     SidebarItem(label: Text('Segmented Controls')),
-                    SidebarItem(label: Text('Selectors')),
+                    SidebarItem(
+                        label: Text('Colors'),
+                        leading: Icon(CupertinoIcons.paintbrush, size: 13)),
                     SidebarItem(
                         leading: Icon(
                           Icons.text_fields,

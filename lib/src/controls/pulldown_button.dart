@@ -41,11 +41,14 @@ class AppKitPulldownButton<T> extends StatefulWidget {
   }) : assert(title != null || icon != null);
 
   @override
-  State<AppKitPulldownButton<T>> createState() => _AppKitPulldownButtonState<T>();
+  State<AppKitPulldownButton<T>> createState() =>
+      _AppKitPulldownButtonState<T>();
 }
 
-class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with SingleTickerProviderStateMixin {
-  bool get enabled => widget.onItemSelected != null && widget.menuBuilder != null;
+class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
+    with SingleTickerProviderStateMixin {
+  bool get enabled =>
+      widget.onItemSelected != null && widget.menuBuilder != null;
 
   TextStyle get textStyle => AppKitTheme.of(context).typography.body;
 
@@ -61,7 +64,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with 
 
   FocusNode? _focusNode;
 
-  FocusNode get _effectiveFocusNode => widget.focusNode ?? (_focusNode ??= FocusNode());
+  FocusNode get _effectiveFocusNode =>
+      widget.focusNode ?? (_focusNode ??= FocusNode());
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -71,13 +75,16 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with 
     properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
     properties.add(DiagnosticsProperty('width', widget.width));
     properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
-    properties.add(DiagnosticsProperty('onItemSelected', widget.onItemSelected));
+    properties
+        .add(DiagnosticsProperty('onItemSelected', widget.onItemSelected));
     properties.add(DiagnosticsProperty('color', widget.color));
     properties.add(DiagnosticsProperty('controlSize', widget.controlSize));
     properties.add(DiagnosticsProperty('semanticLabel', widget.semanticLabel));
     properties.add(DiagnosticsProperty('focusNode', widget.focusNode));
-    properties.add(DiagnosticsProperty('canRequestFocus', widget.canRequestFocus));
-    properties.add(DiagnosticsProperty('imageAlignment', widget.imageAlignment));
+    properties
+        .add(DiagnosticsProperty('canRequestFocus', widget.canRequestFocus));
+    properties
+        .add(DiagnosticsProperty('imageAlignment', widget.imageAlignment));
     properties.add(DiagnosticsProperty('textAlign', widget.textAlign));
     properties.add(DiagnosticsProperty('title', widget.title));
     properties.add(DiagnosticsProperty('icon', widget.icon));
@@ -107,7 +114,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with 
     super.didChangeDependencies();
   }
 
-  Widget _defaultItemBuilder({required BuildContext context, required double controlHeight}) {
+  Widget _defaultItemBuilder(
+      {required BuildContext context, required double controlHeight}) {
     bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
     final popupThemeData = AppKitPopupButtonTheme.of(context);
 
@@ -115,16 +123,20 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with 
         ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
         : popupThemeData.sizeData[controlSize]!.iconSize;
 
-    final TextStyle textStyle = style.getTextStyle(theme: popupThemeData, controlSize: controlSize);
+    final TextStyle textStyle =
+        style.getTextStyle(theme: popupThemeData, controlSize: controlSize);
     Color textColor;
 
     if (style == AppKitPulldownButtonStyle.inline) {
-      textColor = (textStyle.color ?? AppKitColors.labelColor.resolveFrom(context)).multiplyOpacity(0.7);
+      textColor =
+          (textStyle.color ?? AppKitColors.labelColor.resolveFrom(context))
+              .multiplyOpacity(0.7);
       if (!isMainWindow) {
         textColor = textColor.multiplyOpacity(0.5);
       }
     } else {
-      textColor = textStyle.color ?? AppKitColors.labelColor.resolveFrom(context);
+      textColor =
+          textStyle.color ?? AppKitColors.labelColor.resolveFrom(context);
     }
 
     if (!enabled) {
@@ -216,7 +228,9 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with 
   void _handleTap() async {
     final itemRect = context.getWidgetBounds();
     if (null != itemRect && widget.menuBuilder != null) {
-      final menu = _contextMenu.copyWith(position: _contextMenu.position ?? widget.menuEdge.getRectPosition(itemRect));
+      final menu = _contextMenu.copyWith(
+          position: _contextMenu.position ??
+              widget.menuEdge.getRectPosition(itemRect));
       setState(() {
         if (_effectiveFocusNode.canRequestFocus) {
           FocusScope.of(context).requestFocus(_effectiveFocusNode);
@@ -251,18 +265,22 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>> with 
       child: GestureDetector(
         onTap: enabled ? _handleTap : null,
         child: UiElementColorBuilder(builder: (context, colorContainer) {
-          final isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+          final isMainWindow =
+              MainWindowStateListener.instance.isMainWindow.value;
           final popupButtonTheme = AppKitPopupButtonTheme.of(context);
-          final height = style.getHeight(theme: popupButtonTheme, controlSize: controlSize);
+          final height = style.getHeight(
+              theme: popupButtonTheme, controlSize: controlSize);
           final width = widget.width;
           final menuEdge = widget.menuEdge;
 
           return Focus.withExternalFocusNode(
             focusNode: _effectiveFocusNode,
             child: Builder(builder: (context) {
-              final child = _defaultItemBuilder(context: context, controlHeight: height);
+              final child =
+                  _defaultItemBuilder(context: context, controlHeight: height);
 
-              if (style == AppKitPulldownButtonStyle.push || style == AppKitPulldownButtonStyle.bevel) {
+              if (style == AppKitPulldownButtonStyle.push ||
+                  style == AppKitPulldownButtonStyle.bevel) {
                 return _PushButtonStyleWidget<T>(
                   width: width,
                   height: height,
@@ -355,19 +373,27 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
     Color caretBackgroundColor;
     Color arrowsColor;
-    double caretButtonSize = style.getCaretButtonSize(theme: popupButtonTheme, controlSize: controlSize);
-    final controlBackgroundColor =
-        enabled ? colorContainer.controlBackgroundColor : colorContainer.controlBackgroundColor.multiplyOpacity(0.5);
-    final borderRadius = style.getBorderRadius(theme: popupButtonTheme, controlSize: controlSize);
+    double caretButtonSize = style.getCaretButtonSize(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final controlBackgroundColor = enabled
+        ? colorContainer.controlBackgroundColor
+        : colorContainer.controlBackgroundColor.multiplyOpacity(0.5);
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
-      arrowsColor = popupButtonTheme.arrowsColor.resolveFrom(context).multiplyOpacity(enabledFactor);
+      arrowsColor = popupButtonTheme.arrowsColor
+          .resolveFrom(context)
+          .multiplyOpacity(enabledFactor);
     } else {
-      caretBackgroundColor =
-          color ?? popupButtonTheme.elevatedButtonColor ?? theme.accentColor ?? colorContainer.controlAccentColor;
+      caretBackgroundColor = color ??
+          popupButtonTheme.elevatedButtonColor ??
+          theme.accentColor ??
+          colorContainer.controlAccentColor;
 
-      final carteBackgroundColorLiminance = caretBackgroundColor.computeLuminance();
+      final carteBackgroundColorLiminance =
+          caretBackgroundColor.computeLuminance();
 
       arrowsColor = isMainWindow && enabled
           ? carteBackgroundColorLiminance > 0.5
@@ -377,7 +403,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
       if (contextMenuOpened) {
         final hslColor = HSLColor.fromColor(caretBackgroundColor);
-        caretBackgroundColor = (hslColor.withLightness(hslColor.lightness / 1.1)).toColor();
+        caretBackgroundColor =
+            (hslColor.withLightness(hslColor.lightness / 1.1)).toColor();
       }
 
       if (!enabled) {
@@ -390,7 +417,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       width: width,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
-              color: style.getPressedBackgroundColor(theme: theme, backgroundColor: controlBackgroundColor),
+              color: style.getPressedBackgroundColor(
+                  theme: theme, backgroundColor: controlBackgroundColor),
               borderRadius: BorderRadius.circular(borderRadius),
             )
           : const BoxDecoration(),
@@ -412,7 +440,10 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
           boxShadow: getElevatedShadow(context, colorContainer),
         ),
         child: Padding(
-          padding: style.getContainerPadding(theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize),
+          padding: style.getContainerPadding(
+              theme: popupButtonTheme,
+              menuEdge: menuEdge,
+              controlSize: controlSize),
           child: LayoutBuilder(builder: (context, parentConstraints) {
             return Row(
               mainAxisSize: MainAxisSize.max,
@@ -420,9 +451,13 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: Padding(
-                    padding: style.getChildPadding(theme: popupButtonTheme, controlSize: controlSize),
+                    padding: style.getChildPadding(
+                        theme: popupButtonTheme, controlSize: controlSize),
                     child: LayoutBuilder(builder: (context, constraints) {
-                      return SizedBox(width: constraints.maxWidth, height: parentConstraints.maxHeight, child: child);
+                      return SizedBox(
+                          width: constraints.maxWidth,
+                          height: parentConstraints.maxHeight,
+                          child: child);
                     }),
                   ),
                 ),
@@ -433,12 +468,14 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                     decoration: isMainWindow && enabled
                         ? BoxDecoration(
                             color: caretBackgroundColor,
-                            borderRadius: BorderRadius.circular(borderRadius - 1),
+                            borderRadius:
+                                BorderRadius.circular(borderRadius - 1),
                             boxShadow: isBevel
                                 ? null
                                 : [
                                     BoxShadow(
-                                      color: colorContainer.controlAccentColor.withOpacity(0.06),
+                                      color: colorContainer.controlAccentColor
+                                          .withOpacity(0.06),
                                       blurRadius: 1.5,
                                       spreadRadius: 0.0,
                                       offset: const Offset(0, 0.5),
@@ -447,20 +484,23 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                                       offset: const Offset(0.0, 1.0),
                                       blurRadius: 1.0,
                                       spreadRadius: 0.0,
-                                      color: colorContainer.controlAccentColor.withOpacity(0.06),
+                                      color: colorContainer.controlAccentColor
+                                          .withOpacity(0.06),
                                     ),
                                     BoxShadow(
                                       offset: const Offset(0.0, 0.5),
                                       blurRadius: 0.5,
                                       spreadRadius: 0.0,
-                                      color: colorContainer.controlAccentColor.withOpacity(0.12),
+                                      color: colorContainer.controlAccentColor
+                                          .withOpacity(0.12),
                                     )
                                   ])
                         : const BoxDecoration(),
                     child: DecoratedBox(
                       decoration: isMainWindow && !isBevel
                           ? BoxDecoration(
-                              borderRadius: BorderRadius.circular(borderRadius - 1),
+                              borderRadius:
+                                  BorderRadius.circular(borderRadius - 1),
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
@@ -534,16 +574,21 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 
     final Color controlBackgroundColor;
     final Color caretBackgroundColor;
-    final caretButtonSize = style.getCaretButtonSize(theme: popupButtonTheme, controlSize: controlSize);
-    final borderRadius = style.getBorderRadius(theme: popupButtonTheme, controlSize: controlSize);
-    final arrowsColor = popupButtonTheme.arrowsColor.resolveFrom(context).multiplyOpacity(enabledFactor);
+    final caretButtonSize = style.getCaretButtonSize(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final arrowsColor = popupButtonTheme.arrowsColor
+        .resolveFrom(context)
+        .multiplyOpacity(enabledFactor);
 
     if (isHovered) {
       caretBackgroundColor = Colors.transparent;
       controlBackgroundColor = colorContainer.controlBackgroundColor;
     } else {
-      caretBackgroundColor =
-          contextMenuOpened ? Colors.transparent : popupButtonTheme.plainButtonColor.multiplyOpacity(enabledFactor);
+      caretBackgroundColor = contextMenuOpened
+          ? Colors.transparent
+          : popupButtonTheme.plainButtonColor.multiplyOpacity(enabledFactor);
       controlBackgroundColor = Colors.transparent;
     }
 
@@ -552,8 +597,9 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
       width: width,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
-              color:
-                  style.getPressedBackgroundColor(theme: theme, backgroundColor: colorContainer.controlBackgroundColor),
+              color: style.getPressedBackgroundColor(
+                  theme: theme,
+                  backgroundColor: colorContainer.controlBackgroundColor),
               borderRadius: BorderRadius.circular(borderRadius),
             )
           : const BoxDecoration(),
@@ -574,10 +620,14 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
                   width: 0.5,
                 )
               : null,
-          boxShadow: isHovered ? getElevatedShadow(context, colorContainer) : null,
+          boxShadow:
+              isHovered ? getElevatedShadow(context, colorContainer) : null,
         ),
         child: Padding(
-          padding: style.getContainerPadding(theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize),
+          padding: style.getContainerPadding(
+              theme: popupButtonTheme,
+              menuEdge: menuEdge,
+              controlSize: controlSize),
           child: LayoutBuilder(builder: (context, parentConstraints) {
             return Row(
               mainAxisSize: MainAxisSize.max,
@@ -585,9 +635,13 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: Padding(
-                    padding: style.getChildPadding(theme: popupButtonTheme, controlSize: controlSize),
+                    padding: style.getChildPadding(
+                        theme: popupButtonTheme, controlSize: controlSize),
                     child: LayoutBuilder(builder: (context, constraints) {
-                      return SizedBox(width: constraints.maxWidth, height: parentConstraints.maxHeight, child: child);
+                      return SizedBox(
+                          width: constraints.maxWidth,
+                          height: parentConstraints.maxHeight,
+                          child: child);
                     }),
                   ),
                 ),
@@ -658,10 +712,13 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     final popupButtonTheme = AppKitPopupButtonTheme.of(context);
 
     final Color controlBackgroundColor;
-    final caretButtonSize = style.getCaretButtonSize(theme: popupButtonTheme, controlSize: controlSize);
-    final arrowsColor =
-        popupButtonTheme.arrowsColor.resolveFrom(context).multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
-    final borderRadius = style.getBorderRadius(theme: popupButtonTheme, controlSize: controlSize);
+    final caretButtonSize = style.getCaretButtonSize(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final arrowsColor = popupButtonTheme.arrowsColor
+        .resolveFrom(context)
+        .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
 
     if (isHovered) {
       controlBackgroundColor = Colors.black.withOpacity(0.2);
@@ -674,13 +731,19 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
       width: width,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
-              color: style.getPressedBackgroundColor(theme: theme, backgroundColor: controlBackgroundColor),
+              color: style.getPressedBackgroundColor(
+                  theme: theme, backgroundColor: controlBackgroundColor),
               borderRadius: BorderRadius.circular(borderRadius),
             )
           : const BoxDecoration(),
-      decoration: BoxDecoration(color: controlBackgroundColor, borderRadius: BorderRadius.circular(borderRadius)),
+      decoration: BoxDecoration(
+          color: controlBackgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius)),
       child: Padding(
-        padding: style.getContainerPadding(theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize),
+        padding: style.getContainerPadding(
+            theme: popupButtonTheme,
+            menuEdge: menuEdge,
+            controlSize: controlSize),
         child: LayoutBuilder(builder: (context, parentConstraints) {
           return Row(
             mainAxisSize: MainAxisSize.max,
@@ -688,10 +751,13 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: style.getChildPadding(theme: popupButtonTheme, controlSize: controlSize),
+                  padding: style.getChildPadding(
+                      theme: popupButtonTheme, controlSize: controlSize),
                   child: LayoutBuilder(builder: (context, constraints) {
                     return SizedBox(
-                        width: parentConstraints.maxWidth, height: parentConstraints.maxHeight, child: child);
+                        width: parentConstraints.maxWidth,
+                        height: parentConstraints.maxHeight,
+                        child: child);
                   }),
                 ),
               ),
