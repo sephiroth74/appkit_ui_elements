@@ -53,6 +53,9 @@ class AppKitTextField extends StatefulWidget {
   final bool obscureText;
   final Widget? prefix;
   final AppKitOverlayVisibilityMode prefixMode;
+  final Color? cursorColor;
+  final double cursorWidth;
+  final double? cursorHeight;
 
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -105,6 +108,9 @@ class AppKitTextField extends StatefulWidget {
     this.obscureText = false,
     this.prefix,
     this.prefixMode = AppKitOverlayVisibilityMode.never,
+    this.cursorColor,
+    this.cursorWidth = 2.0,
+    this.cursorHeight,
     this.onChanged,
     this.onSubmitted,
     this.onEditingComplete,
@@ -417,10 +423,9 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       final placeholderStyle = widget.placeholderStyle ??
           theme.typography.body
               .copyWith(color: colorContainer.placeholderTextColor);
-      final Color selectionColor =
-          colorContainer.selectedTextColor.withOpacity(0.2);
-      final Color cursorColor =
-          theme.brightness.isDark ? Colors.white : Colors.black;
+      final Color selectionColor = colorContainer.selectedTextBackgroundColor;
+      final Color cursorColor = widget.cursorColor ??
+          (theme.brightness.isDark ? Colors.white : Colors.black);
 
       final Widget paddedEditable = Padding(
         padding: widget.padding,
@@ -459,8 +464,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               onSubmitted: widget.onSubmitted,
               inputFormatters: formatters,
               rendererIgnoresPointer: true,
-              // cursorWidth: widget.cursorWidth,
-              // cursorHeight: widget.cursorHeight,
+              cursorWidth: widget.cursorWidth,
+              cursorHeight: widget.cursorHeight,
               // cursorRadius: widget.cursorRadius,
               cursorColor: cursorColor,
               cursorOpacityAnimates: true,
@@ -499,19 +504,27 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               },
         child: IgnorePointer(
           ignoring: !enabled,
-          child: Container(
-            decoration: const BoxDecoration(),
-            child: _selectionGestureDetectorBuilder.buildGestureDetector(
-              behavior: HitTestBehavior.translucent,
-              child: Align(
-                alignment: Alignment(-1.0, textAlignVertical.y),
-                widthFactor: 1.0,
-                heightFactor: 1.0,
-                child: _addTextDependentAttachments(
-                  editableText: paddedEditable,
-                  textStyle: textStyle,
-                  placeholderStyle: placeholderStyle,
-                  colorContainer: colorContainer,
+          child: AppKitFocusContainer(
+            borderRadius: 0.0,
+            textField: true,
+            canRequestFocus: _effectiveFocusNode.canRequestFocus && enabled,
+            autofocus: widget.autofocus && enabled,
+            descendantsAreFocusable: true,
+            focusNode: _effectiveFocusNode,
+            child: Container(
+              decoration: const BoxDecoration(),
+              child: _selectionGestureDetectorBuilder.buildGestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: Align(
+                  alignment: Alignment(-1.0, textAlignVertical.y),
+                  widthFactor: 1.0,
+                  heightFactor: 1.0,
+                  child: _addTextDependentAttachments(
+                    editableText: paddedEditable,
+                    textStyle: textStyle,
+                    placeholderStyle: placeholderStyle,
+                    colorContainer: colorContainer,
+                  ),
                 ),
               ),
             ),

@@ -26,12 +26,12 @@ class _FieldsPageState extends State<FieldsPage> {
               padding: const EdgeInsets.all(20),
               child: Builder(
                 builder: (context) {
-                  return const Column(
+                  return Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      WidgetTitle(label: 'Text Fields'),
-                      SizedBox(height: 20.0),
+                      const WidgetTitle(label: 'Text Fields'),
+                      const SizedBox(height: 20.0),
                       SizedBox(
                           width: 200,
                           child: AppKitTextField(
@@ -40,8 +40,8 @@ class _FieldsPageState extends State<FieldsPage> {
                             maxLines: 1,
                             keyboardType: TextInputType.text,
                           )),
-                      SizedBox(height: 16.0),
-                      Divider(
+                      const SizedBox(height: 16.0),
+                      const Divider(
                         thickness: 0.5,
                       ),
                     ],

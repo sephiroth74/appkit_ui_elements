@@ -3,7 +3,6 @@ import 'package:example/theme.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +22,6 @@ class _ControlsPageState extends State<ControlsPage> {
   double sliderValue1 = 0.5;
   bool switchValue1 = true;
   double popupButtonWidth = 125.0;
-
-  FocusNode? focusNode;
 
   AppKitContextMenuItem<String>? popupSelectedItem;
 
@@ -93,19 +90,13 @@ class _ControlsPageState extends State<ControlsPage> {
 
   @override
   void initState() {
-    // focusNode = FocusNode();
     // popupSelectedItem = popupMenuBuilder(context).entries.elementAt(1)
     // as AppKitContextMenuItem<String>?;
     super.initState();
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      // focusNode!.requestFocus();
-    });
   }
 
   @override
   void dispose() {
-    focusNode?.dispose();
     super.dispose();
   }
 
@@ -142,9 +133,8 @@ class _ControlsPageState extends State<ControlsPage> {
                                     ]
                                         .map((style) => [
                                               AppKitPopupButton(
-                                                canRequestFocus: false,
+                                                canRequestFocus: true,
                                                 hint: 'Select an item',
-                                                focusNode: focusNode,
                                                 controlSize: controlSize,
                                                 width: popupButtonWidth,
                                                 selectedItem: popupSelectedItem,
@@ -170,46 +160,59 @@ class _ControlsPageState extends State<ControlsPage> {
                       ),
                       const WidgetTitle(label: 'Pull Down Button'),
                       const SizedBox(height: 20.0),
-                      Column(
-                        children: [AppKitControlSize.regular]
-                            .map((controlSize) => [
-                                  Row(
-                                    children: [
-                                      AppKitPulldownButtonStyle.push,
-                                      AppKitPulldownButtonStyle.bevel,
-                                      AppKitPulldownButtonStyle.plain,
-                                      AppKitPulldownButtonStyle.inline,
-                                    ]
-                                        .map((style) => [
-                                              AppKitPulldownButton(
-                                                canRequestFocus: false,
-                                                title: 'Open menu',
-                                                textAlign: TextAlign.start,
-                                                imageAlignment:
-                                                    AppKitMenuImageAlignment
-                                                        .start,
-                                                icon: Icons.open_in_new,
-                                                focusNode: focusNode,
-                                                controlSize: controlSize,
-                                                width: popupButtonWidth,
-                                                onItemSelected: (value) {
-                                                  debugPrint(
-                                                      'onItemSelected($value)');
-                                                },
-                                                menuBuilder:
-                                                    pullDownMenuBuilder,
-                                                style: style,
-                                              ),
-                                              const SizedBox(width: 8.0)
-                                            ])
-                                        .expand((element) => element)
-                                        .toList(),
-                                  ),
-                                  const SizedBox(height: 16.0)
-                                ])
-                            .expand((element) => element)
-                            .toList(),
-                      ),
+                      Column(children: [
+                        Row(
+                          children: [
+                            AppKitPulldownButtonStyle.push,
+                            AppKitPulldownButtonStyle.bevel,
+                            AppKitPulldownButtonStyle.plain,
+                            AppKitPulldownButtonStyle.inline,
+                          ]
+                              .map((style) => [
+                                    AppKitPulldownButton(
+                                      canRequestFocus: true,
+                                      title: 'Open...',
+                                      textAlign: TextAlign.start,
+                                      imageAlignment:
+                                          AppKitMenuImageAlignment.leading,
+                                      icon: Icons.open_in_new,
+                                      width: popupButtonWidth,
+                                      onItemSelected: (value) {},
+                                      menuBuilder: pullDownMenuBuilder,
+                                      style: style,
+                                    ),
+                                    const SizedBox(width: 8.0)
+                                  ])
+                              .expand((element) => element)
+                              .toList(),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          children: [
+                            AppKitPulldownButtonStyle.push,
+                            AppKitPulldownButtonStyle.bevel,
+                            AppKitPulldownButtonStyle.plain,
+                            AppKitPulldownButtonStyle.inline,
+                          ]
+                              .map((style) => [
+                                    AppKitPulldownButton(
+                                      controlSize: AppKitControlSize.regular,
+                                      canRequestFocus: false,
+                                      imageAlignment:
+                                          AppKitMenuImageAlignment.start,
+                                      icon: Icons.add,
+                                      width: 65,
+                                      onItemSelected: (value) {},
+                                      menuBuilder: pullDownMenuBuilder,
+                                      style: style,
+                                    ),
+                                    const SizedBox(width: 8.0)
+                                  ])
+                              .expand((element) => element)
+                              .toList(),
+                        ),
+                        const SizedBox(height: 16.0)
+                      ]),
                       const SizedBox(width: 16.0, height: 16.0),
                       const Divider(
                         thickness: 0.5,

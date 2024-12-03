@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
 import 'package:flutter/semantics.dart';
@@ -10,7 +11,7 @@ const _kFocusRingSize = 15.0;
 const _kFocusRingSizeEnd = 3.0;
 const _kFocusAnimationDuration = 150;
 
-class AppKitFocusRingContainer extends StatefulWidget {
+class AppKitFocusContainer extends StatefulWidget {
   final FocusNode? focusNode;
   final bool canRequestFocus;
   final bool autofocus;
@@ -20,8 +21,9 @@ class AppKitFocusRingContainer extends StatefulWidget {
   final bool enabled;
   final SemanticsProperties semanticsProperties;
   final bool descendantsAreFocusable;
+  final bool descendantsAreTraversable;
 
-  AppKitFocusRingContainer({
+  AppKitFocusContainer({
     super.key,
     required this.child,
     required this.borderRadius,
@@ -31,6 +33,7 @@ class AppKitFocusRingContainer extends StatefulWidget {
     this.autofocus = false,
     this.enabled = true,
     this.descendantsAreFocusable = true,
+    this.descendantsAreTraversable = true,
     String? label,
     bool? checked,
     bool? mixed,
@@ -54,11 +57,10 @@ class AppKitFocusRingContainer extends StatefulWidget {
         );
 
   @override
-  State<AppKitFocusRingContainer> createState() =>
-      _AppKitFocusRingContainerState();
+  State<AppKitFocusContainer> createState() => _AppKitFocusContainerState();
 }
 
-class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
+class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     with SingleTickerProviderStateMixin {
   FocusNode? _focusNode;
 
@@ -125,7 +127,7 @@ class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
   }
 
   @override
-  void didUpdateWidget(covariant AppKitFocusRingContainer oldWidget) {
+  void didUpdateWidget(covariant AppKitFocusContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
@@ -143,6 +145,10 @@ class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
 
   void _handleFocusChanged() {
     if (!mounted) return;
+
+    // logger.d(
+    //     '[Focus changed] has focus: ${_effectiveFocusNode.hasFocus}, has primary focus: ${_effectiveFocusNode.hasPrimaryFocus}');
+
     final bool isFocused =
         _effectiveFocusNode.hasFocus && _effectiveFocusNode.hasPrimaryFocus;
 
@@ -207,11 +213,16 @@ class _AppKitFocusRingContainerState extends State<AppKitFocusRingContainer>
           enabled ? _handleDidGainAccessibilityFocus : null,
       onDidLoseAccessibilityFocus:
           enabled ? _handleDidLoseAccessibilityFocus : null,
-      child: Focus(
-          focusNode: _effectiveFocusNode,
+      child: FocusScope(
+          includeSemantics: false,
+          skipTraversal: false,
+          // parentNode: _effectiveFocusNode,
+          // parentNode: _effectiveFocusNode,
           canRequestFocus: enabled,
           autofocus: enabled && widget.autofocus,
           descendantsAreFocusable: enabled && widget.descendantsAreFocusable,
+          descendantsAreTraversable:
+              enabled && widget.descendantsAreTraversable,
           child: Builder(builder: (context) {
             if (!enabled) {
               return widget.child;

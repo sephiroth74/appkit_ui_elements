@@ -154,7 +154,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
         : popupThemeData.sizeData[controlSize]!.iconSize;
 
-    EdgeInsets iconPadding = popupThemeData.sizeData[controlSize]!.iconPadding;
+    EdgeInsets textPadding = EdgeInsets.only(
+        left: popupThemeData.sizeData[controlSize]!.textPadding);
 
     if (selectedItem == null) {
       if (widget.hint != null) {
@@ -191,20 +192,20 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           if (icon != null)
-            Padding(
-              padding: iconPadding,
-              child: Icon(
-                icon,
-                size: iconSize,
-                color: textColor,
-              ),
+            Icon(
+              icon,
+              size: iconSize,
+              color: textColor,
             ),
           Flexible(
-            child: Text(
-              title,
-              style: textStyle.copyWith(color: textColor),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Padding(
+              padding: textPadding,
+              child: Text(
+                title,
+                style: textStyle.copyWith(color: textColor),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],
@@ -232,7 +233,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
               widget.menuEdge.getRectPosition(itemRect));
       setState(() {
         if (_effectiveFocusNode.canRequestFocus) {
-          _effectiveFocusNode.requestFocus();
+          FocusScope.of(context).requestFocus(_effectiveFocusNode);
         }
         _isMenuOpened = true;
       });
@@ -276,62 +277,68 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
           final borderRadius = style.getBorderRadius(
               theme: popupButtonTheme, controlSize: controlSize);
 
-          return AppKitFocusRingContainer(
+          return AppKitFocusContainer(
             focusNode: _effectiveFocusNode,
             borderRadius: borderRadius,
             canRequestFocus: widget.canRequestFocus && enabled,
-            child: Builder(builder: (context) {
-              final child = itemBuilder?.call(context, widget.selectedItem) ??
-                  _defaultItemBuilder(context: context, controlHeight: height);
+            descendantsAreFocusable: true,
+            descendantsAreTraversable: false,
+            child: Focus.withExternalFocusNode(
+              focusNode: _effectiveFocusNode,
+              child: Builder(builder: (context) {
+                final child = itemBuilder?.call(context, widget.selectedItem) ??
+                    _defaultItemBuilder(
+                        context: context, controlHeight: height);
 
-              if (style == AppKitPopupButtonStyle.push ||
-                  style == AppKitPopupButtonStyle.bevel) {
-                return _PushButtonStyleWidget<T>(
-                  width: width,
-                  height: height,
-                  menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
-                  enabled: enabled,
-                  colorContainer: colorContainer,
-                  contextMenuOpened: _isMenuOpened,
-                  isMainWindow: isMainWindow,
-                  style: style,
-                  controlSize: controlSize,
-                  color: widget.color,
-                  child: child,
-                );
-              } else if (style == AppKitPopupButtonStyle.plain) {
-                return _PlainButtonStyleWidget<T>(
-                  width: width,
-                  height: height,
-                  menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
-                  enabled: enabled,
-                  colorContainer: colorContainer,
-                  contextMenuOpened: _isMenuOpened,
-                  isMainWindow: isMainWindow,
-                  controlSize: controlSize,
-                  isHovered: _isHovered,
-                  child: child,
-                );
-              } else if (style == AppKitPopupButtonStyle.inline) {
-                return _InlineButtonStyleWidget<T>(
-                  width: width,
-                  height: height,
-                  menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
-                  enabled: enabled,
-                  colorContainer: colorContainer,
-                  contextMenuOpened: _isMenuOpened,
-                  controlSize: controlSize,
-                  isMainWindow: isMainWindow,
-                  isHovered: _isHovered,
-                  child: child,
-                );
-              }
+                if (style == AppKitPopupButtonStyle.push ||
+                    style == AppKitPopupButtonStyle.bevel) {
+                  return _PushButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    isMainWindow: isMainWindow,
+                    style: style,
+                    controlSize: controlSize,
+                    color: widget.color,
+                    child: child,
+                  );
+                } else if (style == AppKitPopupButtonStyle.plain) {
+                  return _PlainButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    isMainWindow: isMainWindow,
+                    controlSize: controlSize,
+                    isHovered: _isHovered,
+                    child: child,
+                  );
+                } else if (style == AppKitPopupButtonStyle.inline) {
+                  return _InlineButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    controlSize: controlSize,
+                    isMainWindow: isMainWindow,
+                    isHovered: _isHovered,
+                    child: child,
+                  );
+                }
 
-              return const SizedBox();
-            }),
+                return const SizedBox();
+              }),
+            ),
           );
         }),
       ),

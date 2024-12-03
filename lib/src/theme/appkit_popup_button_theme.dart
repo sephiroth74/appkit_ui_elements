@@ -65,10 +65,10 @@ class AppKitPopupButtonThemeData with Diagnosticable {
       arrowsStrokeWidth: 1.75,
       arrowsSize: const Size(7.5, 12.5),
       childPadding: const EdgeInsets.only(bottom: 2.0, right: 4.0),
-      inlineChildPadding: const EdgeInsets.only(bottom: 2.0, right: 4.0),
+      inlineChildPadding: const EdgeInsets.only(bottom: 2.0, right: 1.0),
       containerPadding: const EdgeInsets.only(left: 9.0, right: 2.0),
       inlineContainerPadding:
-          const EdgeInsets.only(left: 9.5, top: 0.5, right: 4.5, bottom: 0.5),
+          const EdgeInsets.only(left: 10.0, top: 0.5, right: 4.5, bottom: 0.5),
     );
 
     // regular
@@ -80,10 +80,10 @@ class AppKitPopupButtonThemeData with Diagnosticable {
       arrowsStrokeWidth: 1.75,
       arrowsSize: const Size(5.5, 10),
       childPadding: const EdgeInsets.only(bottom: 1.0, right: 4.0),
-      inlineChildPadding: const EdgeInsets.only(bottom: 2.0, right: 4.0),
+      inlineChildPadding: const EdgeInsets.only(bottom: 2.0, right: 1.0),
       containerPadding: const EdgeInsets.only(left: 7.5, right: 2.0),
       inlineContainerPadding:
-          const EdgeInsets.only(left: 8.0, top: 0.5, right: 4.5, bottom: 0.5),
+          const EdgeInsets.only(left: 10.0, top: 0.5, right: 4.5, bottom: 0.5),
     );
 
     // small
@@ -95,7 +95,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
       arrowsStrokeWidth: 1.25,
       arrowsSize: const Size(5.0, 8.0),
       childPadding: const EdgeInsets.only(bottom: 1.0, right: 4.0),
-      inlineChildPadding: const EdgeInsets.only(bottom: 1.5, right: 5.0),
+      inlineChildPadding: const EdgeInsets.only(bottom: 1.5, right: 1.0),
       containerPadding: const EdgeInsets.only(left: 6.0, right: 2.0),
       inlineContainerPadding:
           const EdgeInsets.only(left: 7.5, top: 0.5, right: 4.5, bottom: 0.5),
@@ -110,7 +110,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
         arrowsStrokeWidth: 1.0,
         arrowsSize: const Size(3.0, 5.5),
         childPadding: const EdgeInsets.only(bottom: 0.5, right: 4.0),
-        inlineChildPadding: const EdgeInsets.only(bottom: 1.0, right: 5.0),
+        inlineChildPadding: const EdgeInsets.only(bottom: 1.0, right: 1.0),
         containerPadding: const EdgeInsets.only(left: 5.0, right: 2.0),
         inlineContainerPadding: const EdgeInsets.only(
             left: 7.5, top: 0.5, right: 4.5, bottom: 0.5));
@@ -220,7 +220,7 @@ class AppKitPopupThemeSizeData with Diagnosticable {
 
   double get inlineIconsSize => inlineTextStyle.fontSize! * 1.2;
 
-  EdgeInsets get iconPadding => const EdgeInsets.only(right: 4.0, top: 0.0);
+  double get textPadding => 4.0;
 
   AppKitPopupThemeSizeData({
     required this.height,

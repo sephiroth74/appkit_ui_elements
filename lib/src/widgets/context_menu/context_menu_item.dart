@@ -205,4 +205,4 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   }
 }
 
-enum AppKitMenuImageAlignment { start, end }
+enum AppKitMenuImageAlignment { leading, start, end, trailing }

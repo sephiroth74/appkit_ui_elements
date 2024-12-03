@@ -122,8 +122,6 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
         ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
         : popupThemeData.sizeData[controlSize]!.iconSize;
 
-    EdgeInsets iconPadding = popupThemeData.sizeData[controlSize]!.iconPadding;
-
     final TextStyle textStyle =
         style.getTextStyle(theme: popupThemeData, controlSize: controlSize);
     Color textColor;
@@ -144,42 +142,71 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
       textColor = textColor.multiplyOpacity(0.5);
     }
 
+    final MainAxisAlignment mainAxisAlignment;
+    final double textSpace = popupThemeData.sizeData[controlSize]!.textPadding;
+    final EdgeInsets textPadding;
+
+    switch (widget.imageAlignment) {
+      case AppKitMenuImageAlignment.leading:
+        mainAxisAlignment = MainAxisAlignment.start;
+        textPadding = EdgeInsets.only(left: textSpace);
+        break;
+
+      case AppKitMenuImageAlignment.trailing:
+        mainAxisAlignment = MainAxisAlignment.start;
+        textPadding = EdgeInsets.only(right: textSpace);
+        break;
+
+      case AppKitMenuImageAlignment.start:
+        mainAxisAlignment = MainAxisAlignment.center;
+        textPadding = EdgeInsets.only(left: textSpace);
+        break;
+
+      case AppKitMenuImageAlignment.end:
+        mainAxisAlignment = MainAxisAlignment.center;
+        textPadding = EdgeInsets.only(right: textSpace);
+        break;
+    }
+
+    final textWidget = Padding(
+      padding: textPadding,
+      child: Text(
+        widget.title ?? '',
+        style: textStyle.copyWith(color: textColor),
+        textAlign: widget.textAlign,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+
+    final iconWidget = Icon(
+      widget.icon,
+      size: iconSize,
+      color: textColor,
+    );
+
     return LayoutBuilder(builder: (context, constraints) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: mainAxisAlignment,
         children: [
           if (widget.icon != null &&
-              widget.imageAlignment == AppKitMenuImageAlignment.start)
-            Padding(
-              padding: iconPadding,
-              child: Icon(
-                widget.icon,
-                size: iconSize,
-                color: textColor,
-              ),
-            ),
-          if (widget.title != null)
-            Expanded(
-              child: Text(
-                widget.title!,
-                style: textStyle.copyWith(color: textColor),
-                textAlign: widget.textAlign,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+              (widget.imageAlignment == AppKitMenuImageAlignment.start ||
+                  widget.imageAlignment == AppKitMenuImageAlignment.leading))
+            iconWidget,
+          if (widget.title != null) ...[
+            if (widget.imageAlignment == AppKitMenuImageAlignment.leading ||
+                widget.imageAlignment == AppKitMenuImageAlignment.trailing) ...[
+              Expanded(child: textWidget),
+            ] else ...[
+              Flexible(child: textWidget),
+            ],
+          ],
           if (widget.icon != null &&
-              widget.imageAlignment == AppKitMenuImageAlignment.end)
-            Padding(
-              padding: iconPadding.invertHorizontally(),
-              child: Icon(
-                widget.icon,
-                size: iconSize,
-                color: textColor,
-              ),
-            ),
+              (widget.imageAlignment == AppKitMenuImageAlignment.end ||
+                  widget.imageAlignment == AppKitMenuImageAlignment.trailing))
+            iconWidget,
         ],
       );
     });
@@ -205,7 +232,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
               widget.menuEdge.getRectPosition(itemRect));
       setState(() {
         if (_effectiveFocusNode.canRequestFocus) {
-          _effectiveFocusNode.requestFocus();
+          FocusScope.of(context).requestFocus(_effectiveFocusNode);
         }
         _isMenuOpened = true;
       });
@@ -247,62 +274,67 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
           final borderRadius = style.getBorderRadius(
               theme: popupButtonTheme, controlSize: controlSize);
 
-          return AppKitFocusRingContainer(
+          return AppKitFocusContainer(
             focusNode: _effectiveFocusNode,
             borderRadius: borderRadius,
             canRequestFocus: widget.canRequestFocus && enabled,
-            child: Builder(builder: (context) {
-              final child =
-                  _defaultItemBuilder(context: context, controlHeight: height);
+            descendantsAreFocusable: true,
+            descendantsAreTraversable: false,
+            child: Focus.withExternalFocusNode(
+              focusNode: _effectiveFocusNode,
+              child: Builder(builder: (context) {
+                final child = _defaultItemBuilder(
+                    context: context, controlHeight: height);
 
-              if (style == AppKitPulldownButtonStyle.push ||
-                  style == AppKitPulldownButtonStyle.bevel) {
-                return _PushButtonStyleWidget<T>(
-                  width: width,
-                  height: height,
-                  menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
-                  enabled: enabled,
-                  colorContainer: colorContainer,
-                  contextMenuOpened: _isMenuOpened,
-                  isMainWindow: isMainWindow,
-                  style: style,
-                  controlSize: controlSize,
-                  color: widget.color,
-                  child: child,
-                );
-              } else if (style == AppKitPulldownButtonStyle.plain) {
-                return _PlainButtonStyleWidget<T>(
-                  width: width,
-                  height: height,
-                  menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
-                  enabled: enabled,
-                  colorContainer: colorContainer,
-                  contextMenuOpened: _isMenuOpened,
-                  isMainWindow: isMainWindow,
-                  controlSize: controlSize,
-                  isHovered: _isHovered,
-                  child: child,
-                );
-              } else if (style == AppKitPulldownButtonStyle.inline) {
-                return _InlineButtonStyleWidget<T>(
-                  width: width,
-                  height: height,
-                  menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
-                  enabled: enabled,
-                  colorContainer: colorContainer,
-                  contextMenuOpened: _isMenuOpened,
-                  controlSize: controlSize,
-                  isMainWindow: isMainWindow,
-                  isHovered: _isHovered,
-                  child: child,
-                );
-              }
+                if (style == AppKitPulldownButtonStyle.push ||
+                    style == AppKitPulldownButtonStyle.bevel) {
+                  return _PushButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    isMainWindow: isMainWindow,
+                    style: style,
+                    controlSize: controlSize,
+                    color: widget.color,
+                    child: child,
+                  );
+                } else if (style == AppKitPulldownButtonStyle.plain) {
+                  return _PlainButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    isMainWindow: isMainWindow,
+                    controlSize: controlSize,
+                    isHovered: _isHovered,
+                    child: child,
+                  );
+                } else if (style == AppKitPulldownButtonStyle.inline) {
+                  return _InlineButtonStyleWidget<T>(
+                    width: width,
+                    height: height,
+                    menuEdge: menuEdge,
+                    onItemSelected: widget.onItemSelected,
+                    enabled: enabled,
+                    colorContainer: colorContainer,
+                    contextMenuOpened: _isMenuOpened,
+                    controlSize: controlSize,
+                    isMainWindow: isMainWindow,
+                    isHovered: _isHovered,
+                    child: child,
+                  );
+                }
 
-              return const SizedBox();
-            }),
+                return const SizedBox();
+              }),
+            ),
           );
         }),
       ),
