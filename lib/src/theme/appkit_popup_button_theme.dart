@@ -58,7 +58,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
 
     // large
     final largeSize = AppKitPopupThemeSizeData(
-      height: 29.0,
+      height: 31.0,
       textStyle: typography.body.copyWith(fontSize: 13.5),
       inlineTextStyle: inlineTextStyle.copyWith(fontSize: 13.5),
       borderRadius: 6.0,
@@ -73,15 +73,15 @@ class AppKitPopupButtonThemeData with Diagnosticable {
 
     // regular
     final regularSize = AppKitPopupThemeSizeData(
-      height: 20.0,
+      height: 21.0,
       textStyle: typography.body,
       inlineTextStyle: inlineTextStyle,
-      borderRadius: 5.5,
+      borderRadius: 6,
       arrowsStrokeWidth: 1.75,
       arrowsSize: const Size(5.5, 10),
-      childPadding: const EdgeInsets.only(bottom: 1.0, right: 4.0),
+      childPadding: const EdgeInsets.only(bottom: 2.5, right: 4.0),
       inlineChildPadding: const EdgeInsets.only(bottom: 2.0, right: 1.0),
-      containerPadding: const EdgeInsets.only(left: 7.5, right: 2.0),
+      containerPadding: const EdgeInsets.only(left: 7.5, right: 3),
       inlineContainerPadding:
           const EdgeInsets.only(left: 10.0, top: 0.5, right: 4.5, bottom: 0.5),
     );
@@ -214,7 +214,7 @@ class AppKitPopupThemeSizeData with Diagnosticable {
 
   double get inlineBorderRadius => inlineHeight / 2.0;
 
-  double get arrowsButtonSize => height - 4;
+  double get arrowsButtonSize => height - 5;
 
   double get iconSize => textStyle.fontSize! * 1.2;
 
