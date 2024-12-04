@@ -43,13 +43,13 @@ class AppKitComboButtonThemeData with Diagnosticable {
     return AppKitComboButtonThemeData(
       dataMap: {
         AppKitControlSize.mini: AppKitComboButtonThemeDataSize(
-          buttonSize: const Size(26.0, 12.0),
+          buttonSize: const Size(29.0, 15.0),
           borderRadius: 3.0,
           padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 0.0),
           fontSize: 9.0,
         ),
         AppKitControlSize.small: AppKitComboButtonThemeDataSize(
-          buttonSize: const Size(42.0, 14.0),
+          buttonSize: const Size(46.0, 18.0),
           borderRadius: 4.0,
           padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 1.0),
           fontSize: 10.0,
