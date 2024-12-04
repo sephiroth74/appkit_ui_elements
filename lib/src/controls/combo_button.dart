@@ -197,15 +197,19 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
                             child: widget.child)),
                     if (widget.style == AppKitComboButtonStyle.split) ...[
                       VerticalDivider(
-                        indent: isDown ? 0.0 : 4.0,
-                        endIndent: isDown ? 0.0 : 4.0,
-                        width: 1,
-                        thickness: 1,
-                        color: AppKitColors.text.opaque.tertiary
-                            .multiplyOpacity(0.5),
+                        indent: isDown
+                            ? 0.0
+                            : (themeData.buttonSize.height / 5) + 1,
+                        endIndent: isDown
+                            ? 0.0
+                            : (themeData.buttonSize.height / 5) + 1,
+                        width: 0.5,
+                        thickness: 0.5,
+                        color: AppKitColors.text.opaque.secondary
+                            .multiplyOpacity(0.8),
                       ),
                       _SplitButton(
-                          width: themeData.buttonSize.height - 4,
+                          width: themeData.buttonSize.height - 5,
                           height: themeData.buttonSize.height,
                           colorContainer: colorContainer,
                           enabled: enabled,
@@ -293,7 +297,7 @@ class _SplitButton extends StatelessWidget {
     if (enabled && isDown) {
       controlBackgroundColor = colorContainer.controlBackgroundColor
           .multiplyLuminance(0.9)
-          .withOpacity(0.75);
+          .withOpacity(0.5);
     }
 
     return GestureDetector(
@@ -319,7 +323,7 @@ class _SplitButton extends StatelessWidget {
               quarterTurns: 1,
               child: Icon(
                 Icons.chevron_right,
-                size: width * 0.75,
+                size: width * 0.65,
                 color: enabled
                     ? colorContainer.textColor
                     : colorContainer.textColor.multiplyOpacity(0.5),
@@ -371,7 +375,7 @@ class _ButtonWidget extends StatelessWidget {
     if (enabled && isDown) {
       controlBackgroundColor = colorContainer.controlBackgroundColor
           .multiplyLuminance(0.9)
-          .withOpacity(0.75);
+          .withOpacity(0.5);
     }
 
     return GestureDetector(
@@ -415,7 +419,7 @@ class _ButtonWidget extends StatelessWidget {
                           .body
                           .copyWith(fontSize: themeData.fontSize),
                       child: FittedBox(
-                        fit: BoxFit.scaleDown,
+                        fit: BoxFit.contain,
                         child: child,
                       ),
                     ),

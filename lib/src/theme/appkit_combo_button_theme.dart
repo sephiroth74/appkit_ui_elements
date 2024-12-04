@@ -61,10 +61,11 @@ class AppKitComboButtonThemeData with Diagnosticable {
           fontSize: 13,
         ),
         AppKitControlSize.large: AppKitComboButtonThemeDataSize(
-          buttonSize: const Size(54.0, 26.0),
+          buttonSize: const Size(58.0, 30.0),
           borderRadius: 7.0,
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 3.0),
-          fontSize: 15.0,
+          padding: const EdgeInsets.only(
+              left: 10.0, right: 10.0, bottom: 4.0, top: 2.0),
+          fontSize: 14.0,
         ),
       },
     );

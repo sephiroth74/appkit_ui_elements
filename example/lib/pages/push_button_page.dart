@@ -60,7 +60,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                   children: [
                                     Icon(
                                       Icons.access_alarm,
-                                      size: 15,
+                                      size: 14,
                                       color: AppKitColors.controlAccentColor
                                           .withOpacity(0.85),
                                     ),
