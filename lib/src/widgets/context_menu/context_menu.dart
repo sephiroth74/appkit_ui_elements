@@ -53,12 +53,14 @@ class AppKitContextMenu<T> {
     Offset? position,
     List<AppKitContextMenuEntry<T>>? entries,
     double? maxWidth,
+    double? minWidth,
     Size? size,
   }) {
     return AppKitContextMenu<T>(
       position: position ?? this.position,
       entries: entries ?? this.entries,
       maxWidth: maxWidth ?? this.maxWidth,
+      minWidth: minWidth ?? this.minWidth,
       size: size ?? this.size,
     );
   }

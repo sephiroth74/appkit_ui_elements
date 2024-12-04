@@ -48,6 +48,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
       duration: transitionDuration,
       builder: (context, value, child) {
         final theme = AppKitContextMenuTheme.of(context);
+        debugPrint('state.minWidth: ${state.minWidth}');
 
         return AppKitOverlayFilterWidget(
           backgroundBlur: theme.backgroundBlur,
@@ -59,7 +60,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
           child: Opacity(
             opacity: value,
             child: Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(6),
               constraints: BoxConstraints(
                   maxWidth: state.maxWidth,
                   minWidth: state.minWidth,

@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 
@@ -10,6 +11,15 @@ class PushButtonPage extends StatefulWidget {
 }
 
 class _PushButtonPageState extends State<PushButtonPage> {
+  final _comboButtonContextMenu = AppKitContextMenu<String>(
+    minWidth: 150.0,
+    entries: [
+      const AppKitContextMenuItem(title: 'Item 1'),
+      const AppKitContextMenuItem(title: 'Item 2'),
+      const AppKitContextMenuItem(title: 'Item 3'),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     return MacosScaffold(
@@ -30,25 +40,76 @@ class _PushButtonPageState extends State<PushButtonPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        const WidgetTitle(label: 'Combo Button'),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppKitComboButton<String>(
+                              style: AppKitComboButtonStyle.split,
+                              onPressed: () {},
+                              controlSize: AppKitControlSize.large,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.access_alarm,
+                                      size: 13,
+                                      color: AppKitColors.text.opaque.primary,
+                                    ),
+                                    const SizedBox(width: 6.0),
+                                    const Text('Combo Button'),
+                                  ],
+                                ),
+                              ),
+                              onItemSelected: (value) {},
+                              menuBuilder: (context) => _comboButtonContextMenu,
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitComboButton<String>(
+                              onPressed: () {},
+                              controlSize: AppKitControlSize.regular,
+                              child: const Text('Label'),
+                              menuBuilder: (context) => _comboButtonContextMenu,
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitComboButton<String>(
+                              onPressed: () {},
+                              controlSize: AppKitControlSize.small,
+                              child: const Text('Label'),
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitComboButton<String>(
+                              onPressed: () {},
+                              controlSize: AppKitControlSize.mini,
+                              child: const Text('Label'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16.0),
+                        const Divider(thickness: 0.5),
+                        const WidgetTitle(label: 'Push Button'),
+                        const SizedBox(height: 16.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             AppKitTooltip.plain(
-                              message:
-                                  'This is a tooltip with a somewhat long message.',
+                              message: 'This is a tooltip with a somewhat long message.',
                               child: AppKitPushButton(
                                 onPressed: () {},
                                 controlSize: AppKitControlSize.large,
-                                color: MacosColors.systemYellowColor
-                                    .resolveFrom(context),
+                                color: MacosColors.systemYellowColor.resolveFrom(context),
                                 type: AppKitPushButtonType.primary,
                                 child: const Text('Label'),
                               ),
                             ),
                             const SizedBox(width: 16.0),
                             AppKitTooltip.rich(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 12.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                               softWrap: false,
                               useMousePosition: false,
                               message: TextSpan(
@@ -57,8 +118,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                     text: 'Rich Tooltip: \n',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: AppKitColors.systemGray
-                                          .resolveFrom(context),
+                                      color: AppKitColors.systemGray.resolveFrom(context),
                                       fontSize: 14.0,
                                     ),
                                   ),
@@ -66,18 +126,12 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                   TextSpan(
                                     text: 'tooltip',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        backgroundColor:
-                                            Colors.yellow.withOpacity(0.5)),
+                                        fontWeight: FontWeight.bold, backgroundColor: Colors.yellow.withOpacity(0.5)),
                                   ),
+                                  const TextSpan(text: ' with a somewhat long message.\n\n'),
                                   const TextSpan(
-                                      text:
-                                          ' with a somewhat long message.\n\n'),
-                                  const TextSpan(
-                                    text:
-                                        'Tooltip can also contains rich text.',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline),
+                                    text: 'Tooltip can also contains rich text.',
+                                    style: TextStyle(decoration: TextDecoration.underline),
                                   ),
                                 ],
                               ),
@@ -119,8 +173,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               onPressed: () {},
                               type: AppKitPushButtonType.secondary,
                               controlSize: AppKitControlSize.large,
-                              color: MacosColors.systemYellowColor
-                                  .resolveFrom(context),
+                              color: MacosColors.systemYellowColor.resolveFrom(context),
                               child: const Text('Label'),
                             ),
                             const SizedBox(width: 16.0),

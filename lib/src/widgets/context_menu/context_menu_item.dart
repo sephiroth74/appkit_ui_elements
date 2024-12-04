@@ -10,7 +10,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   final IconData? offImage;
   final IconData? mixedImage;
   final T? value;
-  final AppKitItemState itemState;
+  final AppKitItemState? itemState;
   final AppKitMenuImageAlignment imageAlignment;
   final TextAlign textAlign;
 
@@ -24,7 +24,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     this.offImage,
     this.mixedImage,
     this.items,
-    this.itemState = AppKitItemState.off,
+    this.itemState,
     this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
     super.enabled = true,
@@ -36,17 +36,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
   @override
   List<Object?> get props =>
-      super.props +
-      [
-        value,
-        title,
-        image,
-        onImage,
-        offImage,
-        mixedImage,
-        imageAlignment,
-        textAlign
-      ];
+      super.props + [value, title, image, onImage, offImage, mixedImage, imageAlignment, textAlign];
 
   const AppKitContextMenuItem.submenu({
     required this.title,
@@ -81,8 +71,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   }
 
   void _toggleSubmenu(BuildContext context, AppKitContextMenuState menuState) {
-    if (menuState.isSubmenuOpen &&
-        menuState.focusedEntry == menuState.selectedItem) {
+    if (menuState.isSubmenuOpen && menuState.focusedEntry == menuState.selectedItem) {
       menuState.closeSubmenu();
     } else {
       menuState.showSubmenu(context: context, parent: this);
@@ -90,11 +79,9 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   }
 
   @override
-  Widget builder(BuildContext context, AppKitContextMenuState menuState,
-      [FocusNode? focusNode]) {
+  Widget builder(BuildContext context, AppKitContextMenuState menuState, [FocusNode? focusNode]) {
     final theme = AppKitTheme.of(context);
-    final selectedOrFocused =
-        menuState.focusedEntry == this || menuState.selectedItem == this;
+    final selectedOrFocused = menuState.focusedEntry == this || menuState.selectedItem == this;
 
     final IconData icon;
     if (itemState == AppKitItemState.on) {
@@ -105,39 +92,36 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
       icon = mixedImage ?? CupertinoIcons.minus;
     }
 
-    Color textColor = selectedOrFocused && enabled
-        ? AppKitColors.labelColor.darkColor
-        : AppKitColors.labelColor;
+    Color textColor = selectedOrFocused && enabled ? AppKitColors.labelColor.darkColor : AppKitColors.labelColor;
     if (!enabled) {
       textColor = textColor.withOpacity(0.3);
     }
 
-    final Color iconColor = itemState.isOff ? Colors.transparent : textColor;
+    final Color iconColor = itemState?.isOff == true ? Colors.transparent : textColor;
 
     return GestureDetector(
       onTap: () => enabled ? _handleItemSelection(context) : null,
       child: UiElementColorBuilder(builder: (context, colorContainer) {
-        final accentColor =
-            theme.accentColor ?? colorContainer.controlAccentColor;
+        final accentColor = theme.accentColor ?? colorContainer.controlAccentColor;
 
-        final isSelectionAnimating = menuState.isSelectionAnimating &&
-            menuState.focusedEntry == this &&
-            menuState.selectionTicks % 2 == 0;
+        final isSelectionAnimating =
+            menuState.isSelectionAnimating && menuState.focusedEntry == this && menuState.selectionTicks % 2 == 0;
 
-        final statusIconWidget = Padding(
-          padding: const EdgeInsets.only(top: 3.0, right: 4.0),
-          child: Icon(
-            icon,
-            size: 12,
-            color: iconColor,
-          ),
-        );
+        final statusIconWidget = itemState != null
+            ? Padding(
+                padding: const EdgeInsets.only(top: 3.0, right: 4.0),
+                child: Icon(
+                  icon,
+                  size: 12,
+                  color: iconColor,
+                ),
+              )
+            : const SizedBox(width: 6.0);
 
         final imageWidget = Padding(
           padding: EdgeInsets.only(
               top: 3.0,
-              right:
-                  imageAlignment == AppKitMenuImageAlignment.start ? 4.0 : 0.0,
+              right: imageAlignment == AppKitMenuImageAlignment.start ? 4.0 : 0.0,
               left: imageAlignment == AppKitMenuImageAlignment.end ? 4.0 : 0.0),
           child: Icon(
             image,
@@ -169,29 +153,23 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
         return DecoratedBox(
           decoration: BoxDecoration(
-            color: selectedOrFocused && !isSelectionAnimating
-                ? accentColor.withOpacity(0.7)
-                : Colors.transparent,
+            color: selectedOrFocused && !isSelectionAnimating ? accentColor.withOpacity(0.7) : Colors.transparent,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: 3.0, top: 3.0, right: 3.0, bottom: 3.0),
+            padding: const EdgeInsets.only(left: 3.0, top: 3.0, right: 3.0, bottom: 3.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               textDirection: Directionality.of(context),
               children: [
                 // Left to right
                 statusIconWidget,
-                if (textAlign == TextAlign.right || textAlign == TextAlign.end)
-                  const Spacer(),
-                if (image != null &&
-                    imageAlignment == AppKitMenuImageAlignment.start) ...[
+                if (textAlign == TextAlign.right || textAlign == TextAlign.end) const Spacer(),
+                if (image != null && imageAlignment == AppKitMenuImageAlignment.start) ...[
                   imageWidget,
                 ],
                 Flexible(child: textWidget),
-                if (image != null &&
-                    imageAlignment == AppKitMenuImageAlignment.end) ...[
+                if (image != null && imageAlignment == AppKitMenuImageAlignment.end) ...[
                   imageWidget,
                 ],
                 if (hasSubmenu) ...[const Spacer(), subMenuIconWidget],
