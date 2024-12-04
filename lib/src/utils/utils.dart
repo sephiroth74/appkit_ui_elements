@@ -207,6 +207,16 @@ extension ColorX on Color {
     final alpha = (newOpacity * 255).round();
     return withAlpha(alpha);
   }
+
+  Color multiplyLuminance(double factor) {
+    final hslColor = HSLColor.fromColor(this);
+    return (hslColor.withLightness(hslColor.lightness * factor)).toColor();
+  }
+
+  Color withLuminance(double luminance) {
+    final hslColor = HSLColor.fromColor(this);
+    return (hslColor.withLightness(luminance)).toColor();
+  }
 }
 
 extension RectX on Rect {

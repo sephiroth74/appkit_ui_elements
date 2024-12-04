@@ -7,7 +7,8 @@ import 'package:flutter/widgets.dart';
 class AppKitComboButtonTheme extends InheritedTheme {
   final AppKitComboButtonThemeData data;
 
-  const AppKitComboButtonTheme({super.key, required super.child, required this.data});
+  const AppKitComboButtonTheme(
+      {super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
@@ -20,7 +21,8 @@ class AppKitComboButtonTheme extends InheritedTheme {
   }
 
   static AppKitComboButtonThemeData of(BuildContext context) {
-    final AppKitComboButtonTheme? buttonTheme = context.dependOnInheritedWidgetOfExactType<AppKitComboButtonTheme>();
+    final AppKitComboButtonTheme? buttonTheme =
+        context.dependOnInheritedWidgetOfExactType<AppKitComboButtonTheme>();
     return buttonTheme?.data ?? AppKitTheme.of(context).comboButtonTheme;
   }
 }
@@ -36,30 +38,28 @@ class AppKitComboButtonThemeData with Diagnosticable {
     return dataMap[size]!;
   }
 
-  static AppKitComboButtonThemeData fallback({required Brightness brightness, required AppKitTypography typography}) {
+  static AppKitComboButtonThemeData fallback(
+      {required Brightness brightness, required AppKitTypography typography}) {
     return AppKitComboButtonThemeData(
       dataMap: {
         AppKitControlSize.mini: AppKitComboButtonThemeDataSize(
           buttonSize: const Size(26.0, 12.0),
           borderRadius: 3.0,
-          padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 0.0),
+          padding: const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 0.0),
           fontSize: 9.0,
         ),
-        
         AppKitControlSize.small: AppKitComboButtonThemeDataSize(
           buttonSize: const Size(42.0, 14.0),
           borderRadius: 4.0,
-          padding: const EdgeInsets.only(left: 6.0, right: 6.0, bottom: 1.0),
-          fontSize: 11.0,
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 1.0),
+          fontSize: 10.0,
         ),
-        
         AppKitControlSize.regular: AppKitComboButtonThemeDataSize(
           buttonSize: const Size(48, 22),
           borderRadius: 6.0,
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 2.0),
+          padding: const EdgeInsets.only(left: 9.0, right: 9.0, bottom: 2.0),
           fontSize: 13,
         ),
-        
         AppKitControlSize.large: AppKitComboButtonThemeDataSize(
           buttonSize: const Size(54.0, 26.0),
           borderRadius: 7.0,
@@ -98,7 +98,8 @@ class AppKitComboButtonThemeData with Diagnosticable {
           (entry) {
             return MapEntry(
               entry.key,
-              AppKitComboButtonThemeDataSize.lerp(entry.value, b!.dataMap[entry.key], t),
+              AppKitComboButtonThemeDataSize.lerp(
+                  entry.value, b!.dataMap[entry.key], t),
             );
           },
         ),

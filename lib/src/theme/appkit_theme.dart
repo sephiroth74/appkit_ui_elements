@@ -36,13 +36,16 @@ class AppKitTheme extends StatelessWidget {
   }
 
   static AppKitThemeData of(BuildContext context) {
-    final _InheritedAppKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     return (inheritedTheme?.theme.data ??
-        AppKitThemeData.fromMacosTheme(MacosTheme.of(context), highContrast: MediaQuery.of(context).highContrast));
+        AppKitThemeData.fromMacosTheme(MacosTheme.of(context),
+            highContrast: MediaQuery.of(context).highContrast));
   }
 
   static AppKitThemeData? maybeOf(BuildContext context) {
-    final _InheritedAppKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
     if (inheritedTheme != null) {
       return inheritedTheme.theme.data;
     } else {
@@ -56,13 +59,17 @@ class AppKitTheme extends StatelessWidget {
   }
 
   static Brightness brightnessOf(BuildContext context) {
-    final _InheritedAppKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
-    return inheritedTheme?.theme.data.brightness ?? MediaQuery.of(context).platformBrightness;
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
+    return inheritedTheme?.theme.data.brightness ??
+        MediaQuery.of(context).platformBrightness;
   }
 
   static Brightness? maybeBrightnessOf(BuildContext context) {
-    final _InheritedAppKitTheme? inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
-    return inheritedTheme?.theme.data.brightness ?? MediaQuery.maybeOf(context)?.platformBrightness;
+    final _InheritedAppKitTheme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
+    return inheritedTheme?.theme.data.brightness ??
+        MediaQuery.maybeOf(context)?.platformBrightness;
   }
 }
 
@@ -75,7 +82,8 @@ class _InheritedAppKitTheme extends InheritedWidget {
   final AppKitTheme theme;
 
   @override
-  bool updateShouldNotify(_InheritedAppKitTheme oldWidget) => theme.data != oldWidget.theme.data;
+  bool updateShouldNotify(_InheritedAppKitTheme oldWidget) =>
+      theme.data != oldWidget.theme.data;
 }
 
 class AppKitThemeData extends Equatable with Diagnosticable {
@@ -134,20 +142,27 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
     isMainWindow ??= true;
-    canvasColor ??= isDark ? const Color.fromRGBO(40, 40, 40, 1.0) : const Color.fromRGBO(246, 246, 246, 1.0);
-    typography ??= isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
+    canvasColor ??= isDark
+        ? const Color.fromRGBO(40, 40, 40, 1.0)
+        : const Color.fromRGBO(246, 246, 246, 1.0);
+    typography ??=
+        isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
 
-    controlBackgroundColor ??=
-        isDark ? MacosColors.controlBackgroundColor.darkColor : MacosColors.controlBackgroundColor.color;
+    controlBackgroundColor ??= isDark
+        ? MacosColors.controlBackgroundColor.darkColor
+        : MacosColors.controlBackgroundColor.color;
 
     controlBackgroundColorDisabled ??= isDark
         ? MacosColors.controlBackgroundColor.darkColor.withOpacity(0.5)
         : MacosColors.controlBackgroundColor.color.withOpacity(0.5);
 
-    controlBackgroundPressedColor ??= const CupertinoDynamicColor.withBrightness(
-        color: Color.fromRGBO(0, 0, 0, 0.06), darkColor: Color.fromRGBO(255, 255, 255, 0.15));
+    controlBackgroundPressedColor ??=
+        const CupertinoDynamicColor.withBrightness(
+            color: Color.fromRGBO(0, 0, 0, 0.06),
+            darkColor: Color.fromRGBO(255, 255, 255, 0.15));
 
-    accentColorUnfocused ??= isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
+    accentColorUnfocused ??=
+        isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
 
     pushButtonTheme ??= const AppKitPushButtonThemeData(
       buttonRadius: {
@@ -157,10 +172,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         AppKitControlSize.large: 7.0,
       },
       buttonPadding: {
-        AppKitControlSize.mini: EdgeInsets.only(left: 6.0, right: 6.0, bottom: 0.5),
-        AppKitControlSize.small: EdgeInsets.only(left: 7.0, right: 7.0, bottom: 1.0),
-        AppKitControlSize.regular: EdgeInsets.only(left: 16.0, right: 16.0, top: 2.0, bottom: 3.0),
-        AppKitControlSize.large: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 1.0),
+        AppKitControlSize.mini:
+            EdgeInsets.only(left: 6.0, right: 6.0, bottom: 0.5),
+        AppKitControlSize.small:
+            EdgeInsets.only(left: 7.0, right: 7.0, bottom: 1.0),
+        AppKitControlSize.regular:
+            EdgeInsets.only(left: 16.0, right: 16.0, top: 2.0, bottom: 3.0),
+        AppKitControlSize.large:
+            EdgeInsets.only(right: 20.0, left: 20.0, bottom: 1.0),
       },
       fontSize: {
         AppKitControlSize.mini: 9.0,
@@ -185,7 +204,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     helpButtonTheme ??= AppKitHelpButtonThemeData(
       color: isDark ? MacosColors.textBackgroundColor : MacosColors.textColor,
-      disabledColor: isDark ? MacosColors.textBackgroundColor.withOpacity(0.5) : MacosColors.textColor.withOpacity(0.5),
+      disabledColor: isDark
+          ? MacosColors.textBackgroundColor.withOpacity(0.5)
+          : MacosColors.textColor.withOpacity(0.5),
     );
 
     sliderTheme ??= AppKitSliderThemeData(
@@ -223,14 +244,20 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     circularSliderTheme ??= AppKitCircularSliderThemeData(
-      backgroundColor: isDark ? MacosColors.systemGrayColor.darkColor : Colors.white,
-      thumbColor: isDark ? const Color(0x7fffffff) : Colors.black.withOpacity(0.5),
+      backgroundColor:
+          isDark ? MacosColors.systemGrayColor.darkColor : Colors.white,
+      thumbColor:
+          isDark ? const Color(0x7fffffff) : Colors.black.withOpacity(0.5),
       thumbColorUnfocused: accentColorUnfocused,
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      dividerColorMultipleSelection: isDark ? MacosColors.systemGrayColor.darkColor : const Color(0xFFE8E8E8),
-      dividerColorSingleSelection: isDark ? MacosColors.systemGrayColor.darkColor : const Color(0xFFCCCBCB),
+      dividerColorMultipleSelection: isDark
+          ? MacosColors.systemGrayColor.darkColor
+          : const Color(0xFFE8E8E8),
+      dividerColorSingleSelection: isDark
+          ? MacosColors.systemGrayColor.darkColor
+          : const Color(0xFFCCCBCB),
     );
 
     switchTheme ??= AppKitSwitchThemeData(
@@ -307,7 +334,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     contextMenuTheme ??= AppKitContextMenuThemeData(
       backgroundBlur: 0.4,
       borderRadius: 6.0,
-      backgroundColor: isDark ? AppKitColors.materials.medium.darkColor.withOpacity(0.59) : const Color(0xFFe7e7e7),
+      backgroundColor: isDark
+          ? AppKitColors.materials.medium.darkColor.withOpacity(0.59)
+          : const Color(0xFFe7e7e7),
     );
 
     final defaultData = AppKitThemeData.raw(
@@ -390,11 +419,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 
-  factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData, {bool highContrast = false}) {
+  factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData,
+      {bool highContrast = false}) {
     final brightness = themeData.brightness;
     final themeAccentColor = _getThemeAccentColor(themeData.accentColor);
-    final accentColor =
-        themeAccentColor != null ? brightness.resolve(themeAccentColor.color, themeAccentColor.darkColor) : null;
+    final accentColor = themeAccentColor != null
+        ? brightness.resolve(themeAccentColor.color, themeAccentColor.darkColor)
+        : null;
 
     return AppKitThemeData(
       brightness: themeData.brightness,
@@ -518,9 +549,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       toggleButtonTheme: toggleButtonTheme ?? this.toggleButtonTheme,
       helpButtonTheme: helpButtonTheme ?? this.helpButtonTheme,
       sliderTheme: sliderTheme ?? this.sliderTheme,
-      segmentedControlTheme: segmentedControlTheme ?? this.segmentedControlTheme,
+      segmentedControlTheme:
+          segmentedControlTheme ?? this.segmentedControlTheme,
       canvasColor: canvasColor ?? this.canvasColor,
-      controlBackgroundPressedColor: controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
+      controlBackgroundPressedColor:
+          controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
       switchTheme: switchTheme ?? this.switchTheme,
       progressTheme: progressTheme ?? this.progressTheme,
       accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
@@ -571,27 +604,43 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
       typography: AppKitTypography.lerp(a.typography, b.typography, t),
-      pushButtonTheme: AppKitPushButtonThemeData.lerp(a.pushButtonTheme, b.pushButtonTheme, t),
-      toggleButtonTheme: AppKitToggleButtonThemeData.lerp(a.toggleButtonTheme, b.toggleButtonTheme, t),
-      helpButtonTheme: AppKitHelpButtonThemeData.lerp(a.helpButtonTheme, b.helpButtonTheme, t),
+      pushButtonTheme: AppKitPushButtonThemeData.lerp(
+          a.pushButtonTheme, b.pushButtonTheme, t),
+      toggleButtonTheme: AppKitToggleButtonThemeData.lerp(
+          a.toggleButtonTheme, b.toggleButtonTheme, t),
+      helpButtonTheme: AppKitHelpButtonThemeData.lerp(
+          a.helpButtonTheme, b.helpButtonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
-      segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(a.segmentedControlTheme, b.segmentedControlTheme, t),
+      segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
+          a.segmentedControlTheme, b.segmentedControlTheme, t),
       controlBackgroundPressedColor: CupertinoDynamicColor.withBrightness(
-        color: Color.lerp(a.controlBackgroundPressedColor.color, b.controlBackgroundPressedColor.color, t)!,
-        darkColor: Color.lerp(a.controlBackgroundPressedColor.darkColor, b.controlBackgroundPressedColor.darkColor, t)!,
+        color: Color.lerp(a.controlBackgroundPressedColor.color,
+            b.controlBackgroundPressedColor.color, t)!,
+        darkColor: Color.lerp(a.controlBackgroundPressedColor.darkColor,
+            b.controlBackgroundPressedColor.darkColor, t)!,
       ),
       switchTheme: AppKitSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
-      progressTheme: AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
-      accentColorUnfocused: Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t)!,
-      colorWellTheme: AppKitColorWellThemeData.lerp(a.colorWellTheme, b.colorWellTheme, t),
-      circularSliderTheme: AppKitCircularSliderThemeData.lerp(a.circularSliderTheme, b.circularSliderTheme, t),
-      levelIndicatorsTheme: AppKitLevelIndicatorsThemeData.lerp(a.levelIndicatorsTheme, b.levelIndicatorsTheme, t),
-      ratingIndicatorTheme: AppKitRatingIndicatorThemeData.lerp(a.ratingIndicatorTheme, b.ratingIndicatorTheme, t),
-      tooltipTheme: AppKitTooltipThemeData.lerp(a.tooltipTheme, b.tooltipTheme, t),
-      popupButtonTheme: AppKitPopupButtonThemeData.lerp(a.popupButtonTheme, b.popupButtonTheme, t),
-      contextMenuTheme: AppKitContextMenuThemeData.lerp(a.contextMenuTheme, b.contextMenuTheme, t),
-      comboButtonTheme: AppKitComboButtonThemeData.lerp(a.comboButtonTheme, b.comboButtonTheme, t),
+      progressTheme:
+          AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
+      accentColorUnfocused:
+          Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t)!,
+      colorWellTheme:
+          AppKitColorWellThemeData.lerp(a.colorWellTheme, b.colorWellTheme, t),
+      circularSliderTheme: AppKitCircularSliderThemeData.lerp(
+          a.circularSliderTheme, b.circularSliderTheme, t),
+      levelIndicatorsTheme: AppKitLevelIndicatorsThemeData.lerp(
+          a.levelIndicatorsTheme, b.levelIndicatorsTheme, t),
+      ratingIndicatorTheme: AppKitRatingIndicatorThemeData.lerp(
+          a.ratingIndicatorTheme, b.ratingIndicatorTheme, t),
+      tooltipTheme:
+          AppKitTooltipThemeData.lerp(a.tooltipTheme, b.tooltipTheme, t),
+      popupButtonTheme: AppKitPopupButtonThemeData.lerp(
+          a.popupButtonTheme, b.popupButtonTheme, t),
+      contextMenuTheme: AppKitContextMenuThemeData.lerp(
+          a.contextMenuTheme, b.contextMenuTheme, t),
+      comboButtonTheme: AppKitComboButtonThemeData.lerp(
+          a.comboButtonTheme, b.comboButtonTheme, t),
     );
   }
 
@@ -600,28 +649,46 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<Brightness>('brightness', brightness));
     properties.add(ColorProperty('accentColor', accentColor));
-    properties.add(FlagProperty('isMainWindow', value: isMainWindow, ifTrue: 'main window'));
-    properties.add(DiagnosticsProperty<VisualDensity>('visualDensity', visualDensity));
+    properties.add(FlagProperty('isMainWindow',
+        value: isMainWindow, ifTrue: 'main window'));
+    properties.add(
+        DiagnosticsProperty<VisualDensity>('visualDensity', visualDensity));
     properties.add(ColorProperty('canvasColor', canvasColor));
-    properties.add(DiagnosticsProperty<AppKitTypography>('typography', typography));
-    properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>('pushButtonTheme', pushButtonTheme));
-    properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>('toggleButtonTheme', toggleButtonTheme));
-    properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>('helpButtonTheme', helpButtonTheme));
-    properties.add(DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
     properties
-        .add(DiagnosticsProperty<AppKitSegmentedControlThemeData>('segmentedControlTheme', segmentedControlTheme));
-    properties.add(ColorProperty('controlBackgroundPressedColor', controlBackgroundPressedColor));
-    properties.add(DiagnosticsProperty<AppKitSwitchThemeData>('switchTheme', switchTheme));
-    properties.add(DiagnosticsProperty<AppKitProgressThemeData>('progressTheme', progressTheme));
+        .add(DiagnosticsProperty<AppKitTypography>('typography', typography));
+    properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>(
+        'pushButtonTheme', pushButtonTheme));
+    properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>(
+        'toggleButtonTheme', toggleButtonTheme));
+    properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
+        'helpButtonTheme', helpButtonTheme));
+    properties.add(
+        DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
+    properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>(
+        'segmentedControlTheme', segmentedControlTheme));
+    properties.add(ColorProperty(
+        'controlBackgroundPressedColor', controlBackgroundPressedColor));
+    properties.add(
+        DiagnosticsProperty<AppKitSwitchThemeData>('switchTheme', switchTheme));
+    properties.add(DiagnosticsProperty<AppKitProgressThemeData>(
+        'progressTheme', progressTheme));
     properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
-    properties.add(DiagnosticsProperty<AppKitColorWellThemeData>('colorWellTheme', colorWellTheme));
-    properties.add(DiagnosticsProperty<AppKitCircularSliderThemeData>('circularSliderTheme', circularSliderTheme));
-    properties.add(DiagnosticsProperty<AppKitLevelIndicatorsThemeData>('levelIndicatorsTheme', levelIndicatorsTheme));
-    properties.add(DiagnosticsProperty<AppKitRatingIndicatorThemeData>('ratingIndicatorTheme', ratingIndicatorTheme));
-    properties.add(DiagnosticsProperty<AppKitTooltipThemeData>('tooltipTheme', tooltipTheme));
-    properties.add(DiagnosticsProperty<AppKitPopupButtonThemeData>('popupButtonTheme', popupButtonTheme));
-    properties.add(DiagnosticsProperty<AppKitContextMenuThemeData>('contextMenuTheme', contextMenuTheme));
-    properties.add(DiagnosticsProperty<AppKitComboButtonThemeData>('comboButtonTheme', comboButtonTheme));
+    properties.add(DiagnosticsProperty<AppKitColorWellThemeData>(
+        'colorWellTheme', colorWellTheme));
+    properties.add(DiagnosticsProperty<AppKitCircularSliderThemeData>(
+        'circularSliderTheme', circularSliderTheme));
+    properties.add(DiagnosticsProperty<AppKitLevelIndicatorsThemeData>(
+        'levelIndicatorsTheme', levelIndicatorsTheme));
+    properties.add(DiagnosticsProperty<AppKitRatingIndicatorThemeData>(
+        'ratingIndicatorTheme', ratingIndicatorTheme));
+    properties.add(DiagnosticsProperty<AppKitTooltipThemeData>(
+        'tooltipTheme', tooltipTheme));
+    properties.add(DiagnosticsProperty<AppKitPopupButtonThemeData>(
+        'popupButtonTheme', popupButtonTheme));
+    properties.add(DiagnosticsProperty<AppKitContextMenuThemeData>(
+        'contextMenuTheme', contextMenuTheme));
+    properties.add(DiagnosticsProperty<AppKitComboButtonThemeData>(
+        'comboButtonTheme', comboButtonTheme));
   }
 }
 
