@@ -48,7 +48,6 @@ class AppKitContextMenuWidget extends StatelessWidget {
       duration: transitionDuration,
       builder: (context, value, child) {
         final theme = AppKitContextMenuTheme.of(context);
-        debugPrint('state.minWidth: ${state.minWidth}');
 
         return AppKitOverlayFilterWidget(
           backgroundBlur: theme.backgroundBlur,

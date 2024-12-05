@@ -1,8 +1,8 @@
 import FlutterMacOS
 
-class ColorPanelProvider: NSObject, FlutterStreamHandler {
+class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
     var eventSink: FlutterEventSink?
-    let colorPanel = NSColorPanel.shared
+    // let colorPanel = NSColorPanel.shared
     
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
@@ -16,11 +16,15 @@ class ColorPanelProvider: NSObject, FlutterStreamHandler {
         print("panelMode: \(panelMode)")
         
         NSColorPanel.setPickerMode(panelMode)
+        
+        let colorPanel = NSColorPanel()
+        
         colorPanel.setTarget(self)
         colorPanel.setAction(#selector(startStream(colorPanel:)))
         colorPanel.makeKeyAndOrderFront(self)
         colorPanel.isContinuous = true
         colorPanel.isReleasedWhenClosed = false
+        colorPanel.delegate = self
         
         if(uuid != nil) {
             colorPanel.identifier = NSUserInterfaceItemIdentifier(rawValue: uuid!)
@@ -60,10 +64,9 @@ class ColorPanelProvider: NSObject, FlutterStreamHandler {
         }
     }
     
-    
     @objc public func startStream(colorPanel: NSColorPanel) {
         let colorPanelUuid = colorPanel.identifier?.rawValue
-        let result = ColorResult(color: colorPanel.color, uuid: colorPanelUuid)
+        let result = ColorResult(color: colorPanel.color, uuid: colorPanelUuid, action: "stream")
         eventSink?(result.toFlutter())
     }
     
@@ -72,6 +75,20 @@ class ColorPanelProvider: NSObject, FlutterStreamHandler {
         eventSink = nil
         return nil
     }
+    
+    @MainActor func windowWillClose(_ notification: Notification) {
+        print("windowWillClose(notification: \(notification))")
+        
+        if(notification.object is NSColorPanel) {
+            let colorPanelUuid = (notification.object as! NSColorPanel).identifier?.rawValue
+            let result = ColorResult(color: nil, uuid: colorPanelUuid, action: "close")
+            eventSink?(result.toFlutter())
+        }
+        
+        // let result = ColorResult(color: colorPanel.color, uuid: colorPanelUuid)
+        // eventSink?(result.toFlutter())
+    }
+
 }
 
 extension NSColorPanel.Mode {
@@ -210,21 +227,31 @@ class RGBA: ToFlutterObject {
 }
 
 class ColorResult: ToFlutterObject {
-    let color: RGBA
+    let color: RGBA?
     let uuid: String?
+    let action: String
     
     enum CodingKeys: String, CodingKey {
         case color
         case uuid
+        case action
     }
     
-    init(color: NSColor, uuid: String?) {
-        self.color = RGBA(from: color)
+    init(color: NSColor?, uuid: String?, action: String) {
+        if(color != nil) {
+            self.color = RGBA(from: color!)
+        } else {
+            self.color = nil
+        }
         self.uuid = uuid
+        self.action = action
     }
     
     func toFlutter() -> Any {
-        return ["color": color.toFlutter(), "uuid": uuid as Any]
+        if(color == nil) {
+            return ["uuid": uuid as Any, "action": action]
+        }
+        return ["color": color!.toFlutter(), "uuid": uuid as Any, "action": action]
     }
 }
 

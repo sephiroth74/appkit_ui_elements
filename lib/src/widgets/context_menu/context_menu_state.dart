@@ -204,8 +204,6 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   void verifyPosition(BuildContext context) {
     if (isPositionVerified) return;
 
-    // focusScopeNode.requestFocus();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final boundaries = calculateContextMenuBoundaries(
         context: context,

@@ -6,7 +6,7 @@ import 'package:example/pages/fields_page.dart';
 import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
-import 'package:example/pages/selectors_page.dart';
+import 'package:example/pages/colors_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const IndicatorsPage(),
           const SlidersPage(),
           const SegmentedControlsPage(),
-          const SelectorsPage(),
+          const ColorsPage(),
           const FieldsPage(),
         ][pageIndex],
       ),

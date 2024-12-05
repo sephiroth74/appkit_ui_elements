@@ -146,3 +146,12 @@ enum AppKitTextFieldBorderStyle {
     }
   }
 }
+
+enum AppKitColorWellStyle { regular, minimal, expanded }
+
+enum AppKitPopoverDirection {
+  top,
+  bottom,
+  left,
+  right,
+}

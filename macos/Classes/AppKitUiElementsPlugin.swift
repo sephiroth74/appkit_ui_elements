@@ -42,6 +42,7 @@ public class AppKitUiElementsPlugin: NSObject, FlutterPlugin {
             let color = arguments["color"] as? Dictionary<String, Any>
             
             colorPanelProvider.openPanel(pickerMode: mode!, uuid: uuid, withAlpha: withAlpha, color: color)
+            result("colorPanel")
         }
     default:
       result(FlutterMethodNotImplemented)

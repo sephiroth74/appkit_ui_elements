@@ -41,7 +41,7 @@ abstract class AppkitUiElementsPlatform extends PlatformInterface {
     throw UnimplementedError('colorPicker() has not been implemented.');
   }
 
-  Stream<Color> listenForColorChange(String? uuid) {
+  Stream<Color?> listenForColorChange(String? uuid) {
     throw UnimplementedError(
         'listenForColorChange() has not been implemented.');
   }

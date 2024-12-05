@@ -45,7 +45,7 @@ class MethodChannelAppkitUiElements extends AppkitUiElementsPlatform {
   }
 
   @override
-  Stream<Color> listenForColorChange(String? uuid) {
+  Stream<Color?> listenForColorChange(String? uuid) {
     final listener =
         _colorPickerListener ??= eventChannel.receiveBroadcastStream();
     return listener.where(
@@ -61,6 +61,10 @@ class MethodChannelAppkitUiElements extends AppkitUiElementsPlatform {
       },
     ).map((event) {
       final decoded = event as Map<dynamic, dynamic>;
+      final action = decoded['action'] as String;
+      if (action == 'close' || !decoded.containsKey('color')) {
+        return null;
+      }
       final color = decoded['color'] as Map<dynamic, dynamic>;
       final rgba = RGBAColor.fromJson(color);
       return rgba.toColor();

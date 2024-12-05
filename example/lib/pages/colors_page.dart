@@ -3,14 +3,14 @@ import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 
-class SelectorsPage extends StatefulWidget {
-  const SelectorsPage({super.key});
+class ColorsPage extends StatefulWidget {
+  const ColorsPage({super.key});
 
   @override
-  State<SelectorsPage> createState() => _SelectorsPageState();
+  State<ColorsPage> createState() => _ColorsPageState();
 }
 
-class _SelectorsPageState extends State<SelectorsPage> {
+class _ColorsPageState extends State<ColorsPage> {
   List<Color> colors = AppKitColorPickerMode.values.map((e) {
     switch (e) {
       case AppKitColorPickerMode.wheel:
@@ -71,17 +71,22 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                     ),
                                   ),
                                   const SizedBox(width: 8.0),
-                                  AppKitColorWell(
-                                    withAlpha: true,
-                                    mode: mode,
-                                    uuid: mode.name,
-                                    color: colors[index],
-                                    onChanged: (Color color) {
-                                      setState(() {
-                                        // debugPrint('Color changed from ${colors[index]} to $color');
-                                        colors[index] = color;
-                                      });
-                                    },
+                                  SizedBox(
+                                    width: 100,
+                                    height: 50,
+                                    child: AppKitColorWell(
+                                      withAlpha: true,
+                                      mode: mode,
+                                      uuid: mode.name,
+                                      color: colors[index],
+                                      onChanged: (Color color) {
+                                        setState(() {
+                                          debugPrint(
+                                              'Color changed from ${colors[index]} to $color');
+                                          colors[index] = color;
+                                        });
+                                      },
+                                    ),
                                   ),
                                   const SizedBox(width: 8.0),
                                   Text('Color: ${colors[index].toHex()}'),
