@@ -132,11 +132,13 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
       isDown = true;
     });
 
-    final buttonRect = context.getWidgetBounds() ?? Rect.zero;
+    final buttonRect = context.getWidgetBounds();
+    final link = buttonRect == null ? _layerLink : null;
 
     final result = await context.showPopover(
       transitionDuration: const Duration(milliseconds: 200),
       itemRect: buttonRect,
+      link: link,
       targetAnchor: Alignment.bottomCenter,
       direction: AppKitPopoverDirection.bottom,
       showArrow: true,
@@ -253,7 +255,6 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
 class _ColorWellMinimalWidget extends StatelessWidget {
   static const _kWidth = 38.0;
   static const _kHeight = 24.0;
-  static const _kBorderRadius = 5.5;
 
   final UiElementColorContainer colorContainer;
   final AppKitColorWellThemeData colorTheme;
@@ -274,6 +275,7 @@ class _ColorWellMinimalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppKitColorWellTheme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
       final finalConstraints = constraints.isTight
           ? constraints
@@ -293,10 +295,11 @@ class _ColorWellMinimalWidget extends StatelessWidget {
             foregroundDecoration: isDown
                 ? BoxDecoration(
                     color: Colors.black.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(5.5))
+                    borderRadius:
+                        BorderRadius.circular(theme.borderRadiusMinimal))
                 : null,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(_kBorderRadius),
+              borderRadius: BorderRadius.circular(theme.borderRadiusMinimal),
               color: selectedColor,
               border:
                   Border.all(color: Colors.black.withOpacity(0.2), width: 0.5),
@@ -336,7 +339,6 @@ class _ColorWellMinimalWidget extends StatelessWidget {
 class _ColorWellExpandedWidget extends StatelessWidget {
   static const _kWidth = 58.0;
   static const _kHeight = 25.0;
-  static const _kBorderRadius = 5.5;
 
   final UiElementColorContainer colorContainer;
   final AppKitColorWellThemeData colorTheme;
@@ -359,6 +361,7 @@ class _ColorWellExpandedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppKitColorWellTheme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
       final finalConstraints = constraints.isTight
           ? constraints
@@ -376,10 +379,11 @@ class _ColorWellExpandedWidget extends StatelessWidget {
           foregroundDecoration: isDown
               ? BoxDecoration(
                   color: Colors.black.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(5.5))
+                  borderRadius:
+                      BorderRadius.circular(theme.borderRadiusExpanded))
               : null,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(_kBorderRadius),
+              borderRadius: BorderRadius.circular(theme.borderRadiusExpanded),
               color: Colors.white,
               border: GradientBoxBorder(
                 gradient: LinearGradient(
@@ -406,9 +410,9 @@ class _ColorWellExpandedWidget extends StatelessWidget {
                 onTap: enabled ? () => onTapPopover?.call() : null,
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(_kBorderRadius),
-                      bottomLeft: Radius.circular(_kBorderRadius),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(theme.borderRadiusExpanded),
+                      bottomLeft: Radius.circular(theme.borderRadiusExpanded),
                     ),
                     color: selectedColor,
                   ),
@@ -446,10 +450,10 @@ class _ColorWellExpandedWidget extends StatelessWidget {
                 onTap: enabled ? () => onTapPicker?.call() : null,
                 child: Container(
                   width: 20.0,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(_kBorderRadius),
-                      bottomRight: Radius.circular(_kBorderRadius),
+                      topRight: Radius.circular(theme.borderRadiusExpanded),
+                      bottomRight: Radius.circular(theme.borderRadiusExpanded),
                     ),
                     color: Colors.white,
                   ),
@@ -469,8 +473,6 @@ class _ColorWellExpandedWidget extends StatelessWidget {
 class _ColorWellRegularWidget extends StatelessWidget {
   static const _kWidth = 39.0;
   static const _kHeight = 25.0;
-  static const _kBorderRadius = 5.5;
-  static const _kInnerBorderRadius = 2.0;
 
   const _ColorWellRegularWidget({
     required this.colorTheme,
@@ -492,6 +494,7 @@ class _ColorWellRegularWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppKitColorWellTheme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
       final finalConstraints = constraints.isTight
           ? constraints
@@ -511,10 +514,11 @@ class _ColorWellRegularWidget extends StatelessWidget {
             foregroundDecoration: isDown
                 ? BoxDecoration(
                     color: Colors.black.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(_kBorderRadius))
+                    borderRadius:
+                        BorderRadius.circular(theme.borderRadiusRegular))
                 : null,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(_kBorderRadius),
+                borderRadius: BorderRadius.circular(theme.borderRadiusRegular),
                 color: Colors.white,
                 border: GradientBoxBorder(
                   gradient: LinearGradient(
@@ -538,7 +542,8 @@ class _ColorWellRegularWidget extends StatelessWidget {
               padding: const EdgeInsets.all(3.0),
               child: DecoratedBox(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(_kInnerBorderRadius),
+                      borderRadius:
+                          BorderRadius.circular(theme.borderRadiusRegularInner),
                       border: Border.all(
                           color: Colors.black.withOpacity(0.2), width: 0.5),
                       color: selectedColor)),

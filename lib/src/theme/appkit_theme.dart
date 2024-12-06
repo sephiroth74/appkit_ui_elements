@@ -272,11 +272,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     colorWellTheme ??= AppKitColorWellThemeData(
-      borderColor: const Color(0xFFAFAFAF),
-      gradientColors: [
-        const Color(0xFFE3E3E3),
-        const Color(0xFFF7F7F7),
-      ],
+      borderRadiusMinimal: 5.5,
+      borderRadiusExpanded: 5.5,
+      borderRadiusRegular: 5.5,
+      borderRadiusRegularInner: 2.0,
     );
 
     tooltipTheme ??= AppKitTooltipThemeData(

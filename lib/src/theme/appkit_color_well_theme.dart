@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -26,48 +28,67 @@ class AppKitColorWellTheme extends InheritedTheme {
 }
 
 class AppKitColorWellThemeData with Diagnosticable {
-  final Color borderColor;
-  final List<Color> gradientColors;
+  final double borderRadiusMinimal;
+  final double borderRadiusExpanded;
+  final double borderRadiusRegular;
+  final double borderRadiusRegularInner;
 
   AppKitColorWellThemeData({
-    required this.borderColor,
-    required this.gradientColors,
+    required this.borderRadiusMinimal,
+    required this.borderRadiusExpanded,
+    required this.borderRadiusRegular,
+    required this.borderRadiusRegularInner,
   });
 
   static AppKitColorWellThemeData lerp(
       AppKitColorWellThemeData? a, AppKitColorWellThemeData? b, double t) {
     return AppKitColorWellThemeData(
-      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t)!,
-      gradientColors: List.generate(
-        a?.gradientColors.length ?? 0,
-        (index) =>
-            Color.lerp(a?.gradientColors[index], b?.gradientColors[index], t)!,
-      ),
+      borderRadiusMinimal:
+          lerpDouble(a?.borderRadiusMinimal, b?.borderRadiusMinimal, t)!,
+      borderRadiusExpanded:
+          lerpDouble(a?.borderRadiusExpanded, b?.borderRadiusExpanded, t)!,
+      borderRadiusRegular:
+          lerpDouble(a?.borderRadiusRegular, b?.borderRadiusRegular, t)!,
+      borderRadiusRegularInner: lerpDouble(
+          a?.borderRadiusRegularInner, b?.borderRadiusRegularInner, t)!,
     );
   }
 
   AppKitColorWellThemeData merge(AppKitColorWellThemeData? other) {
     if (other == null) return this;
     return copyWith(
-      borderColor: other.borderColor,
-      gradientColors: other.gradientColors,
+      borderRadiusMinimal: other.borderRadiusMinimal,
+      borderRadiusExpanded: other.borderRadiusExpanded,
+      borderRadiusRegular: other.borderRadiusRegular,
+      borderRadiusRegularInner: other.borderRadiusRegularInner,
     );
   }
 
   AppKitColorWellThemeData copyWith({
-    Color? borderColor,
-    List<Color>? gradientColors,
+    double? borderRadiusMinimal,
+    double? borderRadiusExpanded,
+    double? borderRadiusRegular,
+    double? borderRadiusRegularInner,
   }) {
     return AppKitColorWellThemeData(
-      borderColor: borderColor ?? this.borderColor,
-      gradientColors: gradientColors ?? this.gradientColors,
+      borderRadiusMinimal: borderRadiusMinimal ?? this.borderRadiusMinimal,
+      borderRadiusExpanded: borderRadiusExpanded ?? this.borderRadiusExpanded,
+      borderRadiusRegular: borderRadiusRegular ?? this.borderRadiusRegular,
+      borderRadiusRegularInner:
+          borderRadiusRegularInner ?? this.borderRadiusRegularInner,
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(ColorProperty('borderColor', borderColor));
-    properties.add(IterableProperty<Color>('gradientColors', gradientColors));
+    properties.add(DiagnosticsProperty<double>(
+        'borderRadiusMinimal', borderRadiusMinimal));
+    properties.add(DiagnosticsProperty<double>(
+        'borderRadiusExpanded', borderRadiusExpanded));
+    properties.add(DiagnosticsProperty<double>(
+        'borderRadiusRegular', borderRadiusRegular));
+    properties.add(DiagnosticsProperty<double>(
+        'borderRadiusRegularInner', borderRadiusRegularInner));
   }
 }
