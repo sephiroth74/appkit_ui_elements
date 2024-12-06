@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 
@@ -34,6 +35,8 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const WidgetTitle(label: 'Toggle Button'),
+                        const SizedBox(height: 16.0),
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,

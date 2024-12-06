@@ -17,7 +17,6 @@ class _ControlsPageState extends State<ControlsPage> {
   bool? checkboxValue1 = true;
   bool radioButtonValue2 = true;
   bool radioButtonValue3 = false;
-  double stepperValue = 50;
   bool disclosureValue = false;
   double sliderValue1 = 0.5;
   bool switchValue1 = true;
@@ -79,15 +78,6 @@ class _ControlsPageState extends State<ControlsPage> {
         );
       };
 
-  void _onPopupItemSelected(AppKitContextMenuItem<String>? value) {
-    setState(() {
-      if (value != null) {
-        popupSelectedItem =
-            popupMenuBuilder(context).findItemByValue(value.value);
-      }
-    });
-  }
-
   @override
   void initState() {
     // popupSelectedItem = popupMenuBuilder(context).entries.elementAt(1)
@@ -119,104 +109,6 @@ class _ControlsPageState extends State<ControlsPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const WidgetTitle(label: 'Popup Button'),
-                      const SizedBox(height: 20.0),
-                      Column(
-                        children: [AppKitControlSize.regular]
-                            .map((controlSize) => [
-                                  Row(
-                                    children: [
-                                      AppKitPopupButtonStyle.push,
-                                      AppKitPopupButtonStyle.bevel,
-                                      AppKitPopupButtonStyle.plain,
-                                      AppKitPopupButtonStyle.inline,
-                                    ]
-                                        .map((style) => [
-                                              AppKitPopupButton(
-                                                canRequestFocus: true,
-                                                hint: 'Select an item',
-                                                controlSize: controlSize,
-                                                width: popupButtonWidth,
-                                                selectedItem: popupSelectedItem,
-                                                onItemSelected: switchValue1
-                                                    ? _onPopupItemSelected
-                                                    : null,
-                                                menuBuilder: popupMenuBuilder,
-                                                style: style,
-                                              ),
-                                              const SizedBox(width: 8.0)
-                                            ])
-                                        .expand((element) => element)
-                                        .toList(),
-                                  ),
-                                  const SizedBox(height: 16.0)
-                                ])
-                            .expand((element) => element)
-                            .toList(),
-                      ),
-                      const SizedBox(width: 16.0, height: 16.0),
-                      const Divider(
-                        thickness: 0.5,
-                      ),
-                      const WidgetTitle(label: 'Pull Down Button'),
-                      const SizedBox(height: 20.0),
-                      Column(children: [
-                        Row(
-                          children: [
-                            AppKitPulldownButtonStyle.push,
-                            AppKitPulldownButtonStyle.bevel,
-                            AppKitPulldownButtonStyle.plain,
-                            AppKitPulldownButtonStyle.inline,
-                          ]
-                              .map((style) => [
-                                    AppKitPulldownButton(
-                                      canRequestFocus: true,
-                                      title: 'Open...',
-                                      textAlign: TextAlign.start,
-                                      imageAlignment:
-                                          AppKitMenuImageAlignment.leading,
-                                      icon: Icons.open_in_new,
-                                      width: popupButtonWidth,
-                                      onItemSelected: (value) {},
-                                      menuBuilder: pullDownMenuBuilder,
-                                      style: style,
-                                    ),
-                                    const SizedBox(width: 8.0)
-                                  ])
-                              .expand((element) => element)
-                              .toList(),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Row(
-                          children: [
-                            AppKitPulldownButtonStyle.push,
-                            AppKitPulldownButtonStyle.bevel,
-                            AppKitPulldownButtonStyle.plain,
-                            AppKitPulldownButtonStyle.inline,
-                          ]
-                              .map((style) => [
-                                    AppKitPulldownButton(
-                                      controlSize: AppKitControlSize.regular,
-                                      canRequestFocus: false,
-                                      imageAlignment:
-                                          AppKitMenuImageAlignment.start,
-                                      icon: Icons.add,
-                                      width: 65,
-                                      onItemSelected: (value) {},
-                                      menuBuilder: pullDownMenuBuilder,
-                                      style: style,
-                                    ),
-                                    const SizedBox(width: 8.0)
-                                  ])
-                              .expand((element) => element)
-                              .toList(),
-                        ),
-                        const SizedBox(height: 16.0)
-                      ]),
-                      const SizedBox(width: 16.0, height: 16.0),
-                      const Divider(
-                        thickness: 0.5,
-                      ),
                       const WidgetTitle(label: 'Switches'),
                       const SizedBox(height: 20.0),
                       Row(
@@ -527,31 +419,6 @@ class _ControlsPageState extends State<ControlsPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(width: 16.0, height: 16.0),
-                      const Divider(thickness: 0.5),
-                      const WidgetTitle(label: 'Stepper'),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        children: [
-                          SizedBox(
-                              width: 100, child: Text('Value: $stepperValue')),
-                          const SizedBox(width: 16.0),
-                          AppKitStepper(
-                            value: stepperValue,
-                            increment: 1,
-                            onChanged: (value) {
-                              debugPrint('onChanged($value)');
-                              setState(() {
-                                stepperValue = value;
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 16.0),
-                          AppKitStepper(
-                            value: stepperValue,
-                          ),
-                        ],
-                      )
                     ],
                   );
                 },

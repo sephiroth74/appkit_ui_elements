@@ -255,6 +255,33 @@ class _SlidersPageState extends State<SlidersPage> {
                           ),
                         ],
                       ),
+                      const SizedBox(width: 16.0, height: 16.0),
+                      const Divider(thickness: 0.5),
+                      const WidgetTitle(label: 'Stepper'),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          SizedBox(
+                              width: 100,
+                              child: Text(
+                                  'Value: ${(slider1Value * 100).floor()}')),
+                          const SizedBox(width: 16.0),
+                          AppKitStepper(
+                            value: (slider1Value * 100).floorToDouble(),
+                            increment: 1,
+                            onChanged: (value) {
+                              debugPrint('onChanged($value)');
+                              setState(() {
+                                slider1Value = value / 100;
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitStepper(
+                            value: (slider1Value * 100).floorToDouble(),
+                          ),
+                        ],
+                      )
                     ],
                   );
                 },

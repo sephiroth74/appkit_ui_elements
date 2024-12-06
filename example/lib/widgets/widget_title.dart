@@ -9,20 +9,23 @@ class WidgetTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: MacosColors.systemGrayColor.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(4.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: MacosColors.systemGrayColor.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(4.0),
         ),
-        child: Text(
-          label,
-          style: MacosTypography.of(context).title2.copyWith(
-                fontFamily: GoogleFonts.jetBrainsMono().fontFamily,
-              ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+          ),
+          child: Text(
+            label,
+            style: MacosTypography.of(context).title2.copyWith(
+                  fontFamily: GoogleFonts.jetBrainsMono().fontFamily,
+                ),
+          ),
         ),
       ),
     );

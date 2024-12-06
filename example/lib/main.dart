@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/pages/combo_button_page.dart';
 import 'package:example/pages/controls_page.dart';
 import 'package:example/pages/fields_page.dart';
 import 'package:example/pages/indicators_page.dart';
+import 'package:example/pages/popup_button.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
 import 'package:example/pages/colors_page.dart';
@@ -78,8 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
               return SidebarItems(
                   scrollController: scrollController,
                   items: const [
-                    SidebarItem(label: Text('Push Button')),
-                    SidebarItem(label: Text('Toggle Button')),
+                    SidebarItem(label: Text('Buttons'), disclosureItems: [
+                      SidebarItem(label: Text('Push Button')),
+                      SidebarItem(label: Text('Toggle Button')),
+                      SidebarItem(label: Text('Combo Button')),
+                      SidebarItem(label: Text('Popup Button')),
+                    ]),
                     SidebarItem(label: Text('Controls')),
                     SidebarItem(label: Text('Indicators')),
                     SidebarItem(label: Text('Sliders')),
@@ -105,6 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: [
           const PushButtonPage(),
           const ToggleButtonPage(),
+          const ComboButtonPage(),
+          const PopupButtonPage(),
           const ControlsPage(),
           const IndicatorsPage(),
           const SlidersPage(),
