@@ -38,7 +38,7 @@ class _ColorsPageState extends State<ColorsPage> {
   Widget build(BuildContext context) {
     return MacosScaffold(
       toolBar: const ToolBar(
-        title: Text('Selectors'),
+        title: Text('Colors'),
         titleWidth: 200,
       ),
       children: [

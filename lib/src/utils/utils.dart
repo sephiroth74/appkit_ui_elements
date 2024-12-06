@@ -62,6 +62,15 @@ extension BuildContextExtensions on BuildContext {
   }
 }
 
+extension RenderBoxExtensions on RenderBox? {
+  Rect? getWidgetBounds({Offset? offset, Size? size}) {
+    if (this == null) return null;
+    final widgetPosition = this!.localToGlobal(offset ?? Offset.zero);
+    final widgetSize = size ?? this!.size;
+    return widgetPosition & widgetSize;
+  }
+}
+
 /// Calculates the position of the context menu based on the position of the
 /// menu and the position of the parent menu. To prevent the menu from
 /// extending beyond the screen boundaries.

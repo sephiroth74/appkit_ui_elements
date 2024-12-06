@@ -5,6 +5,7 @@ extension PopoverX on BuildContext {
   Future<dynamic> showPopover({
     required Widget child,
     LayerLink? link,
+    Rect? itemRect,
     Offset? position,
     Alignment? targetAnchor,
     AppKitPopoverDirection direction = AppKitPopoverDirection.bottom,
@@ -12,7 +13,14 @@ extension PopoverX on BuildContext {
     Duration? transitionDuration = const Duration(milliseconds: 200),
     required String uuid,
   }) async {
+    // link, itemRect or position must be provided
+    assert(link != null || itemRect != null || position != null);
+
+    // link and itemRect cannot be provided at the same time
+    assert(link == null || itemRect == null);
+
     final state = PopoverState(
+        itemRect: itemRect,
         link: link,
         child: child,
         targetAnchor: targetAnchor,

@@ -132,12 +132,14 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
       isDown = true;
     });
 
+    final buttonRect = context.getWidgetBounds() ?? Rect.zero;
+
     final result = await context.showPopover(
       transitionDuration: const Duration(milliseconds: 200),
+      itemRect: buttonRect,
       targetAnchor: Alignment.bottomCenter,
       direction: AppKitPopoverDirection.bottom,
       showArrow: true,
-      link: _layerLink,
       child: const AppKitColorWellPopover(),
       uuid: widget.uuid,
     );
