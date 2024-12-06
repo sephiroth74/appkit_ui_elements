@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements_platform_interface.dart';
+import 'package:appkit_ui_elements/src/controls/plain_button.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:collection/collection.dart';
@@ -11,10 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:indexed/indexed.dart';
+import 'package:uuid/uuid.dart';
 
 /// See: https://developer.apple.com/documentation/appkit/nscolorpanel/mode
 class AppKitColorWell extends StatefulWidget {
-  final String? uuid;
+  final String uuid;
   final ValueChanged<Color>? onChanged;
   final AppKitColorPickerMode mode;
   final bool withAlpha;
@@ -22,16 +24,15 @@ class AppKitColorWell extends StatefulWidget {
   final Color? color;
   final AppKitColorWellStyle style;
 
-  const AppKitColorWell({
+  AppKitColorWell({
     super.key,
     required this.onChanged,
     this.mode = AppKitColorPickerMode.wheel,
     this.withAlpha = false,
     this.semanticLabel,
     this.color,
-    this.uuid,
     this.style = AppKitColorWellStyle.regular,
-  });
+  }) : uuid = const Uuid().v4();
 
   @override
   State<AppKitColorWell> createState() => _AppKitColorWellState();
@@ -43,6 +44,8 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
   Color? _selectedColor;
 
   bool isDown = false;
+
+  bool isHovered = false;
 
   bool get enabled => widget.onChanged != null;
 
@@ -56,22 +59,38 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     return _onColorChanged!;
   }
 
-  void _handleTap() async {
+  void _handleMouseEnter() {
     setState(() {
-      isDown = true;
+      isHovered = true;
     });
-    if (widget.style == AppKitColorWellStyle.regular) {
-      _showColorPicker(mode: widget.mode, withAlpha: widget.withAlpha);
-    } else {
-      _showColorSwatchesPopover();
-    }
   }
+
+  void _handleMouseExit() {
+    setState(() {
+      isHovered = false;
+    });
+  }
+
+  void _handleTapColorPicker() {
+    _showColorPicker(mode: widget.mode, withAlpha: widget.withAlpha);
+  }
+
+  void _handleTapColorSwatches() {
+    _showColorSwatchesPopover();
+  }
+
+  bool get _isColorPickerOpened =>
+      _colorSubscription != null || context.isPopoverVisible(widget.uuid);
 
   void _showColorPicker(
       {required AppKitColorPickerMode mode, required bool withAlpha}) async {
-    if (!enabled || _colorSubscription != null) {
+    if (!enabled || _isColorPickerOpened) {
       return;
     }
+
+    setState(() {
+      isDown = true;
+    });
 
     _colorSubscription ??= onColorChanged.listen((Color? color) {
       if (color == null) {
@@ -95,7 +114,6 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
         color: _selectedColor,
         colorSpace: mode.toColorSpaceMode(),
       );
-      debugPrint('ok, done');
     } on MissingPluginException {
       debugPrint('AppKitColorWell: MissingPluginException');
       debugPrint(
@@ -106,6 +124,14 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
   }
 
   void _showColorSwatchesPopover() async {
+    if (!enabled || _isColorPickerOpened) {
+      return;
+    }
+
+    setState(() {
+      isDown = true;
+    });
+
     final result = await context.showPopover(
       transitionDuration: const Duration(milliseconds: 200),
       targetAnchor: Alignment.bottomCenter,
@@ -113,6 +139,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
       showArrow: true,
       link: _layerLink,
       child: const AppKitColorWellPopover(),
+      uuid: widget.uuid,
     );
 
     if (result == AppKitColorWellPopover.SHOW_COLORS) {
@@ -167,17 +194,42 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
       button: true,
       child: UiElementColorBuilder(builder: (context, colorContainer) {
         final colorTheme = AppKitColorWellTheme.of(context);
-        return GestureDetector(
-          onTap: enabled ? _handleTap : null,
+        return MouseRegion(
+          onEnter: enabled ? (_) => _handleMouseEnter() : null,
+          onExit: enabled ? (_) => _handleMouseExit() : null,
           child: CompositedTransformTarget(
             link: _layerLink,
-            child: _ColorWellRegularWidget(
-              colorTheme: colorTheme,
-              enabled: enabled,
-              selectedColor: selectedColor,
-              colorContainer: colorContainer,
-              isDown: isDown,
-            ),
+            child: Builder(builder: (context) {
+              if (widget.style == AppKitColorWellStyle.regular) {
+                return _ColorWellRegularWidget(
+                  onTap: enabled ? _handleTapColorPicker : null,
+                  colorTheme: colorTheme,
+                  selectedColor: selectedColor,
+                  colorContainer: colorContainer,
+                  isDown: isDown,
+                  isHovered: isHovered,
+                );
+              } else if (widget.style == AppKitColorWellStyle.expanded) {
+                return _ColorWellExpandedWidget(
+                  onTapPicker: enabled ? _handleTapColorPicker : null,
+                  onTapPopover: enabled ? _handleTapColorSwatches : null,
+                  colorContainer: colorContainer,
+                  colorTheme: colorTheme,
+                  selectedColor: selectedColor,
+                  isDown: isDown,
+                  isHovered: isHovered,
+                );
+              } else {
+                return _ColorWellMinimalWidget(
+                  onTap: enabled ? _handleTapColorSwatches : null,
+                  colorContainer: colorContainer,
+                  colorTheme: colorTheme,
+                  selectedColor: selectedColor,
+                  isDown: isDown,
+                  isHovered: isHovered,
+                );
+              }
+            }),
           ),
         );
       }),
@@ -196,37 +248,35 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
   }
 }
 
-class _ColorWellRegularWidget extends StatelessWidget {
-  static const _kWidth = 39.0;
-  static const _kHeight = 25.0;
-
-  const _ColorWellRegularWidget({
-    required this.colorTheme,
-    required this.enabled,
-    required this.selectedColor,
-    required this.colorContainer,
-    required this.isDown,
-  });
+class _ColorWellMinimalWidget extends StatelessWidget {
+  static const _kWidth = 38.0;
+  static const _kHeight = 24.0;
+  static const _kBorderRadius = 5.5;
 
   final UiElementColorContainer colorContainer;
   final AppKitColorWellThemeData colorTheme;
-  final bool enabled;
   final Color selectedColor;
   final bool isDown;
+  final bool isHovered;
+  final VoidCallback? onTap;
+  bool get enabled => onTap != null;
 
-  void _handleTapDown(TapDownDetails details) {}
-
-  void _handleTapUp(TapUpDetails details) {}
-
-  void _handleTapCancel() {}
-
-  void _handleTap() {}
+  const _ColorWellMinimalWidget({
+    required this.colorContainer,
+    required this.colorTheme,
+    required this.selectedColor,
+    required this.isDown,
+    required this.isHovered,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final finalConstraints = constraints.isTight
           ? constraints
+              .copyWith(minWidth: _kWidth, minHeight: _kHeight)
+              .normalize()
           : const BoxConstraints(
               maxWidth: _kWidth,
               maxHeight: _kHeight,
@@ -236,6 +286,7 @@ class _ColorWellRegularWidget extends StatelessWidget {
       return ConstrainedBox(
         constraints: finalConstraints,
         child: GestureDetector(
+          onTap: enabled ? () => onTap?.call() : null,
           child: Container(
             foregroundDecoration: isDown
                 ? BoxDecoration(
@@ -243,7 +294,225 @@ class _ColorWellRegularWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5.5))
                 : null,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.5),
+              borderRadius: BorderRadius.circular(_kBorderRadius),
+              color: selectedColor,
+              border:
+                  Border.all(color: Colors.black.withOpacity(0.2), width: 0.5),
+            ),
+            child: isHovered
+                ? Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black.withOpacity(0.2),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(1.0),
+                          child: RotatedBox(
+                            quarterTurns: 1,
+                            child: Icon(
+                              Icons.chevron_right,
+                              size: 12.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class _ColorWellExpandedWidget extends StatelessWidget {
+  static const _kWidth = 58.0;
+  static const _kHeight = 25.0;
+  static const _kBorderRadius = 5.5;
+
+  final UiElementColorContainer colorContainer;
+  final AppKitColorWellThemeData colorTheme;
+  final Color selectedColor;
+  final bool isDown;
+  final bool isHovered;
+  final VoidCallback? onTapPicker;
+  final VoidCallback? onTapPopover;
+  bool get enabled => onTapPicker != null && onTapPopover != null;
+
+  const _ColorWellExpandedWidget({
+    required this.colorContainer,
+    required this.colorTheme,
+    required this.selectedColor,
+    required this.isDown,
+    required this.isHovered,
+    this.onTapPicker,
+    this.onTapPopover,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final finalConstraints = constraints.isTight
+          ? constraints
+              .copyWith(minWidth: _kWidth, minHeight: _kHeight)
+              .normalize()
+          : const BoxConstraints(
+              maxWidth: _kWidth,
+              maxHeight: _kHeight,
+              minHeight: _kHeight,
+              minWidth: _kWidth);
+
+      return ConstrainedBox(
+        constraints: finalConstraints,
+        child: Container(
+          foregroundDecoration: isDown
+              ? BoxDecoration(
+                  color: Colors.black.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(5.5))
+              : null,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(_kBorderRadius),
+              color: Colors.white,
+              border: GradientBoxBorder(
+                gradient: LinearGradient(
+                  colors: [
+                    AppKitColors.text.opaque.tertiary.multiplyOpacity(0.55),
+                    AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                width: 0.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: const Offset(0, 0.5),
+                  blurRadius: 0.25,
+                ),
+              ]),
+          child: Row(mainAxisSize: MainAxisSize.max, children: [
+            Flexible(
+              flex: 1,
+              child: GestureDetector(
+                onTap: enabled ? () => onTapPopover?.call() : null,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(_kBorderRadius),
+                      bottomLeft: Radius.circular(_kBorderRadius),
+                    ),
+                    color: selectedColor,
+                  ),
+                  child: isHovered
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black.withOpacity(0.2),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(1.0),
+                                child: RotatedBox(
+                                  quarterTurns: 1,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 12.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : null,
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 0,
+              child: GestureDetector(
+                onTap: enabled ? () => onTapPicker?.call() : null,
+                child: Container(
+                  width: 20.0,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(_kBorderRadius),
+                      bottomRight: Radius.circular(_kBorderRadius),
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: Center(
+                      child: Image.asset('assets/icons/color_well.png',
+                          package: 'appkit_ui_elements', width: 15.0)),
+                ),
+              ),
+            ),
+          ]),
+        ),
+      );
+    });
+  }
+}
+
+class _ColorWellRegularWidget extends StatelessWidget {
+  static const _kWidth = 39.0;
+  static const _kHeight = 25.0;
+  static const _kBorderRadius = 5.5;
+  static const _kInnerBorderRadius = 2.0;
+
+  const _ColorWellRegularWidget({
+    required this.colorTheme,
+    required this.selectedColor,
+    required this.colorContainer,
+    required this.isDown,
+    required this.isHovered,
+    required this.onTap,
+  });
+
+  final UiElementColorContainer colorContainer;
+  final AppKitColorWellThemeData colorTheme;
+  final Color selectedColor;
+  final bool isDown;
+  final bool isHovered;
+  final VoidCallback? onTap;
+
+  bool get enabled => onTap != null;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final finalConstraints = constraints.isTight
+          ? constraints
+              .copyWith(minWidth: _kWidth, minHeight: _kHeight)
+              .normalize()
+          : const BoxConstraints(
+              maxWidth: _kWidth,
+              maxHeight: _kHeight,
+              minHeight: _kHeight,
+              minWidth: _kWidth);
+
+      return ConstrainedBox(
+        constraints: finalConstraints,
+        child: GestureDetector(
+          onTap: enabled ? () => onTap?.call() : null,
+          child: Container(
+            foregroundDecoration: isDown
+                ? BoxDecoration(
+                    color: Colors.black.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(_kBorderRadius))
+                : null,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(_kBorderRadius),
                 color: Colors.white,
                 border: GradientBoxBorder(
                   gradient: LinearGradient(
@@ -267,7 +536,7 @@ class _ColorWellRegularWidget extends StatelessWidget {
               padding: const EdgeInsets.all(3.0),
               child: DecoratedBox(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
+                      borderRadius: BorderRadius.circular(_kInnerBorderRadius),
                       border: Border.all(
                           color: Colors.black.withOpacity(0.2), width: 0.5),
                       color: selectedColor)),
@@ -307,6 +576,7 @@ extension AppKitColorPickerModeX on AppKitColorPickerMode {
 class AppKitColorWellPopover extends StatefulWidget {
   static const swatchSize = Size(13.0, 13.0);
   static const swatchPadding = EdgeInsets.all(0.5);
+  // ignore: constant_identifier_names
   static const SHOW_COLORS = 'show-colors';
 
   static final systemColors = [
@@ -745,92 +1015,5 @@ class _ColorPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate != this || (oldDelegate as _ColorPainter).color != color;
-  }
-}
-
-class AppKitPlainButton extends StatefulWidget {
-  final Widget child;
-  final Color? color;
-  final VoidCallback? onPressed;
-  final String? semanticLabel;
-
-  const AppKitPlainButton({
-    super.key,
-    required this.child,
-    required this.onPressed,
-    this.semanticLabel,
-    this.color,
-  });
-
-  @override
-  State<AppKitPlainButton> createState() => _AppKitPlainButtonState();
-}
-
-class _AppKitPlainButtonState extends State<AppKitPlainButton> {
-  bool get enabled => widget.onPressed != null;
-  bool isDown = false;
-
-  void _handleTapDown(TapDownDetails details) {
-    setState(() => isDown = true);
-  }
-
-  void _handleTapUp(TapUpDetails details) {
-    setState(() => isDown = false);
-  }
-
-  void _handleTapCancel() {
-    setState(() => isDown = false);
-  }
-
-  void _handleTap() {
-    widget.onPressed?.call();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    assert(debugCheckHasAppKitTheme(context));
-
-    return Semantics(
-      label: widget.semanticLabel,
-      button: true,
-      enabled: enabled,
-      child: GestureDetector(
-        onTapDown: enabled ? _handleTapDown : null,
-        onTapUp: enabled ? _handleTapUp : null,
-        onTapCancel: enabled ? _handleTapCancel : null,
-        onTap: enabled ? _handleTap : null,
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
-          final color = widget.color ??
-              AppKitColors.text.opaque.quaternary.resolveFrom(context);
-
-          final lumination = color.computeLuminance();
-          final textColor = lumination > 0.5
-              ? AppKitColors.text.opaque.primary.darkColor
-              : AppKitColors.text.opaque.primary.color;
-
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-            foregroundDecoration: isDown
-                ? BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
-                  )
-                : null,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: Center(
-              child: DefaultTextStyle(
-                style: AppKitTheme.of(context)
-                    .typography
-                    .body
-                    .copyWith(color: textColor),
-                child: widget.child,
-              ),
-            ),
-          );
-        }),
-      ),
-    );
   }
 }

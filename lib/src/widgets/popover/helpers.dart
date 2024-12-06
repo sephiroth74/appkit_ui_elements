@@ -10,6 +10,7 @@ extension PopoverX on BuildContext {
     AppKitPopoverDirection direction = AppKitPopoverDirection.bottom,
     bool showArrow = true,
     Duration? transitionDuration = const Duration(milliseconds: 200),
+    required String uuid,
   }) async {
     final state = PopoverState(
         link: link,
@@ -31,7 +32,7 @@ extension PopoverX on BuildContext {
             ],
           );
         },
-        settings: const RouteSettings(name: "popover-menu"),
+        settings: RouteSettings(name: "popover-menu", arguments: uuid),
         fullscreenDialog: true,
         barrierDismissible: true,
         opaque: false,
@@ -41,5 +42,10 @@ extension PopoverX on BuildContext {
         barrierLabel: null,
       ),
     );
+  }
+
+  bool isPopoverVisible(String uuid) {
+    return ModalRoute.of(this)!.settings.name == "popover-menu" &&
+        ModalRoute.of(this)!.settings.arguments == uuid;
   }
 }

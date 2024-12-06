@@ -33,6 +33,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/icons/color_well.png
   plugin:
     platforms:
       macos:

@@ -72,12 +72,10 @@ class _ColorsPageState extends State<ColorsPage> {
                                   ),
                                   const SizedBox(width: 8.0),
                                   SizedBox(
-                                    width: 100,
-                                    height: 50,
                                     child: AppKitColorWell(
+                                      style: AppKitColorWellStyle.minimal,
                                       withAlpha: true,
                                       mode: mode,
-                                      uuid: mode.name,
                                       color: colors[index],
                                       onChanged: (Color color) {
                                         setState(() {
@@ -97,14 +95,14 @@ class _ColorsPageState extends State<ColorsPage> {
                           );
                         }).toList(),
                       ),
-                      const Row(
+                      Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                               width: 100,
                               child: Text('Disabled: ',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis)),
-                          SizedBox(width: 8.0),
+                          const SizedBox(width: 8.0),
                           AppKitColorWell(onChanged: null),
                         ],
                       ),
