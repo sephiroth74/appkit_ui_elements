@@ -41,7 +41,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   appkit_ui_element_colors: 39bb2d80be3f19b152ccf4c70d5bbe6cba43d74a
-  appkit_ui_elements: f35b68c453a3ee7a64fe809658ac547b863fb9c6
+  appkit_ui_elements: 661d76d55d90741d026c6bd589eaa296ae7a6985
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   macos_ui: 91890e30ceb34d2c6f5d2008b306a9a760410f94
   macos_window_utils: 933f91f64805e2eb91a5bd057cf97cd097276663

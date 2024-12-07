@@ -1,11 +1,16 @@
 import 'package:logger/logger.dart';
 
-final logger = Logger(
-  filter: DevelopmentFilter(),
-  level: Level.all,
-  printer: SimplePrinter(
-    colors: true,
-    printTime: true,
-  ),
-  output: ConsoleOutput(),
-);
+Logger newLogger(String tag) => Logger(
+      filter: DevelopmentFilter(),
+      level: Level.all,
+      printer: PrefixPrinter(
+        SimplePrinter(colors: true),
+        error: '[$tag] ERROR',
+        warning: '[$tag] WARNING',
+        info: '[$tag] INFO',
+        debug: '[$tag] DEBUG',
+        trace: '[$tag] TRACE',
+        fatal: '[$tag] FATAL',
+      ),
+      output: ConsoleOutput(),
+    );

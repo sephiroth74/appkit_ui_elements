@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
-import 'package:appkit_ui_elements/src/utils/utils.dart';
 import 'package:flutter/semantics.dart';
-import 'package:flutter/widgets.dart';
 
 const _kFocusRingSize = 15.0;
 const _kFocusRingSizeEnd = 3.0;
 const _kFocusAnimationDuration = 150;
+
+final _logger = newLogger('AppKitFocusContainer');
 
 class AppKitFocusContainer extends StatefulWidget {
   final FocusNode? focusNode;
@@ -148,14 +149,14 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
   void _handleFocusChanged() {
     if (!mounted) return;
 
-    // logger.d(
-    // '[Focus changed] has focus: ${_effectiveFocusNode.hasFocus}, has primary focus: ${_effectiveFocusNode.hasPrimaryFocus}');
-
     final bool isFocused =
         _effectiveFocusNode.hasFocus && _effectiveFocusNode.hasPrimaryFocus;
 
     final bool isMainWindow =
         MainWindowStateListener.instance.isMainWindow.value;
+
+    // _logger.d(
+    // 'isFocused: $isFocused, isMainWindow: $isMainWindow, wasFocused: $_isFocused, wasMainWindow: $_isMainWindow');
 
     if (isFocused != _isFocused || isMainWindow != _isMainWindow) {
       final bool mainWindowChanged = isMainWindow != _isMainWindow;

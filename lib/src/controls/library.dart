@@ -23,3 +23,4 @@ export 'switch.dart';
 export 'text_field.dart';
 export 'toggle_button.dart';
 export 'tooltip.dart';
+export 'search_field.dart';

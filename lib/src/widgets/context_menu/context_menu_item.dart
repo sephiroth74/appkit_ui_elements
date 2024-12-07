@@ -13,6 +13,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   final AppKitItemState? itemState;
   final AppKitMenuImageAlignment imageAlignment;
   final TextAlign textAlign;
+  final ValueChanged<AppKitContextMenuItem<T>>? onSelected;
 
   final List<AppKitContextMenuEntry<T>>? items;
 
@@ -27,6 +28,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     this.itemState,
     this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
+    this.onSelected,
     super.enabled = true,
   });
 
@@ -45,7 +47,8 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         offImage,
         mixedImage,
         imageAlignment,
-        textAlign
+        textAlign,
+        onSelected,
       ];
 
   const AppKitContextMenuItem.submenu({
@@ -59,7 +62,8 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         itemState = AppKitItemState.off,
         mixedImage = null,
         onImage = null,
-        offImage = null;
+        offImage = null,
+        onSelected = null;
 
   bool get hasSubmenu => items != null;
 
@@ -72,10 +76,11 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
       _toggleSubmenu(context, menuState);
     } else {
       menuState.animateSelectedItem(this, () {
-        menuState.setSelectedItem(this);
         if (Navigator.canPop(context)) {
           Navigator.pop(context, this);
         }
+        onSelected?.call(this);
+        menuState.setSelectedItem(this);
       });
     }
   }

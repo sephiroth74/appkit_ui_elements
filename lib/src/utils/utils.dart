@@ -259,3 +259,9 @@ extension BrightnessX on Brightness {
     return light;
   }
 }
+
+extension TextEditingControllerX on TextEditingController {
+  void selectAll() {
+    selection = TextSelection(baseOffset: 0, extentOffset: text.length);
+  }
+}

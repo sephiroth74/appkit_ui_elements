@@ -72,7 +72,6 @@ class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
   bool _panStarted = false;
 
   set panStarted(bool value) {
-    logger.i('panStarted: $value');
     setState(() => _panStarted = value);
   }
 

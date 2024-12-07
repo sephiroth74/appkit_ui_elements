@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
@@ -9,9 +10,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
-import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 const int _kiOSHorizontalCursorOffsetPixels = -2;
+const int _kChangedTimerDuration = 500;
 
 class AppKitTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -50,9 +51,11 @@ class AppKitTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final String? restorationId;
   final AppKitOverlayVisibilityMode clearButtonMode;
+  final EdgeInsets? clearButtonPadding;
   final String obscuringCharacter;
   final bool obscureText;
   final Widget? prefix;
+  final EdgeInsets prefixPadding;
   final AppKitOverlayVisibilityMode prefixMode;
   final Color? cursorColor;
   final double cursorWidth;
@@ -65,6 +68,7 @@ class AppKitTextField extends StatefulWidget {
   final AppKitTextFieldBehavior behavior;
   final Color? backgroundColor;
   final BoxDecoration? decoration;
+  final bool continuous;
 
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -75,62 +79,67 @@ class AppKitTextField extends StatefulWidget {
 
   const AppKitTextField({
     super.key,
+    required this.keyboardType,
+    SmartDashesType? smartDashesType,
+    SmartQuotesType? smartQuotesType,
+    this.autocorrect = false,
+    this.autofillHints,
+    this.autofocus = false,
+    this.backgroundColor,
+    this.behavior = AppKitTextFieldBehavior.editable,
+    this.borderStyle = AppKitTextFieldBorderStyle.line,
+    this.clearButtonMode = AppKitOverlayVisibilityMode.never,
+    this.clearButtonPadding =
+        const EdgeInsets.only(top: 1.0, bottom: 2.0, left: 6.0, right: 6.0),
+    this.contextMenuBuilder = _defaultContextMenuBuilder,
+    this.continuous = true,
     this.controller,
+    this.cursorColor,
+    this.cursorHeight,
+    this.cursorOffset,
+    this.cursorRadius = const Radius.circular(2.0),
+    this.cursorWidth = 2.0,
+    this.decoration,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.enabled = true,
+    this.enableInteractiveSelection = true,
+    this.enableSuggestions = false,
+    this.expands = false,
     this.focusNode,
+    this.inputFormatters,
+    this.maxLength,
+    this.maxLengthEnforcement,
+    this.maxLines,
+    this.minLines,
+    this.obscureText = false,
+    this.obscuringCharacter = '•',
+    this.onChanged,
+    this.onEditingComplete,
+    this.onSubmitted,
+    this.onTap,
     this.padding =
         const EdgeInsets.only(left: 3.5, right: 3.5, top: 1.0, bottom: 3.0),
     this.placeholder,
-    this.title,
-    this.style,
     this.placeholderStyle,
-    required this.keyboardType,
-    this.textInputAction,
-    this.textCapitalization = TextCapitalization.none,
-    this.strutStyle,
-    this.textAlign = TextAlign.start,
-    this.textAlignVertical = TextAlignVertical.top,
-    this.behavior = AppKitTextFieldBehavior.editable,
-    this.autofocus = false,
-    this.autocorrect = false,
-    SmartDashesType? smartDashesType,
-    SmartQuotesType? smartQuotesType,
-    this.enableSuggestions = false,
-    this.maxLines,
-    this.minLines,
-    this.maxLength,
-    this.expands = false,
-    this.maxLengthEnforcement,
-    this.inputFormatters,
-    this.enabled = true,
-    this.selectionHeightStyle = ui.BoxHeightStyle.tight,
-    this.selectionWidthStyle = ui.BoxWidthStyle.tight,
-    this.scrollPadding = const EdgeInsets.all(20.0),
-    this.enableInteractiveSelection = true,
-    this.selectionControls,
-    this.dragStartBehavior = DragStartBehavior.start,
-    this.scrollController,
-    this.scrollPhysics,
-    this.autofillHints,
-    this.restorationId,
-    this.clearButtonMode = AppKitOverlayVisibilityMode.never,
-    this.obscuringCharacter = '•',
-    this.obscureText = false,
     this.prefix,
     this.prefixMode = AppKitOverlayVisibilityMode.never,
-    this.cursorColor,
-    this.cursorWidth = 2.0,
-    this.cursorHeight,
+    this.prefixPadding =
+        const EdgeInsets.only(top: 1.0, bottom: 3.0, left: 6.0, right: 6.0),
+    this.restorationId,
+    this.scrollController,
+    this.scrollPadding = const EdgeInsets.all(20.0),
+    this.scrollPhysics,
+    this.selectionControls,
+    this.selectionHeightStyle = ui.BoxHeightStyle.tight,
+    this.selectionWidthStyle = ui.BoxWidthStyle.tight,
     this.showCursor = true,
-    this.cursorRadius = const Radius.circular(2.0),
-    this.backgroundColor,
-    this.decoration,
-    this.cursorOffset,
-    this.borderStyle = AppKitTextFieldBorderStyle.line,
-    this.contextMenuBuilder = _defaultContextMenuBuilder,
-    this.onChanged,
-    this.onSubmitted,
-    this.onEditingComplete,
-    this.onTap,
+    this.strutStyle,
+    this.style,
+    this.textAlign = TextAlign.start,
+    this.textAlignVertical = TextAlignVertical.top,
+    this.textCapitalization = TextCapitalization.none,
+    this.textInputAction,
+    this.title,
   })  : smartDashesType = smartDashesType ??
             (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
         smartQuotesType = smartQuotesType ??
@@ -150,6 +159,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
   RestorableTextEditingController? _controller;
 
   bool _showSelectionHandles = false;
+
+  Timer? _timer;
 
   final TextSelectionControls cupertinoDesktopTextSelectionControls =
       CupertinoDesktopTextSelectionControls();
@@ -195,6 +206,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     _focusNode?.dispose();
     _controller?.dispose();
     _effectiveFocusNode.removeListener(_handleFocusChanged);
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -299,6 +311,40 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     }
   }
 
+  void _handleChanged(String value) {
+    if (widget.onChanged != null) {
+      if (widget.continuous) {
+        widget.onChanged!(value);
+      } else {
+        _timer?.cancel();
+        _timer =
+            Timer(const Duration(milliseconds: _kChangedTimerDuration), () {
+          widget.onChanged!(value);
+        });
+      }
+    }
+  }
+
+  void _handleClearButtonTap() {
+    // Special handle onChanged for ClearButton
+    // Also call onChanged when the clear button is tapped.
+    final bool textChanged = _effectiveController.text.isNotEmpty;
+    _effectiveController.clear();
+    if (widget.onChanged != null && textChanged) {
+      widget.onChanged!(_effectiveController.text);
+    }
+    FocusScope.of(context).requestFocus(_effectiveFocusNode);
+    // FocusScope.of(context).unfocus();
+    // _effectiveFocusNode.unfocus();
+  }
+
+  void _handleSubmitted(String value) {
+    setState(() {
+      _effectiveController.selectAll();
+    });
+    widget.onSubmitted?.call(value);
+  }
+
   Widget _addTextDependentAttachments({
     required Widget editableText,
     required TextStyle textStyle,
@@ -332,19 +378,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             // the current text state.
             if (_showPrefixWidget(text!))
               Padding(
-                padding: EdgeInsets.only(
-                  top: widget.padding.top,
-                  bottom: widget.padding.bottom,
-                  left: 6.0,
-                  right: 6.0,
-                ),
-                child: MacosIconTheme(
-                  data: MacosIconThemeData(
-                    color: iconsColor,
-                    size: 16.0,
-                  ),
-                  child: widget.prefix!,
-                ),
+                padding: widget.prefixPadding,
+                child: widget.prefix!,
               ),
             // In the middle part, stack the placeholder on top of the main EditableText
             // if needed.
@@ -374,40 +409,52 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               ),
             ),
             // First add the explicit suffix if the suffix visibility mode matches.
-            if (_showClearButton(text))
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  key: _clearGlobalKey,
-                  onTap: enabled
-                      ? () {
-                          debugPrint('onTap');
-                          // Special handle onChanged for ClearButton
-                          // Also call onChanged when the clear button is tapped.
-                          final bool textChanged =
-                              _effectiveController.text.isNotEmpty;
-                          _effectiveController.clear();
-                          if (widget.onChanged != null && textChanged) {
-                            widget.onChanged!(_effectiveController.text);
-                          }
-                          FocusScope.of(context).unfocus();
-                          // _effectiveFocusNode.unfocus();
-                        }
-                      : null,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: widget.padding.top,
-                      left: 6.0,
-                      right: 6.0,
-                    ),
-                    child: Icon(
-                      CupertinoIcons.clear_thick_circled,
-                      size: 16.0,
-                      color: iconsColor,
+
+            Builder(builder: (context) {
+              final clearButtonSize =
+                  textStyle.fontSize != null ? textStyle.fontSize! + 3 : 16.0;
+              final showClearButton = _showClearButton(text);
+              return FocusScope(
+                canRequestFocus: false,
+                child: TapRegion(
+                  behavior: HitTestBehavior.opaque,
+                  consumeOutsideTaps: false,
+                  enabled: enabled && showClearButton,
+                  onTapInside: (event) {
+                    _handleClearButtonTap();
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.basic,
+                    child: GestureDetector(
+                      key: _clearGlobalKey,
+                      child: Center(
+                        child: Padding(
+                          padding: widget.clearButtonPadding ??
+                              EdgeInsets.only(
+                                top: widget.padding.top,
+                                bottom: widget.padding.bottom,
+                                left: 6.0,
+                                right: 6.0,
+                              ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: showClearButton
+                                ? Icon(
+                                    CupertinoIcons.clear_thick_circled,
+                                    color: iconsColor,
+                                    size: clearButtonSize,
+                                  )
+                                : SizedBox(
+                                    height: clearButtonSize,
+                                    width: clearButtonSize),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              );
+            }),
           ],
         );
       },
@@ -435,13 +482,15 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
     final theme = AppKitTheme.of(context);
 
+    TextStyle? resolvedPlaceholderStyle = widget.placeholderStyle;
     TextStyle? resolvedStyle = widget.style;
     final textStyle = theme.typography.body.merge(resolvedStyle);
 
     return UiElementColorBuilder(builder: (context, colorContainer) {
-      final placeholderStyle = widget.placeholderStyle ??
-          theme.typography.body
-              .copyWith(color: colorContainer.placeholderTextColor);
+      final placeholderStyle = theme.typography.body
+          .copyWith(color: colorContainer.placeholderTextColor)
+          .merge(resolvedPlaceholderStyle);
+
       final Color selectionColor = colorContainer.selectedTextBackgroundColor;
 
       final Color cursorColor = widget.cursorColor ??
@@ -454,7 +503,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             0,
           );
 
-      final decoration = _getBoxDecoration(colorContainer);
+      final decoration = _getBoxDecoration(colorContainer, textStyle.fontSize);
 
       final Widget paddedEditable = Padding(
         padding: widget.padding,
@@ -490,10 +539,10 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               selectionColor: selectionColor,
               selectionControls:
                   selectionEnabled ? textSelectionControls : null,
-              onChanged: widget.onChanged,
+              onChanged: enabled ? _handleChanged : null,
               onSelectionChanged: _handleSelectionChanged,
               onEditingComplete: widget.onEditingComplete,
-              onSubmitted: widget.onSubmitted,
+              onSubmitted: enabled ? _handleSubmitted : null,
               inputFormatters: formatters,
               rendererIgnoresPointer: true,
               cursorWidth: widget.cursorWidth,
@@ -568,7 +617,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     });
   }
 
-  BoxDecoration _getBoxDecoration(UiElementColorContainer colorContainer) {
+  BoxDecoration _getBoxDecoration(
+      UiElementColorContainer colorContainer, double? fontSize) {
     final backgroundColor = widget.backgroundColor ??
         (enabled
             ? colorContainer.controlBackgroundColor
@@ -614,7 +664,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       case AppKitTextFieldBorderStyle.rounded:
         return BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
+          borderRadius: BorderRadius.circular(
+              fontSize != null ? fontSize / 2 : borderRadius),
           border: GradientBoxBorder(
               gradient: LinearGradient(
                 colors: [
@@ -765,6 +816,7 @@ class _TextFieldSelectionGestureDetectorBuilder
           .findRenderObject()! as RenderBox;
       final Offset localOffset =
           renderBox.globalToLocal(details.globalPosition);
+
       if (renderBox.hitTest(BoxHitTestResult(), position: localOffset)) {
         return;
       }

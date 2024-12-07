@@ -11,15 +11,6 @@ class PushButtonPage extends StatefulWidget {
 }
 
 class _PushButtonPageState extends State<PushButtonPage> {
-  final _comboButtonContextMenu = AppKitContextMenu<String>(
-    minWidth: 150.0,
-    entries: [
-      const AppKitContextMenuItem(title: 'Item 1'),
-      const AppKitContextMenuItem(title: 'Item 2'),
-      const AppKitContextMenuItem(title: 'Item 3'),
-    ],
-  );
-
   @override
   Widget build(BuildContext context) {
     return MacosScaffold(
