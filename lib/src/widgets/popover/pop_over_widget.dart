@@ -86,7 +86,7 @@ class PopoverWidget extends StatelessWidget {
 class _PopoverBackgroundPainter extends CustomPainter {
   final Color color;
   final Offset? anchorOffset;
-  final AppKitPopoverDirection? anchorDirection;
+  final AppKitMenuEdge? anchorDirection;
   final double cornerRadius;
   final double anchorHeight;
   final double anchorWidth;
@@ -120,24 +120,26 @@ class _PopoverBackgroundPainter extends CustomPainter {
       rect = Rect.fromLTRB(0, 0, size.width, size.height);
     } else {
       switch (anchorDirection!) {
-        case AppKitPopoverDirection.top:
+        case AppKitMenuEdge.top:
           rect = Rect.fromLTRB(0, 0, size.width, size.height - anchorHeight);
-        case AppKitPopoverDirection.bottom:
+        case AppKitMenuEdge.auto:
+        case AppKitMenuEdge.bottom:
           rect = Rect.fromLTRB(0, anchorHeight, size.width, size.height);
-        case AppKitPopoverDirection.left:
+        case AppKitMenuEdge.left:
           rect = Rect.fromLTRB(0, 0, size.width - anchorHeight, size.height);
-        case AppKitPopoverDirection.right:
+        case AppKitMenuEdge.right:
           rect = Rect.fromLTRB(anchorHeight, 0, size.width, size.height);
       }
     }
 
     if (null == anchorOffset) {
-      offsetDx = (anchorDirection == AppKitPopoverDirection.top ||
-              anchorDirection == AppKitPopoverDirection.bottom)
+      offsetDx = (anchorDirection == AppKitMenuEdge.top ||
+              anchorDirection == AppKitMenuEdge.bottom ||
+              anchorDirection == AppKitMenuEdge.auto)
           ? rect.topCenter.dx
           : 0;
-      offsetDy = (anchorDirection == AppKitPopoverDirection.left ||
-              anchorDirection == AppKitPopoverDirection.right)
+      offsetDy = (anchorDirection == AppKitMenuEdge.left ||
+              anchorDirection == AppKitMenuEdge.right)
           ? rect.centerLeft.dy
           : 0;
     } else {
@@ -147,7 +149,8 @@ class _PopoverBackgroundPainter extends CustomPainter {
 
     path.moveTo(rect.left + cornerRadius, rect.top);
 
-    if (anchorDirection == AppKitPopoverDirection.bottom &&
+    if ((anchorDirection == AppKitMenuEdge.bottom ||
+            anchorDirection == AppKitMenuEdge.auto) &&
         (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
       path.lineTo(rect.left + offsetDx - anchorWidth / 2, rect.top);
       path.lineTo(rect.left + offsetDx, rect.top - anchorHeight);
@@ -159,7 +162,7 @@ class _PopoverBackgroundPainter extends CustomPainter {
         radius: Radius.circular(cornerRadius));
 
     // right
-    if (anchorDirection == AppKitPopoverDirection.left &&
+    if (anchorDirection == AppKitMenuEdge.left &&
         (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
       path.lineTo(rect.right, rect.top + offsetDy - anchorWidth / 2);
       path.lineTo(rect.right + anchorHeight, rect.top + offsetDy);
@@ -171,7 +174,7 @@ class _PopoverBackgroundPainter extends CustomPainter {
         radius: Radius.circular(cornerRadius));
 
     // bottom
-    if (anchorDirection == AppKitPopoverDirection.top &&
+    if (anchorDirection == AppKitMenuEdge.top &&
         (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
       path.lineTo(rect.left + offsetDx + anchorWidth / 2, rect.bottom);
       path.lineTo(rect.left + offsetDx, rect.bottom + anchorHeight);
@@ -183,7 +186,7 @@ class _PopoverBackgroundPainter extends CustomPainter {
         radius: Radius.circular(cornerRadius));
 
     // left
-    if (anchorDirection == AppKitPopoverDirection.right &&
+    if (anchorDirection == AppKitMenuEdge.right &&
         (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
       path.lineTo(rect.left, rect.top + offsetDy + anchorWidth / 2);
       path.lineTo(rect.left - anchorHeight, rect.top + offsetDy);

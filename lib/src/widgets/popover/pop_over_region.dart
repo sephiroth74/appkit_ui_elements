@@ -8,7 +8,7 @@ typedef AppKitPopoverBuilder = Widget Function(BuildContext context);
 
 class AppKitPopoverRegion extends StatelessWidget {
   final Widget child;
-  final AppKitPopoverDirection direction;
+  final AppKitMenuEdge direction;
   final Alignment alignment;
   final AppKitPopoverBuilder builder;
   final String _uuid = const Uuid().v4();

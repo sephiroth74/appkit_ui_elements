@@ -30,7 +30,7 @@ class PopoverState extends ChangeNotifier {
 
   Alignment? targetAnchor;
 
-  AppKitPopoverDirection direction;
+  AppKitMenuEdge direction;
 
   final bool showArrow;
 
@@ -47,13 +47,14 @@ class PopoverState extends ChangeNotifier {
   EdgeInsetsGeometry get paddings {
     if (showArrow) {
       switch (direction) {
-        case AppKitPopoverDirection.top:
+        case AppKitMenuEdge.top:
           return _kPadding.copyWith(bottom: kAnchorHeight + _kPadding.bottom);
-        case AppKitPopoverDirection.bottom:
+        case AppKitMenuEdge.auto:
+        case AppKitMenuEdge.bottom:
           return _kPadding.copyWith(top: kAnchorHeight + _kPadding.top);
-        case AppKitPopoverDirection.left:
+        case AppKitMenuEdge.left:
           return _kPadding.copyWith(right: kAnchorHeight + _kPadding.right);
-        case AppKitPopoverDirection.right:
+        case AppKitMenuEdge.right:
           return _kPadding.copyWith(left: kAnchorHeight + _kPadding.left);
       }
     } else {
@@ -101,52 +102,55 @@ class PopoverState extends ChangeNotifier {
           finalPosition = itemRect!.getAnchorOffset(targetAnchor);
 
           switch (direction) {
-            case AppKitPopoverDirection.top:
+            case AppKitMenuEdge.top:
               finalPosition += Offset(-childRect.width / 2, -childRect.height);
-            case AppKitPopoverDirection.bottom:
+            case AppKitMenuEdge.auto:
+            case AppKitMenuEdge.bottom:
               finalPosition += Offset(-childRect.width / 2, 0);
-            case AppKitPopoverDirection.left:
+            case AppKitMenuEdge.left:
               finalPosition += Offset(-childRect.width, -childRect.height / 2);
-            case AppKitPopoverDirection.right:
+            case AppKitMenuEdge.right:
               finalPosition += Offset(0, -childRect.height / 2);
           }
 
-          if (direction == AppKitPopoverDirection.bottom) {
+          if (direction == AppKitMenuEdge.bottom ||
+              direction == AppKitMenuEdge.auto) {
             if (itemRect!.bottom + childRect.height > safeScreenRect.bottom) {
               finalPosition =
                   Offset(finalPosition.dx, itemRect!.top - childRect.height);
-              direction = AppKitPopoverDirection.top;
+              direction = AppKitMenuEdge.top;
               targetAnchor = Alignment.topCenter;
             }
-          } else if (direction == AppKitPopoverDirection.top) {
+          } else if (direction == AppKitMenuEdge.top) {
             if (itemRect!.top - childRect.height < safeScreenRect.top) {
               finalPosition = Offset(finalPosition.dx, 0);
-              direction = AppKitPopoverDirection.bottom;
+              direction = AppKitMenuEdge.bottom;
               targetAnchor = Alignment.bottomCenter;
             }
-          } else if (direction == AppKitPopoverDirection.right) {
+          } else if (direction == AppKitMenuEdge.right) {
             if (itemRect!.right + childRect.width > safeScreenRect.width) {
               finalPosition = Offset(-childRect.width, finalPosition.dy);
-              direction = AppKitPopoverDirection.left;
+              direction = AppKitMenuEdge.left;
               targetAnchor = Alignment.centerLeft;
             }
-          } else if (direction == AppKitPopoverDirection.left) {
+          } else if (direction == AppKitMenuEdge.left) {
             if (itemRect!.left - childRect.width < safeScreenRect.left) {
               finalPosition = Offset(0, finalPosition.dy);
-              direction = AppKitPopoverDirection.right;
+              direction = AppKitMenuEdge.right;
               targetAnchor = Alignment.centerRight;
             }
           }
         } else if (link != null) {
           // link is not null
           switch (direction) {
-            case AppKitPopoverDirection.top:
+            case AppKitMenuEdge.top:
               finalPosition += Offset(-childRect.width / 2, -childRect.height);
-            case AppKitPopoverDirection.bottom:
+            case AppKitMenuEdge.auto:
+            case AppKitMenuEdge.bottom:
               finalPosition += Offset(-childRect.width / 2, 0);
-            case AppKitPopoverDirection.left:
+            case AppKitMenuEdge.left:
               finalPosition += Offset(-childRect.width, -childRect.height / 2);
-            case AppKitPopoverDirection.right:
+            case AppKitMenuEdge.right:
               finalPosition += Offset(0, -childRect.height / 2);
           }
         }

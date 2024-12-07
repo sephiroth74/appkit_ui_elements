@@ -8,7 +8,7 @@ extension PopoverX on BuildContext {
     Rect? itemRect,
     Offset? position,
     Alignment? targetAnchor,
-    AppKitPopoverDirection direction = AppKitPopoverDirection.bottom,
+    AppKitMenuEdge direction = AppKitMenuEdge.bottom,
     bool showArrow = true,
     Duration? transitionDuration = const Duration(milliseconds: 200),
     required String uuid,

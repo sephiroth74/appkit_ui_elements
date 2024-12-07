@@ -25,6 +25,12 @@ class _FieldsPageState extends State<FieldsPage> {
 
   AppKitControlSize textFieldSize = AppKitControlSize.regular;
 
+  AppKitOverlayVisibilityMode clearButtonMode =
+      AppKitOverlayVisibilityMode.always;
+
+  AppKitTextFieldBorderStyle textFieldBorderStyle =
+      AppKitTextFieldBorderStyle.rounded;
+
   // ignore: prefer_function_declarations_over_variables
   ContextMenuBuilder<String> get searchFieldMenuBuilder => (context) {
         if (_searchResults.isEmpty) {
@@ -84,7 +90,7 @@ class _FieldsPageState extends State<FieldsPage> {
                           child: AppKitTextField(
                         controller: textFieldController,
                         enabled: textFieldEnabled,
-                        borderStyle: AppKitTextFieldBorderStyle.none,
+                        borderStyle: textFieldBorderStyle,
                         placeholder: 'Placeholder',
                         expands: false,
                         maxLines: 1,
@@ -95,7 +101,7 @@ class _FieldsPageState extends State<FieldsPage> {
                         textInputAction: TextInputAction.search,
                         keyboardType: TextInputType.text,
                         autofocus: false,
-                        clearButtonMode: AppKitOverlayVisibilityMode.always,
+                        clearButtonMode: clearButtonMode,
                         behavior: AppKitTextFieldBehavior.editable,
                         onChanged: (value) => debugPrint('on changed: $value'),
                         onEditingComplete: () =>
@@ -114,8 +120,8 @@ class _FieldsPageState extends State<FieldsPage> {
                         padding: const EdgeInsets.all(8.0),
                         clearButtonPadding: const EdgeInsets.all(8.0),
                         enabled: textFieldEnabled,
-                        borderStyle: AppKitTextFieldBorderStyle.line,
-                        clearButtonMode: AppKitOverlayVisibilityMode.always,
+                        borderStyle: textFieldBorderStyle,
+                        clearButtonMode: clearButtonMode,
                         textInputAction: TextInputAction.newline,
                         keyboardType: TextInputType.multiline,
                         placeholder: 'Placeholder',
@@ -125,35 +131,6 @@ class _FieldsPageState extends State<FieldsPage> {
                           debugPrint('on changed: $value');
                         },
                       )),
-                      const SizedBox(height: 16.0),
-                      // 3
-                      Flexible(
-                          child: AppKitTextField(
-                        controller: textFieldController,
-                        enabled: textFieldEnabled,
-                        borderStyle: AppKitTextFieldBorderStyle.bezel,
-                        placeholder: 'Placeholder',
-                        expands: false,
-                        maxLines: 1,
-                        keyboardType: TextInputType.text,
-                        clearButtonMode: AppKitOverlayVisibilityMode.notEditing,
-                      )),
-                      const SizedBox(height: 16.0),
-                      // 4
-                      Flexible(
-                        child: AppKitTextField(
-                          controller: textFieldController,
-                          enabled: textFieldEnabled,
-                          borderStyle: AppKitTextFieldBorderStyle.rounded,
-                          textInputAction: TextInputAction.newline,
-                          keyboardType: TextInputType.multiline,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          placeholder: 'Placeholder',
-                          clearButtonMode: AppKitOverlayVisibilityMode.always,
-                          expands: true,
-                        ),
-                      ),
                     ],
                   ),
 
@@ -168,12 +145,13 @@ class _FieldsPageState extends State<FieldsPage> {
                       Flexible(
                         child: AppKitSearchField(
                           controlSize: textFieldSize,
-                          clearButtonMode: AppKitOverlayVisibilityMode.always,
+                          clearButtonMode: clearButtonMode,
                           autocorrect: false,
                           autofocus: true,
                           contextMenuBuilder: searchFieldMenuBuilder,
                           controller: textFieldController,
                           enabled: textFieldEnabled,
+                          borderStyle: textFieldBorderStyle,
                           continuous: false,
                           onTap: () {
                             debugPrint('search field tapped');
@@ -213,8 +191,10 @@ class _FieldsPageState extends State<FieldsPage> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Flexible(
-                                child: Text('Enable/Disable text fields')),
+                            SizedBox(
+                                width: 150,
+                                child: Text(
+                                    '${textFieldEnabled ? 'Disable' : 'Enable'} Text Fields')),
                             const SizedBox(width: 16.0),
                             AppKitSwitch(
                                 checked: textFieldEnabled,
@@ -227,7 +207,89 @@ class _FieldsPageState extends State<FieldsPage> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Flexible(child: Text('Search Field Size')),
+                          const SizedBox(width: 150, child: Text('Clear mode')),
+                          const SizedBox(width: 16.0),
+                          AppKitPopupButton(
+                            selectedItem: AppKitContextMenuItem(
+                              title: clearButtonMode.name,
+                              value: clearButtonMode,
+                              enabled: true,
+                            ),
+                            width: 150,
+                            controlSize: AppKitControlSize.regular,
+                            menuEdge: AppKitMenuEdge.bottom,
+                            menuBuilder: (context) {
+                              return AppKitContextMenu<
+                                      AppKitOverlayVisibilityMode>(
+                                  minWidth: 150,
+                                  entries: [
+                                    for (final size
+                                        in AppKitOverlayVisibilityMode.values)
+                                      AppKitContextMenuItem(
+                                        title: size.name,
+                                        value: size,
+                                        enabled: true,
+                                      ),
+                                  ]);
+                            },
+                            onItemSelected: (value) {
+                              setState(() {
+                                if (null != value?.value) {
+                                  clearButtonMode = value?.value
+                                      as AppKitOverlayVisibilityMode;
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                              width: 150, child: Text('Border style')),
+                          const SizedBox(width: 16.0),
+                          AppKitPopupButton(
+                            selectedItem: AppKitContextMenuItem(
+                              title: textFieldBorderStyle.name,
+                              value: textFieldBorderStyle,
+                              enabled: true,
+                            ),
+                            width: 150,
+                            controlSize: AppKitControlSize.regular,
+                            menuEdge: AppKitMenuEdge.bottom,
+                            menuBuilder: (context) {
+                              return AppKitContextMenu<
+                                      AppKitTextFieldBorderStyle>(
+                                  minWidth: 150,
+                                  entries: [
+                                    for (final size
+                                        in AppKitTextFieldBorderStyle.values)
+                                      AppKitContextMenuItem(
+                                        title: size.name,
+                                        value: size,
+                                        enabled: true,
+                                      ),
+                                  ]);
+                            },
+                            onItemSelected: (value) {
+                              setState(() {
+                                if (null != value?.value) {
+                                  textFieldBorderStyle = value?.value
+                                      as AppKitTextFieldBorderStyle;
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                              width: 150, child: Text('Search Field Size')),
                           const SizedBox(width: 16.0),
                           AppKitPopupButton(
                             selectedItem: AppKitContextMenuItem(
@@ -240,6 +302,7 @@ class _FieldsPageState extends State<FieldsPage> {
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
                               return AppKitContextMenu<AppKitControlSize>(
+                                  minWidth: 150,
                                   entries: [
                                     for (final size in AppKitControlSize.values)
                                       AppKitContextMenuItem(

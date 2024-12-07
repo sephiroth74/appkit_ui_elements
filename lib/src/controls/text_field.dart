@@ -118,7 +118,7 @@ class AppKitTextField extends StatefulWidget {
     this.onSubmitted,
     this.onTap,
     this.padding =
-        const EdgeInsets.only(left: 3.5, right: 3.5, top: 1.0, bottom: 3.0),
+        const EdgeInsets.only(left: 5, right: 5, top: 1.0, bottom: 3.0),
     this.placeholder,
     this.placeholderStyle,
     this.prefix,

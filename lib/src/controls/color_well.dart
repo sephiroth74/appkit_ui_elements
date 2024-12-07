@@ -140,7 +140,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
       itemRect: buttonRect,
       link: link,
       targetAnchor: Alignment.bottomCenter,
-      direction: AppKitPopoverDirection.bottom,
+      direction: AppKitMenuEdge.auto,
       showArrow: true,
       child: const AppKitColorWellPopover(),
       uuid: widget.uuid,
