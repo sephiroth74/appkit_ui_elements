@@ -1,7 +1,10 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
+
+const _kLabelSize = 160.0;
 
 class FieldsPage extends StatefulWidget {
   const FieldsPage({super.key});
@@ -191,10 +194,10 @@ class _FieldsPageState extends State<FieldsPage> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
-                                width: 150,
-                                child: Text(
-                                    '${textFieldEnabled ? 'Disable' : 'Enable'} Text Fields')),
+                            const SizedBox(
+                                width: _kLabelSize,
+                                child:
+                                    AppKitLabel(text: Text('Disable Fields'))),
                             const SizedBox(width: 16.0),
                             AppKitSwitch(
                                 checked: textFieldEnabled,
@@ -207,7 +210,14 @@ class _FieldsPageState extends State<FieldsPage> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const SizedBox(width: 150, child: Text('Clear mode')),
+                          const SizedBox(
+                              width: _kLabelSize,
+                              child: AppKitLabel(
+                                  icon: Icon(
+                                    CupertinoIcons.eye_slash,
+                                    size: 14,
+                                  ),
+                                  text: Text('Clear Button Mode'))),
                           const SizedBox(width: 16.0),
                           AppKitPopupButton(
                             selectedItem: AppKitContextMenuItem(
@@ -215,7 +225,7 @@ class _FieldsPageState extends State<FieldsPage> {
                               value: clearButtonMode,
                               enabled: true,
                             ),
-                            width: 150,
+                            width: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
@@ -248,7 +258,13 @@ class _FieldsPageState extends State<FieldsPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const SizedBox(
-                              width: 150, child: Text('Border style')),
+                              width: _kLabelSize,
+                              child: AppKitLabel(
+                                  icon: Icon(
+                                    Icons.border_bottom,
+                                    size: 14,
+                                  ),
+                                  text: Text('Border Style'))),
                           const SizedBox(width: 16.0),
                           AppKitPopupButton(
                             selectedItem: AppKitContextMenuItem(
@@ -256,7 +272,7 @@ class _FieldsPageState extends State<FieldsPage> {
                               value: textFieldBorderStyle,
                               enabled: true,
                             ),
-                            width: 150,
+                            width: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
@@ -289,7 +305,14 @@ class _FieldsPageState extends State<FieldsPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const SizedBox(
-                              width: 150, child: Text('Search Field Size')),
+                            width: _kLabelSize,
+                            child: AppKitLabel(
+                                icon: Icon(
+                                  CupertinoIcons.textformat_size,
+                                  size: 14,
+                                ),
+                                text: Text('Search Field Size')),
+                          ),
                           const SizedBox(width: 16.0),
                           AppKitPopupButton(
                             selectedItem: AppKitContextMenuItem(
@@ -297,7 +320,7 @@ class _FieldsPageState extends State<FieldsPage> {
                               value: textFieldSize,
                               enabled: true,
                             ),
-                            width: 150,
+                            width: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {

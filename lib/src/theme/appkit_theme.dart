@@ -109,6 +109,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitPopupButtonThemeData popupButtonTheme;
   final AppKitContextMenuThemeData contextMenuTheme;
   final AppKitComboButtonThemeData comboButtonTheme;
+  final AppKitIconThemeData iconTheme;
   final AppKitTypography typography;
 
   factory AppKitThemeData({
@@ -129,6 +130,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitPopupButtonThemeData? popupButtonTheme,
     AppKitContextMenuThemeData? contextMenuTheme,
     AppKitComboButtonThemeData? comboButtonTheme,
+    AppKitIconThemeData? iconTheme,
     Color? canvasColor,
     Color? accentColor,
     bool? isMainWindow,
@@ -338,6 +340,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           : const Color(0xFFe7e7e7),
     );
 
+    iconTheme ??= AppKitIconThemeData(
+      color: accentColor,
+      size: 20,
+    );
+
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       accentColor: accentColor,
@@ -362,6 +369,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       popupButtonTheme: popupButtonTheme,
       contextMenuTheme: contextMenuTheme,
       comboButtonTheme: comboButtonTheme,
+      iconTheme: iconTheme,
     );
 
     final customData = defaultData.copyWith(
@@ -389,6 +397,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       popupButtonTheme: popupButtonTheme,
       contextMenuTheme: contextMenuTheme,
       comboButtonTheme: comboButtonTheme,
+      iconTheme: iconTheme,
     );
 
     return defaultData.merge(customData);
@@ -482,6 +491,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.popupButtonTheme,
     required this.contextMenuTheme,
     required this.comboButtonTheme,
+    required this.iconTheme,
   });
 
   @override
@@ -509,6 +519,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         popupButtonTheme,
         contextMenuTheme,
         comboButtonTheme,
+        iconTheme,
       ];
 
   AppKitThemeData copyWith({
@@ -537,6 +548,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitPopupButtonThemeData? popupButtonTheme,
     AppKitContextMenuThemeData? contextMenuTheme,
     AppKitComboButtonThemeData? comboButtonTheme,
+    AppKitIconThemeData? iconTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -564,6 +576,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       popupButtonTheme: popupButtonTheme ?? this.popupButtonTheme,
       contextMenuTheme: contextMenuTheme ?? this.contextMenuTheme,
       comboButtonTheme: comboButtonTheme ?? this.comboButtonTheme,
+      iconTheme: iconTheme ?? this.iconTheme,
     );
   }
 
@@ -593,6 +606,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       popupButtonTheme: other.popupButtonTheme,
       contextMenuTheme: other.contextMenuTheme,
       comboButtonTheme: other.comboButtonTheme,
+      iconTheme: other.iconTheme,
     );
   }
 
@@ -640,6 +654,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.contextMenuTheme, b.contextMenuTheme, t),
       comboButtonTheme: AppKitComboButtonThemeData.lerp(
           a.comboButtonTheme, b.comboButtonTheme, t),
+      iconTheme: AppKitIconThemeData.lerp(a.iconTheme, b.iconTheme, t),
     );
   }
 
@@ -688,6 +703,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'contextMenuTheme', contextMenuTheme));
     properties.add(DiagnosticsProperty<AppKitComboButtonThemeData>(
         'comboButtonTheme', comboButtonTheme));
+    properties
+        .add(DiagnosticsProperty<AppKitIconThemeData>('iconTheme', iconTheme));
   }
 }
 
