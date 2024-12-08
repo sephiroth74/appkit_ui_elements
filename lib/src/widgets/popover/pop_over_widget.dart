@@ -101,9 +101,6 @@ class _PopoverBackgroundPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    debugPrint(
-        'size: $size, anchorOffset: $anchorOffset, anchorDirection: $anchorDirection');
-
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.fill

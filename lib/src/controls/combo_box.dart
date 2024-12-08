@@ -105,8 +105,6 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
 
   @override
   void didUpdateWidget(AppKitComboBox oldWidget) {
-    debugPrint('didUpdateWidget');
-
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controlSize != widget.controlSize) {
       _textFieldSize.value = null;
