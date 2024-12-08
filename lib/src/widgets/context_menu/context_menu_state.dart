@@ -3,13 +3,21 @@ import 'dart:collection';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/utils/utils.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 64);
 const _kAnimationCount = 4;
 
 class AppKitContextMenuState<T> extends ChangeNotifier {
-  final focusScopeNode = FocusScopeNode();
+  late final focusScopeNode = FocusScopeNode(
+    onKeyEvent: (node, event) {
+      if (event.logicalKey == LogicalKeyboardKey.enter) {
+        this._handleItemSelection(node.context, focusedEntry);
+      }
+      return KeyEventResult.ignored;
+    },
+  );
 
   final overlayController = OverlayPortalController(debugLabel: 'ContextMenu');
 
@@ -76,6 +84,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   double get minWidth => menu.minWidth;
 
+  double? get maxHeight => menu.maxHeight;
+
   AppKitContextMenuEntry<T>? get focusedEntry => _focusedEntry;
 
   AppKitContextMenuEntry<T>? get futureSelectedEntry => _futureSelectedEntry;
@@ -115,6 +125,14 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     _futureSelectedEntry = null;
     _selectionTimer?.cancel();
     notifyListeners();
+  }
+
+  void _handleItemSelection(
+      BuildContext? context, AppKitContextMenuEntry<T>? item) {
+    if (null == item || null == context) return;
+    if (item is! AppKitContextMenuItem<T>) return;
+    if (item.hasSubmenu) return;
+    item.handleItemSelection(context);
   }
 
   void animateSelectedItem(
@@ -206,13 +224,13 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final boundaries = calculateContextMenuBoundaries(
-        context: context,
-        menu: menu,
-        parentRect: parentItemRect,
-        spawnAlignment: _spawnAlignment,
-        isSubmenu: _isSubmenu,
-        menuEdge: _menuEdge,
-      );
+          context: context,
+          menu: menu,
+          parentRect: parentItemRect,
+          spawnAlignment: _spawnAlignment,
+          isSubmenu: _isSubmenu,
+          menuEdge: _menuEdge,
+          maxHeight: maxHeight);
 
       menu.position = boundaries.pos;
       menu.size = boundaries.size;

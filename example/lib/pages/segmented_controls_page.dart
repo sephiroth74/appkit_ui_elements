@@ -40,7 +40,6 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                 padding: const EdgeInsets.all(20),
                 child: Builder(
                   builder: (context) {
-                    final theme = AppKitTheme.of(context);
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,

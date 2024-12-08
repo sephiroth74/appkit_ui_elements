@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/pages/combo_box_button_page.dart';
 import 'package:example/pages/combo_button_page.dart';
 import 'package:example/pages/controls_page.dart';
 import 'package:example/pages/fields_page.dart';
@@ -84,7 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       SidebarItem(label: Text('Push Button')),
                       SidebarItem(label: Text('Toggle Button')),
                       SidebarItem(label: Text('Combo Button')),
-                      SidebarItem(label: Text('Popup Button')),
+                      SidebarItem(label: Text('ComboBox Button')),
+                      SidebarItem(label: Text('Popup/Pulldown Button')),
                     ]),
                     SidebarItem(label: Text('Controls')),
                     SidebarItem(label: Text('Indicators')),
@@ -112,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const PushButtonPage(),
           const ToggleButtonPage(),
           const ComboButtonPage(),
+          const ComboBoxButtonPage(),
           const PopupButtonPage(),
           const ControlsPage(),
           const IndicatorsPage(),

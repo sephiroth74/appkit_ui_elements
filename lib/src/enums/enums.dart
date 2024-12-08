@@ -109,6 +109,11 @@ enum AppKitPopupButtonStyle {
 
 typedef AppKitPulldownButtonStyle = AppKitPopupButtonStyle;
 
+enum AppKitComboBoxStyle {
+  bordered,
+  plain,
+}
+
 enum AppKitOverlayVisibilityMode {
   never,
   editing,
@@ -134,15 +139,15 @@ enum AppKitTextFieldBorderStyle {
   bezel,
   rounded;
 
-  double get borderRadius {
+  double getBorderRadius(double? radius) {
     switch (this) {
       case AppKitTextFieldBorderStyle.none:
       case AppKitTextFieldBorderStyle.line:
         return 0.0;
       case AppKitTextFieldBorderStyle.bezel:
-        return _kBezelBorderRadius;
+        return radius ?? _kBezelBorderRadius;
       case AppKitTextFieldBorderStyle.rounded:
-        return _kRoundedBorderRadius;
+        return radius ?? _kRoundedBorderRadius;
     }
   }
 }

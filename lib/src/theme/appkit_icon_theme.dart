@@ -94,6 +94,7 @@ class AppKitIconThemeData with Diagnosticable {
   final Color? color;
 
   double? get opacity => _opacity?.clamp(0.0, 1.0);
+
   final double? _opacity;
 
   final double? size;

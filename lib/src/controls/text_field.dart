@@ -32,7 +32,6 @@ class AppKitTextField extends StatefulWidget {
   final bool autocorrect;
   final SmartDashesType smartDashesType;
   final SmartQuotesType smartQuotesType;
-  final bool enableSuggestions;
   final int? maxLines;
   final int? minLines;
   final int? maxLength;
@@ -50,8 +49,10 @@ class AppKitTextField extends StatefulWidget {
   final ScrollPhysics? scrollPhysics;
   final Iterable<String>? autofillHints;
   final String? restorationId;
-  final AppKitOverlayVisibilityMode clearButtonMode;
-  final EdgeInsets? clearButtonPadding;
+  final Widget? suffix;
+  final AppKitOverlayVisibilityMode? suffixMode;
+  final AppKitOverlayVisibilityMode? clearButtonMode;
+  final EdgeInsets? suffixPadding;
   final String obscuringCharacter;
   final bool obscureText;
   final Widget? prefix;
@@ -69,6 +70,7 @@ class AppKitTextField extends StatefulWidget {
   final Color? backgroundColor;
   final BoxDecoration? decoration;
   final bool continuous;
+  final double? borderRadius;
 
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -89,7 +91,7 @@ class AppKitTextField extends StatefulWidget {
     this.behavior = AppKitTextFieldBehavior.editable,
     this.borderStyle = AppKitTextFieldBorderStyle.line,
     this.clearButtonMode = AppKitOverlayVisibilityMode.never,
-    this.clearButtonPadding =
+    this.suffixPadding =
         const EdgeInsets.only(top: 1.0, bottom: 2.0, left: 6.0, right: 6.0),
     this.contextMenuBuilder = _defaultContextMenuBuilder,
     this.continuous = true,
@@ -103,7 +105,6 @@ class AppKitTextField extends StatefulWidget {
     this.dragStartBehavior = DragStartBehavior.start,
     this.enabled = true,
     this.enableInteractiveSelection = true,
-    this.enableSuggestions = false,
     this.expands = false,
     this.focusNode,
     this.inputFormatters,
@@ -139,11 +140,16 @@ class AppKitTextField extends StatefulWidget {
     this.textAlignVertical = TextAlignVertical.top,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction,
+    this.suffix,
+    this.suffixMode = AppKitOverlayVisibilityMode.always,
     this.title,
+    this.borderRadius,
   })  : smartDashesType = smartDashesType ??
             (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
         smartQuotesType = smartQuotesType ??
-            (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled);
+            (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled),
+        assert(suffix != null ? suffixMode != null : true),
+        assert(suffix != null ? clearButtonMode == null : true);
 
   @override
   State<AppKitTextField> createState() => _AppKitTextFieldState();
@@ -183,7 +189,9 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
   bool get _hasDecoration {
     return widget.placeholder != null ||
-        widget.clearButtonMode != AppKitOverlayVisibilityMode.never;
+        widget.clearButtonMode != AppKitOverlayVisibilityMode.never ||
+        (widget.suffix != null &&
+            widget.suffixMode != AppKitOverlayVisibilityMode.never);
   }
 
   late final _TextFieldSelectionGestureDetectorBuilder
@@ -273,10 +281,19 @@ class _AppKitTextFieldState extends State<AppKitTextField>
   }
 
   bool _showClearButton(TextEditingValue text) {
-    return _shouldShowAttachment(
-      attachment: widget.clearButtonMode,
-      hasText: text.text.isNotEmpty,
-    );
+    return widget.clearButtonMode != null &&
+        _shouldShowAttachment(
+          attachment: widget.clearButtonMode!,
+          hasText: text.text.isNotEmpty,
+        );
+  }
+
+  bool _showSuffixWidget(TextEditingValue text) {
+    return widget.suffix != null &&
+        _shouldShowAttachment(
+          attachment: widget.suffixMode!,
+          hasText: text.text.isNotEmpty,
+        );
   }
 
   bool _shouldShowSelectionHandles(SelectionChangedCause? cause) {
@@ -413,7 +430,21 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             Builder(builder: (context) {
               final clearButtonSize =
                   textStyle.fontSize != null ? textStyle.fontSize! + 3 : 16.0;
+
+              if (_showSuffixWidget(text)) {
+                return Padding(
+                  padding: widget.suffixPadding ??
+                      EdgeInsets.only(
+                          top: widget.padding.top,
+                          bottom: widget.padding.bottom,
+                          left: 6.0,
+                          right: 6.0),
+                  child: widget.suffix!,
+                );
+              }
+
               final showClearButton = _showClearButton(text);
+
               return FocusScope(
                 canRequestFocus: false,
                 child: TapRegion(
@@ -429,7 +460,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                       key: _clearGlobalKey,
                       child: Center(
                         child: Padding(
-                          padding: widget.clearButtonPadding ??
+                          padding: widget.suffixPadding ??
                               EdgeInsets.only(
                                 top: widget.padding.top,
                                 bottom: widget.padding.bottom,
@@ -484,7 +515,13 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
     TextStyle? resolvedPlaceholderStyle = widget.placeholderStyle;
     TextStyle? resolvedStyle = widget.style;
-    final textStyle = theme.typography.body.merge(resolvedStyle);
+
+    Color textColor = theme.typography.body.color ??
+        AppKitColors.text.opaque.primary.resolveFrom(context);
+
+    final textStyle = theme.typography.body
+        .copyWith(color: textColor.multiplyOpacity(enabled ? 1.0 : 0.5))
+        .merge(resolvedStyle);
 
     return UiElementColorBuilder(builder: (context, colorContainer) {
       final placeholderStyle = theme.typography.body
@@ -532,7 +569,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
               autocorrect: widget.autocorrect,
               smartDashesType: widget.smartDashesType,
               smartQuotesType: widget.smartQuotesType,
-              enableSuggestions: widget.enableSuggestions,
+              enableSuggestions: false,
               maxLines: widget.maxLines,
               minLines: widget.minLines,
               expands: widget.expands,
@@ -587,8 +624,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
         child: IgnorePointer(
           ignoring: !enabled || !widget.behavior.canRequestFocus,
           child: AppKitFocusContainer(
-            borderRadius:
-                decoration.borderRadius, //widget.borderStyle.borderRadius,
+            borderRadius: decoration.borderRadius,
             textField: true,
             focusNode: _effectiveFocusNode,
             enabled: enabled && _effectiveFocusNode.canRequestFocus,
@@ -623,8 +659,10 @@ class _AppKitTextFieldState extends State<AppKitTextField>
         (enabled
             ? colorContainer.controlBackgroundColor
             : colorContainer.controlBackgroundColor.withOpacity(0.5));
-    const borderWidth = 1.0;
-    final borderRadius = widget.borderStyle.borderRadius;
+    const borderWidth = 0.5;
+
+    final borderRadius =
+        widget.borderStyle.getBorderRadius(widget.borderRadius);
 
     if (widget.decoration != null) {
       return widget.decoration!;
@@ -664,8 +702,16 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       case AppKitTextFieldBorderStyle.rounded:
         return BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(
-              fontSize != null ? fontSize / 2 : borderRadius),
+          // borderRadius: BorderRadius.circular(widget.borderRadius ?? (fontSize != null ? fontSize / 2 : borderRadius)),
+          borderRadius: BorderRadius.circular(borderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: colorContainer.shadowColor.withOpacity(0.05),
+              blurRadius: 1.25,
+              offset: const Offset(0, 0.25),
+              blurStyle: BlurStyle.outer,
+            ),
+          ],
           border: GradientBoxBorder(
               gradient: LinearGradient(
                 colors: [
@@ -729,8 +775,6 @@ class _AppKitTextFieldState extends State<AppKitTextField>
         'smartDashesType', widget.smartDashesType));
     properties.add(DiagnosticsProperty<SmartQuotesType>(
         'smartQuotesType', widget.smartQuotesType));
-    properties.add(DiagnosticsProperty<bool>(
-        'enableSuggestions', widget.enableSuggestions));
     properties.add(DiagnosticsProperty<int>('maxLines', widget.maxLines));
     properties.add(DiagnosticsProperty<int>('minLines', widget.minLines));
     properties.add(DiagnosticsProperty<int>('maxLength', widget.maxLength));

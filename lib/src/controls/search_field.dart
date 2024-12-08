@@ -132,8 +132,6 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
         menuEdge: AppKitMenuEdge.auto,
       );
 
-      _logger.d('Selected value: $value');
-
       if (value?.value != null) {
         setState(() {
           _controller!.text = value!.title;
@@ -178,7 +176,6 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
       continuous: widget.continuous,
       controller: _controller,
       enabled: enabled,
-      enableSuggestions: false,
       focusNode: _focusNode,
       inputFormatters: widget.inputFormatters,
       keyboardType: widget.inputType,
@@ -329,19 +326,6 @@ extension _ControlSizeX on AppKitControlSize {
         return const TextStyle(fontSize: 13.0);
       case AppKitControlSize.large:
         return const TextStyle(fontSize: 16.0);
-    }
-  }
-
-  double get borderRadius {
-    switch (this) {
-      case AppKitControlSize.mini:
-        return 2.0;
-      case AppKitControlSize.small:
-        return 4.0;
-      case AppKitControlSize.regular:
-        return 8.0;
-      case AppKitControlSize.large:
-        return 10.0;
     }
   }
 }

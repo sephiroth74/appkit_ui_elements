@@ -281,7 +281,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                   width: width,
                   height: height,
                   menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
                   enabled: enabled,
                   colorContainer: colorContainer,
                   contextMenuOpened: _isMenuOpened,
@@ -296,7 +295,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                   width: width,
                   height: height,
                   menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
                   enabled: enabled,
                   colorContainer: colorContainer,
                   contextMenuOpened: _isMenuOpened,
@@ -310,7 +308,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                   width: width,
                   height: height,
                   menuEdge: menuEdge,
-                  onItemSelected: widget.onItemSelected,
                   enabled: enabled,
                   colorContainer: colorContainer,
                   contextMenuOpened: _isMenuOpened,
@@ -376,7 +373,6 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
   final double width;
   final double height;
   final AppKitMenuEdge menuEdge;
-  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
   final bool enabled;
   final UiElementColorContainer colorContainer;
   final bool contextMenuOpened;
@@ -398,7 +394,6 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     required this.controlSize,
     required this.child,
     required this.style,
-    this.onItemSelected,
     this.color,
   });
 
@@ -581,7 +576,6 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
   final double width;
   final double height;
   final AppKitMenuEdge menuEdge;
-  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
   final bool enabled;
   final UiElementColorContainer colorContainer;
   final bool contextMenuOpened;
@@ -602,7 +596,6 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     required this.isMainWindow,
     required this.controlSize,
     required this.child,
-    this.onItemSelected,
     this.isHovered = false,
   });
 
@@ -724,7 +717,6 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
   final double width;
   final double height;
   final AppKitMenuEdge menuEdge;
-  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
   final bool enabled;
   final UiElementColorContainer colorContainer;
   final bool contextMenuOpened;
@@ -745,7 +737,6 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     required this.isMainWindow,
     required this.controlSize,
     required this.child,
-    this.onItemSelected,
     this.isHovered = false,
   });
 

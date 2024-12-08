@@ -82,11 +82,17 @@ extension RenderBoxExtensions on RenderBox? {
   required AlignmentGeometry spawnAlignment,
   required bool isSubmenu,
   AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
+  double? maxHeight,
 }) {
   final screenSize = MediaQuery.of(context).size;
   final safeScreenRect = (Offset.zero & screenSize).deflate(8.0);
   Rect menuRect = context.getWidgetBounds()!;
   AlignmentGeometry nextSpawnAlignment = spawnAlignment;
+
+  if (maxHeight != null) {
+    menuRect = menuRect.copyWith(
+        bottom: min(menuRect.bottom, menuRect.top + maxHeight));
+  }
 
   double x = menuRect.left;
   double y = menuRect.top;
@@ -94,6 +100,10 @@ extension RenderBoxExtensions on RenderBox? {
 
   if (menuEdge == AppKitMenuEdge.left) {
     x -= menuRect.width;
+  }
+
+  if (menuRect.height > screenSize.height) {
+    menuRect = menuRect.copyWith(top: menuRect.top, bottom: screenSize.height);
   }
 
   bool isWidthExceed() => x + menuRect.width > screenSize.width || x < 0;
@@ -173,8 +183,13 @@ extension RenderBoxExtensions on RenderBox? {
 
   final globalMenuRect = Rect.fromLTWH(x, y, menuRect.width, menuRect.height);
 
-  if (globalMenuRect.bottom > safeScreenRect.bottom) {
+  if (globalMenuRect.top < safeScreenRect.top) {
+    menuRect = globalMenuRect.shift(Offset(0, safeScreenRect.top - y));
+    menuSize = menuRect.size;
+  } else if (globalMenuRect.bottom > safeScreenRect.bottom) {
     menuRect = globalMenuRect.shift(Offset(0, safeScreenRect.bottom - y));
+    menuSize = menuRect.size;
+  } else {
     menuSize = menuRect.size;
   }
 
