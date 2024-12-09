@@ -23,6 +23,7 @@ dependencies:
   plugin_platform_interface: any
   collection: ^1.18.0
   indexed: ^0.0.8
+  intl: ^0.20.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

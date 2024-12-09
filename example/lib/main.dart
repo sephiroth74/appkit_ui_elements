@@ -10,6 +10,7 @@ import 'package:example/pages/popup_button.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
 import 'package:example/pages/colors_page.dart';
+import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
@@ -93,6 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Sliders')),
                     SidebarItem(label: Text('Segmented Controls')),
                     SidebarItem(
+                        label: Text('Selectors'),
+                        leading: Icon(Icons.date_range_outlined, size: 13)),
+                    SidebarItem(
                         label: Text('Colors'),
                         leading: Icon(CupertinoIcons.paintbrush, size: 13)),
                     SidebarItem(
@@ -120,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const IndicatorsPage(),
           const SlidersPage(),
           const SegmentedControlsPage(),
+          const SelectorsPage(),
           const ColorsPage(),
           const FieldsPage(),
         ][pageIndex],

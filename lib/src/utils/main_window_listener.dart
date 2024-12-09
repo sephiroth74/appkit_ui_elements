@@ -12,6 +12,23 @@ class MainWindowStreamBuilder extends StreamBuilder {
       : super(stream: MainWindowStateListener.instance.isMainWindow);
 }
 
+typedef MainWindowWidgetBuilder = Widget Function(
+    BuildContext context, bool isMainWindow);
+
+class MainWindowBuilder extends StatelessWidget {
+  final MainWindowWidgetBuilder builder;
+
+  const MainWindowBuilder({super.key, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return MainWindowStreamBuilder(builder: (context, snapshot) {
+      final isMainWindow = snapshot.hasData ? snapshot.data as bool : false;
+      return builder(context, isMainWindow);
+    });
+  }
+}
+
 class MainWindowListener extends StatefulWidget {
   final Widget child;
   final ValueChanged<bool>? onMainWindowChanged;
