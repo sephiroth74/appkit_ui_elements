@@ -52,7 +52,6 @@ class AppKitTextField extends StatefulWidget {
   final Widget? suffix;
   final AppKitOverlayVisibilityMode? suffixMode;
   final AppKitOverlayVisibilityMode? clearButtonMode;
-  final EdgeInsets? suffixPadding;
   final String obscuringCharacter;
   final bool obscureText;
   final Widget? prefix;
@@ -91,8 +90,6 @@ class AppKitTextField extends StatefulWidget {
     this.behavior = AppKitTextFieldBehavior.editable,
     this.borderStyle = AppKitTextFieldBorderStyle.line,
     this.clearButtonMode = AppKitOverlayVisibilityMode.never,
-    this.suffixPadding =
-        const EdgeInsets.only(top: 1.0, bottom: 2.0, left: 6.0, right: 6.0),
     this.contextMenuBuilder = _defaultContextMenuBuilder,
     this.continuous = true,
     this.controller,
@@ -432,15 +429,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                   textStyle.fontSize != null ? textStyle.fontSize! + 3 : 16.0;
 
               if (_showSuffixWidget(text)) {
-                return Padding(
-                  padding: widget.suffixPadding ??
-                      EdgeInsets.only(
-                          top: widget.padding.top,
-                          bottom: widget.padding.bottom,
-                          left: 6.0,
-                          right: 6.0),
-                  child: widget.suffix!,
-                );
+                return widget.suffix!;
               }
 
               final showClearButton = _showClearButton(text);
@@ -460,13 +449,12 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                       key: _clearGlobalKey,
                       child: Center(
                         child: Padding(
-                          padding: widget.suffixPadding ??
-                              EdgeInsets.only(
-                                top: widget.padding.top,
-                                bottom: widget.padding.bottom,
-                                left: 6.0,
-                                right: 6.0,
-                              ),
+                          padding: EdgeInsets.only(
+                            top: widget.padding.top,
+                            bottom: widget.padding.bottom,
+                            left: 6.0,
+                            right: 6.0,
+                          ),
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: showClearButton

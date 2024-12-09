@@ -360,7 +360,6 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
       textAlign: widget.textAlign,
       suffix: suffix,
       suffixMode: AppKitOverlayVisibilityMode.always,
-      suffixPadding: const EdgeInsets.only(),
       decoration: decoration,
       style: widget.controlSize.textStyle,
     );

@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-final _logger = newLogger('AppKitSearchField');
-
 class AppKitSearchField extends StatefulWidget {
   final ContextMenuBuilder<String>? contextMenuBuilder;
   final TextEditingController? controller;
