@@ -6,9 +6,6 @@ import 'package:appkit_ui_elements/src/library.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-const _kSize = 21.0;
-const _kWidthRatio = 1.5;
-const _kBorderRadiusRatio = 4;
 const _longPressDuration = Duration(milliseconds: 500);
 const _tickerDuration = Duration(milliseconds: 100);
 
@@ -19,20 +16,18 @@ class AppKitStepper extends StatefulWidget {
   final double increment;
   final double value;
   final ValueChanged<double>? onChanged;
-  final double height;
-  final double width;
+  final AppKitControlSize controlSize;
 
   const AppKitStepper({
     super.key,
+    required this.value,
     this.semanticLabel,
     this.minValue = 0,
     this.maxValue = 100,
     this.increment = 1,
-    double size = _kSize,
-    required this.value,
+    this.controlSize = AppKitControlSize.regular,
     this.onChanged,
-  })  : height = size,
-        width = size / _kWidthRatio;
+  });
 
   bool get enabled => onChanged != null;
 
@@ -56,6 +51,16 @@ class _AppKitStepperState extends State<AppKitStepper> {
     ));
   }
 
+  Size get size => widget.controlSize.size;
+
+  double get height => size.height;
+
+  double get width => size.width;
+
+  double get borderRadius => widget.controlSize.borderRadius;
+
+  double get borderWidth => 1.0;
+
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
@@ -65,8 +70,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
         ? Colors.white.withOpacity(0.2 * enabledFactor)
         : Colors.black.withOpacity(0.2 * enabledFactor);
 
-    final borderRadius = widget.height / _kBorderRadiusRatio;
-    final borderWidth = widget.height / 40;
+    //final borderRadius = widget.height / _kBorderRadiusRatio;
+    // final borderWidth = widget.height / 40;
 
     final iconColor = !theme.brightness.isDark
         ? widget.enabled
@@ -76,12 +81,15 @@ class _AppKitStepperState extends State<AppKitStepper> {
             ? AppKitColors.labelColor.darkColor
             : AppKitColors.text.opaque.tertiary.darkColor;
 
+    final strokeWidth = widget.controlSize.strokeWidth;
+    final separatorWidth = widget.controlSize.separatorWidth;
+
     return Semantics(
       label: widget.semanticLabel,
       button: true,
       child: SizedBox(
-        width: widget.width,
-        height: widget.height,
+        width: width,
+        height: height,
         child: GestureDetector(
           onPanDown: widget.enabled ? _onPanDown : null,
           onPanEnd: widget.enabled ? _onPanEnd : null,
@@ -95,21 +103,23 @@ class _AppKitStepperState extends State<AppKitStepper> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.15 * enabledFactor),
-                      offset: Offset(0, widget.height / 80),
-                      blurRadius: widget.height / 80,
+                      offset: Offset(0, height / 80),
+                      blurRadius: height / 80,
+                      blurStyle: BlurStyle.outer,
                     ),
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05 * enabledFactor),
-                      offset: Offset(0, widget.height / 20),
-                      blurRadius: widget.height / 26.666,
+                      offset: Offset(0, height / 20),
+                      blurRadius: height / 26.666,
+                      blurStyle: BlurStyle.outer,
                     ),
                   ]),
               child: Stack(
                 children: [
                   // Top Stepper
                   SizedBox(
-                    width: widget.width,
-                    height: widget.height / 2,
+                    width: width,
+                    height: height / 2,
                     child: Container(
                       foregroundDecoration:
                           _isPointerDown && _isPointerIncreasing
@@ -142,8 +152,10 @@ class _AppKitStepperState extends State<AppKitStepper> {
                           painter: IconButtonPainter(
                             color: iconColor,
                             icon: AppKitControlButtonIcon.disclosureUp,
-                            offset: Offset(0, -widget.height / 10),
-                            size: widget.height / 2,
+                            offset: Offset(0, -height / 10),
+                            strokeWidth: strokeWidth,
+                            strokeCap: StrokeCap.square,
+                            size: height / 2,
                           ),
                         ),
                       ),
@@ -154,8 +166,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                   Positioned(
                     bottom: 0,
                     child: SizedBox(
-                      width: widget.width,
-                      height: widget.height / 2,
+                      width: width,
+                      height: height / 2,
                       child: Container(
                         foregroundDecoration: _isPointerDown &&
                                 !_isPointerIncreasing
@@ -191,8 +203,10 @@ class _AppKitStepperState extends State<AppKitStepper> {
                               painter: IconButtonPainter(
                                 color: iconColor,
                                 icon: AppKitControlButtonIcon.disclosureDown,
-                                offset: Offset(0, -widget.height / 10),
-                                size: widget.height / 2,
+                                offset: Offset(0, -height / 10),
+                                strokeCap: StrokeCap.square,
+                                strokeWidth: strokeWidth,
+                                size: height / 2,
                               ),
                             )),
                       ),
@@ -201,11 +215,11 @@ class _AppKitStepperState extends State<AppKitStepper> {
 
                   // Top Gradient
                   Positioned(
-                    bottom: widget.height / 2,
+                    bottom: height / 2,
                     left: borderWidth,
                     child: SizedBox(
-                      width: widget.width - borderWidth * 2,
-                      height: widget.height / 5,
+                      width: width - borderWidth * 2,
+                      height: height / 5,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -221,11 +235,11 @@ class _AppKitStepperState extends State<AppKitStepper> {
 
                   // Bottom Gradient
                   Positioned(
-                    top: widget.height / 2,
+                    top: height / 2,
                     left: borderWidth,
                     child: SizedBox(
-                      width: widget.width - borderWidth * 2,
-                      height: widget.height / 5,
+                      width: width - borderWidth * 2,
+                      height: height / 5,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -241,11 +255,11 @@ class _AppKitStepperState extends State<AppKitStepper> {
 
                   // Filler
                   Positioned(
-                    top: (widget.height / 2) - (widget.height / 20),
+                    top: (height / 2) - (height / 20),
                     left: borderWidth,
                     child: SizedBox(
-                      width: widget.width - borderWidth * 2,
-                      height: widget.height / 10,
+                      width: width - borderWidth * 2,
+                      height: height / 10,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.05 * enabledFactor),
@@ -255,14 +269,14 @@ class _AppKitStepperState extends State<AppKitStepper> {
 
                   // Separator
                   Positioned(
-                    top: (widget.height / 2) - (widget.height / 40),
+                    top: (height / 2) - (separatorWidth / 2),
                     left: borderWidth,
                     child: SizedBox(
-                      width: widget.width - borderWidth * 2,
-                      height: widget.height / 20,
+                      width: width - borderWidth * 2,
+                      height: separatorWidth,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.125 * enabledFactor),
+                        color: Colors.black.withOpacity(0.05 * enabledFactor),
                       )),
                     ),
                   ),
@@ -320,7 +334,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
   void _onPanDown(DragDownDetails details) {
     setState(() {
       isPointerDown = true;
-      _isPointerIncreasing = details.localPosition.dy < widget.height / 2;
+      _isPointerIncreasing = details.localPosition.dy < height / 2;
     });
   }
 
@@ -349,16 +363,15 @@ class _AppKitStepperState extends State<AppKitStepper> {
   void _onPanUpdate(DragUpdateDetails details) {
     setState(() {
       isPointerDown = (details.localPosition.dy >= 0 &&
-              details.localPosition.dy <= widget.height) &&
-          (details.localPosition.dx >= 0 &&
-              details.localPosition.dx <= widget.width);
-      _isPointerIncreasing = details.localPosition.dy < widget.height / 2;
+              details.localPosition.dy <= height) &&
+          (details.localPosition.dx >= 0 && details.localPosition.dx <= width);
+      _isPointerIncreasing = details.localPosition.dy < height / 2;
     });
   }
 
   void _onPanStart(DragStartDetails details) {
     setState(() {
-      _isPointerIncreasing = details.localPosition.dy < widget.height / 2;
+      _isPointerIncreasing = details.localPosition.dy < height / 2;
     });
   }
 
@@ -372,5 +385,59 @@ class _AppKitStepperState extends State<AppKitStepper> {
     final newValue = (widget.value - widget.increment)
         .clamp(widget.minValue, widget.maxValue);
     widget.onChanged?.call(newValue);
+  }
+}
+
+extension _ConstrolSizeX on AppKitControlSize {
+  double get separatorWidth {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return 0.5;
+      case AppKitControlSize.small:
+        return 1.0;
+      case AppKitControlSize.regular:
+        return 2.0;
+      case AppKitControlSize.large:
+        return 2.0;
+    }
+  }
+
+  double get strokeWidth {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return 1.0;
+      case AppKitControlSize.small:
+        return 1.0;
+      case AppKitControlSize.regular:
+        return 1.5;
+      case AppKitControlSize.large:
+        return 1.5;
+    }
+  }
+
+  double get borderRadius {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return 3.5;
+      case AppKitControlSize.small:
+        return 5.0;
+      case AppKitControlSize.regular:
+        return 6.5;
+      case AppKitControlSize.large:
+        return 8.0;
+    }
+  }
+
+  Size get size {
+    switch (this) {
+      case AppKitControlSize.mini:
+        return const Size(11, 15);
+      case AppKitControlSize.small:
+        return const Size(13, 18);
+      case AppKitControlSize.regular:
+        return const Size(15, 22);
+      case AppKitControlSize.large:
+        return const Size(18, 27);
+    }
   }
 }

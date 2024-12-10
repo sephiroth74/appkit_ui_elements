@@ -1,13 +1,13 @@
+import 'dart:async';
+
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_borders/gradient_borders.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 class AppKitDatePicker extends StatefulWidget {
   final AppKitDatePickerType type;
@@ -41,7 +41,11 @@ class AppKitDatePicker extends StatefulWidget {
             maximumDate == null ||
             minimumDate.isBefore(maximumDate)),
         assert(initialDateTime.isAfter(minimumDate ?? DateTime(1)) &&
-            initialDateTime.isBefore(maximumDate ?? DateTime(9999)));
+            initialDateTime.isBefore(maximumDate ?? DateTime(9999))),
+        assert(
+            dateElements != AppKitDateElements.none ||
+                timeElements != AppKitTimeElements.none,
+            'At least one of dateElements or timeElements must be non-none');
 
   @override
   State<AppKitDatePicker> createState() => _AppKitDatePickerState();
@@ -49,13 +53,6 @@ class AppKitDatePicker extends StatefulWidget {
 
 class _AppKitDatePickerState extends State<AppKitDatePicker> {
   bool get enabled => widget.onChanged != null;
-
-  // FocusNode? _focusNode;
-
-  // List<FocusNode> _focusNodes = [
-  //   FocusNode(),
-  //   FocusNode(),
-  // ];
 
   @override
   void initState() {
@@ -77,7 +74,8 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
       label: widget.semanticLabel,
       container: true,
       child: MainWindowBuilder(builder: (context, isMainWindow) {
-        if (widget.type == AppKitDatePickerType.textual) {
+        if (widget.type == AppKitDatePickerType.textual ||
+            widget.type == AppKitDatePickerType.textualWithStepper) {
           return _TextualDatePicker(
             type: widget.type,
             dateElements: widget.dateElements,
@@ -94,33 +92,6 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
             languageCode: languageCode,
             isMainWindow: isMainWindow,
           );
-
-          // return FocusScope(
-          //   autofocus: true,
-          //   onFocusChange: (value) {
-          //     debugPrint('DatePicker focus changed: $value');
-          //   },
-          //   child: Row(children: [
-          //     FocusableWidget(focusNode: _focusNodes[0], index: 0),
-          //     const SizedBox(width: 4),
-          //     FocusableWidget(focusNode: _focusNodes[1], index: 1),
-          //   ]),
-          //   // child: _TextualDatePicker(
-          //   //   focusNode: _effectiveFocusNode,
-          //   //   type: widget.type,
-          //   //   dateElements: widget.dateElements,
-          //   //   timeElements: widget.timeElements,
-          //   //   initialDateTime: widget.initialDateTime,
-          //   //   minimumDate: widget.minimumDate,
-          //   //   maximumDate: widget.maximumDate,
-          //   //   semanticLabel: widget.semanticLabel,
-          //   //   textStyle: widget.textStyle,
-          //   //   color: widget.color,
-          //   //   drawBackground: widget.drawBackground,
-          //   //   drawBorder: widget.drawBorder,
-          //   //   onChanged: widget.onChanged,
-          //   // ),
-          // );
         } else {
           return Container();
         }
@@ -150,78 +121,6 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
         value: widget.drawBackground, ifTrue: 'drawBackground'));
     properties.add(FlagProperty('drawBorder',
         value: widget.drawBorder, ifTrue: 'drawBorder'));
-  }
-}
-
-class FocusableWidget extends StatefulWidget {
-  final FocusNode focusNode;
-  final int index;
-
-  const FocusableWidget({
-    required this.focusNode,
-    required this.index,
-  });
-
-  @override
-  State<FocusableWidget> createState() => _FocusableWidgetState();
-}
-
-class _FocusableWidgetState extends State<FocusableWidget> {
-  @override
-  void initState() {
-    super.initState();
-    if (widget.index == 0) {
-      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        FocusScope.of(context).requestFocus(widget.focusNode);
-      });
-    }
-    widget.focusNode.addListener(_handleFocusChange);
-  }
-
-  @override
-  void dispose() {
-    widget.focusNode.removeListener(_handleFocusChange);
-    super.dispose();
-  }
-
-  void _handleFocusChange() {
-    debugPrint(
-        'FocusableWidget[${widget.index}] focus changed: ${widget.focusNode.hasFocus}');
-    setState(() {
-      _isFocused = widget.focusNode.hasFocus;
-    });
-  }
-
-  bool _isFocused = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Focus(
-      autofocus: widget.index == 0,
-      canRequestFocus: true,
-      descendantsAreFocusable: false,
-      descendantsAreTraversable: false,
-      skipTraversal: false,
-      focusNode: widget.focusNode,
-      onFocusChange: (value) {
-        debugPrint('[${widget.index}] FocusableWidget onFocusChange: $value');
-      },
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(widget.focusNode);
-        },
-        child: SizedBox.square(
-          dimension: 50,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: _isFocused ? Colors.red : Colors.black,
-                  width: _isFocused ? 2 : 1),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 
@@ -271,26 +170,60 @@ class _TextualDatePickerState extends State<_TextualDatePicker> {
 
   String get languageCode => widget.languageCode;
 
-  late final DateFormat formatter;
+  late DateFormat dateFormatter;
 
-  late final List<String> formatterSegments;
+  late DateFormat timeFormatter;
 
-  late final List<FocusNode> focusNodes;
+  late List<String> dateFormatterSegments;
+
+  late List<String> timeFormatterSegments;
+
+  late List<FocusNode> focusNodes;
+
+  late DateTime dateTime;
+
+  bool get hasDate => widget.dateElements != AppKitDateElements.none;
+
+  bool get hasTime => widget.timeElements != AppKitTimeElements.none;
+
+  String get dateString => dateFormatter.format(dateTime);
+
+  String get timeString => timeFormatter.format(dateTime);
+
+  List<int> get dateSegments => dateString.split('/').map(int.parse).toList();
+
+  List<int> get timeSegments => timeString.split(':').map(int.parse).toList();
+
+  (TextStyle, double)? _charWidth;
 
   @override
   void initState() {
     super.initState();
+    initializeWidget();
+  }
 
-    formatter = DateFormat.yMd(languageCode);
-    formatterSegments =
-        formatter.pattern!.split('/').map((e) => e.toLowerCase()).toList();
-    focusNodes =
-        List.generate(formatterSegments.length, (index) => FocusNode());
+  void initializeWidget() {
+    debugPrint('**** initializeWidget ****');
+    dateTime = widget.initialDateTime.copyWith();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      debugPrint('Requesting focus for index 0');
-      FocusScope.of(context).requestFocus(focusNodes[0]);
-    });
+    dateFormatter = widget.dateElements.getDateFormat(languageCode);
+    timeFormatter = widget.timeElements.getDateFormat(languageCode);
+
+    dateFormatterSegments =
+        hasDate ? dateFormatter.pattern!.split('/').toList() : [];
+    timeFormatterSegments =
+        hasTime ? timeFormatter.pattern!.split(':').toList() : [];
+
+    final totalSegments =
+        (dateFormatterSegments.length) + (timeFormatterSegments.length);
+
+    focusNodes = List.generate(totalSegments, (index) => FocusNode());
+
+    if (_focusedIndex == null || _focusedIndex! >= totalSegments) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(focusNodes[0]);
+      });
+    }
   }
 
   @override
@@ -298,33 +231,114 @@ class _TextualDatePickerState extends State<_TextualDatePicker> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant _TextualDatePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint('**** didUpdateWidget ****');
+    debugPrint('${oldWidget.dateElements} => ${widget.dateElements}');
+    debugPrint('${oldWidget.timeElements} => ${widget.timeElements}');
+    debugPrint('${oldWidget.initialDateTime} => ${widget.initialDateTime}');
+
+    if (oldWidget.dateElements != widget.dateElements ||
+        oldWidget.timeElements != widget.timeElements ||
+        oldWidget.initialDateTime != widget.initialDateTime) {
+      initializeWidget();
+    }
+  }
+
   void _handleFocusChange(int index, bool value) {
-    debugPrint('focus changed: $index => $value');
+    debugPrint('_handleFocusChange: $index => $value');
     setState(() {
       _focusedIndex = value ? index : null;
     });
   }
 
-  void _handleKeyEvent(int index, KeyEvent event) {
-    debugPrint('key event: $index => $event');
+  void _handleSegmentStep(int? index, bool increase) {
+    debugPrint('_handleSegmentStep: $index => $increase');
+    if (index == null) return;
+    final segments = List.from(
+        index < dateFormatterSegments.length ? dateSegments : timeSegments);
+    final segmentIndex = index < dateFormatterSegments.length
+        ? index
+        : index - dateFormatterSegments.length;
+    int newValue = segments[segmentIndex] + (increase ? 1 : -1);
+    _handleSegmentChanged(index, newValue);
+  }
+
+  void _handleSegmentChanged(int index, int value) {
+    final isTimeSegment = index >= dateFormatterSegments.length;
+    final segments = List.from(
+        index < dateFormatterSegments.length ? dateSegments : timeSegments);
+    final segmentIndex = index < dateFormatterSegments.length
+        ? index
+        : index - dateFormatterSegments.length;
+    final segmentName = isTimeSegment
+        ? timeFormatterSegments[segmentIndex]
+        : dateFormatterSegments[segmentIndex];
+
+    int newValue = value;
+
+    if (value < 0 && isTimeSegment) {
+      if (segmentName == 'H') {
+        newValue = 23;
+      } else {
+        newValue = 59;
+      }
+    }
+
+    if (newValue < 0) newValue = 0;
+    segments[segmentIndex] = newValue;
+
+    final DateTime newDate;
+    final DateTime newTime;
+
+    if (isTimeSegment) {
+      final timeString = segments.join(':');
+      newTime = timeFormatter.parse(timeString);
+      newDate = dateFormatter.parse(dateString);
+    } else {
+      final dateString = segments.join('/');
+      newDate = dateFormatter.parse(dateString);
+      newTime = timeFormatter.parse(timeString);
+    }
+
+    setState(() {
+      dateTime = DateTime(newDate.year, newDate.month, newDate.day,
+          newTime.hour, newTime.minute, newTime.second);
+      debugPrint('New DateTime: $dateTime');
+    });
+  }
+
+  double _getCharWidth(TextStyle textStyle) {
+    if (_charWidth != null && _charWidth!.$1 == textStyle) {
+      return _charWidth!.$2;
+    }
+    double maxWidth = 0;
+    for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+      final Size size = textStyle.getTextSize(i.toString());
+      if (size.width > maxWidth) {
+        maxWidth = size.width;
+      }
+    }
+    _charWidth = (textStyle, maxWidth);
+    return maxWidth;
   }
 
   @override
   Widget build(BuildContext context) {
-    final date = formatter.format(widget.initialDateTime);
-    final dateSegments = date.split('/');
-    // debugPrint('date: $date');
-
     return UiElementColorBuilder(builder: (context, colorContainer) {
       return LayoutBuilder(builder: (context, constraints) {
         assert(constraints.hasBoundedWidth);
         final theme = AppKitTheme.of(context);
 
+        final textStyle = theme.typography.body;
+        final charWidth = _getCharWidth(textStyle);
+
         final List<Widget> children = [];
 
-        for (var i = 0; i < dateSegments.length; i++) {
-          String segment = dateSegments[i];
-          final formatterSegment = formatterSegments[i];
+        for (var i = 0; i < dateFormatterSegments.length; i++) {
+          String segment = dateSegments[i].toString();
+          final formatterSegment = dateFormatterSegments[i];
 
           if (formatterSegment == 'y') {
             segment = segment.padLeft(4, '0');
@@ -332,17 +346,20 @@ class _TextualDatePickerState extends State<_TextualDatePicker> {
             segment = segment.padLeft(2, '0');
           }
 
+          // create a string filled with zeros based on the segment length
           final child = _TextualPickerElement(
+            enabled: enabled,
             text: segment,
-            textStyle: theme.typography.body,
+            charWidth: charWidth,
+            textStyle: textStyle,
             index: i,
             color: widget.color ??
                 theme.accentColor ??
                 colorContainer.controlAccentColor,
             isMainWindow: isMainWindow,
             focusNode: focusNodes[i],
+            onSegmentChanged: enabled ? _handleSegmentChanged : null,
             onFocusChanged: enabled ? _handleFocusChange : null,
-            onKeyEvent: enabled ? _handleKeyEvent : null,
             isFocused: enabled && _focusedIndex == i,
           );
 
@@ -354,36 +371,99 @@ class _TextualDatePickerState extends State<_TextualDatePicker> {
           }
         }
 
+        if (children.isNotEmpty && timeFormatterSegments.isNotEmpty) {
+          children.add(DefaultTextStyle(
+              style: theme.typography.body, child: const Text(', ')));
+        }
+
+        // now add the time segments
+
+        for (var i = 0; i < timeFormatterSegments.length; i++) {
+          String segment = timeSegments[i].toString();
+          segment = segment.padLeft(2, '0');
+
+          // create a string filled with zeros based on the segment length
+          final child = _TextualPickerElement(
+            enabled: enabled,
+            text: segment,
+            charWidth: charWidth,
+            textStyle: textStyle,
+            index: i + dateFormatterSegments.length,
+            color: widget.color ??
+                theme.accentColor ??
+                colorContainer.controlAccentColor,
+            isMainWindow: isMainWindow,
+            focusNode: focusNodes[i + dateFormatterSegments.length],
+            onSegmentChanged: enabled ? _handleSegmentChanged : null,
+            onFocusChanged: enabled ? _handleFocusChange : null,
+            isFocused:
+                enabled && _focusedIndex == i + dateFormatterSegments.length,
+          );
+
+          children.add(child);
+
+          if (i < timeSegments.length - 1) {
+            children.add(DefaultTextStyle(
+                style: theme.typography.body, child: const Text(':')));
+          }
+        }
+
         final backgroundColor = colorContainer.controlBackgroundColor
             .multiplyOpacity(enabled ? 1.0 : 0.5);
 
         return ConstrainedBox(
             constraints: constraints,
-            child: Container(
-              padding: const EdgeInsets.only(
-                  left: 2.0, right: 2.0, top: 0.0, bottom: 1.0),
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                border: GradientBoxBorder(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppKitColors.text.opaque.tertiary.multiplyOpacity(0.6),
-                        AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: const [0.9, 1.0],
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    clipBehavior: Clip.hardEdge,
+                    padding: const EdgeInsets.only(
+                        left: 1.0, right: 1.0, top: 2.0, bottom: 4.0),
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      border: Border(
+                        top: BorderSide(
+                            color: AppKitColors.text.opaque.tertiary
+                                .multiplyOpacity(0.65),
+                            width: 1),
+                        left: BorderSide(
+                            color: AppKitColors.text.opaque.tertiary
+                                .multiplyOpacity(0.65),
+                            width: 1),
+                        right: BorderSide(
+                            color: AppKitColors.text.opaque.tertiary
+                                .multiplyOpacity(0.65),
+                            width: 1),
+                        bottom: BorderSide(
+                            color: AppKitColors.text.opaque.secondary
+                                .multiplyOpacity(0.65),
+                            width: 1),
+                      ),
                     ),
-                    width: 0.5),
-              ),
-              child: FocusScope(
-                autofocus: true,
-                canRequestFocus: true,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: children,
+                    child: FocusScope(
+                      autofocus: true,
+                      canRequestFocus: true,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: children,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                if (widget.type == AppKitDatePickerType.textualWithStepper) ...[
+                  const SizedBox(width: 4),
+                  AppKitStepper(
+                    value: 1.0,
+                    onChanged: enabled
+                        ? (value) =>
+                            _handleSegmentStep(_focusedIndex, value > 1.0)
+                        : null,
+                  )
+                ]
+              ],
             ));
       });
     });
@@ -391,9 +471,11 @@ class _TextualDatePickerState extends State<_TextualDatePicker> {
 }
 
 typedef FocusChangeCallback = void Function(int index, bool value);
-typedef KeyEventCallback = void Function(int index, KeyEvent event);
+typedef SegmentChangedCallback = void Function(int index, int value);
 
-class _TextualPickerElement extends StatelessWidget {
+const _kKeyDelayTimeout = Duration(milliseconds: 1000);
+
+class _TextualPickerElement extends StatefulWidget {
   final String text;
   final TextStyle textStyle;
   final int index;
@@ -402,27 +484,163 @@ class _TextualPickerElement extends StatelessWidget {
   final bool isMainWindow;
   final FocusNode focusNode;
   final FocusChangeCallback? onFocusChanged;
-  final KeyEventCallback? onKeyEvent;
+  final SegmentChangedCallback? onSegmentChanged;
+  final double charWidth;
+  final bool enabled;
 
-  late final FocusScopeNode focusScopeNode = FocusScopeNode(
-    traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
-  );
-
-  _TextualPickerElement({
+  const _TextualPickerElement({
     required this.text,
     required this.textStyle,
     required this.index,
     required this.color,
     required this.isMainWindow,
     required this.focusNode,
+    required this.charWidth,
+    required this.enabled,
     this.onFocusChanged,
-    this.onKeyEvent,
+    this.onSegmentChanged,
     this.isFocused = false,
   });
 
   @override
+  State<_TextualPickerElement> createState() => _TextualPickerElementState();
+}
+
+class _TextualPickerElementState extends State<_TextualPickerElement> {
+  late final FocusScopeNode focusScopeNode = FocusScopeNode(
+    traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
+  );
+
+  @override
+  void didUpdateWidget(_TextualPickerElement oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text) {
+      _editedText = null;
+      _dispatchTimer?.cancel();
+    }
+  }
+
+  @override
+  void dispose() {
+    _dispatchTimer?.cancel();
+    super.dispose();
+  }
+
+  String? _editedText;
+
+  Timer? _dispatchTimer;
+
+  String? get editedText => _editedText;
+
+  String get currentText => _editedText ?? widget.text;
+
+  int get maxSegmentLength => widget.text.length;
+
+  set editedText(String? value) {
+    if (value != _editedText) {
+      setState(() {
+        _editedText = value;
+      });
+    }
+  }
+
+  bool _canHandleKeyEvent(KeyEvent event) {
+    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+      final key = event.logicalKey;
+      return (key.keyId >= 30 && key.keyId <= 39) ||
+          [
+            LogicalKeyboardKey.arrowDown,
+            LogicalKeyboardKey.arrowUp,
+            LogicalKeyboardKey.digit0,
+            LogicalKeyboardKey.digit1,
+            LogicalKeyboardKey.digit2,
+            LogicalKeyboardKey.digit3,
+            LogicalKeyboardKey.digit4,
+            LogicalKeyboardKey.digit5,
+            LogicalKeyboardKey.digit6,
+            LogicalKeyboardKey.digit7,
+            LogicalKeyboardKey.digit8,
+            LogicalKeyboardKey.digit9,
+            LogicalKeyboardKey.numpad0,
+            LogicalKeyboardKey.numpad1,
+            LogicalKeyboardKey.numpad2,
+            LogicalKeyboardKey.numpad3,
+            LogicalKeyboardKey.numpad4,
+            LogicalKeyboardKey.numpad5,
+            LogicalKeyboardKey.numpad6,
+            LogicalKeyboardKey.numpad7,
+            LogicalKeyboardKey.numpad8,
+            LogicalKeyboardKey.numpad9,
+          ].contains(key);
+    }
+    return false;
+  }
+
+  void _dispatchResult(int segmentValue) {
+    _dispatchTimer?.cancel();
+    widget.onSegmentChanged?.call(widget.index, segmentValue);
+    editedText = null;
+  }
+
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    if (!_canHandleKeyEvent(event)) {
+      _dispatchTimer?.cancel();
+      return KeyEventResult.ignored;
+    }
+
+    final key = event.logicalKey;
+
+    if (key == LogicalKeyboardKey.arrowDown ||
+        key == LogicalKeyboardKey.arrowUp) {
+      final value = int.tryParse(currentText) ?? 0;
+      final newValue = value + (key == LogicalKeyboardKey.arrowUp ? 1 : -1);
+      _dispatchResult(newValue);
+      return KeyEventResult.handled;
+    }
+
+    // key event is a numeric key event
+
+    String? newText = editedText;
+    KeyEventResult result = KeyEventResult.ignored;
+
+    if (newText == null) {
+      newText = key.keyLabel;
+      result = KeyEventResult.handled;
+    } else if (newText.length < maxSegmentLength) {
+      newText = newText + key.keyLabel;
+      result = KeyEventResult.handled;
+    }
+
+    if (newText.length < maxSegmentLength) {
+      editedText = newText;
+      _dispatchTimer?.cancel();
+      _dispatchTimer = Timer(_kKeyDelayTimeout, () {
+        _dispatchResult(int.parse(newText!));
+      });
+    } else {
+      _dispatchResult(int.parse(newText));
+    }
+
+    return result;
+  }
+
+  void _handleFocusChange(bool value) {
+    if (!value) {
+      _dispatchTimer?.cancel();
+      if (editedText != null) {
+        widget.onSegmentChanged?.call(widget.index, int.parse(editedText!));
+        editedText = null;
+      }
+    }
+    widget.onFocusChanged?.call(widget.index, value);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final backgroundColor = isFocused && isMainWindow ? color : null;
+    final segmentWidth = widget.charWidth * widget.text.length;
+
+    final backgroundColor =
+        widget.isFocused && widget.isMainWindow ? widget.color : null;
     final Color textColor;
 
     if (backgroundColor != null) {
@@ -434,50 +652,30 @@ class _TextualPickerElement extends StatelessWidget {
     }
 
     return Focus(
-      debugLabel: 'TextualPickerElement[$index]',
-      focusNode: focusNode,
+      debugLabel: 'TextualPickerElement[${widget.index}]',
+      focusNode: widget.focusNode,
       descendantsAreTraversable: false,
       descendantsAreFocusable: false,
       skipTraversal: false,
-      onFocusChange: (value) {
-        onFocusChanged?.call(index, value);
-      },
-      onKeyEvent: (node, event) {
-        if ([
-              LogicalKeyboardKey.arrowDown,
-              LogicalKeyboardKey.arrowUp,
-              LogicalKeyboardKey.numpad0,
-              LogicalKeyboardKey.numpad1,
-              LogicalKeyboardKey.numpad2,
-              LogicalKeyboardKey.numpad3,
-              LogicalKeyboardKey.numpad4,
-              LogicalKeyboardKey.numpad5,
-              LogicalKeyboardKey.numpad6,
-              LogicalKeyboardKey.numpad7,
-              LogicalKeyboardKey.numpad8,
-              LogicalKeyboardKey.numpad9,
-            ].contains(event.logicalKey) ||
-            (event.logicalKey.keyId >= 30 && event.logicalKey.keyId <= 39)) {
-          onKeyEvent?.call(index, event);
-          return KeyEventResult.handled;
-        }
-
-        return KeyEventResult.ignored;
-      },
+      onFocusChange: widget.enabled ? _handleFocusChange : null,
+      onKeyEvent:
+          widget.enabled ? (node, event) => _handleKeyEvent(node, event) : null,
       child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(focusNode),
+        onTap: () => FocusScope.of(context).requestFocus(widget.focusNode),
         child: Container(
-          padding: const EdgeInsets.only(
-              top: 1.0, bottom: 3.0, left: 1.0, right: 1.0),
-          decoration: isFocused
+          width: segmentWidth + 4.0,
+          padding: const EdgeInsets.only(top: 1.0, bottom: 2.0, right: 2.0),
+          decoration: widget.isFocused
               ? BoxDecoration(
                   color: backgroundColor,
                   borderRadius: BorderRadius.circular(4.0),
                 )
               : const BoxDecoration(),
           child: DefaultTextStyle(
-            style: textStyle.merge(TextStyle(color: textColor)),
-            child: Text(text),
+            style: widget.textStyle.merge(TextStyle(color: textColor)),
+            maxLines: 1,
+            textAlign: TextAlign.end,
+            child: Text(currentText),
           ),
         ),
       ),
@@ -494,11 +692,44 @@ enum AppKitDatePickerType {
 enum AppKitDateElements {
   monthDayYear,
   monthYear,
-  none,
+  none;
+
+  DateFormat getDateFormat([String? locale]) {
+    switch (this) {
+      case AppKitDateElements.monthDayYear:
+        return DateFormat.yMd(locale);
+      case AppKitDateElements.monthYear:
+        return DateFormat.yM(locale);
+      case AppKitDateElements.none:
+        return DateFormat.yMd(locale);
+    }
+  }
 }
 
 enum AppKitTimeElements {
   hourMinuteSecond,
   hourMinute,
-  none,
+  none;
+
+  DateFormat getDateFormat([String? locale]) {
+    switch (this) {
+      case AppKitTimeElements.hourMinuteSecond:
+        return DateFormat.Hms(locale);
+      case AppKitTimeElements.hourMinute:
+        return DateFormat.Hm(locale);
+      case AppKitTimeElements.none:
+        return DateFormat.Hms(locale);
+    }
+  }
+}
+
+extension _TextStyleX on TextStyle {
+  Size getTextSize(String text) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: this),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
 }

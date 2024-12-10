@@ -163,17 +163,21 @@ class IconButtonPainter extends CustomPainter {
   final AppKitControlButtonIcon icon;
   final Paint _paint;
   final Offset offset;
+  final double? strokeWidth;
+  final StrokeCap? strokeCap;
 
-  IconButtonPainter(
-      {required this.color,
-      required this.size,
-      required this.icon,
-      this.offset = Offset.zero})
-      : _paint = Paint()
+  IconButtonPainter({
+    required this.color,
+    required this.size,
+    required this.icon,
+    this.offset = Offset.zero,
+    this.strokeWidth,
+    this.strokeCap,
+  }) : _paint = Paint()
           ..color = color
           ..style = PaintingStyle.stroke
-          ..strokeWidth = size / 10
-          ..strokeCap = StrokeCap.round
+          ..strokeWidth = strokeWidth ?? size / 10
+          ..strokeCap = strokeCap ?? StrokeCap.round
           ..strokeJoin = StrokeJoin.round;
 
   @override

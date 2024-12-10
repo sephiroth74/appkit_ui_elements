@@ -267,6 +267,7 @@ class _SlidersPageState extends State<SlidersPage> {
                                   'Value: ${(slider1Value * 100).floor()}')),
                           const SizedBox(width: 16.0),
                           AppKitStepper(
+                            controlSize: AppKitControlSize.regular,
                             value: (slider1Value * 100).floorToDouble(),
                             increment: 1,
                             onChanged: (value) {

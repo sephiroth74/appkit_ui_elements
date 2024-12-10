@@ -49,12 +49,12 @@ class _SelectorsPageState extends State<SelectorsPage> {
                         Column(
                           children: [
                             SizedBox(
-                              width: 150,
+                              width: 190,
                               child: AppKitDatePicker(
                                 dateElements: AppKitDateElements.monthDayYear,
-                                timeElements: AppKitTimeElements.none,
+                                timeElements: AppKitTimeElements.hourMinute,
                                 semanticLabel: 'Date Picker',
-                                type: AppKitDatePickerType.textual,
+                                type: AppKitDatePickerType.textualWithStepper,
                                 onChanged: () {
                                   debugPrint('Date Changed');
                                 },
