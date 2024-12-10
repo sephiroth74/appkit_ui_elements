@@ -421,7 +421,7 @@ class _TextualDatePickerState extends State<_TextualDatePicker> {
                   child: Container(
                     clipBehavior: Clip.hardEdge,
                     padding: const EdgeInsets.only(
-                        left: 1.0, right: 1.0, top: 2.0, bottom: 4.0),
+                        left: 1.0, right: 1.0, top: 2.0, bottom: 2.0),
                     decoration: BoxDecoration(
                       color: backgroundColor,
                       border: Border(
@@ -664,7 +664,7 @@ class _TextualPickerElementState extends State<_TextualPickerElement> {
         onTap: () => FocusScope.of(context).requestFocus(widget.focusNode),
         child: Container(
           width: segmentWidth + 4.0,
-          padding: const EdgeInsets.only(top: 1.0, bottom: 2.0, right: 2.0),
+          padding: const EdgeInsets.only(top: 0.0, bottom: 1.0, right: 2.0),
           decoration: widget.isFocused
               ? BoxDecoration(
                   color: backgroundColor,
