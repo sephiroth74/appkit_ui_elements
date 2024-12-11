@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 const _kBezelBorderRadius = 1.0;
 const _kRoundedBorderRadius = 6.0;
@@ -153,3 +154,43 @@ enum AppKitTextFieldBorderStyle {
 }
 
 enum AppKitColorWellStyle { regular, minimal, expanded }
+
+enum AppKitDatePickerType {
+  graphical,
+  textualWithStepper,
+  textual,
+}
+
+enum AppKitDateElements {
+  monthDayYear,
+  monthYear,
+  none;
+
+  DateFormat getDateFormat([String? locale]) {
+    switch (this) {
+      case AppKitDateElements.monthDayYear:
+        return DateFormat.yMd(locale);
+      case AppKitDateElements.monthYear:
+        return DateFormat.yM(locale);
+      case AppKitDateElements.none:
+        return DateFormat.yMd(locale);
+    }
+  }
+}
+
+enum AppKitTimeElements {
+  hourMinuteSecond,
+  hourMinute,
+  none;
+
+  DateFormat getDateFormat([String? locale]) {
+    switch (this) {
+      case AppKitTimeElements.hourMinuteSecond:
+        return DateFormat.Hms(locale);
+      case AppKitTimeElements.hourMinute:
+        return DateFormat.Hm(locale);
+      case AppKitTimeElements.none:
+        return DateFormat.Hms(locale);
+    }
+  }
+}

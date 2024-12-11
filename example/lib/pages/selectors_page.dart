@@ -56,11 +56,27 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                 semanticLabel: 'Date Picker',
                                 type: AppKitDatePickerType.textualWithStepper,
                                 onChanged: () {
-                                  debugPrint('Date Changed');
+                                  debugPrint('[1] Date Changed');
                                 },
-                                initialDateTime: DateTime.now(),
                               ),
-                            )
+                            ),
+                            const SizedBox(height: 20.0),
+                            AppKitDatePicker(
+                              dateElements: AppKitDateElements.monthDayYear,
+                              timeElements: AppKitTimeElements.none,
+                              semanticLabel: 'Date Picker (graphical)',
+                              date: DateTime.now(),
+                              // minimumDate: DateTime(2024, 11, 10),
+                              // maximumDate: DateTime(2025, 1, 6),
+                              type: AppKitDatePickerType.graphical,
+                              drawBackground: true,
+                              drawBorder: true,
+                              selectionType:
+                                  AppKitDatePickerSelectionType.range,
+                              onChanged: () {
+                                debugPrint('[2] Date Changed');
+                              },
+                            ),
                           ],
                         ),
                       ],
