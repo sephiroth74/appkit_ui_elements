@@ -4,9 +4,9 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
+import 'package:appkit_ui_elements/src/widgets/date_picker/textual_date_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
@@ -83,7 +83,7 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
       child: MainWindowBuilder(builder: (context, isMainWindow) {
         if (widget.type == AppKitDatePickerType.textual ||
             widget.type == AppKitDatePickerType.textualWithStepper) {
-          return _TextualDatePicker(
+          return TextualDatePicker(
             type: widget.type,
             dateElements: widget.dateElements,
             timeElements: widget.timeElements,
@@ -141,10 +141,13 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
   }
 }
 
-class _GraphicalDatePicker extends StatefulWidget {
-  static const width = 139.0;
-  static const height = 148.0;
+const _kGrahpicalDatePickerWidth = 139.0;
+const _kGrahpicalDatePickerHeight = 148.0;
+const _kGraphicalDatePickerBorderWidth = 1.0;
+const _kGraphicalDatePickerHeaderHeight = 18.0;
+const _kGraphicalDatePickerDividerHeight = 2.0;
 
+class _GraphicalDatePicker extends StatefulWidget {
   final DateTime initialDateTime;
   final DateTime? minimumDate;
   final DateTime? maximumDate;
@@ -174,14 +177,18 @@ class _GraphicalDatePicker extends StatefulWidget {
 }
 
 class _GraphicalDatePickerState extends State<_GraphicalDatePicker> {
-  bool get enabled => widget.onChanged != null;
-
+  late final FocusNode _focusNode = FocusNode();
+  late final List<FocusNode> _focusNodes =
+      List.generate(42, (index) => FocusNode());
   late DateTime _currentDateTime = widget.initialDateTime;
+
+  bool get enabled => widget.onChanged != null;
+  bool get isFocused => _focusNode.hasFocus;
 
   set currentDateTime(DateTime value) {
     if (value != _currentDateTime) {
       setState(() {
-        debugPrint('Setting currentDateTime: $value');
+        debugPrint('$runtimeType Setting currentDateTime: $value');
         _currentDateTime = value;
       });
     }
@@ -190,114 +197,145 @@ class _GraphicalDatePickerState extends State<_GraphicalDatePicker> {
   DateTime get currentDateTime => _currentDateTime;
 
   void _handlePreviousDatePressed() {
+    debugPrint('_handlePreviousDatePressed');
     currentDateTime = DateTime(
         currentDateTime.year, currentDateTime.month - 1, currentDateTime.day);
+    FocusScope.of(context).requestFocus(_focusNode);
   }
 
   void _handleNextDatePressed() {
+    debugPrint('_handleNextDatePressed');
     currentDateTime = DateTime(
         currentDateTime.year, currentDateTime.month + 1, currentDateTime.day);
+    FocusScope.of(context).requestFocus(_focusNode);
   }
 
   void _handleCurrentDatePressed() {
+    debugPrint('_handleCurrentDatePressed');
     currentDateTime = widget.initialDateTime;
+    FocusScope.of(context).requestFocus(_focusNode);
   }
 
   @override
   Widget build(BuildContext context) {
-    const borderWidth = 1.0;
-    return UiElementColorBuilder(builder: (context, colorContainer) {
-      final theme = AppKitTheme.of(context);
-      final accentColor = widget.color ??
-          theme.accentColor ??
-          colorContainer.controlAccentColor;
+    return Focus(
+      focusNode: _focusNode,
+      canRequestFocus: enabled,
+      autofocus: enabled,
+      onFocusChange: (value) {
+        setState(() {
+          debugPrint('$runtimeType Focus changed: $value');
+        });
+      },
+      child: AppKitFocusContainer(
+        borderRadius: BorderRadius.circular(3),
+        canRequestFocus: true,
+        enabled: enabled,
+        focusNode: _focusNode,
+        child: UiElementColorBuilder(builder: (context, colorContainer) {
+          final theme = AppKitTheme.of(context);
+          final accentColor = widget.color ??
+              theme.accentColor?.multiplyLuminance(0.85) ??
+              colorContainer.controlAccentColor;
 
-      return Container(
-        constraints: const BoxConstraints(
-          minWidth: _GraphicalDatePicker.width,
-          maxWidth: _GraphicalDatePicker.width,
-          minHeight: _GraphicalDatePicker.height,
-          maxHeight: _GraphicalDatePicker.height,
-        ),
-        decoration: BoxDecoration(
-          color: widget.drawBackground
-              ? colorContainer.controlBackgroundColor
-              : null,
-          border: widget.drawBorder
-              ? Border(
-                  top: BorderSide(
-                      color: AppKitColors.text.opaque.tertiary
-                          .multiplyOpacity(0.65),
-                      width: borderWidth),
-                  left: BorderSide(
-                      color: AppKitColors.text.opaque.tertiary
-                          .multiplyOpacity(0.65),
-                      width: borderWidth),
-                  right: BorderSide(
-                      color: AppKitColors.text.opaque.tertiary
-                          .multiplyOpacity(0.65),
-                      width: borderWidth),
-                  bottom: BorderSide(
-                      color: AppKitColors.text.opaque.secondary
-                          .multiplyOpacity(0.65),
-                      width: borderWidth),
-                )
-              : Border.all(color: Colors.transparent, width: borderWidth),
-        ),
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                height: 18,
-                child: _GraphicalDatePickerHeader(
-                  currentDate: currentDateTime,
-                  colorContainer: colorContainer,
-                  isMainWindow: widget.isMainWindow,
-                  enabled: enabled,
-                  languageCode: widget.languageCode,
-                  onPreviousDatePressed:
-                      enabled ? _handlePreviousDatePressed : null,
-                  onNextDatePressed: enabled ? _handleNextDatePressed : null,
-                  onCurrentDatePressed:
-                      enabled ? _handleCurrentDatePressed : null,
-                ),
-              ),
-              const SizedBox(height: 2.0),
-              SizedBox(
-                height: constraints.maxHeight - 18 - 2,
-                width: constraints.maxWidth,
-                child: _GraphicalDatePickerContent(
-                  initialDateTime: currentDateTime,
-                  minimumDate: widget.minimumDate,
-                  maximumDate: widget.maximumDate,
-                  colorContainer: colorContainer,
-                  accentColor: accentColor,
-                  isMainWindow: widget.isMainWindow,
-                  enabled: enabled,
-                  languageCode: widget.languageCode,
-                  selectionType: widget.selectionType,
-                  onPreviousMonthPressed:
-                      enabled ? _handlePreviousDatePressed : null,
-                  onNextMonthPressed: enabled ? _handleNextDatePressed : null,
-                ),
-              )
-            ],
+          return Container(
+            constraints: const BoxConstraints(
+              minWidth: _kGrahpicalDatePickerWidth,
+              maxWidth: _kGrahpicalDatePickerWidth,
+              minHeight: _kGrahpicalDatePickerHeight,
+              maxHeight: _kGrahpicalDatePickerHeight,
+            ),
+            decoration: BoxDecoration(
+              color: widget.drawBackground
+                  ? colorContainer.controlBackgroundColor
+                  : null,
+              border: widget.drawBorder
+                  ? Border(
+                      top: BorderSide(
+                          color: AppKitColors.text.opaque.tertiary
+                              .multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth),
+                      left: BorderSide(
+                          color: AppKitColors.text.opaque.tertiary
+                              .multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth),
+                      right: BorderSide(
+                          color: AppKitColors.text.opaque.tertiary
+                              .multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth),
+                      bottom: BorderSide(
+                          color: AppKitColors.text.opaque.secondary
+                              .multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth),
+                    )
+                  : Border.all(
+                      color: Colors.transparent,
+                      width: _kGraphicalDatePickerBorderWidth),
+            ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(
+                    height: _kGraphicalDatePickerHeaderHeight,
+                    child: _GraphicalDatePickerHeader(
+                      currentDate: currentDateTime,
+                      colorContainer: colorContainer,
+                      isMainWindow: widget.isMainWindow,
+                      enabled: enabled,
+                      languageCode: widget.languageCode,
+                      onPreviousoMonthPressed:
+                          enabled ? _handlePreviousDatePressed : null,
+                      onNextMonthPressed:
+                          enabled ? _handleNextDatePressed : null,
+                      onCurrentDatePressed:
+                          enabled ? _handleCurrentDatePressed : null,
+                    ),
+                  ),
+                  const SizedBox(height: _kGraphicalDatePickerDividerHeight),
+                  SizedBox(
+                    height: constraints.maxHeight -
+                        _kGraphicalDatePickerHeaderHeight -
+                        _kGraphicalDatePickerDividerHeight,
+                    width: constraints.maxWidth,
+                    child: FocusScope(
+                      child: _GraphicalDatePickerContent(
+                        focusNode: _focusNode,
+                        focusNodes: _focusNodes,
+                        initialDateTime: currentDateTime,
+                        minimumDate: widget.minimumDate,
+                        maximumDate: widget.maximumDate,
+                        colorContainer: colorContainer,
+                        accentColor: accentColor,
+                        isMainWindow: widget.isMainWindow,
+                        enabled: enabled,
+                        languageCode: widget.languageCode,
+                        selectionType: widget.selectionType,
+                        onPreviousMonthPressed:
+                            enabled ? _handlePreviousDatePressed : null,
+                        onNextMonthPressed:
+                            enabled ? _handleNextDatePressed : null,
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }),
           );
         }),
-      );
-    });
+      ),
+    );
   }
 }
 
-class _GraphicalDatePickerHeader extends StatefulWidget {
+class _GraphicalDatePickerHeader extends StatelessWidget {
   final DateTime currentDate;
   final UiElementColorContainer colorContainer;
   final bool isMainWindow;
   final bool enabled;
   final String languageCode;
-  final VoidCallback? onPreviousDatePressed;
-  final VoidCallback? onNextDatePressed;
+  final VoidCallback? onPreviousoMonthPressed;
+  final VoidCallback? onNextMonthPressed;
   final VoidCallback? onCurrentDatePressed;
 
   const _GraphicalDatePickerHeader({
@@ -306,36 +344,21 @@ class _GraphicalDatePickerHeader extends StatefulWidget {
     required this.isMainWindow,
     required this.enabled,
     required this.languageCode,
-    this.onPreviousDatePressed,
-    this.onNextDatePressed,
+    this.onPreviousoMonthPressed,
+    this.onNextMonthPressed,
     this.onCurrentDatePressed,
   });
 
-  @override
-  State<_GraphicalDatePickerHeader> createState() =>
-      _GraphicalDatePickerHeaderState();
-}
-
-class _GraphicalDatePickerHeaderState
-    extends State<_GraphicalDatePickerHeader> {
-  bool get enabled => widget.enabled && widget.onPreviousDatePressed != null;
-
-  void _handleArrowLeftPressed() {
-    widget.onPreviousDatePressed?.call();
-  }
-
-  void _handleArrowRightPressed() {
-    widget.onNextDatePressed?.call();
-  }
-
-  void _handleArrowCenterPressed() {
-    widget.onCurrentDatePressed?.call();
-  }
+  bool get isEnabled =>
+      enabled &&
+      onPreviousoMonthPressed != null &&
+      onNextMonthPressed != null &&
+      onCurrentDatePressed != null;
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormatter = DateFormat.yMMM(widget.languageCode);
-    final String dateString = dateFormatter.format(widget.currentDate);
+    final DateFormat dateFormatter = DateFormat.yMMM(languageCode);
+    final String dateString = dateFormatter.format(currentDate);
     final theme = AppKitTheme.of(context);
 
     return Align(
@@ -346,7 +369,7 @@ class _GraphicalDatePickerHeaderState
           mainAxisSize: MainAxisSize.max,
           children: [
             Opacity(
-              opacity: widget.enabled ? 1.0 : 0.5,
+              opacity: isEnabled ? 1.0 : 0.5,
               child: DefaultTextStyle(
                   style: theme.typography.callout.copyWith(
                       fontWeight: AppKitFontWeight.w600, fontSize: 12.0),
@@ -355,23 +378,20 @@ class _GraphicalDatePickerHeaderState
             const Spacer(),
             _GraphicalDatePickerHeaderButton(
               type: _HeaderButtonType.left,
-              enabled: widget.enabled,
-              isMainWindow: widget.isMainWindow,
-              onPressed: enabled ? _handleArrowLeftPressed : null,
+              isMainWindow: isMainWindow,
+              onPressed: isEnabled ? onPreviousoMonthPressed : null,
             ),
             const SizedBox(width: 5.0),
             _GraphicalDatePickerHeaderButton(
               type: _HeaderButtonType.center,
-              enabled: widget.enabled,
-              isMainWindow: widget.isMainWindow,
-              onPressed: enabled ? _handleArrowCenterPressed : null,
+              isMainWindow: isMainWindow,
+              onPressed: isEnabled ? onCurrentDatePressed : null,
             ),
             const SizedBox(width: 5.0),
             _GraphicalDatePickerHeaderButton(
               type: _HeaderButtonType.right,
-              enabled: widget.enabled,
-              isMainWindow: widget.isMainWindow,
-              onPressed: enabled ? _handleArrowRightPressed : null,
+              isMainWindow: isMainWindow,
+              onPressed: isEnabled ? onNextMonthPressed : null,
             ),
           ],
         ),
@@ -392,6 +412,8 @@ class _GraphicalDatePickerContent extends StatelessWidget {
   final VoidCallback? onPreviousMonthPressed;
   final VoidCallback? onNextMonthPressed;
   final AppKitDatePickerSelectionType selectionType;
+  final FocusNode? focusNode;
+  final List<FocusNode> focusNodes;
 
   const _GraphicalDatePickerContent({
     required this.initialDateTime,
@@ -401,10 +423,12 @@ class _GraphicalDatePickerContent extends StatelessWidget {
     required this.languageCode,
     required this.accentColor,
     required this.selectionType,
+    required this.focusNodes,
     this.minimumDate,
     this.maximumDate,
     this.onPreviousMonthPressed,
     this.onNextMonthPressed,
+    this.focusNode,
   });
 
   static List<String> getDaysOfWeek(String locale) {
@@ -471,8 +495,10 @@ class _GraphicalDatePickerContent extends StatelessWidget {
             Flexible(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.only(left: 1.0, right: 2.0),
+                padding: const EdgeInsets.only(left: 1.0, right: 2.0, top: 1.0),
                 child: _GraphicalDatePickerMonthView(
+                  focusNode: focusNode,
+                  focusNodes: focusNodes,
                   initialDateTime: initialDateTime,
                   minimumDate: minimumDate,
                   maximumDate: maximumDate,
@@ -506,6 +532,8 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
   final AppKitDatePickerSelectionType selectionType;
   final VoidCallback? onPreviousMonthPressed;
   final VoidCallback? onNextMonthPressed;
+  final FocusNode? focusNode;
+  final List<FocusNode> focusNodes;
 
   const _GraphicalDatePickerMonthView({
     required this.initialDateTime,
@@ -515,10 +543,12 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
     required this.languageCode,
     required this.accentColor,
     required this.selectionType,
+    required this.focusNodes,
     this.minimumDate,
     this.maximumDate,
     this.onPreviousMonthPressed,
     this.onNextMonthPressed,
+    this.focusNode,
   });
 
   @override
@@ -528,9 +558,15 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
 
 class _GraphicalDatePickerMonthViewState
     extends State<_GraphicalDatePickerMonthView> {
-  bool isMousePressed = false;
+  static const rowsCount = 7;
+  static const columnsCount = 6;
+  static const totalDays = rowsCount * columnsCount;
+
+  bool _isMousePressed = false;
 
   DateTime? _pointerDownDate;
+
+  DateTime? _currentSelectedDate;
 
   DateTime? _selectedStartDate;
 
@@ -539,33 +575,105 @@ class _GraphicalDatePickerMonthViewState
   DateTime get selectedStartDate =>
       _selectedStartDate ?? widget.initialDateTime;
 
+  DateTime get currentSelectedDate =>
+      _currentSelectedDate ?? widget.initialDateTime;
+
   DateTime? get selectedEndDate => _selectedEndDate;
 
   bool get isRangeSelection =>
       widget.selectionType == AppKitDatePickerSelectionType.range;
 
-  void _setSelectionRange(DateTime startDate, DateTime endDate) {
+  DateTime get firstDayOfMonth =>
+      DateTime(widget.initialDateTime.year, widget.initialDateTime.month, 1);
+
+  DateTime get firstDayOfWeek =>
+      firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1));
+
+  DateTime get lastDayOfMonth => DateTime(
+      widget.initialDateTime.year, widget.initialDateTime.month + 1, 0);
+
+  DateTime get lastDayOfWeek =>
+      firstDayOfWeek.add(const Duration(days: totalDays - 1));
+
+  late DateTime today = DateTime.now();
+
+  void _setSelectionRange(DateTime startDate, DateTime? endDate) {
+    debugPrint('==>> Setting selection range: $startDate - $endDate');
     setState(() {
-      _selectedStartDate = startDate.isBefore(endDate) ? startDate : endDate;
-      _selectedEndDate = startDate.isBefore(endDate) ? endDate : startDate;
+      if (endDate == null) {
+        _pointerDownDate = startDate;
+        _selectedStartDate = startDate;
+        _selectedEndDate = null;
+      } else {
+        _selectedStartDate = startDate.isBefore(endDate) ? startDate : endDate;
+        _selectedEndDate = startDate.isBefore(endDate) ? endDate : startDate;
+      }
     });
+  }
+
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    final bool isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
+    debugPrint(
+        'event.key: ${event.logicalKey.debugName} pointerDownDate: $_pointerDownDate, currentSelectedDate: $_currentSelectedDate');
+
+    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowRight ||
+          event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        final current = selectedEndDate ?? selectedStartDate;
+        final nextDay = current.add(Duration(
+            days: event.logicalKey == LogicalKeyboardKey.arrowRight ? 1 : 7));
+
+        if (nextDay.isAfter(lastDayOfMonth) &&
+            nextDay.isBefore(widget.maximumDate ?? DateTime(9999))) {
+          widget.onNextMonthPressed?.call();
+        }
+
+        _pointerDownDate = selectedStartDate;
+        _currentSelectedDate = nextDay;
+
+        setState(() => _setSelectionRange(
+            nextDay, isShiftPressed ? _pointerDownDate : null));
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+          event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        final current = selectedStartDate;
+        final previousDay = current.subtract(Duration(
+            days: event.logicalKey == LogicalKeyboardKey.arrowLeft ? 1 : 7));
+        if (previousDay.isBefore(firstDayOfMonth) &&
+            previousDay.isAfter(widget.minimumDate ?? DateTime(1))) {
+          widget.onPreviousMonthPressed?.call();
+        }
+        setState(() => _setSelectionRange(
+            previousDay, isShiftPressed ? selectedEndDate : null));
+        return KeyEventResult.handled;
+      }
+    } else {
+      _pointerDownDate = null;
+    }
+    return KeyEventResult.ignored;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
 
+    debugPrint('focusNode is focused: ${widget.focusNode?.hasFocus}');
+
+    if (_selectedStartDate != null && widget.focusNode?.hasFocus == true) {
+      // find the selectedStartDate focus node index
+
+      int index = (currentSelectedDate.difference(firstDayOfWeek).inDays);
+
+      if (index >= 0 && index < widget.focusNodes.length) {
+        debugPrint('==>> Focusing on index: $index');
+        FocusScope.of(context).requestFocus(widget.focusNodes[index]);
+      }
+    }
+
     // find the date of the first day of the week from the 1st day of the current month
-    final firstDayOfMonth =
-        DateTime(widget.initialDateTime.year, widget.initialDateTime.month, 1);
-    final firstDayOfWeek =
-        firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1));
-    final lastDayOfMonth = DateTime(
-        widget.initialDateTime.year, widget.initialDateTime.month + 1, 0);
-    final lastDayOfWeek = lastDayOfMonth.add(Duration(
-        days: 7 - (lastDayOfMonth.weekday == 7 ? 0 : lastDayOfMonth.weekday)));
+
     final dayTextStyle = theme.typography.callout.copyWith(fontSize: 10.0);
-    final today = DateTime.now();
+    final isFocused = widget.focusNode?.hasFocus == true;
 
     return Padding(
       // padding: const EdgeInsets.only(left: 1.0, right: 3.0, bottom: 4.0, top: 2.0),
@@ -576,7 +684,6 @@ class _GraphicalDatePickerMonthViewState
         final totalHeight = constraints.maxHeight;
         final days = <List<Widget>>[];
         List<Widget> currentRow = <Widget>[];
-        final totalDays = lastDayOfWeek.difference(firstDayOfWeek).inDays + 1;
 
         for (var i = 0; i < totalDays; i++) {
           final day = firstDayOfWeek.add(Duration(days: i));
@@ -596,8 +703,14 @@ class _GraphicalDatePickerMonthViewState
               ? day.isBetween(selectedStartDate, selectedEndDate!, true)
               : day.isSameDay(selectedStartDate);
 
+          final isPreviousDaySelected =
+              day.weekday != 0 && selectedStartDate.isBefore(day);
+          final isNextDaySelected = day.weekday != 7 &&
+              selectedEndDate != null &&
+              selectedEndDate!.isAfter(day);
+
           final backgroundColor = widget.enabled && isSelected
-              ? widget.isMainWindow
+              ? widget.isMainWindow && isFocused
                   ? widget.accentColor
                   : AppKitColors.systemGray.withLuminance(0.85)
               : null;
@@ -620,7 +733,7 @@ class _GraphicalDatePickerMonthViewState
               ? backgroundColor.computeLuminance() >= 0.5
                   ? AppKitColors.text.opaque.primary
                   : AppKitColors.text.opaque.primary.darkColor
-              : isToday && widget.isMainWindow
+              : isToday && widget.isMainWindow && isFocused
                   ? widget.accentColor
                   : AppKitColors.text.opaque.primary;
 
@@ -631,86 +744,116 @@ class _GraphicalDatePickerMonthViewState
               fontWeight: isToday ? FontWeight.bold : null);
 
           final dayWidget = Padding(
-            padding: const EdgeInsets.only(left: 1.0, right: 1.0, bottom: 2.0),
-            child: MouseRegion(
-              onEnter: widget.enabled &&
-                      isRangeSelection &&
-                      isMousePressed &&
-                      isWithinValidRange
-                  ? (_) {
-                      if (isBeforeCurrentMonth) {
-                        widget.onPreviousMonthPressed?.call();
-                        return;
-                      } else if (isAfterCurrentMonth) {
-                        widget.onNextMonthPressed?.call();
-                        return;
-                      }
-
-                      final start = _pointerDownDate ?? selectedStartDate;
-
-                      if (day.isAfter(start)) {
-                        _setSelectionRange(start, day);
-                      } else {
-                        _setSelectionRange(day, start);
-                      }
-                    }
+            padding: const EdgeInsets.only(bottom: 2.0),
+            child: Focus(
+              focusNode: widget.focusNodes[i],
+              canRequestFocus: true,
+              onFocusChange: (value) {
+                debugPrint('==>> Focus changed: [$i] $day ==> $value');
+              },
+              onKeyEvent: widget.enabled && widget.isMainWindow
+                  ? (node, event) => _handleKeyEvent(node, event)
                   : null,
-              child: Listener(
-                onPointerUp: widget.enabled
+              child: MouseRegion(
+                onEnter: widget.enabled &&
+                        isRangeSelection &&
+                        _isMousePressed &&
+                        isWithinValidRange
                     ? (_) {
-                        debugPrint('onPointerUp');
-                        setState(() {
-                          isMousePressed = false;
-                          _pointerDownDate = null;
-                        });
-                      }
-                    : null,
-                onPointerCancel: (_) {
-                  debugPrint('onPointerCancel');
-                },
-                onPointerDown: widget.enabled
-                    ? (_) {
-                        debugPrint('onPointerDown');
                         if (isBeforeCurrentMonth) {
                           widget.onPreviousMonthPressed?.call();
+                          return;
                         } else if (isAfterCurrentMonth) {
                           widget.onNextMonthPressed?.call();
-                        } else if (isWithinValidRange) {
-                          final bool isShiftPressed =
-                              HardwareKeyboard.instance.isShiftPressed;
+                          return;
+                        }
 
-                          setState(() {
-                            if (isShiftPressed &&
-                                isRangeSelection &&
-                                !day.isSameDay(selectedStartDate)) {
-                              isMousePressed = false;
-                              _setSelectionRange(day, selectedStartDate);
-                            } else {
-                              isMousePressed = true;
-                              _pointerDownDate = day;
-                              _selectedStartDate = day;
-                              _selectedEndDate = null;
-                            }
-                          });
+                        final start = _pointerDownDate ?? selectedStartDate;
+
+                        if (day.isAfter(start)) {
+                          _setSelectionRange(start, day);
+                        } else {
+                          _setSelectionRange(day, start);
                         }
                       }
                     : null,
-                child: Container(
-                  width: (totalWidth / 7) - 2,
-                  height: (totalHeight / 6) - 2,
-                  decoration: isSelected
-                      ? BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(3.0))
+                child: Listener(
+                  onPointerUp: widget.enabled
+                      ? (_) {
+                          setState(() {
+                            _isMousePressed = false;
+                            _pointerDownDate = null;
+                          });
+                        }
                       : null,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: Text(
-                        day.day.toString(),
-                        style: textStyle,
-                        textAlign: TextAlign.end,
+                  onPointerDown: widget.enabled
+                      ? (_) {
+                          // FocusScope.of(context).requestFocus(widget.focusNode);
+                          FocusScope.of(context)
+                              .requestFocus(widget.focusNodes[i]);
+
+                          if (isBeforeCurrentMonth) {
+                            widget.onPreviousMonthPressed?.call();
+                          } else if (isAfterCurrentMonth) {
+                            widget.onNextMonthPressed?.call();
+                          } else if (isWithinValidRange) {
+                            final bool isShiftPressed =
+                                HardwareKeyboard.instance.isShiftPressed;
+
+                            setState(() {
+                              if (isShiftPressed &&
+                                  isRangeSelection &&
+                                  !day.isSameDay(selectedStartDate)) {
+                                _isMousePressed = false;
+                                _currentSelectedDate = day;
+                                _setSelectionRange(day, selectedStartDate);
+                              } else {
+                                _isMousePressed = true;
+                                _currentSelectedDate = day;
+                                _setSelectionRange(day, null);
+                              }
+                            });
+                          }
+                        }
+                      : null,
+                  child: SizedBox(
+                    width: (totalWidth / rowsCount) - 0, // see padding
+                    height: (totalHeight / columnsCount) - 2, // see paddings
+                    child: DecoratedBox(
+                      decoration: isSelected &&
+                              (isPreviousDaySelected && isNextDaySelected)
+                          ? BoxDecoration(color: backgroundColor)
+                          : isSelected &&
+                                  (!isPreviousDaySelected && isNextDaySelected)
+                              ? BoxDecoration(
+                                  color: backgroundColor,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(3.0),
+                                      bottomLeft: Radius.circular(3.0)))
+                              : isSelected &&
+                                      (!isNextDaySelected &&
+                                          isPreviousDaySelected)
+                                  ? BoxDecoration(
+                                      color: backgroundColor,
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(3.0),
+                                          bottomRight: Radius.circular(3.0)))
+                                  : isSelected
+                                      ? BoxDecoration(
+                                          color: backgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(3.0))
+                                      : const BoxDecoration(),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 2.0, bottom: 2),
+                          child: Text(
+                            day.day.toString(),
+                            style: textStyle,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -735,9 +878,8 @@ class _GraphicalDatePickerMonthViewState
           children: [
             for (var row in days) ...[
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: row,
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: row),
               // if (days.indexOf(row) < days.length - 1) const SizedBox(height: 2.0),
             ]
           ],
@@ -749,13 +891,11 @@ class _GraphicalDatePickerMonthViewState
 
 class _GraphicalDatePickerHeaderButton extends StatefulWidget {
   final _HeaderButtonType type;
-  final bool enabled;
   final bool isMainWindow;
   final VoidCallback? onPressed;
 
   const _GraphicalDatePickerHeaderButton({
     required this.type,
-    required this.enabled,
     required this.isMainWindow,
     this.onPressed,
   });
@@ -769,6 +909,8 @@ class _GraphicalDatePickerHeaderButtonState
     extends State<_GraphicalDatePickerHeaderButton> {
   bool _isPressed = false;
   Timer? _timer;
+
+  bool get enabled => widget.onPressed != null;
 
   void _handleTapDown() {
     _timer?.cancel();
@@ -807,9 +949,9 @@ class _GraphicalDatePickerHeaderButtonState
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTapDown: widget.enabled ? (_) => _handleTapDown() : null,
-      onTapUp: (_) => widget.enabled ? _handleTapUpOrCancel() : null,
-      onTapCancel: () => widget.enabled ? _handleTapUpOrCancel() : null,
+      onTapDown: enabled ? (_) => _handleTapDown() : null,
+      onTapUp: (_) => enabled ? _handleTapUpOrCancel() : null,
+      onTapCancel: () => enabled ? _handleTapUpOrCancel() : null,
       child: SizedBox(
         width: 10,
         height: 10,
@@ -818,7 +960,7 @@ class _GraphicalDatePickerHeaderButtonState
             size: const Size(6.5, 6.5),
             painter: _GraphicalDatePickerHeaderButtonPainter(
               type: widget.type,
-              enabled: widget.enabled,
+              enabled: enabled,
               isMainWindow: widget.isMainWindow,
               isPressed: isPressed,
             ),
@@ -887,597 +1029,3 @@ class _GraphicalDatePickerHeaderButtonPainter extends CustomPainter {
 }
 
 enum _HeaderButtonType { left, center, right }
-
-// region TextualDatePicker
-
-class _TextualDatePicker extends StatefulWidget {
-  final String languageCode;
-  final AppKitDatePickerType type;
-  final AppKitDateElements dateElements;
-  final AppKitTimeElements timeElements;
-  final DateTime initialDateTime;
-  final DateTime? minimumDate;
-  final DateTime? maximumDate;
-  final TextStyle? textStyle;
-  final Color? color;
-  final bool drawBackground;
-  final bool drawBorder;
-  final VoidCallback? onChanged;
-  final bool isMainWindow;
-
-  const _TextualDatePicker({
-    required this.type,
-    required this.dateElements,
-    required this.timeElements,
-    required this.initialDateTime,
-    required this.languageCode,
-    required this.isMainWindow,
-    this.minimumDate,
-    this.maximumDate,
-    this.textStyle,
-    this.color,
-    this.onChanged,
-    this.drawBackground = true,
-    this.drawBorder = true,
-  });
-
-  @override
-  State<_TextualDatePicker> createState() => _TextualDatePickerState();
-}
-
-class _TextualDatePickerState extends State<_TextualDatePicker> {
-  int? _focusedIndex;
-
-  bool get enabled => widget.onChanged != null;
-
-  bool get isMainWindow => widget.isMainWindow;
-
-  String get languageCode => widget.languageCode;
-
-  late DateFormat dateFormatter;
-
-  late DateFormat timeFormatter;
-
-  late List<String> dateFormatterSegments;
-
-  late List<String> timeFormatterSegments;
-
-  late List<FocusNode> focusNodes;
-
-  late DateTime dateTime;
-
-  bool get hasDate => widget.dateElements != AppKitDateElements.none;
-
-  bool get hasTime => widget.timeElements != AppKitTimeElements.none;
-
-  String get dateString => dateFormatter.format(dateTime);
-
-  String get timeString => timeFormatter.format(dateTime);
-
-  List<int> get dateSegments => dateString.split('/').map(int.parse).toList();
-
-  List<int> get timeSegments => timeString.split(':').map(int.parse).toList();
-
-  (TextStyle, double)? _charWidth;
-
-  @override
-  void initState() {
-    super.initState();
-    initializeWidget();
-  }
-
-  void initializeWidget() {
-    debugPrint('**** initializeWidget ****');
-    dateTime = widget.initialDateTime.copyWith();
-
-    dateFormatter = widget.dateElements.getDateFormat(languageCode);
-    timeFormatter = widget.timeElements.getDateFormat(languageCode);
-
-    dateFormatterSegments =
-        hasDate ? dateFormatter.pattern!.split('/').toList() : [];
-    timeFormatterSegments =
-        hasTime ? timeFormatter.pattern!.split(':').toList() : [];
-
-    final totalSegments =
-        (dateFormatterSegments.length) + (timeFormatterSegments.length);
-
-    focusNodes = List.generate(totalSegments, (index) => FocusNode());
-
-    if (_focusedIndex == null || _focusedIndex! >= totalSegments) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        FocusScope.of(context).requestFocus(focusNodes[0]);
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant _TextualDatePicker oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    debugPrint('**** didUpdateWidget ****');
-    debugPrint('${oldWidget.dateElements} => ${widget.dateElements}');
-    debugPrint('${oldWidget.timeElements} => ${widget.timeElements}');
-    debugPrint('${oldWidget.initialDateTime} => ${widget.initialDateTime}');
-
-    if (oldWidget.dateElements != widget.dateElements ||
-        oldWidget.timeElements != widget.timeElements ||
-        oldWidget.initialDateTime != widget.initialDateTime) {
-      initializeWidget();
-    }
-  }
-
-  void _handleFocusChange(int index, bool value) {
-    debugPrint('_handleFocusChange: $index => $value');
-    setState(() {
-      _focusedIndex = value ? index : null;
-    });
-  }
-
-  void _handleSegmentStep(int? index, bool increase) {
-    debugPrint('_handleSegmentStep: $index => $increase');
-    if (index == null) return;
-    final segments = List.from(
-        index < dateFormatterSegments.length ? dateSegments : timeSegments);
-    final segmentIndex = index < dateFormatterSegments.length
-        ? index
-        : index - dateFormatterSegments.length;
-    int newValue = segments[segmentIndex] + (increase ? 1 : -1);
-    _handleSegmentChanged(index, newValue);
-  }
-
-  void _handleSegmentChanged(int index, int value) {
-    final isTimeSegment = index >= dateFormatterSegments.length;
-    final segments = List.from(
-        index < dateFormatterSegments.length ? dateSegments : timeSegments);
-    final segmentIndex = index < dateFormatterSegments.length
-        ? index
-        : index - dateFormatterSegments.length;
-    final segmentName = isTimeSegment
-        ? timeFormatterSegments[segmentIndex]
-        : dateFormatterSegments[segmentIndex];
-
-    int newValue = value;
-
-    if (value < 0 && isTimeSegment) {
-      if (segmentName == 'H') {
-        newValue = 23;
-      } else {
-        newValue = 59;
-      }
-    }
-
-    if (newValue < 0) newValue = 0;
-    segments[segmentIndex] = newValue;
-
-    final DateTime newDate;
-    final DateTime newTime;
-
-    if (isTimeSegment) {
-      final timeString = segments.join(':');
-      newTime = timeFormatter.parse(timeString);
-      newDate = dateFormatter.parse(dateString);
-    } else {
-      final dateString = segments.join('/');
-      newDate = dateFormatter.parse(dateString);
-      newTime = timeFormatter.parse(timeString);
-    }
-
-    setState(() {
-      dateTime = DateTime(newDate.year, newDate.month, newDate.day,
-          newTime.hour, newTime.minute, newTime.second);
-      debugPrint('New DateTime: $dateTime');
-    });
-  }
-
-  double _getCharWidth(TextStyle textStyle) {
-    if (_charWidth != null && _charWidth!.$1 == textStyle) {
-      return _charWidth!.$2;
-    }
-    double maxWidth = 0;
-    for (int i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-      final Size size = textStyle.getTextSize(i.toString());
-      if (size.width > maxWidth) {
-        maxWidth = size.width;
-      }
-    }
-    _charWidth = (textStyle, maxWidth);
-    return maxWidth;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return UiElementColorBuilder(builder: (context, colorContainer) {
-      return LayoutBuilder(builder: (context, constraints) {
-        assert(constraints.hasBoundedWidth);
-        final theme = AppKitTheme.of(context);
-
-        final textStyle = theme.typography.body;
-        final charWidth = _getCharWidth(textStyle);
-
-        final List<Widget> children = [];
-
-        for (var i = 0; i < dateFormatterSegments.length; i++) {
-          String segment = dateSegments[i].toString();
-          final formatterSegment = dateFormatterSegments[i];
-
-          if (formatterSegment == 'y') {
-            segment = segment.padLeft(4, '0');
-          } else {
-            segment = segment.padLeft(2, '0');
-          }
-
-          // create a string filled with zeros based on the segment length
-          final child = _TextualPickerElement(
-            enabled: enabled,
-            text: segment,
-            charWidth: charWidth,
-            textStyle: textStyle,
-            index: i,
-            color: widget.color ??
-                theme.accentColor ??
-                colorContainer.controlAccentColor,
-            isMainWindow: isMainWindow,
-            focusNode: focusNodes[i],
-            onSegmentChanged: enabled ? _handleSegmentChanged : null,
-            onFocusChanged: enabled ? _handleFocusChange : null,
-            isFocused: enabled && _focusedIndex == i,
-          );
-
-          children.add(child);
-
-          if (i < dateSegments.length - 1) {
-            children.add(DefaultTextStyle(
-                style: theme.typography.body, child: const Text('.')));
-          }
-        }
-
-        if (children.isNotEmpty && timeFormatterSegments.isNotEmpty) {
-          children.add(DefaultTextStyle(
-              style: theme.typography.body, child: const Text(', ')));
-        }
-
-        // now add the time segments
-
-        for (var i = 0; i < timeFormatterSegments.length; i++) {
-          String segment = timeSegments[i].toString();
-          segment = segment.padLeft(2, '0');
-
-          // create a string filled with zeros based on the segment length
-          final child = _TextualPickerElement(
-            enabled: enabled,
-            text: segment,
-            charWidth: charWidth,
-            textStyle: textStyle,
-            index: i + dateFormatterSegments.length,
-            color: widget.color ??
-                theme.accentColor ??
-                colorContainer.controlAccentColor,
-            isMainWindow: isMainWindow,
-            focusNode: focusNodes[i + dateFormatterSegments.length],
-            onSegmentChanged: enabled ? _handleSegmentChanged : null,
-            onFocusChanged: enabled ? _handleFocusChange : null,
-            isFocused:
-                enabled && _focusedIndex == i + dateFormatterSegments.length,
-          );
-
-          children.add(child);
-
-          if (i < timeSegments.length - 1) {
-            children.add(DefaultTextStyle(
-                style: theme.typography.body, child: const Text(':')));
-          }
-        }
-
-        final backgroundColor = colorContainer.controlBackgroundColor
-            .multiplyOpacity(enabled ? 1.0 : 0.5);
-
-        return ConstrainedBox(
-            constraints: constraints,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    padding: const EdgeInsets.only(
-                        left: 1.0, right: 1.0, top: 2.0, bottom: 2.0),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      border: Border(
-                        top: BorderSide(
-                            color: AppKitColors.text.opaque.tertiary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                        left: BorderSide(
-                            color: AppKitColors.text.opaque.tertiary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                        right: BorderSide(
-                            color: AppKitColors.text.opaque.tertiary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                        bottom: BorderSide(
-                            color: AppKitColors.text.opaque.secondary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                      ),
-                    ),
-                    child: FocusScope(
-                      autofocus: true,
-                      canRequestFocus: true,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: children,
-                      ),
-                    ),
-                  ),
-                ),
-                if (widget.type == AppKitDatePickerType.textualWithStepper) ...[
-                  const SizedBox(width: 4),
-                  AppKitStepper(
-                    value: 1.0,
-                    onChanged: enabled
-                        ? (value) =>
-                            _handleSegmentStep(_focusedIndex, value > 1.0)
-                        : null,
-                  )
-                ]
-              ],
-            ));
-      });
-    });
-  }
-}
-
-typedef FocusChangeCallback = void Function(int index, bool value);
-typedef SegmentChangedCallback = void Function(int index, int value);
-
-const _kKeyDelayTimeout = Duration(milliseconds: 1000);
-
-class _TextualPickerElement extends StatefulWidget {
-  final String text;
-  final TextStyle textStyle;
-  final int index;
-  final bool isFocused;
-  final Color color;
-  final bool isMainWindow;
-  final FocusNode focusNode;
-  final FocusChangeCallback? onFocusChanged;
-  final SegmentChangedCallback? onSegmentChanged;
-  final double charWidth;
-  final bool enabled;
-
-  const _TextualPickerElement({
-    required this.text,
-    required this.textStyle,
-    required this.index,
-    required this.color,
-    required this.isMainWindow,
-    required this.focusNode,
-    required this.charWidth,
-    required this.enabled,
-    this.onFocusChanged,
-    this.onSegmentChanged,
-    this.isFocused = false,
-  });
-
-  @override
-  State<_TextualPickerElement> createState() => _TextualPickerElementState();
-}
-
-class _TextualPickerElementState extends State<_TextualPickerElement> {
-  late final FocusScopeNode focusScopeNode = FocusScopeNode(
-    traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
-  );
-
-  @override
-  void didUpdateWidget(_TextualPickerElement oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.text != widget.text) {
-      _editedText = null;
-      _dispatchTimer?.cancel();
-    }
-  }
-
-  @override
-  void dispose() {
-    _dispatchTimer?.cancel();
-    super.dispose();
-  }
-
-  String? _editedText;
-
-  Timer? _dispatchTimer;
-
-  String? get editedText => _editedText;
-
-  String get currentText => _editedText ?? widget.text;
-
-  int get maxSegmentLength => widget.text.length;
-
-  set editedText(String? value) {
-    if (value != _editedText) {
-      setState(() {
-        _editedText = value;
-      });
-    }
-  }
-
-  bool _canHandleKeyEvent(KeyEvent event) {
-    if (event is KeyDownEvent || event is KeyRepeatEvent) {
-      final key = event.logicalKey;
-      return (key.keyId >= 30 && key.keyId <= 39) ||
-          [
-            LogicalKeyboardKey.arrowDown,
-            LogicalKeyboardKey.arrowUp,
-            LogicalKeyboardKey.digit0,
-            LogicalKeyboardKey.digit1,
-            LogicalKeyboardKey.digit2,
-            LogicalKeyboardKey.digit3,
-            LogicalKeyboardKey.digit4,
-            LogicalKeyboardKey.digit5,
-            LogicalKeyboardKey.digit6,
-            LogicalKeyboardKey.digit7,
-            LogicalKeyboardKey.digit8,
-            LogicalKeyboardKey.digit9,
-            LogicalKeyboardKey.numpad0,
-            LogicalKeyboardKey.numpad1,
-            LogicalKeyboardKey.numpad2,
-            LogicalKeyboardKey.numpad3,
-            LogicalKeyboardKey.numpad4,
-            LogicalKeyboardKey.numpad5,
-            LogicalKeyboardKey.numpad6,
-            LogicalKeyboardKey.numpad7,
-            LogicalKeyboardKey.numpad8,
-            LogicalKeyboardKey.numpad9,
-          ].contains(key);
-    }
-    return false;
-  }
-
-  void _dispatchResult(int segmentValue) {
-    _dispatchTimer?.cancel();
-    widget.onSegmentChanged?.call(widget.index, segmentValue);
-    editedText = null;
-  }
-
-  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
-    if (!_canHandleKeyEvent(event)) {
-      _dispatchTimer?.cancel();
-      return KeyEventResult.ignored;
-    }
-
-    final key = event.logicalKey;
-
-    if (key == LogicalKeyboardKey.arrowDown ||
-        key == LogicalKeyboardKey.arrowUp) {
-      final value = int.tryParse(currentText) ?? 0;
-      final newValue = value + (key == LogicalKeyboardKey.arrowUp ? 1 : -1);
-      _dispatchResult(newValue);
-      return KeyEventResult.handled;
-    }
-
-    // key event is a numeric key event
-
-    String? newText = editedText;
-    KeyEventResult result = KeyEventResult.ignored;
-
-    if (newText == null) {
-      newText = key.keyLabel;
-      result = KeyEventResult.handled;
-    } else if (newText.length < maxSegmentLength) {
-      newText = newText + key.keyLabel;
-      result = KeyEventResult.handled;
-    }
-
-    if (newText.length < maxSegmentLength) {
-      editedText = newText;
-      _dispatchTimer?.cancel();
-      _dispatchTimer = Timer(_kKeyDelayTimeout, () {
-        _dispatchResult(int.parse(newText!));
-      });
-    } else {
-      _dispatchResult(int.parse(newText));
-    }
-
-    return result;
-  }
-
-  void _handleFocusChange(bool value) {
-    if (!value) {
-      _dispatchTimer?.cancel();
-      if (editedText != null) {
-        widget.onSegmentChanged?.call(widget.index, int.parse(editedText!));
-        editedText = null;
-      }
-    }
-    widget.onFocusChanged?.call(widget.index, value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final segmentWidth = widget.charWidth * widget.text.length;
-
-    final backgroundColor =
-        widget.isFocused && widget.isMainWindow ? widget.color : null;
-    final Color textColor;
-
-    if (backgroundColor != null) {
-      backgroundColor.computeLuminance() > 0.5
-          ? textColor = AppKitColors.text.opaque.primary.color
-          : textColor = AppKitColors.text.opaque.primary.darkColor;
-    } else {
-      textColor = AppKitColors.text.opaque.primary.color;
-    }
-
-    return Focus(
-      debugLabel: 'TextualPickerElement[${widget.index}]',
-      focusNode: widget.focusNode,
-      descendantsAreTraversable: false,
-      descendantsAreFocusable: false,
-      skipTraversal: false,
-      onFocusChange: widget.enabled ? _handleFocusChange : null,
-      onKeyEvent:
-          widget.enabled ? (node, event) => _handleKeyEvent(node, event) : null,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(widget.focusNode),
-        child: Container(
-          width: segmentWidth + 4.0,
-          padding: const EdgeInsets.only(top: 0.0, bottom: 1.0, right: 2.0),
-          decoration: widget.isFocused
-              ? BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(4.0),
-                )
-              : const BoxDecoration(),
-          child: DefaultTextStyle(
-            style: widget.textStyle.merge(TextStyle(color: textColor)),
-            maxLines: 1,
-            textAlign: TextAlign.end,
-            child: Text(currentText),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// endregion TextualDatePicker
-
-extension _TextStyleX on TextStyle {
-  Size getTextSize(String text) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: this),
-      maxLines: 1,
-      textDirection: TextDirection.ltr,
-    )..layout(minWidth: 0, maxWidth: double.infinity);
-    return textPainter.size;
-  }
-}
-
-extension _DateTimeX on DateTime {
-  bool isSameDay(DateTime other) {
-    return year == other.year && month == other.month && day == other.day;
-  }
-
-  bool isBetween(DateTime start, DateTime end, bool inclusive) {
-    if (inclusive) {
-      // start <= this <= end
-      return (isAfter(start) || isSameDay(start)) &&
-          (isBefore(end) || isSameDay(end));
-    } else {
-      // start < this < end
-      return isAfter(start) && isBefore(end);
-    }
-  }
-}
-
-enum AppKitDatePickerSelectionType {
-  single,
-  range,
-}

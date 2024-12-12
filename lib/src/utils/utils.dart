@@ -280,3 +280,31 @@ extension TextEditingControllerX on TextEditingController {
     selection = TextSelection(baseOffset: 0, extentOffset: text.length);
   }
 }
+
+extension TextStyleX on TextStyle {
+  Size getTextSize(String text) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: this),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+}
+
+extension DateTimeX on DateTime {
+  bool isSameDay(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
+  }
+
+  bool isBetween(DateTime start, DateTime end, bool inclusive) {
+    if (inclusive) {
+      // start <= this <= end
+      return (isAfter(start) || isSameDay(start)) &&
+          (isBefore(end) || isSameDay(end));
+    } else {
+      // start < this < end
+      return isAfter(start) && isBefore(end);
+    }
+  }
+}

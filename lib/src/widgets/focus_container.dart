@@ -84,6 +84,11 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
 
   bool get enabled => _effectiveFocusNode.canRequestFocus && widget.enabled;
 
+  bool isFocusNodeFocused(FocusNode node) {
+    return node
+        .hasFocus; // && node.children.isEmpty ? true : node.children.any((e) => isFocusNodeFocused(e));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,7 +101,7 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     _mainWindowListener = MainWindowStateListener.instance.isMainWindow
         .listen((value) => _handleFocusChanged());
     _isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
-    _isFocused = _effectiveFocusNode.hasPrimaryFocus;
+    _isFocused = isFocusNodeFocused(_effectiveFocusNode);
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: _kFocusAnimationDuration),
@@ -149,14 +154,13 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
   void _handleFocusChanged() {
     if (!mounted) return;
 
-    final bool isFocused =
-        _effectiveFocusNode.hasFocus && _effectiveFocusNode.hasPrimaryFocus;
+    final bool isFocused = isFocusNodeFocused(_effectiveFocusNode);
 
     final bool isMainWindow =
         MainWindowStateListener.instance.isMainWindow.value;
 
-    // _logger.d(
-    // '[$hashCode] isFocused: $isFocused, isMainWindow: $isMainWindow, wasFocused: $_isFocused, wasMainWindow: $_isMainWindow');
+    _logger.d(
+        '[$hashCode] isFocused: $isFocused, isMainWindow: $isMainWindow, wasFocused: $_isFocused, wasMainWindow: $_isMainWindow');
 
     if (isFocused != _isFocused || isMainWindow != _isMainWindow) {
       final bool mainWindowChanged = isMainWindow != _isMainWindow;

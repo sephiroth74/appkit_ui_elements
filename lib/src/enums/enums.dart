@@ -194,3 +194,8 @@ enum AppKitTimeElements {
     }
   }
 }
+
+enum AppKitDatePickerSelectionType {
+  single,
+  range,
+}
