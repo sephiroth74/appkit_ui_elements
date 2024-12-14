@@ -14,6 +14,7 @@ import 'package:intl/intl.dart' hide TextDirection;
 
 class AppKitDatePicker extends StatefulWidget {
   final bool autofocus;
+  final bool canRequestFocus;
   final AppKitDatePickerType type;
   final AppKitDateElements dateElements;
   final AppKitTimeElements timeElements;
@@ -39,6 +40,7 @@ class AppKitDatePicker extends StatefulWidget {
     this.textStyle,
     this.color,
     this.onChanged,
+    this.canRequestFocus = true,
     this.autofocus = false,
     this.drawBackground = true,
     this.drawBorder = true,
@@ -98,6 +100,7 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
             languageCode: languageCode,
             isMainWindow: isMainWindow,
             autofocus: widget.autofocus,
+            canRequestFocus: widget.canRequestFocus,
           );
         } else {
           if (widget.dateElements != AppKitDateElements.none) {
@@ -571,7 +574,7 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
       _GraphicalDatePickerMonthViewState();
 }
 
-final logger = newLogger('GraphicalDatePickerMonthView');
+final _logger = newLogger('GraphicalDatePickerMonthView');
 
 class _GraphicalDatePickerMonthViewState
     extends State<_GraphicalDatePickerMonthView> {
@@ -590,14 +593,14 @@ class _GraphicalDatePickerMonthViewState
 
   set pointerDownDate(DateTime? value) {
     if (value != _pointerDownDate) {
-      logger.d('set pointerDownDate => $value');
+      _logger.d('set pointerDownDate => $value');
       _pointerDownDate = value;
     }
   }
 
   set currentSelectedDate(DateTime? value) {
     if (value != _currentSelectedDate) {
-      logger.d('set currentSelectedDate => $value');
+      _logger.d('set currentSelectedDate => $value');
       _currentSelectedDate = value;
     }
   }
@@ -637,7 +640,7 @@ class _GraphicalDatePickerMonthViewState
   void didUpdateWidget(covariant _GraphicalDatePickerMonthView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialDateTime != widget.initialDateTime) {
-      logger.d('==>> Initial date changed: ${widget.initialDateTime}');
+      _logger.d('==>> Initial date changed: ${widget.initialDateTime}');
       // _pointerDownDate = widget.initialDateTime;
       // _currentSelectedDate = widget.initialDateTime;
     }
@@ -710,10 +713,10 @@ class _GraphicalDatePickerMonthViewState
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
 
-    logger.t('focusNode is focused: ${widget.focusNode?.hasFocus}');
+    _logger.t('focusNode is focused: ${widget.focusNode?.hasFocus}');
 
     if (widget.focusNode?.hasFocus == true && !widget.childFocusNode.hasFocus) {
-      logger.t('Requesting focus on childFocusNode');
+      _logger.t('Requesting focus on childFocusNode');
       widget.childFocusNode.requestFocus();
     }
 

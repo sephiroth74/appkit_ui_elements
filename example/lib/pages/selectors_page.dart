@@ -66,6 +66,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                 SizedBox(
                                   width: 190,
                                   child: AppKitDatePicker(
+                                    canRequestFocus: true,
                                     autofocus: false,
                                     date: _selectedDate,
                                     minimumDate: _minimumDate,
@@ -95,6 +96,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                 SizedBox(
                                   width: 190,
                                   child: AppKitDatePicker(
+                                    canRequestFocus: true,
                                     autofocus: true,
                                     date: _selectedDate,
                                     minimumDate: _minimumDate,
@@ -117,60 +119,60 @@ class _SelectorsPageState extends State<SelectorsPage> {
                               ],
                             ),
                             const SizedBox(height: 20.0),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Label(text: Text('Graphical (date)')),
-                                const SizedBox(height: 8.0),
-                                AppKitDatePicker(
-                                  dateElements: AppKitDateElements.monthYear,
-                                  timeElements: AppKitTimeElements.none,
-                                  semanticLabel: 'Date Picker (graphical)',
-                                  date: _selectedDate,
-                                  minimumDate: _minimumDate,
-                                  maximumDate: _maximumDate,
-                                  type: AppKitDatePickerType.graphical,
-                                  drawBackground: true,
-                                  drawBorder: true,
-                                  selectionType:
-                                      AppKitDatePickerSelectionType.single,
-                                  onChanged: (d1, d2) {
-                                    debugPrint('[2] Date Changed ($d1, $d2)');
-                                    selectedDate = d1;
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20.0),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Label(text: Text('Graphical (time)')),
-                                const SizedBox(height: 8.0),
-                                AppKitDatePicker(
-                                  dateElements: AppKitDateElements.none,
-                                  timeElements:
-                                      AppKitTimeElements.hourMinuteSecond,
-                                  semanticLabel: 'Date Picker (graphical)',
-                                  date: _selectedDate,
-                                  minimumDate: _minimumDate,
-                                  maximumDate: _maximumDate,
-                                  type: AppKitDatePickerType.graphical,
-                                  drawBackground: true,
-                                  drawBorder: true,
-                                  selectionType:
-                                      AppKitDatePickerSelectionType.single,
-                                  onChanged: (d1, d2) {
-                                    debugPrint('[2] Date Changed ($d1, $d2)');
-                                    selectedDate = d1;
-                                  },
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     const Label(text: Text('Graphical (date)')),
+                            //     const SizedBox(height: 8.0),
+                            //     AppKitDatePicker(
+                            //       dateElements: AppKitDateElements.monthYear,
+                            //       timeElements: AppKitTimeElements.none,
+                            //       semanticLabel: 'Date Picker (graphical)',
+                            //       date: _selectedDate,
+                            //       minimumDate: _minimumDate,
+                            //       maximumDate: _maximumDate,
+                            //       type: AppKitDatePickerType.graphical,
+                            //       drawBackground: true,
+                            //       drawBorder: true,
+                            //       selectionType:
+                            //           AppKitDatePickerSelectionType.single,
+                            //       onChanged: (d1, d2) {
+                            //         debugPrint('[2] Date Changed ($d1, $d2)');
+                            //         selectedDate = d1;
+                            //       },
+                            //     ),
+                            //   ],
+                            // ),
+                            // const SizedBox(height: 20.0),
+                            // Column(
+                            //   mainAxisSize: MainAxisSize.min,
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     const Label(text: Text('Graphical (time)')),
+                            //     const SizedBox(height: 8.0),
+                            //     AppKitDatePicker(
+                            //       dateElements: AppKitDateElements.none,
+                            //       timeElements:
+                            //           AppKitTimeElements.hourMinuteSecond,
+                            //       semanticLabel: 'Date Picker (graphical)',
+                            //       date: _selectedDate,
+                            //       minimumDate: _minimumDate,
+                            //       maximumDate: _maximumDate,
+                            //       type: AppKitDatePickerType.graphical,
+                            //       drawBackground: true,
+                            //       drawBorder: true,
+                            //       selectionType:
+                            //           AppKitDatePickerSelectionType.single,
+                            //       onChanged: (d1, d2) {
+                            //         debugPrint('[2] Date Changed ($d1, $d2)');
+                            //         selectedDate = d1;
+                            //       },
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ],

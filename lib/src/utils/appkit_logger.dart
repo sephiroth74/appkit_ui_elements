@@ -4,7 +4,7 @@ Logger newLogger(String tag) => Logger(
       filter: DevelopmentFilter(),
       level: Level.all,
       printer: PrefixPrinter(
-        SimplePrinter(colors: true),
+        SimplePrinter(colors: true, printTime: true),
         error: '[$tag] ERROR',
         warning: '[$tag] WARNING',
         info: '[$tag] INFO',

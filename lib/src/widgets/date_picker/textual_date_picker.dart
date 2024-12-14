@@ -12,8 +12,6 @@ typedef SegmentChangedCallback = void Function(int index, int value);
 
 const _kKeyDelayTimeout = Duration(milliseconds: 1000);
 
-final logger = newLogger('TextualDatePicker');
-
 @protected
 class TextualDatePicker extends StatefulWidget {
   final String languageCode;
@@ -29,6 +27,7 @@ class TextualDatePicker extends StatefulWidget {
   final bool drawBorder;
   final bool isMainWindow;
   final bool autofocus;
+  final bool canRequestFocus;
   final ValueChanged<DateTime>? onChanged;
 
   const TextualDatePicker({
@@ -44,6 +43,7 @@ class TextualDatePicker extends StatefulWidget {
     this.textStyle,
     this.color,
     this.onChanged,
+    this.canRequestFocus = true,
     this.autofocus = false,
     this.drawBackground = true,
     this.drawBorder = true,
@@ -54,6 +54,8 @@ class TextualDatePicker extends StatefulWidget {
 }
 
 class _TextualDatePickerState extends State<TextualDatePicker> {
+  late final _logger = newLogger('TextualDatePicker[$hashCode]');
+
   int? _focusedIndex;
 
   bool get enabled => widget.onChanged != null;
@@ -70,9 +72,8 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   late List<String> timeFormatterSegments;
 
-  late List<FocusNode> focusNodes;
-
-  late final FocusScopeNode _focusScopeNode = FocusScopeNode();
+  int get totalsegments =>
+      dateFormatterSegments.length + timeFormatterSegments.length;
 
   late DateTime dateTime;
 
@@ -90,29 +91,52 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   (TextStyle, double)? _charWidth;
 
+  FocusNode? _focusNode;
+
+  FocusNode get _effectiveFocusNode =>
+      _focusNode ??= FocusNode(debugLabel: 'TextualDatePicker[$hashCode]');
+
+  String? _editedText;
+
+  Timer? _dispatchTimer;
+
+  int getMaxSegmentLength(int index) => _getSegmentText(index).length;
+
+  set editedText(String? value) {
+    if (value != _editedText) {
+      setState(() {
+        _editedText = value;
+      });
+    }
+  }
+
+  set focusedIndex(int? value) {
+    if (value != _focusedIndex) {
+      setState(() {
+        if (_focusedIndex != null && _editedText != null) {
+          _handleSegmentChanged(_focusedIndex!, int.parse(_editedText!));
+        }
+        _editedText = null;
+        _dispatchTimer?.cancel();
+        _focusedIndex = value;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     initializeWidget();
-
-    _focusScopeNode.addListener(() {
-      logger.d(
-          'FocusScopeNode focusChanged => ${_focusScopeNode.hasFocus} / ${_focusScopeNode.focusedChild}');
-      // if (!_focusScopeNode.hasPrimaryFocus) {
-      //   _focusedIndex = null;
-      // }
-    });
   }
 
   @override
   void dispose() {
-    _focusScopeNode.dispose();
+    _focusNode?.dispose();
+    _dispatchTimer?.cancel();
     super.dispose();
   }
 
   void initializeWidget() {
-    logger.i('initializeWidget');
-
     dateTime = widget.initialDateTime.copyWith();
 
     dateFormatter = widget.dateElements.getDateFormat(languageCode);
@@ -123,21 +147,20 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
     timeFormatterSegments =
         hasTime ? timeFormatter.pattern!.split(':').toList() : [];
 
-    final totalSegments =
-        (dateFormatterSegments.length) + (timeFormatterSegments.length);
-
-    focusNodes = List.generate(totalSegments, (index) => FocusNode());
-
-    if (_focusScopeNode.hasFocus &&
-        (_focusedIndex == null || _focusedIndex! >= totalSegments)) {
+    if (_effectiveFocusNode.hasFocus &&
+        widget.autofocus &&
+        widget.canRequestFocus &&
+        (_focusedIndex == null || _focusedIndex! >= totalsegments)) {
+      _logger.t('[$hashCode] requesting focus for index 0');
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        FocusScope.of(context).requestFocus(focusNodes[0]);
+        focusedIndex = 0;
       });
     }
   }
 
   @override
   void didUpdateWidget(covariant TextualDatePicker oldWidget) {
+    _logger.i('[$hashCode] didUpdateWidget');
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.dateElements != widget.dateElements ||
@@ -147,14 +170,135 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
     }
   }
 
-  void _handleFocusChange(int index, bool value) {
-    logger.d('_handleFocusChange: $index => $value');
+  bool _canHandleKeyEvent(KeyEvent event) {
+    if (event is KeyUpEvent || event is KeyRepeatEvent) {
+      final key = event.logicalKey;
+      return (key.keyId >= 30 && key.keyId <= 39) ||
+          [
+            LogicalKeyboardKey.arrowDown,
+            LogicalKeyboardKey.arrowUp,
+            LogicalKeyboardKey.digit0,
+            LogicalKeyboardKey.digit1,
+            LogicalKeyboardKey.digit2,
+            LogicalKeyboardKey.digit3,
+            LogicalKeyboardKey.digit4,
+            LogicalKeyboardKey.digit5,
+            LogicalKeyboardKey.digit6,
+            LogicalKeyboardKey.digit7,
+            LogicalKeyboardKey.digit8,
+            LogicalKeyboardKey.digit9,
+            LogicalKeyboardKey.numpad0,
+            LogicalKeyboardKey.numpad1,
+            LogicalKeyboardKey.numpad2,
+            LogicalKeyboardKey.numpad3,
+            LogicalKeyboardKey.numpad4,
+            LogicalKeyboardKey.numpad5,
+            LogicalKeyboardKey.numpad6,
+            LogicalKeyboardKey.numpad7,
+            LogicalKeyboardKey.numpad8,
+            LogicalKeyboardKey.numpad9,
+          ].contains(key);
+    }
+    return false;
+  }
+
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    _logger.i('[$hashCode] _handleKeyEvent: $event');
+    if (event is KeyDownEvent) {
+      final bool isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
+
+      if (event.logicalKey == LogicalKeyboardKey.arrowRight ||
+          (event.logicalKey == LogicalKeyboardKey.tab && !isShiftPressed)) {
+        int nextIndex = (_focusedIndex ?? 0) + 1;
+        if (nextIndex >= totalsegments) {
+          nextIndex = 0;
+        }
+        focusedIndex = nextIndex;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+          (event.logicalKey == LogicalKeyboardKey.tab && isShiftPressed)) {
+        int nextIndex = (_focusedIndex ?? 0) - 1;
+        if (nextIndex < 0) {
+          nextIndex = totalsegments - 1;
+        }
+        focusedIndex = nextIndex;
+      }
+      return KeyEventResult.handled;
+    }
+
+    if (!_canHandleKeyEvent(event) || !enabled || _focusedIndex == null) {
+      return KeyEventResult.ignored;
+    }
+
+    final key = event.logicalKey;
+    final index = _focusedIndex!;
+
+    if (key == LogicalKeyboardKey.arrowDown ||
+        key == LogicalKeyboardKey.arrowUp) {
+      final value = int.tryParse(_getSegmentText(index)) ?? 0;
+      final newValue = value + (key == LogicalKeyboardKey.arrowUp ? 1 : -1);
+
+      _editedText = null;
+      _dispatchTimer?.cancel();
+
+      _handleSegmentChanged(index, newValue);
+      return KeyEventResult.handled;
+    }
+
+    // key event is a numeric key event
+    final maxSegmentLength = getMaxSegmentLength(index);
+
+    String? newText = _editedText;
+
+    if (newText == null) {
+      newText = key.keyLabel;
+    } else if (newText.length < maxSegmentLength) {
+      newText = newText + key.keyLabel;
+    }
+
+    if (newText.length < maxSegmentLength) {
+      editedText = newText;
+      _dispatchTimer?.cancel();
+      _dispatchTimer = Timer(_kKeyDelayTimeout, () {
+        _handleSegmentChanged(index, int.parse(newText!));
+        _editedText = null;
+      });
+    } else {
+      editedText = null;
+      _dispatchTimer?.cancel();
+      _handleSegmentChanged(index, int.parse(newText));
+    }
+
+    return KeyEventResult.handled;
+  }
+
+  void _handleFocusChange(bool value) {
+    _logger.d(
+        '[$hashCode] _handleFocusChange: $value (_focusedIndex: $_focusedIndex)');
+    if (!value) {
+      if (_focusedIndex != null && _editedText != null) {
+        _handleSegmentChanged(_focusedIndex!, int.parse(_editedText!));
+      }
+      focusedIndex = null;
+    } else {
+      if (enabled &&
+          (_focusedIndex == null || _focusedIndex! >= totalsegments)) {
+        focusedIndex = 0;
+      } else {
+        setState(() {});
+      }
+    }
+  }
+
+  void _handleSegmentTap(int index) {
+    _logger.i('[$hashCode] _handleSegmentTap: $index');
     setState(() {
-      _focusedIndex = value ? index : null;
+      _effectiveFocusNode.requestFocus();
+      _focusedIndex = index;
     });
   }
 
   void _handleSegmentStep(int? index, bool increase) {
+    _logger.i('[$hashCode] _handleSegmentStep: $index => $increase');
     if (index == null) return;
     final segments = List.from(
         index < dateFormatterSegments.length ? dateSegments : timeSegments);
@@ -166,6 +310,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   void _handleSegmentChanged(int index, int value) {
+    _logger.i('[$hashCode] _handleSegmentChanged: $index => $value');
     final isTimeSegment = index >= dateFormatterSegments.length;
     final segments = List.from(
         index < dateFormatterSegments.length ? dateSegments : timeSegments);
@@ -224,8 +369,27 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
     return maxWidth;
   }
 
+  String _getSegmentText(int index) {
+    if (index < dateFormatterSegments.length) {
+      final segment = _focusedIndex == index && _editedText != null
+          ? _editedText!
+          : dateSegments[index].toString();
+      return dateFormatterSegments[index] == 'y'
+          ? segment.padLeft(4, '0')
+          : segment.padLeft(2, '0');
+    } else {
+      return (_focusedIndex == index && _editedText != null
+              ? _editedText!
+              : timeSegments[index - dateFormatterSegments.length].toString())
+          .padLeft(2, '0');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _logger.d(
+        'isFocused: ${_effectiveFocusNode.hasFocus} / ${_effectiveFocusNode.hasPrimaryFocus}, _focusedIndex: $_focusedIndex');
+
     return UiElementColorBuilder(builder: (context, colorContainer) {
       return LayoutBuilder(builder: (context, constraints) {
         assert(constraints.hasBoundedWidth);
@@ -237,14 +401,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
         final List<Widget> children = [];
 
         for (var i = 0; i < dateFormatterSegments.length; i++) {
-          String segment = dateSegments[i].toString();
-          final formatterSegment = dateFormatterSegments[i];
-
-          if (formatterSegment == 'y') {
-            segment = segment.padLeft(4, '0');
-          } else {
-            segment = segment.padLeft(2, '0');
-          }
+          String segment = _getSegmentText(i);
 
           // create a string filled with zeros based on the segment length
           final child = _TextualPickerElement(
@@ -257,10 +414,10 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                 theme.accentColor ??
                 colorContainer.controlAccentColor,
             isMainWindow: isMainWindow,
-            focusNode: focusNodes[i],
-            onSegmentChanged: enabled ? _handleSegmentChanged : null,
-            onFocusChanged: enabled ? _handleFocusChange : null,
-            isFocused: enabled && _focusedIndex == i,
+            isFocused: enabled &&
+                _focusedIndex == i &&
+                _effectiveFocusNode.hasPrimaryFocus,
+            onTap: enabled ? _handleSegmentTap : null,
           );
 
           children.add(child);
@@ -279,8 +436,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
         // now add the time segments
 
         for (var i = 0; i < timeFormatterSegments.length; i++) {
-          String segment = timeSegments[i].toString();
-          segment = segment.padLeft(2, '0');
+          String segment = _getSegmentText(i + dateFormatterSegments.length);
 
           // create a string filled with zeros based on the segment length
           final child = _TextualPickerElement(
@@ -293,11 +449,10 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                 theme.accentColor ??
                 colorContainer.controlAccentColor,
             isMainWindow: isMainWindow,
-            focusNode: focusNodes[i + dateFormatterSegments.length],
-            onSegmentChanged: enabled ? _handleSegmentChanged : null,
-            onFocusChanged: enabled ? _handleFocusChange : null,
-            isFocused:
-                enabled && _focusedIndex == i + dateFormatterSegments.length,
+            isFocused: _effectiveFocusNode.hasPrimaryFocus &&
+                enabled &&
+                _focusedIndex == i + dateFormatterSegments.length,
+            onTap: enabled ? _handleSegmentTap : null,
           );
 
           children.add(child);
@@ -343,10 +498,12 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                             width: 1),
                       ),
                     ),
-                    child: FocusScope(
-                      node: _focusScopeNode,
+                    child: Focus(
+                      focusNode: _effectiveFocusNode,
                       autofocus: widget.autofocus,
-                      canRequestFocus: true,
+                      canRequestFocus: widget.canRequestFocus,
+                      onFocusChange: enabled ? _handleFocusChange : null,
+                      onKeyEvent: enabled ? _handleKeyEvent : null,
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: children,
@@ -371,18 +528,16 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 }
 
-class _TextualPickerElement extends StatefulWidget {
+class _TextualPickerElement extends StatelessWidget {
   final String text;
   final TextStyle textStyle;
   final int index;
   final bool isFocused;
   final Color color;
   final bool isMainWindow;
-  final FocusNode focusNode;
-  final FocusChangeCallback? onFocusChanged;
-  final SegmentChangedCallback? onSegmentChanged;
   final double charWidth;
   final bool enabled;
+  final ValueChanged<int>? onTap;
 
   const _TextualPickerElement({
     required this.text,
@@ -390,149 +545,17 @@ class _TextualPickerElement extends StatefulWidget {
     required this.index,
     required this.color,
     required this.isMainWindow,
-    required this.focusNode,
     required this.charWidth,
     required this.enabled,
-    this.onFocusChanged,
-    this.onSegmentChanged,
     this.isFocused = false,
+    this.onTap,
   });
 
   @override
-  State<_TextualPickerElement> createState() => _TextualPickerElementState();
-}
-
-class _TextualPickerElementState extends State<_TextualPickerElement> {
-  @override
-  void didUpdateWidget(_TextualPickerElement oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.text != widget.text) {
-      _editedText = null;
-      _dispatchTimer?.cancel();
-    }
-  }
-
-  @override
-  void dispose() {
-    _dispatchTimer?.cancel();
-    super.dispose();
-  }
-
-  String? _editedText;
-
-  Timer? _dispatchTimer;
-
-  String? get editedText => _editedText;
-
-  String get currentText => _editedText ?? widget.text;
-
-  int get maxSegmentLength => widget.text.length;
-
-  set editedText(String? value) {
-    if (value != _editedText) {
-      setState(() {
-        _editedText = value;
-      });
-    }
-  }
-
-  bool _canHandleKeyEvent(KeyEvent event) {
-    if (event is KeyDownEvent || event is KeyRepeatEvent) {
-      final key = event.logicalKey;
-      return (key.keyId >= 30 && key.keyId <= 39) ||
-          [
-            LogicalKeyboardKey.arrowDown,
-            LogicalKeyboardKey.arrowUp,
-            LogicalKeyboardKey.digit0,
-            LogicalKeyboardKey.digit1,
-            LogicalKeyboardKey.digit2,
-            LogicalKeyboardKey.digit3,
-            LogicalKeyboardKey.digit4,
-            LogicalKeyboardKey.digit5,
-            LogicalKeyboardKey.digit6,
-            LogicalKeyboardKey.digit7,
-            LogicalKeyboardKey.digit8,
-            LogicalKeyboardKey.digit9,
-            LogicalKeyboardKey.numpad0,
-            LogicalKeyboardKey.numpad1,
-            LogicalKeyboardKey.numpad2,
-            LogicalKeyboardKey.numpad3,
-            LogicalKeyboardKey.numpad4,
-            LogicalKeyboardKey.numpad5,
-            LogicalKeyboardKey.numpad6,
-            LogicalKeyboardKey.numpad7,
-            LogicalKeyboardKey.numpad8,
-            LogicalKeyboardKey.numpad9,
-          ].contains(key);
-    }
-    return false;
-  }
-
-  void _dispatchResult(int segmentValue) {
-    _dispatchTimer?.cancel();
-    widget.onSegmentChanged?.call(widget.index, segmentValue);
-    editedText = null;
-  }
-
-  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
-    if (!_canHandleKeyEvent(event)) {
-      _dispatchTimer?.cancel();
-      return KeyEventResult.ignored;
-    }
-
-    final key = event.logicalKey;
-
-    if (key == LogicalKeyboardKey.arrowDown ||
-        key == LogicalKeyboardKey.arrowUp) {
-      final value = int.tryParse(currentText) ?? 0;
-      final newValue = value + (key == LogicalKeyboardKey.arrowUp ? 1 : -1);
-      _dispatchResult(newValue);
-      return KeyEventResult.handled;
-    }
-
-    // key event is a numeric key event
-
-    String? newText = editedText;
-    KeyEventResult result = KeyEventResult.ignored;
-
-    if (newText == null) {
-      newText = key.keyLabel;
-      result = KeyEventResult.handled;
-    } else if (newText.length < maxSegmentLength) {
-      newText = newText + key.keyLabel;
-      result = KeyEventResult.handled;
-    }
-
-    if (newText.length < maxSegmentLength) {
-      editedText = newText;
-      _dispatchTimer?.cancel();
-      _dispatchTimer = Timer(_kKeyDelayTimeout, () {
-        _dispatchResult(int.parse(newText!));
-      });
-    } else {
-      _dispatchResult(int.parse(newText));
-    }
-
-    return result;
-  }
-
-  void _handleFocusChange(bool value) {
-    if (!value) {
-      _dispatchTimer?.cancel();
-      if (editedText != null) {
-        widget.onSegmentChanged?.call(widget.index, int.parse(editedText!));
-        editedText = null;
-      }
-    }
-    widget.onFocusChanged?.call(widget.index, value);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final segmentWidth = widget.charWidth * widget.text.length;
+    final segmentWidth = charWidth * text.length;
 
-    final backgroundColor =
-        widget.isFocused && widget.isMainWindow ? widget.color : null;
+    final backgroundColor = isFocused && isMainWindow ? color : null;
     final Color textColor;
 
     if (backgroundColor != null) {
@@ -543,32 +566,22 @@ class _TextualPickerElementState extends State<_TextualPickerElement> {
       textColor = AppKitColors.text.opaque.primary.color;
     }
 
-    return Focus(
-      debugLabel: 'TextualPickerElement[${widget.index}]',
-      focusNode: widget.focusNode,
-      descendantsAreTraversable: false,
-      descendantsAreFocusable: false,
-      skipTraversal: false,
-      onFocusChange: widget.enabled ? _handleFocusChange : null,
-      onKeyEvent:
-          widget.enabled ? (node, event) => _handleKeyEvent(node, event) : null,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(widget.focusNode),
-        child: Container(
-          width: segmentWidth + 4.0,
-          padding: const EdgeInsets.only(top: 0.0, bottom: 1.0, right: 2.0),
-          decoration: widget.isFocused
-              ? BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(4.0),
-                )
-              : const BoxDecoration(),
-          child: DefaultTextStyle(
-            style: widget.textStyle.merge(TextStyle(color: textColor)),
-            maxLines: 1,
-            textAlign: TextAlign.end,
-            child: Text(currentText),
-          ),
+    return GestureDetector(
+      onTap: enabled ? () => onTap?.call(index) : null,
+      child: Container(
+        width: segmentWidth + 4.0,
+        padding: const EdgeInsets.only(top: 0.0, bottom: 1.0, right: 2.0),
+        decoration: isFocused
+            ? BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(4.0),
+              )
+            : const BoxDecoration(),
+        child: DefaultTextStyle(
+          style: textStyle.merge(TextStyle(color: textColor)),
+          maxLines: 1,
+          textAlign: TextAlign.end,
+          child: Text(text),
         ),
       ),
     );
