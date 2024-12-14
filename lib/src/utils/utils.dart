@@ -307,4 +307,21 @@ extension DateTimeX on DateTime {
       return isAfter(start) && isBefore(end);
     }
   }
+
+  bool isSameOrBefore(DateTime other) {
+    return isBefore(other) || isSameDay(other);
+  }
+
+  bool isSameOrAfter(DateTime other) {
+    return isAfter(other) || isSameDay(other);
+  }
+
+  DateTime clamp(DateTime? start, DateTime? end) {
+    if (start != null && isBefore(start)) {
+      return start;
+    } else if (end != null && isAfter(end)) {
+      return end;
+    }
+    return this;
+  }
 }

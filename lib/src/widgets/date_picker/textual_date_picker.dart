@@ -12,6 +12,8 @@ typedef SegmentChangedCallback = void Function(int index, int value);
 
 const _kKeyDelayTimeout = Duration(milliseconds: 1000);
 
+final logger = newLogger('TextualDatePicker');
+
 @protected
 class TextualDatePicker extends StatefulWidget {
   final String languageCode;
@@ -25,8 +27,9 @@ class TextualDatePicker extends StatefulWidget {
   final Color? color;
   final bool drawBackground;
   final bool drawBorder;
-  final VoidCallback? onChanged;
   final bool isMainWindow;
+  final bool autofocus;
+  final ValueChanged<DateTime>? onChanged;
 
   const TextualDatePicker({
     super.key,
@@ -41,6 +44,7 @@ class TextualDatePicker extends StatefulWidget {
     this.textStyle,
     this.color,
     this.onChanged,
+    this.autofocus = false,
     this.drawBackground = true,
     this.drawBorder = true,
   });
@@ -68,6 +72,8 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   late List<FocusNode> focusNodes;
 
+  late final FocusScopeNode _focusScopeNode = FocusScopeNode();
+
   late DateTime dateTime;
 
   bool get hasDate => widget.dateElements != AppKitDateElements.none;
@@ -88,9 +94,25 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   void initState() {
     super.initState();
     initializeWidget();
+
+    _focusScopeNode.addListener(() {
+      logger.d(
+          'FocusScopeNode focusChanged => ${_focusScopeNode.hasFocus} / ${_focusScopeNode.focusedChild}');
+      // if (!_focusScopeNode.hasPrimaryFocus) {
+      //   _focusedIndex = null;
+      // }
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusScopeNode.dispose();
+    super.dispose();
   }
 
   void initializeWidget() {
+    logger.i('initializeWidget');
+
     dateTime = widget.initialDateTime.copyWith();
 
     dateFormatter = widget.dateElements.getDateFormat(languageCode);
@@ -106,16 +128,12 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
     focusNodes = List.generate(totalSegments, (index) => FocusNode());
 
-    if (_focusedIndex == null || _focusedIndex! >= totalSegments) {
+    if (_focusScopeNode.hasFocus &&
+        (_focusedIndex == null || _focusedIndex! >= totalSegments)) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         FocusScope.of(context).requestFocus(focusNodes[0]);
       });
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -130,14 +148,13 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   void _handleFocusChange(int index, bool value) {
-    debugPrint('_handleFocusChange: $index => $value');
+    logger.d('_handleFocusChange: $index => $value');
     setState(() {
       _focusedIndex = value ? index : null;
     });
   }
 
   void _handleSegmentStep(int? index, bool increase) {
-    debugPrint('_handleSegmentStep: $index => $increase');
     if (index == null) return;
     final segments = List.from(
         index < dateFormatterSegments.length ? dateSegments : timeSegments);
@@ -185,11 +202,11 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
       newTime = timeFormatter.parse(timeString);
     }
 
-    setState(() {
-      dateTime = DateTime(newDate.year, newDate.month, newDate.day,
-          newTime.hour, newTime.minute, newTime.second);
-      debugPrint('New DateTime: $dateTime');
-    });
+    final newDateTime = DateTime(newDate.year, newDate.month, newDate.day,
+        newTime.hour, newTime.minute, newTime.second);
+
+    widget.onChanged
+        ?.call(newDateTime.clamp(widget.minimumDate, widget.maximumDate));
   }
 
   double _getCharWidth(TextStyle textStyle) {
@@ -327,7 +344,8 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                       ),
                     ),
                     child: FocusScope(
-                      autofocus: true,
+                      node: _focusScopeNode,
+                      autofocus: widget.autofocus,
                       canRequestFocus: true,
                       child: Row(
                         mainAxisSize: MainAxisSize.max,

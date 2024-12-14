@@ -159,8 +159,8 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     final bool isMainWindow =
         MainWindowStateListener.instance.isMainWindow.value;
 
-    _logger.d(
-        '[$hashCode] isFocused: $isFocused, isMainWindow: $isMainWindow, wasFocused: $_isFocused, wasMainWindow: $_isMainWindow');
+    // _logger.d(
+    //     '[$hashCode] isFocused: $isFocused, isMainWindow: $isMainWindow, wasFocused: $_isFocused, wasMainWindow: $_isMainWindow');
 
     if (isFocused != _isFocused || isMainWindow != _isMainWindow) {
       final bool mainWindowChanged = isMainWindow != _isMainWindow;

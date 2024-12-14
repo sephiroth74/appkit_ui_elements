@@ -92,12 +92,6 @@ class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
       center.dx + (size / 2) * cos(sweepAngle - pi / 2),
       center.dy + (size / 2) * sin(sweepAngle - pi / 2),
     );
-
-    // final sweepAngle = value * (360 - widget.sweepAngle * 2) * (pi / 180) - (-90 + widget.sweepAngle) * (pi / 180);
-    // return Offset(
-    //   center.dx + (size / 2) * cos(sweepAngle - pi / 2),
-    //   center.dy + (size / 2) * sin(sweepAngle - pi / 2),
-    // );
   }
 
   void _handleThumbPan(DragUpdateDetails details) {
