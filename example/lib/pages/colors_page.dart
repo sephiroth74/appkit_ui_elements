@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
-import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 class ColorsPage extends StatefulWidget {

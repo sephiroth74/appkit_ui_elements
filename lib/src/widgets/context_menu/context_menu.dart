@@ -1,6 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AppKitContextMenu<T> {
   Offset? position;

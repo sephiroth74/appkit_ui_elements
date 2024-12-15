@@ -1,6 +1,6 @@
-import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/theme/appkit_theme.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 class AppKitCircularSliderTheme extends InheritedTheme {
   final AppKitCircularSliderThemeData data;

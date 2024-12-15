@@ -1,7 +1,6 @@
 import 'dart:ui';
 
-import 'package:appkit_ui_elements/src/library.dart';
-import 'package:appkit_ui_elements/src/theme/appkit_theme.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 
 class AppKitSliderTheme extends InheritedTheme {

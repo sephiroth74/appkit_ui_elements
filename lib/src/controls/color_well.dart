@@ -4,7 +4,6 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements_platform_interface.dart';
 import 'package:appkit_ui_elements/src/controls/plain_button.dart';
-import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';

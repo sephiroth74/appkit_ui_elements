@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/utils.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 64);
 const _kAnimationCount = 4;

@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
-import 'package:appkit_ui_elements/src/library.dart';
-import 'package:appkit_ui_elements/src/theme/appkit_tooltip_theme.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 

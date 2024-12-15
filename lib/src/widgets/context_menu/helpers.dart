@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/widgets.dart';
 
 /// Shows the root context menu popup.
 Future<AppKitContextMenuItem<T>?> showContextMenu<T>(

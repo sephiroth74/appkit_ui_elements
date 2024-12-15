@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 class AppKitSegmentedControlTheme extends InheritedTheme {
   final AppKitSegmentedControlThemeData data;

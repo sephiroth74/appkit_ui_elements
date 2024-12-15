@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/material.dart';
 
 class AppKitContextMenuWidget extends StatelessWidget {
   final AppKitContextMenuState menuState;

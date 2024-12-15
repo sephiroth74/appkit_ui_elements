@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/widgets.dart';
 
 extension PopoverX on BuildContext {
   Future<dynamic> showPopover({

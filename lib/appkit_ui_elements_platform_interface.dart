@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';

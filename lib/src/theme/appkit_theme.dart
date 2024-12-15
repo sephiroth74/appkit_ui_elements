@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 ///
 /// https://www.figma.com/design/IX6ph2VWrJiRoMTI1Byz0K/Apple-Design-Resources---macOS-(Community)?node-id=0-1745&node-type=frame&t=2SWN7P0O7eB3nXKr-0

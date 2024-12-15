@@ -1,6 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/utils.dart';
-import 'package:flutter/material.dart';
 
 @protected
 const kCornerRadius = 6.0;
@@ -168,23 +166,23 @@ extension _RectX on Rect {
   Offset getAnchorOffset(Alignment? targetAnchor) {
     switch (targetAnchor) {
       case Alignment.topLeft:
-        return Offset(left, top);
+        return Offset(this.left, top);
       case Alignment.topCenter:
-        return Offset(left + width / 2, top);
+        return Offset(this.left + width / 2, top);
       case Alignment.topRight:
-        return Offset(right, top);
+        return Offset(this.right, top);
       case Alignment.centerLeft:
-        return Offset(left, top + height / 2);
+        return Offset(this.left, top + height / 2);
       case Alignment.center:
-        return Offset(left + width / 2, top + height / 2);
+        return Offset(this.left + width / 2, top + height / 2);
       case Alignment.centerRight:
-        return Offset(right, top + height / 2);
+        return Offset(this.right, top + height / 2);
       case Alignment.bottomLeft:
-        return Offset(left, bottom);
+        return Offset(this.left, bottom);
       case Alignment.bottomCenter:
-        return Offset(left + width / 2, bottom);
+        return Offset(this.left + width / 2, bottom);
       case Alignment.bottomRight:
-        return Offset(right, bottom);
+        return Offset(this.right, bottom);
       default:
         return center;
     }

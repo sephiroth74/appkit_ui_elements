@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/library.dart';
-import 'package:appkit_ui_elements/src/utils/main_window_listener.dart';
+import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:flutter/semantics.dart';
 
 const _kFocusRingSize = 15.0;

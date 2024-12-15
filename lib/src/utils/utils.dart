@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 bool debugCheckHasAppKitTheme(BuildContext context, [bool check = true]) {
   assert(() {
@@ -256,11 +257,13 @@ extension RectX on Rect {
 
 extension EdgeInsetsX on EdgeInsets {
   EdgeInsets invertHorizontally() {
-    return EdgeInsets.only(left: right, right: left, top: top, bottom: bottom);
+    return EdgeInsets.only(
+        left: this.right, right: this.left, top: top, bottom: bottom);
   }
 
   EdgeInsets invertVertically() {
-    return EdgeInsets.only(left: left, right: right, top: bottom, bottom: top);
+    return EdgeInsets.only(
+        left: this.left, right: this.right, top: bottom, bottom: top);
   }
 }
 
@@ -293,8 +296,23 @@ extension TextStyleX on TextStyle {
 }
 
 extension DateTimeX on DateTime {
+  DateTime nextMonth() => DateTime(year, month + 1, day);
+  DateTime previousMonth() => DateTime(year, month - 1, day);
+
+  bool isBeforeRange(DateTimeRange range) {
+    return isBefore(range.start);
+  }
+
+  bool isAfterRange(DateTimeRange range) {
+    return isAfter(range.end);
+  }
+
   bool isSameDay(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
+  }
+
+  bool isSameMonth(DateTime other) {
+    return year == other.year && month == other.month;
   }
 
   bool isBetween(DateTime start, DateTime end, bool inclusive) {
@@ -324,4 +342,61 @@ extension DateTimeX on DateTime {
     }
     return this;
   }
+}
+
+extension EitherX<A, B> on Either<A, B> {
+  A getLeft() => fold(
+      (A value) => value, (B value) => throw UnsupportedError('Either.right'));
+  B getRight() => fold(
+      (A value) => throw UnsupportedError('Either.left'), (B value) => value);
+
+  A get left => fold(
+      (A value) => value, (B value) => throw UnsupportedError('Either.right'));
+  B get right => fold(
+      (A value) => throw UnsupportedError('Either.left'), (B value) => value);
+}
+
+class DateTimeRange extends Equatable {
+  final DateTime start;
+  final DateTime end;
+
+  DateTimeRange({required DateTime start, required DateTime end})
+      : start = start.isBefore(end) ? start : end,
+        end = start.isBefore(end) ? end : start;
+
+  const DateTimeRange.single(DateTime date)
+      : start = date,
+        end = date;
+
+  bool contains(DateTime date) {
+    return date.isBetween(start, end, true);
+  }
+
+  bool isBefore(DateTime other) {
+    return start.isBefore(other);
+  }
+
+  bool isAfter(DateTime other) {
+    return end.isAfter(other);
+  }
+
+  bool isSameOrBefore(DateTime other) {
+    return start.isSameOrBefore(start);
+  }
+
+  bool isSameOrAfter(DateTime other) {
+    return end.isSameOrAfter(end);
+  }
+
+  Duration get duration => end.difference(start);
+
+  DateTimeRange copyWith({DateTime? start, DateTime? end}) {
+    return DateTimeRange(
+      start: start ?? this.start,
+      end: end ?? this.end,
+    );
+  }
+
+  @override
+  List<Object?> get props => [start, end];
 }

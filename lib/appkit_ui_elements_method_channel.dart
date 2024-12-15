@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/library.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:flutter/services.dart';
 

@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:macos_ui/macos_ui.dart';
 

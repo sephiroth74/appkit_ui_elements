@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 class AppKitLevelIndicatorsTheme extends InheritedTheme {
   final AppKitLevelIndicatorsThemeData data;

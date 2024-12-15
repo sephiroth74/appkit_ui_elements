@@ -24,6 +24,7 @@ dependencies:
   collection: ^1.18.0
   indexed: ^0.0.8
   intl: ^0.20.1
+  dartz: ^0.10.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

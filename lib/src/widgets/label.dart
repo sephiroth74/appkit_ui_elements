@@ -1,6 +1,5 @@
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/library.dart';
 
 class AppKitLabel extends StatelessWidget {
   /// Creates a label.
