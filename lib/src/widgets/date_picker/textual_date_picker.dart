@@ -151,7 +151,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
         widget.autofocus &&
         widget.canRequestFocus &&
         (_focusedIndex == null || _focusedIndex! >= totalsegments)) {
-      _logger.t('[$hashCode] requesting focus for index 0');
       SchedulerBinding.instance.addPostFrameCallback((_) {
         focusedIndex = 0;
       });
@@ -160,7 +159,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   @override
   void didUpdateWidget(covariant TextualDatePicker oldWidget) {
-    _logger.i('[$hashCode] didUpdateWidget');
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.dateElements != widget.dateElements ||
@@ -203,7 +201,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
-    _logger.i('[$hashCode] _handleKeyEvent: $event');
     if (event is KeyDownEvent) {
       final bool isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
 
@@ -272,8 +269,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   void _handleFocusChange(bool value) {
-    _logger.d(
-        '[$hashCode] _handleFocusChange: $value (_focusedIndex: $_focusedIndex)');
     if (!value) {
       if (_focusedIndex != null && _editedText != null) {
         _handleSegmentChanged(_focusedIndex!, int.parse(_editedText!));
@@ -290,7 +285,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   void _handleSegmentTap(int index) {
-    _logger.i('[$hashCode] _handleSegmentTap: $index');
     setState(() {
       _effectiveFocusNode.requestFocus();
       _focusedIndex = index;
@@ -298,7 +292,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   void _handleSegmentStep(int? index, bool increase) {
-    _logger.i('[$hashCode] _handleSegmentStep: $index => $increase');
     if (index == null) return;
     final segments = List.from(
         index < dateFormatterSegments.length ? dateSegments : timeSegments);
@@ -310,7 +303,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
   }
 
   void _handleSegmentChanged(int index, int value) {
-    _logger.i('[$hashCode] _handleSegmentChanged: $index => $value');
     final isTimeSegment = index >= dateFormatterSegments.length;
     final segments = List.from(
         index < dateFormatterSegments.length ? dateSegments : timeSegments);
@@ -387,9 +379,6 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    _logger.d(
-        'isFocused: ${_effectiveFocusNode.hasFocus} / ${_effectiveFocusNode.hasPrimaryFocus}, _focusedIndex: $_focusedIndex');
-
     return UiElementColorBuilder(builder: (context, colorContainer) {
       return LayoutBuilder(builder: (context, constraints) {
         assert(constraints.hasBoundedWidth);

@@ -84,14 +84,11 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
 
   @override
   void didUpdateWidget(covariant GraphicalDatePicker oldWidget) {
-    _logger.i(
-        'didUpdateWidget(${oldWidget.initialDateTime} => ${widget.initialDateTime})');
-
+    super.didUpdateWidget(oldWidget);
     if (oldWidget.initialDateTime != widget.initialDateTime) {
       _currentDateTime = widget.initialDateTime;
+      _initialDateTime = widget.initialDateTime.start;
     }
-
-    super.didUpdateWidget(oldWidget);
   }
 
   void _handleUpdateCalendarView(DateTime dateTime) {
@@ -448,8 +445,13 @@ class _GraphicalDatePickerMonthViewState
   bool get isRangeSelection =>
       widget.selectionType == AppKitDatePickerSelectionType.range;
 
-  DateTime get firstDayOfMonth =>
-      DateTime(_initialDateTime.year, _initialDateTime.month, 1);
+  DateTime get firstDayOfMonth => DateTime(
+      _initialDateTime.year,
+      _initialDateTime.month,
+      1,
+      _initialDateTime.hour,
+      _initialDateTime.minute,
+      _initialDateTime.second);
 
   DateTime get firstDayOfWeek =>
       firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1));
