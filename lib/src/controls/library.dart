@@ -25,3 +25,4 @@ export 'toggle_button.dart';
 export 'tooltip.dart';
 export 'search_field.dart';
 export 'date_picker.dart';
+export 'dialog_button.dart';

@@ -170,8 +170,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       buttonRadius: {
         AppKitControlSize.mini: 2.0,
         AppKitControlSize.small: 3.0,
-        AppKitControlSize.regular: 6.0,
-        AppKitControlSize.large: 7.0,
+        AppKitControlSize.regular: 5.0,
+        AppKitControlSize.large: 5.0,
       },
       buttonPadding: {
         AppKitControlSize.mini:
@@ -197,7 +197,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       },
       destructiveTextColor: AppKitColors.systemRed,
       overlayPressedColor: CupertinoDynamicColor.withBrightness(
-        color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: Color.fromRGBO(0, 0, 0, 0.1),
         darkColor: Color.fromRGBO(255, 255, 255, 0.15),
       ),
     );

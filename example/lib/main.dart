@@ -4,6 +4,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/pages/combo_box_button_page.dart';
 import 'package:example/pages/combo_button_page.dart';
 import 'package:example/pages/controls_page.dart';
+import 'package:example/pages/dialogs_page.dart';
 import 'package:example/pages/fields_page.dart';
 import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/popup_button.dart';
@@ -93,6 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Controls')),
                     SidebarItem(label: Text('Indicators')),
                     SidebarItem(label: Text('Sliders')),
+                    SidebarItem(
+                        label: Text('Dialogs'),
+                        leading: Icon(Icons.window_outlined, size: 13)),
                     SidebarItem(label: Text('Layout'), disclosureItems: [
                       SidebarItem(
                         label: Text('Segmented Controls'),
@@ -135,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const ControlsPage(),
           const IndicatorsPage(),
           const SlidersPage(),
+          const DialogsViewPage(),
           const SegmentedControlsPage(),
           const TabViewPage(),
           const SelectorsPage(),

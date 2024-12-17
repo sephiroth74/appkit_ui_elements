@@ -13,6 +13,7 @@ export 'src/theme/library.dart';
 export 'src/utils/library.dart';
 export 'src/widgets/library.dart';
 export 'src/layout/library.dart';
+export 'src/dialogs/library.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {
