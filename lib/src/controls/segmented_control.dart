@@ -492,6 +492,20 @@ class SegmentedControllerSingle extends AppKitSegmentedController {
     }
   }
 
+  set index(int index) {
+    setIndex(index);
+  }
+
+  int get count => length;
+
+  void next() {
+    setIndex((_index + 1) % length);
+  }
+
+  void previous() {
+    setIndex((_index - 1) % length);
+  }
+
   @override
   void setSelectedIndexes(Set<int> indexes) {
     assert(indexes.length == 1);

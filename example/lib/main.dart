@@ -12,6 +12,7 @@ import 'package:example/pages/segmented_controls_page.dart';
 import 'package:example/pages/colors_page.dart';
 import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
+import 'package:example/pages/tab_view_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,7 +93,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Controls')),
                     SidebarItem(label: Text('Indicators')),
                     SidebarItem(label: Text('Sliders')),
-                    SidebarItem(label: Text('Segmented Controls')),
+                    SidebarItem(label: Text('Layout'), disclosureItems: [
+                      SidebarItem(
+                        label: Text('Segmented Controls'),
+                        leading:
+                            Icon(CupertinoIcons.rectangle_split_3x1, size: 13),
+                      ),
+                      SidebarItem(
+                        label: Text('Tab View'),
+                        leading:
+                            Icon(CupertinoIcons.uiwindow_split_2x1, size: 13),
+                      ),
+                    ]),
                     SidebarItem(
                         label: Text('Selectors'),
                         leading: Icon(Icons.date_range_outlined, size: 13)),
@@ -124,6 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const IndicatorsPage(),
           const SlidersPage(),
           const SegmentedControlsPage(),
+          const TabViewPage(),
           const SelectorsPage(),
           const ColorsPage(),
           const FieldsPage(),
