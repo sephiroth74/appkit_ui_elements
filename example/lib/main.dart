@@ -6,6 +6,7 @@ import 'package:example/pages/combo_button_page.dart';
 import 'package:example/pages/controls_page.dart';
 import 'package:example/pages/dialogs_page.dart';
 import 'package:example/pages/fields_page.dart';
+import 'package:example/pages/group_box_page.dart';
 import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/popup_button.dart';
 import 'package:example/pages/push_button_page.dart';
@@ -108,6 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         leading:
                             Icon(CupertinoIcons.uiwindow_split_2x1, size: 13),
                       ),
+                      SidebarItem(
+                        label: Text('Group Box'),
+                        leading: Icon(CupertinoIcons.rectangle_3_offgrid_fill,
+                            size: 13),
+                      ),
                     ]),
                     SidebarItem(
                         label: Text('Selectors'),
@@ -142,6 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const DialogsViewPage(),
           const SegmentedControlsPage(),
           const TabViewPage(),
+          const GroupedBoxPage(),
           const SelectorsPage(),
           const ColorsPage(),
           const FieldsPage(),

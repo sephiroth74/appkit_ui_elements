@@ -199,3 +199,9 @@ enum AppKitDatePickerSelectionType {
   single,
   range,
 }
+
+enum AppKitGroupBoxStyle {
+  defaultScrollBox,
+  roundedScrollBox,
+  standardScrollBox,
+}
