@@ -408,7 +408,7 @@ class _BoxDecorationBuilder {
     if (!isPrimary || !isEnabled) {
       return [
         const BoxShadow(
-          color: Color.fromRGBO(0, 0, 0, 0.075),
+          color: Color.fromRGBO(0, 0, 0, 0.06),
           blurRadius: 0.25,
           spreadRadius: 0,
           offset: Offset(0, 0.5),
@@ -417,19 +417,19 @@ class _BoxDecorationBuilder {
     } else {
       return [
         BoxShadow(
-          color: accentColor.withOpacity(0.12),
+          color: accentColor.withOpacity(0.06),
           blurRadius: 3,
           spreadRadius: 0,
           offset: const Offset(0, 0.25),
         ),
         BoxShadow(
-          color: accentColor.withOpacity(0.12),
+          color: accentColor.withOpacity(0.06),
           blurRadius: 2,
           spreadRadius: 0,
           offset: const Offset(0, 0.5),
         ),
         BoxShadow(
-          color: accentColor.withOpacity(0.24),
+          color: accentColor.withOpacity(0.12),
           blurRadius: 1,
           spreadRadius: 0,
           offset: const Offset(0, 0.25),

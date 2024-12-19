@@ -449,8 +449,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                       child: Center(
                         child: Padding(
                           padding: EdgeInsets.only(
-                            top: widget.padding.top,
-                            bottom: widget.padding.bottom,
+                            top: widget.padding.top + 0.5,
+                            bottom: widget.padding.bottom - 0.5,
                             left: 6.0,
                             right: 6.0,
                           ),

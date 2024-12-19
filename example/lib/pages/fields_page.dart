@@ -96,6 +96,7 @@ class _FieldsPageState extends State<FieldsPage> {
                         borderStyle: textFieldBorderStyle,
                         placeholder: 'Placeholder',
                         expands: false,
+                        minLines: 1,
                         maxLines: 1,
                         autofillHints: const [AutofillHints.email],
                         autocorrect: true,
@@ -195,7 +196,7 @@ class _FieldsPageState extends State<FieldsPage> {
                             const SizedBox(
                                 width: _kLabelSize,
                                 child:
-                                    AppKitLabel(text: Text('Disable Fields'))),
+                                    AppKitLabel(text: Text('Enable Fields'))),
                             const SizedBox(width: 16.0),
                             AppKitSwitch(
                                 checked: textFieldEnabled,

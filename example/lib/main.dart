@@ -92,9 +92,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       SidebarItem(label: Text('ComboBox Button')),
                       SidebarItem(label: Text('Popup/Pulldown Button')),
                     ]),
-                    SidebarItem(label: Text('Controls')),
-                    SidebarItem(label: Text('Indicators')),
-                    SidebarItem(label: Text('Sliders')),
+                    SidebarItem(
+                        label: Text('Controls'),
+                        leading: Icon(Icons.radio_button_checked, size: 13)),
+                    SidebarItem(
+                        label: Text('Indicators'),
+                        leading:
+                            Icon(CupertinoIcons.circle_grid_hex, size: 13)),
+                    SidebarItem(
+                        label: Text('Sliders'),
+                        leading:
+                            Icon(CupertinoIcons.slider_horizontal_3, size: 13)),
                     SidebarItem(
                         label: Text('Dialogs'),
                         leading: Icon(Icons.window_outlined, size: 13)),
