@@ -79,7 +79,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const WidgetTitle(label: 'GroupBox (diabled)'),
+                    const WidgetTitle(label: 'GroupBox (disbled)'),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisSize: MainAxisSize.max,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/pages/colors_page.dart';
 import 'package:example/pages/combo_box_button_page.dart';
 import 'package:example/pages/combo_button_page.dart';
 import 'package:example/pages/controls_page.dart';
@@ -11,7 +12,6 @@ import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/popup_button.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
-import 'package:example/pages/colors_page.dart';
 import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/tab_view_page.dart';

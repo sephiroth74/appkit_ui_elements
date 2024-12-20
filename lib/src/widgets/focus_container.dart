@@ -195,6 +195,7 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppKitTheme.of(context);
     return Semantics(
       label: widget.semanticsProperties.label,
       enabled: widget.enabled,
@@ -224,9 +225,8 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
           return widget.child;
         }
 
-        final focusRingColor = AppKitColors.focusRingColor
-            .resolveFrom(context)
-            .multiplyOpacity(_alphaAnimation.value);
+        final focusRingColor =
+            theme.focusColor.multiplyOpacity(_alphaAnimation.value);
 
         return CustomPaint(
             isComplex: true,

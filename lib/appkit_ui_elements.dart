@@ -10,10 +10,10 @@ export 'package:flutter/widgets.dart';
 export 'src/controls/library.dart';
 export 'src/enums/enums.dart';
 export 'src/theme/library.dart';
-export 'src/utils/library.dart';
 export 'src/widgets/library.dart';
 export 'src/layout/library.dart';
 export 'src/dialogs/library.dart';
+export 'src/library.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {

@@ -89,6 +89,7 @@ class _InheritedAppKitTheme extends InheritedWidget {
 class AppKitThemeData extends Equatable with Diagnosticable {
   final Brightness brightness;
   final Color? accentColor;
+  final Color focusColor;
   final bool isMainWindow;
   final VisualDensity visualDensity;
   final Color canvasColor;
@@ -114,6 +115,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
+    Color? primaryColor,
     VisualDensity? visualDensity,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
@@ -132,7 +134,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitComboButtonThemeData? comboButtonTheme,
     AppKitIconThemeData? iconTheme,
     Color? canvasColor,
-    Color? accentColor,
+    AppKitAccentColor? accentColor,
     bool? isMainWindow,
     Color? controlBackgroundColor,
     CupertinoDynamicColor? controlBackgroundPressedColor,
@@ -141,6 +143,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitTypography? typography,
   }) {
     final bool isDark = brightness == Brightness.dark;
+
+    primaryColor ??= _ColorProvider.getPrimaryColor(
+      accentColor: accentColor ?? AppKitAccentColor.blue,
+      isDark: isDark,
+      isMainWindow: isMainWindow ?? true,
+    );
+
+    Color focusColor = primaryColor.withOpacity(0.749);
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
     isMainWindow ??= true;
@@ -214,7 +224,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     sliderTheme ??= AppKitSliderThemeData(
       trackColor: AppKitColors.fills.opaque.primary.resolveWith(brightness),
       thumbColor: controlBackgroundColor,
-      sliderColor: accentColor,
+      sliderColor: primaryColor,
       tickColor: const Color(0xFFC9C9C7),
       discreteAnchorThreshold: 0.01,
       animationDuration: 200,
@@ -269,7 +279,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     progressTheme ??= AppKitProgressThemeData(
       trackColor: isDark ? const Color(0xFFe1e0de) : const Color(0xFFe1e0de),
-      color: accentColor,
+      color: primaryColor,
       accentColorUnfocused: accentColorUnfocused,
     );
 
@@ -324,7 +334,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     popupButtonTheme ??= AppKitPopupButtonThemeData.fallback(
       brightness: brightness,
       typography: typography,
-      elevatedButtonColor: accentColor,
+      elevatedButtonColor: primaryColor,
     );
 
     comboButtonTheme ??= AppKitComboButtonThemeData.fallback(
@@ -341,13 +351,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     iconTheme ??= AppKitIconThemeData(
-      color: accentColor,
+      color: primaryColor,
       size: 20,
     );
 
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
-      accentColor: accentColor,
+      accentColor: primaryColor,
+      focusColor: focusColor,
       isMainWindow: isMainWindow,
       visualDensity: visualDensity,
       typography: typography,
@@ -374,7 +385,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     final customData = defaultData.copyWith(
       brightness: brightness,
-      accentColor: accentColor,
+      accentColor: primaryColor,
+      focusColor: focusColor,
       isMainWindow: isMainWindow,
       visualDensity: visualDensity,
       canvasColor: canvasColor,
@@ -404,7 +416,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   }
 
   factory AppKitThemeData.light({
-    Color? accentColor,
+    AppKitAccentColor? accentColor,
     bool isMainWindow = true,
   }) =>
       AppKitThemeData(
@@ -414,7 +426,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       );
 
   factory AppKitThemeData.dark({
-    Color? accentColor,
+    AppKitAccentColor? accentColor,
     bool isMainWindow = true,
   }) =>
       AppKitThemeData(
@@ -429,15 +441,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
   factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData,
       {bool highContrast = false}) {
-    final brightness = themeData.brightness;
-    final themeAccentColor = _getThemeAccentColor(themeData.accentColor);
-    final accentColor = themeAccentColor != null
-        ? brightness.resolve(themeAccentColor.color, themeAccentColor.darkColor)
-        : null;
-
     return AppKitThemeData(
       brightness: themeData.brightness,
-      accentColor: accentColor,
+      accentColor: AppKitAccentColor.fromAccentColor(
+          themeData.accentColor ?? AccentColor.blue),
       isMainWindow: themeData.isMainWindow,
       visualDensity: themeData.visualDensity,
       canvasColor: themeData.canvasColor,
@@ -445,31 +452,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
   }
 
-  static CupertinoDynamicColor? _getThemeAccentColor(AccentColor? color) {
-    if (null == color) return null;
-    switch (color) {
-      case AccentColor.blue:
-        return AppKitColors.systemBlue;
-      case AccentColor.purple:
-        return AppKitColors.systemPurple;
-      case AccentColor.pink:
-        return AppKitColors.systemPink;
-      case AccentColor.red:
-        return AppKitColors.systemRed;
-      case AccentColor.orange:
-        return AppKitColors.systemOrange;
-      case AccentColor.yellow:
-        return AppKitColors.systemYellow;
-      case AccentColor.green:
-        return AppKitColors.systemGreen;
-      case AccentColor.graphite:
-        return AppKitColors.systemGray;
-    }
-  }
-
   const AppKitThemeData.raw({
     required this.brightness,
     required this.accentColor,
+    required this.focusColor,
     required this.isMainWindow,
     required this.visualDensity,
     required this.typography,
@@ -498,6 +484,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   List<Object?> get props => [
         brightness,
         accentColor,
+        focusColor,
         isMainWindow,
         visualDensity,
         canvasColor,
@@ -525,6 +512,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   AppKitThemeData copyWith({
     Brightness? brightness,
     Color? accentColor,
+    Color? focusColor,
     bool? isMainWindow,
     VisualDensity? visualDensity,
     AppKitTypography? typography,
@@ -553,6 +541,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
       accentColor: accentColor ?? this.accentColor,
+      focusColor: focusColor ?? this.focusColor,
       isMainWindow: isMainWindow ?? this.isMainWindow,
       visualDensity: visualDensity ?? this.visualDensity,
       typography: typography ?? this.typography,
@@ -585,6 +574,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return copyWith(
       brightness: other.brightness,
       accentColor: other.accentColor,
+      focusColor: other.focusColor,
       isMainWindow: other.isMainWindow,
       visualDensity: other.visualDensity,
       typography: other.typography,
@@ -614,6 +604,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return AppKitThemeData.raw(
       brightness: t < 0.5 ? a.brightness : b.brightness,
       accentColor: t < 0.5 ? a.accentColor : b.accentColor,
+      focusColor: Color.lerp(a.focusColor, b.focusColor, t)!,
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
       typography: AppKitTypography.lerp(a.typography, b.typography, t),
@@ -663,6 +654,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<Brightness>('brightness', brightness));
     properties.add(ColorProperty('accentColor', accentColor));
+    properties.add(ColorProperty('focusColor', focusColor));
     properties.add(FlagProperty('isMainWindow',
         value: isMainWindow, ifTrue: 'main window'));
     properties.add(
@@ -708,6 +700,153 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   }
 }
 
+class _ColorProvider {
+  _ColorProvider._();
+
+  /// Returns the primary color based on the provided parameters.
+  static Color getPrimaryColor({
+    required AppKitAccentColor accentColor,
+    required bool isDark,
+    required bool isMainWindow,
+  }) {
+    if (!isMainWindow) {
+      return isDark
+          ? const Color.fromRGBO(100, 100, 100, 0.625)
+          : const Color.fromRGBO(190, 190, 190, 1.0);
+    }
+
+    switch (accentColor) {
+      case AppKitAccentColor.blue:
+        if (isDark) {
+          return AppKitColors.systemBlue.darkColor;
+        } else {
+          return AppKitColors.systemBlue.color;
+        }
+
+      case AppKitAccentColor.purple:
+        if (isDark) {
+          return AppKitColors.systemPurple.darkColor;
+        } else {
+          return AppKitColors.systemPurple.color;
+        }
+
+      case AppKitAccentColor.pink:
+        if (isDark) {
+          return AppKitColors.systemPink.darkColor;
+        } else {
+          return AppKitColors.systemPink.color;
+        }
+
+      case AppKitAccentColor.red:
+        if (isDark) {
+          return AppKitColors.systemRed.darkColor;
+        } else {
+          return AppKitColors.systemRed.color;
+        }
+
+      case AppKitAccentColor.orange:
+        if (isDark) {
+          return AppKitColors.systemOrange.darkColor;
+        } else {
+          return AppKitColors.systemOrange.color;
+        }
+
+      case AppKitAccentColor.yellow:
+        if (isDark) {
+          return AppKitColors.systemYellow.darkColor;
+        } else {
+          return AppKitColors.systemYellow.color;
+        }
+
+      case AppKitAccentColor.green:
+        if (isDark) {
+          return AppKitColors.systemGreen.darkColor;
+        } else {
+          return AppKitColors.systemGreen.color;
+        }
+
+      case AppKitAccentColor.graphite:
+        if (isDark) {
+          return AppKitColors.systemGray.darkColor;
+        } else {
+          return AppKitColors.systemGray.color;
+        }
+    }
+  }
+
+  /// Returns the active color based on the provided parameters.
+  static Color getActiveColor({
+    required AppKitAccentColor accentColor,
+    required bool isDark,
+    required bool isMainWindow,
+  }) {
+    if (!isMainWindow) {
+      return isDark
+          ? const Color.fromRGBO(76, 78, 65, 1.0)
+          : const Color.fromRGBO(180, 180, 180, 1.0);
+    }
+
+    switch (accentColor) {
+      case AppKitAccentColor.blue:
+        if (isDark) {
+          return const Color.fromRGBO(0, 122, 255, 1.0);
+        } else {
+          return const Color.fromRGBO(10, 132, 255, 1.0);
+        }
+
+      case AppKitAccentColor.purple:
+        if (isDark) {
+          return const Color.fromRGBO(191, 90, 242, 1.0);
+        } else {
+          return const Color.fromRGBO(218, 142, 255, 1.0);
+        }
+
+      case AppKitAccentColor.pink:
+        if (isDark) {
+          return const Color.fromRGBO(255, 45, 85, 1.0);
+        } else {
+          return const Color.fromRGBO(255, 55, 95, 1.0);
+        }
+
+      case AppKitAccentColor.red:
+        if (isDark) {
+          return const Color.fromRGBO(255, 59, 48, 1.0);
+        } else {
+          return const Color.fromRGBO(255, 69, 58, 1.0);
+        }
+
+      case AppKitAccentColor.orange:
+        if (isDark) {
+          return const Color.fromRGBO(255, 149, 0, 1.0);
+        } else {
+          return const Color.fromRGBO(255, 159, 10, 1.0);
+        }
+
+      case AppKitAccentColor.yellow:
+        if (isDark) {
+          return const Color.fromRGBO(255, 204, 0, 1.0);
+        } else {
+          return const Color.fromRGBO(255, 214, 10, 1.0);
+        }
+
+      case AppKitAccentColor.green:
+        if (isDark) {
+          return const Color.fromRGBO(76, 217, 100, 1.0);
+        } else {
+          return const Color.fromRGBO(76, 227, 110, 1.0);
+        }
+
+      case AppKitAccentColor.graphite:
+        if (isDark) {
+          return const Color.fromRGBO(142, 142, 142, 1.0);
+        } else {
+          return const Color.fromRGBO(142, 142, 142, 1.0);
+        }
+    }
+  }
+}
+
+@protected
 extension UiElementColorBuilderX on UiElementColorContainer {
   BoxShadow get shadowPrimary => BoxShadow(
         color: shadowColor.withOpacity(0.4),
