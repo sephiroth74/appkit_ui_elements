@@ -90,6 +90,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Brightness brightness;
   final Color? accentColor;
   final Color focusColor;
+  final Color dividerColor;
   final bool isMainWindow;
   final VisualDensity visualDensity;
   final Color canvasColor;
@@ -112,6 +113,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitComboButtonThemeData comboButtonTheme;
   final AppKitIconThemeData iconTheme;
   final AppKitTypography typography;
+  final AppKitScrollbarThemeData scrollbarTheme;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -133,6 +135,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitContextMenuThemeData? contextMenuTheme,
     AppKitComboButtonThemeData? comboButtonTheme,
     AppKitIconThemeData? iconTheme,
+    AppKitScrollbarThemeData? scrollbarTheme,
     Color? canvasColor,
     AppKitAccentColor? accentColor,
     bool? isMainWindow,
@@ -141,6 +144,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlBackgroundColorDisabled,
     Color? accentColorUnfocused,
     AppKitTypography? typography,
+    Color? dividerColor,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
@@ -175,6 +179,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     accentColorUnfocused ??=
         isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
+
+    dividerColor ??= isDark
+        ? AppKitColors.dividerColor.darkColor
+        : AppKitColors.dividerColor.color;
 
     pushButtonTheme ??= const AppKitPushButtonThemeData(
       buttonRadius: {
@@ -355,38 +363,50 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       size: 20,
     );
 
-    final defaultData = AppKitThemeData.raw(
-      brightness: brightness,
-      accentColor: primaryColor,
-      focusColor: focusColor,
-      isMainWindow: isMainWindow,
-      visualDensity: visualDensity,
-      typography: typography,
-      pushButtonTheme: pushButtonTheme,
-      toggleButtonTheme: toggleButtonTheme,
-      helpButtonTheme: helpButtonTheme,
-      sliderTheme: sliderTheme,
-      segmentedControlTheme: segmentedControlTheme,
-      switchTheme: switchTheme,
-      progressTheme: progressTheme,
-      colorWellTheme: colorWellTheme,
-      circularSliderTheme: circularSliderTheme,
-      levelIndicatorsTheme: levelIndicatorsTheme,
-      ratingIndicatorTheme: ratingIndicatorTheme,
-      canvasColor: canvasColor,
-      controlBackgroundPressedColor: controlBackgroundPressedColor,
-      accentColorUnfocused: accentColorUnfocused,
-      tooltipTheme: tooltipTheme,
-      popupButtonTheme: popupButtonTheme,
-      contextMenuTheme: contextMenuTheme,
-      comboButtonTheme: comboButtonTheme,
-      iconTheme: iconTheme,
+    scrollbarTheme ??= AppKitScrollbarThemeData(
+      thickness: 6.0,
+      thicknessWhileHovering: 9.0,
+      thumbColor: isDark
+          ? AppKitColors.scrollbarColor.darkColor
+          : AppKitColors.scrollbarColor.color,
+      radius: const Radius.circular(25),
+      thumbVisibility: false,
     );
+
+    final defaultData = AppKitThemeData.raw(
+        brightness: brightness,
+        accentColor: primaryColor,
+        focusColor: focusColor,
+        dividerColor: dividerColor,
+        isMainWindow: isMainWindow,
+        visualDensity: visualDensity,
+        typography: typography,
+        pushButtonTheme: pushButtonTheme,
+        toggleButtonTheme: toggleButtonTheme,
+        helpButtonTheme: helpButtonTheme,
+        sliderTheme: sliderTheme,
+        segmentedControlTheme: segmentedControlTheme,
+        switchTheme: switchTheme,
+        progressTheme: progressTheme,
+        colorWellTheme: colorWellTheme,
+        circularSliderTheme: circularSliderTheme,
+        levelIndicatorsTheme: levelIndicatorsTheme,
+        ratingIndicatorTheme: ratingIndicatorTheme,
+        canvasColor: canvasColor,
+        controlBackgroundPressedColor: controlBackgroundPressedColor,
+        accentColorUnfocused: accentColorUnfocused,
+        tooltipTheme: tooltipTheme,
+        popupButtonTheme: popupButtonTheme,
+        contextMenuTheme: contextMenuTheme,
+        comboButtonTheme: comboButtonTheme,
+        iconTheme: iconTheme,
+        scrollbarTheme: scrollbarTheme);
 
     final customData = defaultData.copyWith(
       brightness: brightness,
       accentColor: primaryColor,
       focusColor: focusColor,
+      dividerColor: dividerColor,
       isMainWindow: isMainWindow,
       visualDensity: visualDensity,
       canvasColor: canvasColor,
@@ -410,6 +430,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       contextMenuTheme: contextMenuTheme,
       comboButtonTheme: comboButtonTheme,
       iconTheme: iconTheme,
+      scrollbarTheme: scrollbarTheme,
     );
 
     return defaultData.merge(customData);
@@ -456,6 +477,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.brightness,
     required this.accentColor,
     required this.focusColor,
+    required this.dividerColor,
     required this.isMainWindow,
     required this.visualDensity,
     required this.typography,
@@ -478,6 +500,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.contextMenuTheme,
     required this.comboButtonTheme,
     required this.iconTheme,
+    required this.scrollbarTheme,
   });
 
   @override
@@ -507,12 +530,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         contextMenuTheme,
         comboButtonTheme,
         iconTheme,
+        scrollbarTheme,
+        dividerColor,
       ];
 
   AppKitThemeData copyWith({
     Brightness? brightness,
     Color? accentColor,
     Color? focusColor,
+    Color? dividerColor,
     bool? isMainWindow,
     VisualDensity? visualDensity,
     AppKitTypography? typography,
@@ -537,6 +563,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitContextMenuThemeData? contextMenuTheme,
     AppKitComboButtonThemeData? comboButtonTheme,
     AppKitIconThemeData? iconTheme,
+    AppKitScrollbarThemeData? scrollbarTheme,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -566,6 +593,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       contextMenuTheme: contextMenuTheme ?? this.contextMenuTheme,
       comboButtonTheme: comboButtonTheme ?? this.comboButtonTheme,
       iconTheme: iconTheme ?? this.iconTheme,
+      scrollbarTheme: scrollbarTheme ?? this.scrollbarTheme,
+      dividerColor: dividerColor ?? this.dividerColor,
     );
   }
 
@@ -597,6 +626,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       contextMenuTheme: other.contextMenuTheme,
       comboButtonTheme: other.comboButtonTheme,
       iconTheme: other.iconTheme,
+      scrollbarTheme: other.scrollbarTheme,
+      dividerColor: other.dividerColor,
     );
   }
 
@@ -646,6 +677,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       comboButtonTheme: AppKitComboButtonThemeData.lerp(
           a.comboButtonTheme, b.comboButtonTheme, t),
       iconTheme: AppKitIconThemeData.lerp(a.iconTheme, b.iconTheme, t),
+      scrollbarTheme:
+          AppKitScrollbarThemeData.lerp(a.scrollbarTheme, b.scrollbarTheme, t),
+      dividerColor: Color.lerp(a.dividerColor, b.dividerColor, t)!,
     );
   }
 
@@ -697,6 +731,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'comboButtonTheme', comboButtonTheme));
     properties
         .add(DiagnosticsProperty<AppKitIconThemeData>('iconTheme', iconTheme));
+    properties.add(DiagnosticsProperty<AppKitScrollbarThemeData>(
+        'scrollbarTheme', scrollbarTheme));
+    properties.add(ColorProperty('dividerColor', dividerColor));
   }
 }
 

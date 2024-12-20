@@ -17,3 +17,4 @@ export 'appkit_popup_button_theme.dart';
 export 'appkit_context_menu_theme.dart';
 export 'appkit_combo_button_theme.dart';
 export 'appkit_icon_theme.dart';
+export 'appkit_scrollbar_theme.dart';

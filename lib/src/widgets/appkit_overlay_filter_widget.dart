@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
-import 'package:appkit_ui_elements/src/widgets/wallpaper_tinting_override.dart';
+import 'package:appkit_ui_elements/src/layout/appkit_wallpaper_tinting_override.dart';
 import 'package:flutter/material.dart';
 
 class AppKitOverlayFilterWidget extends StatelessWidget {
@@ -29,7 +29,7 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WallpaperTintingOverride(
+    return AppKitWallpaperTintingOverride(
       child: UiElementColorBuilder(builder: (context, colorContainer) {
         return Container(
           decoration: BoxDecoration(

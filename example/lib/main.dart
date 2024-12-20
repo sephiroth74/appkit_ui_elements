@@ -11,6 +11,7 @@ import 'package:example/pages/group_box_page.dart';
 import 'package:example/pages/indicators_page.dart';
 import 'package:example/pages/popup_button.dart';
 import 'package:example/pages/push_button_page.dart';
+import 'package:example/pages/resizable_panel_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
 import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
@@ -109,8 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     SidebarItem(label: Text('Layout'), disclosureItems: [
                       SidebarItem(
                         label: Text('Segmented Controls'),
-                        leading:
-                            Icon(CupertinoIcons.rectangle_split_3x1, size: 13),
+                        leading: Icon(
+                            CupertinoIcons.rectangle_stack_badge_minus,
+                            size: 13),
                       ),
                       SidebarItem(
                         label: Text('Tab View'),
@@ -122,6 +124,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         leading: Icon(CupertinoIcons.rectangle_3_offgrid_fill,
                             size: 13),
                       ),
+                      SidebarItem(
+                          leading: Icon(CupertinoIcons.rectangle_split_3x1,
+                              size: 13),
+                          label: Text('Resizable Panel')),
                     ]),
                     SidebarItem(
                         label: Text('Selectors'),
@@ -157,6 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const SegmentedControlsPage(),
           const TabViewPage(),
           const GroupedBoxPage(),
+          const ResizablePanelPage(),
           const SelectorsPage(),
           const ColorsPage(),
           const FieldsPage(),

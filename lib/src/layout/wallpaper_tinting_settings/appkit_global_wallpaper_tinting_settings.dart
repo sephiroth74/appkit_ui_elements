@@ -1,16 +1,16 @@
 import 'dart:async';
 
-class GlobalWallpaperTintingSettings {
-  static final WallpaperTintingSettingsData data =
-      WallpaperTintingSettingsData();
+class AppKitGlobalWallpaperTintingSettings {
+  static final AppKitWallpaperTintingSettingsData data =
+      AppKitWallpaperTintingSettingsData();
 
   /// The [StreamController] for an event stream that is triggered when [data]
   /// changes.
   static final _onDataChangedStreamController =
-      StreamController<WallpaperTintingSettingsData>.broadcast();
+      StreamController<AppKitWallpaperTintingSettingsData>.broadcast();
 
   /// A stream that can be used to listen to [data] changes.
-  static Stream<WallpaperTintingSettingsData> get onDataChangedStream =>
+  static Stream<AppKitWallpaperTintingSettingsData> get onDataChangedStream =>
       _onDataChangedStreamController.stream;
 
   /// Gets whether wallpaper tinting should be enabled.
@@ -42,7 +42,7 @@ class GlobalWallpaperTintingSettings {
 }
 
 /// Holds data related to wallpaper tinting.
-class WallpaperTintingSettingsData {
+class AppKitWallpaperTintingSettingsData {
   /// The number of wallpaper tinting overrides that are currently active.
   ///
   /// A wallpaper tinting override causes wallpaper tinting to be disabled.

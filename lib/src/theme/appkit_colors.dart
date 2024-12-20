@@ -85,6 +85,15 @@ class AppKitColors {
     darkColor: Color(0xFF0A84FF),
   );
 
+  static const dividerColor = CupertinoDynamicColor.withBrightness(
+      color: Color(0x1F000000), darkColor: Color(0x1FFFFFFF));
+
+  static CupertinoDynamicColor scrollbarColor =
+      CupertinoDynamicColor.withBrightness(
+    color: AppKitColors.systemGray.color.withOpacity(0.8),
+    darkColor: AppKitColors.systemGray.darkColor.withOpacity(0.8),
+  );
+
   /// The text of a label containing primary content.
   static const labelColor = CupertinoDynamicColor.withBrightness(
     color: Color.fromRGBO(0, 0, 0, 0.85),

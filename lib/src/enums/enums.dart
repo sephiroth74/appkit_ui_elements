@@ -238,3 +238,9 @@ enum AppKitAccentColor {
     }
   }
 }
+
+enum AppKitResizableSide {
+  left,
+  right,
+  top,
+}
