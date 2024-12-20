@@ -85,11 +85,6 @@ class AppKitColors {
     darkColor: Color(0xFF0A84FF),
   );
 
-  static const focusRingColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xBF0A82FF),
-    darkColor: Color(0xBF0A82FF),
-  );
-
   /// The text of a label containing primary content.
   static const labelColor = CupertinoDynamicColor.withBrightness(
     color: Color.fromRGBO(0, 0, 0, 0.85),

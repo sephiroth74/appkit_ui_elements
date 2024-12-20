@@ -60,8 +60,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                                     Icon(
                                       Icons.access_alarm,
                                       size: 14,
-                                      color: AppKitColors.controlAccentColor
-                                          .withOpacity(0.85),
+                                      color: AppKitIconTheme.of(context).color,
                                     ),
                                     const SizedBox(width: 6.0),
                                     const Text('Button'),
@@ -121,8 +120,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                                     Icon(
                                       Icons.access_alarm,
                                       size: 15,
-                                      color: AppKitColors.controlAccentColor
-                                          .withOpacity(0.85),
+                                      color: AppKitIconTheme.of(context).color,
                                     ),
                                     const SizedBox(width: 6.0),
                                     const Text('Combo Button'),
