@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const groupMessage =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
@@ -15,7 +14,7 @@ class _ResizablePanelPageState extends State<ResizablePanelPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const ToolBar(
+      toolBar: const AppKitToolBar(
         title: Text('Resizable Panel'),
         titleWidth: 200,
       ),

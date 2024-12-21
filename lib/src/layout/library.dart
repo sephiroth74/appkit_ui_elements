@@ -1,7 +1,8 @@
 export 'tab_view/library.dart';
 export 'wallpaper_tinting_settings/library.dart';
+export 'toolbar/library.dart';
 
-export 'apkit_content_area.dart';
+export 'appkit_content_area.dart';
 export 'appkit_group_box.dart';
 export 'appkit_list_title.dart';
 export 'appkit_resizable_pane.dart';

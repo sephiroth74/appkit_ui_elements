@@ -52,6 +52,7 @@ extension PopoverX on BuildContext {
   }
 
   bool isPopoverVisible(String uuid) {
-    return ModalRoute.of(this)!.settings.name == "popover-menu" && ModalRoute.of(this)!.settings.arguments == uuid;
+    return ModalRoute.of(this)!.settings.name == "popover-menu" &&
+        ModalRoute.of(this)!.settings.arguments == uuid;
   }
 }

@@ -17,6 +17,7 @@ import 'package:example/pages/selectors_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/tab_view_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
+import 'package:example/pages/toolbar_page.dart';
 import 'package:example/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -128,6 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           leading: Icon(CupertinoIcons.rectangle_split_3x1,
                               size: 13),
                           label: Text('Resizable Panel')),
+                      SidebarItem(
+                          leading: Icon(CupertinoIcons.macwindow, size: 13),
+                          label: Text('Toolbar')),
                     ]),
                     SidebarItem(
                         label: Text('Selectors'),
@@ -164,6 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const TabViewPage(),
           const GroupedBoxPage(),
           const ResizablePanelPage(),
+          const ToolbarPage(),
           const SelectorsPage(),
           const ColorsPage(),
           const FieldsPage(),

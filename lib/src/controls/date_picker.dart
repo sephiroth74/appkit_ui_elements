@@ -1,6 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/widgets/date_picker/graphical_date_picker.dart';
-import 'package:appkit_ui_elements/src/widgets/date_picker/textual_date_picker.dart';
+import 'package:appkit_ui_elements/src/widgets/date_picker/appkit_graphical_date_picker.dart';
+import 'package:appkit_ui_elements/src/widgets/date_picker/appkit_textual_date_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 

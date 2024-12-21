@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class AppKitScaffold extends StatefulWidget {
   const AppKitScaffold({
@@ -15,7 +14,7 @@ class AppKitScaffold extends StatefulWidget {
 
   final Color? backgroundColor;
   final List<Widget> children;
-  final ToolBar? toolBar;
+  final AppKitToolBar? toolBar;
 
   @override
   State<AppKitScaffold> createState() => _AppKitScaffoldState();

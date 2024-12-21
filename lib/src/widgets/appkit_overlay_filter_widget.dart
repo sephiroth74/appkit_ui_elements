@@ -40,20 +40,6 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
               width: 0.5,
             ),
             boxShadow: [
-              // BoxShadow(
-              //   color: Colors.black.withOpacity(0.75),
-              //   offset: const Offset(0, 0),
-              //   blurRadius: 0.25,
-              //   spreadRadius: 0.0,
-              //   blurStyle: BlurStyle.outer,
-              // ),
-              // BoxShadow(
-              //   color: Colors.black.withOpacity(0.15),
-              //   offset: const Offset(0, 0),
-              //   blurRadius: 0.75,
-              //   spreadRadius: 0.0,
-              //   blurStyle: BlurStyle.outer,
-              // ),
               BoxShadow(
                 color: colorContainer.shadowColor.withOpacity(0.25),
                 offset: const Offset(0, 3.5),

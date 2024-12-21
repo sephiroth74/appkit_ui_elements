@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -54,8 +53,6 @@ class TextualDatePicker extends StatefulWidget {
 }
 
 class _TextualDatePickerState extends State<TextualDatePicker> {
-  late final _logger = newLogger('TextualDatePicker[$hashCode]');
-
   int? _focusedIndex;
 
   bool get enabled => widget.onChanged != null;
