@@ -1,7 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/macos_ui.dart';
-import 'package:macos_ui/src/library.dart';
 
 class AppKitIconButtonTheme extends InheritedTheme {
   const AppKitIconButtonTheme({
