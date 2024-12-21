@@ -2,23 +2,22 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
 
-class PopoverWidget extends StatelessWidget {
-  final PopoverState popoverState;
+class AppKitPopoverWidget extends StatelessWidget {
+  final AppKitPopoverState popoverState;
   final Duration transitionDuration;
-  const PopoverWidget({
+  const AppKitPopoverWidget({
     super.key,
     required this.popoverState,
     Duration? transitionDuration,
-  }) : transitionDuration =
-            transitionDuration ?? const Duration(milliseconds: 200);
+  }) : transitionDuration = transitionDuration ?? const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
-    return PopoverProvider(
+    return AppKitPopoverProvider(
       state: popoverState,
       child: Builder(
         builder: (context) {
-          final state = PopoverState.of(context);
+          final state = AppKitPopoverState.of(context);
           state.verifyPosition(context);
 
           final child = Opacity(
@@ -30,8 +29,7 @@ class PopoverWidget extends StatelessWidget {
           );
 
           if (state.link == null) {
-            return Positioned(
-                left: state.position.dx, top: state.position.dy, child: child);
+            return Positioned(left: state.position.dx, top: state.position.dy, child: child);
           }
 
           return CompositedTransformFollower(
@@ -45,7 +43,7 @@ class PopoverWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildPopover(BuildContext context, PopoverState state) {
+  Widget _buildPopover(BuildContext context, AppKitPopoverState state) {
     return TweenAnimationBuilder(
         curve: Curves.easeOutBack,
         duration: transitionDuration,
@@ -56,8 +54,7 @@ class PopoverWidget extends StatelessWidget {
               child: Transform.scale(
                 scale: value,
                 alignment: Alignment.center,
-                child:
-                    UiElementColorBuilder(builder: (context, colorContainer) {
+                child: UiElementColorBuilder(builder: (context, colorContainer) {
                   return CustomPaint(
                       painter: _PopoverBackgroundPainter(
                         cornerRadius: kCornerRadius,
@@ -65,8 +62,7 @@ class PopoverWidget extends StatelessWidget {
                         anchorWidth: kAnchorWidth,
                         color: colorContainer.windowBackgroundColor,
                         anchorOffset: state.anchorOffset,
-                        anchorDirection:
-                            state.showArrow ? state.direction : null,
+                        anchorDirection: state.showArrow ? state.direction : null,
                       ),
                       child: Padding(
                         padding: state.paddings,
@@ -135,10 +131,8 @@ class _PopoverBackgroundPainter extends CustomPainter {
               anchorDirection == AppKitMenuEdge.auto)
           ? rect.topCenter.dx
           : 0;
-      offsetDy = (anchorDirection == AppKitMenuEdge.left ||
-              anchorDirection == AppKitMenuEdge.right)
-          ? rect.centerLeft.dy
-          : 0;
+      offsetDy =
+          (anchorDirection == AppKitMenuEdge.left || anchorDirection == AppKitMenuEdge.right) ? rect.centerLeft.dy : 0;
     } else {
       offsetDx = -anchorOffset!.dx;
       offsetDy = -anchorOffset!.dy;
@@ -146,8 +140,7 @@ class _PopoverBackgroundPainter extends CustomPainter {
 
     path.moveTo(rect.left + cornerRadius, rect.top);
 
-    if ((anchorDirection == AppKitMenuEdge.bottom ||
-            anchorDirection == AppKitMenuEdge.auto) &&
+    if ((anchorDirection == AppKitMenuEdge.bottom || anchorDirection == AppKitMenuEdge.auto) &&
         (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
       path.lineTo(rect.left + offsetDx - anchorWidth / 2, rect.top);
       path.lineTo(rect.left + offsetDx, rect.top - anchorHeight);
@@ -155,44 +148,37 @@ class _PopoverBackgroundPainter extends CustomPainter {
     }
 
     path.lineTo(rect.right - cornerRadius, rect.top);
-    path.arcToPoint(Offset(rect.right, cornerRadius + rect.top),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.right, cornerRadius + rect.top), radius: Radius.circular(cornerRadius));
 
     // right
-    if (anchorDirection == AppKitMenuEdge.left &&
-        (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
+    if (anchorDirection == AppKitMenuEdge.left && (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
       path.lineTo(rect.right, rect.top + offsetDy - anchorWidth / 2);
       path.lineTo(rect.right + anchorHeight, rect.top + offsetDy);
       path.lineTo(rect.right, rect.top + offsetDy + anchorWidth / 2);
     }
 
     path.lineTo(rect.right, rect.bottom - cornerRadius);
-    path.arcToPoint(Offset(rect.right - cornerRadius, rect.bottom),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.right - cornerRadius, rect.bottom), radius: Radius.circular(cornerRadius));
 
     // bottom
-    if (anchorDirection == AppKitMenuEdge.top &&
-        (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
+    if (anchorDirection == AppKitMenuEdge.top && (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
       path.lineTo(rect.left + offsetDx + anchorWidth / 2, rect.bottom);
       path.lineTo(rect.left + offsetDx, rect.bottom + anchorHeight);
       path.lineTo(rect.left + offsetDx - anchorWidth / 2, rect.bottom);
     }
 
     path.lineTo(rect.left + cornerRadius, rect.bottom);
-    path.arcToPoint(Offset(rect.left, rect.bottom - cornerRadius),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.left, rect.bottom - cornerRadius), radius: Radius.circular(cornerRadius));
 
     // left
-    if (anchorDirection == AppKitMenuEdge.right &&
-        (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
+    if (anchorDirection == AppKitMenuEdge.right && (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
       path.lineTo(rect.left, rect.top + offsetDy + anchorWidth / 2);
       path.lineTo(rect.left - anchorHeight, rect.top + offsetDy);
       path.lineTo(rect.left, rect.top + offsetDy - anchorWidth / 2);
     }
 
     path.lineTo(rect.left, rect.top + cornerRadius);
-    path.arcToPoint(Offset(rect.left + cornerRadius, rect.top),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.left + cornerRadius, rect.top), radius: Radius.circular(cornerRadius));
     path.close();
 
     canvas.drawShadow(path, Colors.grey.shade700, 6.0, true);
@@ -210,7 +196,6 @@ class _PopoverBackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate != this ||
-        (oldDelegate as _PopoverBackgroundPainter).color != color;
+    return oldDelegate != this || (oldDelegate as _PopoverBackgroundPainter).color != color;
   }
 }

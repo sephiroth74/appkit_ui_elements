@@ -18,7 +18,7 @@ extension PopoverX on BuildContext {
     // link and itemRect cannot be provided at the same time
     assert(link == null || itemRect == null);
 
-    final state = PopoverState(
+    final state = AppKitPopoverState(
         itemRect: itemRect,
         link: link,
         child: child,
@@ -32,7 +32,7 @@ extension PopoverX on BuildContext {
         pageBuilder: (context, animation, secondaryAnimation) {
           return Stack(
             children: [
-              PopoverWidget(
+              AppKitPopoverWidget(
                 popoverState: state,
                 transitionDuration: transitionDuration,
               )
@@ -52,7 +52,6 @@ extension PopoverX on BuildContext {
   }
 
   bool isPopoverVisible(String uuid) {
-    return ModalRoute.of(this)!.settings.name == "popover-menu" &&
-        ModalRoute.of(this)!.settings.arguments == uuid;
+    return ModalRoute.of(this)!.settings.name == "popover-menu" && ModalRoute.of(this)!.settings.arguments == uuid;
   }
 }

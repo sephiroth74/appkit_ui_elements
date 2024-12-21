@@ -9,15 +9,15 @@ const kAnchorHeight = 10.0;
 @protected
 const kAnchorWidth = 20.0;
 
-class PopoverProvider extends InheritedNotifier<PopoverState> {
-  const PopoverProvider({
+class AppKitPopoverProvider extends InheritedNotifier<AppKitPopoverState> {
+  const AppKitPopoverProvider({
     super.key,
     required super.child,
-    required PopoverState state,
+    required AppKitPopoverState state,
   }) : super(notifier: state);
 }
 
-class PopoverState extends ChangeNotifier {
+class AppKitPopoverState extends ChangeNotifier {
   static const EdgeInsets _kPadding = EdgeInsets.all(8.0);
 
   final Rect? itemRect;
@@ -60,7 +60,7 @@ class PopoverState extends ChangeNotifier {
     }
   }
 
-  PopoverState({
+  AppKitPopoverState({
     required this.child,
     required this.direction,
     required this.showArrow,
@@ -70,10 +70,8 @@ class PopoverState extends ChangeNotifier {
     Offset? position,
   }) : _position = position;
 
-  static PopoverState of(BuildContext context) {
-    final provider =
-        context.dependOnInheritedWidgetOfExactType<PopoverProvider>()!
-            as PopoverProvider?;
+  static AppKitPopoverState of(BuildContext context) {
+    final provider = context.dependOnInheritedWidgetOfExactType<AppKitPopoverProvider>()! as AppKitPopoverProvider?;
 
     if (provider == null) {
       throw 'No PopoverProvider found in context';
@@ -111,11 +109,9 @@ class PopoverState extends ChangeNotifier {
               finalPosition += Offset(0, -childRect.height / 2);
           }
 
-          if (direction == AppKitMenuEdge.bottom ||
-              direction == AppKitMenuEdge.auto) {
+          if (direction == AppKitMenuEdge.bottom || direction == AppKitMenuEdge.auto) {
             if (itemRect!.bottom + childRect.height > safeScreenRect.bottom) {
-              finalPosition =
-                  Offset(finalPosition.dx, itemRect!.top - childRect.height);
+              finalPosition = Offset(finalPosition.dx, itemRect!.top - childRect.height);
               direction = AppKitMenuEdge.top;
               targetAnchor = Alignment.topCenter;
             }

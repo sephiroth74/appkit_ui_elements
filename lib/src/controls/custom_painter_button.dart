@@ -65,8 +65,6 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    final AppKitThemeData theme = AppKitTheme.of(context);
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: widget.enabled ? _handleTapDown : null,
