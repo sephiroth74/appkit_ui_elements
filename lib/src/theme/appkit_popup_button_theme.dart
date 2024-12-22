@@ -59,6 +59,8 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     // large
     final largeSize = AppKitPopupThemeSizeData(
       height: 30.0,
+      inlineHeight: 30.0 * 1.25,
+      inlineBorderRadius: (30.0 * 1.25) / 2.0,
       textStyle: typography.body.copyWith(fontSize: 13.5),
       inlineTextStyle: inlineTextStyle.copyWith(fontSize: 13.5),
       borderRadius: 6.5,
@@ -74,6 +76,8 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     // regular
     final regularSize = AppKitPopupThemeSizeData(
       height: 21.0,
+      inlineHeight: 21.0 * 1.25,
+      inlineBorderRadius: (21.0 * 1.25) / 2.0,
       textStyle: typography.body,
       inlineTextStyle: inlineTextStyle,
       borderRadius: 6,
@@ -89,6 +93,8 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     // small
     final smallSize = AppKitPopupThemeSizeData(
       height: 18.0,
+      inlineHeight: 18.0 * 1.25,
+      inlineBorderRadius: (18.0 * 1.25) / 2.0,
       textStyle: typography.body.copyWith(fontSize: 10.0),
       inlineTextStyle: inlineTextStyle.copyWith(fontSize: 10.0), // TBD
       borderRadius: 5.0,
@@ -104,6 +110,8 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     // mini
     final miniSize = AppKitPopupThemeSizeData(
         height: 15.0,
+        inlineHeight: 15.0 * 1.25,
+        inlineBorderRadius: (15.0 * 1.25) / 2.0,
         textStyle: typography.body.copyWith(fontSize: 9.0),
         inlineTextStyle: inlineTextStyle.copyWith(fontSize: 9.0), // TBD
         borderRadius: 3.0,
@@ -200,6 +208,10 @@ class AppKitPopupButtonThemeData with Diagnosticable {
 
 class AppKitPopupThemeSizeData with Diagnosticable {
   final double height;
+  final double inlineHeight;
+  final double iconSize;
+  final double inlineIconsSize;
+
   final TextStyle textStyle;
   final TextStyle inlineTextStyle;
   final double borderRadius;
@@ -209,43 +221,57 @@ class AppKitPopupThemeSizeData with Diagnosticable {
   final EdgeInsets inlineChildPadding;
   final EdgeInsets containerPadding;
   final EdgeInsets inlineContainerPadding;
-
-  double get inlineHeight => height * 1.25;
-
-  double get inlineBorderRadius => inlineHeight / 2.0;
-
-  double get arrowsButtonSize => height - 5;
-
-  double get iconSize => textStyle.fontSize! * 1.2;
-
-  double get inlineIconsSize => inlineTextStyle.fontSize! * 1.2;
+  final double inlineBorderRadius;
+  final Color? inlineBackgroundColor;
+  final Color? inlineHoveredBackgroundColor;
+  final Color? inlinePressedBackgroundColor;
+  final double arrowsButtonSize;
 
   double get textPadding => 4.0;
 
   AppKitPopupThemeSizeData({
-    required this.height,
+    this.height = 21.0,
+    this.inlineHeight = 21.0 * 1.25,
+    this.borderRadius = 6.0,
+    this.arrowsStrokeWidth = 1.75,
+    this.arrowsSize = const Size(5.5, 10),
     required this.textStyle,
     required this.inlineTextStyle,
-    required this.borderRadius,
-    required this.arrowsStrokeWidth,
-    required this.arrowsSize,
-    required this.childPadding,
-    required this.inlineChildPadding,
-    required this.containerPadding,
-    required this.inlineContainerPadding,
-  });
+    this.childPadding = const EdgeInsets.only(bottom: 2.5, right: 4.0),
+    this.containerPadding = const EdgeInsets.only(left: 7.5, right: 3),
+    this.inlineChildPadding = const EdgeInsets.only(bottom: 2.0, right: 1.0),
+    this.inlineContainerPadding =
+        const EdgeInsets.only(left: 10.0, top: 0.5, right: 4.5, bottom: 0.5),
+    required this.inlineBorderRadius,
+    this.inlineBackgroundColor,
+    this.inlineHoveredBackgroundColor,
+    this.inlinePressedBackgroundColor,
+    double? arrowsButtonSize,
+    double? iconSize,
+    double? inlineIconsSize,
+  })  : arrowsButtonSize = arrowsButtonSize ?? height - 5.0,
+        iconSize = iconSize ?? textStyle.fontSize! * 1.2,
+        inlineIconsSize = inlineIconsSize ?? inlineTextStyle.fontSize! * 1.2;
 
   AppKitPopupThemeSizeData copyWith({
-    double? height,
-    TextStyle? textStyle,
-    TextStyle? inlineTextStyle,
-    double? borderRadius,
+    Color? inlineBackgroundColor,
+    Color? inlineHoveredBackgroundColor,
+    Color? inlinePressedBackgroundColor,
+    double? arrowsButtonSize,
     double? arrowsStrokeWidth,
-    Size? arrowsSize,
+    double? borderRadius,
+    double? height,
+    double? iconSize,
+    double? inlineBorderRadius,
+    double? inlineHeight,
+    double? inlineIconsSize,
     EdgeInsets? childPadding,
-    EdgeInsets? inlineChildPadding,
     EdgeInsets? containerPadding,
+    EdgeInsets? inlineChildPadding,
     EdgeInsets? inlineContainerPadding,
+    Size? arrowsSize,
+    TextStyle? inlineTextStyle,
+    TextStyle? textStyle,
   }) {
     return AppKitPopupThemeSizeData(
       height: height ?? this.height,
@@ -259,6 +285,17 @@ class AppKitPopupThemeSizeData with Diagnosticable {
       containerPadding: containerPadding ?? this.containerPadding,
       inlineContainerPadding:
           inlineContainerPadding ?? this.inlineContainerPadding,
+      inlineBorderRadius: inlineBorderRadius ?? this.inlineBorderRadius,
+      inlineHeight: inlineHeight ?? this.inlineHeight,
+      inlineBackgroundColor:
+          inlineBackgroundColor ?? this.inlineBackgroundColor,
+      inlineHoveredBackgroundColor:
+          inlineHoveredBackgroundColor ?? this.inlineHoveredBackgroundColor,
+      inlinePressedBackgroundColor:
+          inlinePressedBackgroundColor ?? this.inlinePressedBackgroundColor,
+      arrowsButtonSize: arrowsButtonSize ?? this.arrowsButtonSize,
+      iconSize: iconSize ?? this.iconSize,
+      inlineIconsSize: inlineIconsSize ?? this.inlineIconsSize,
     );
   }
 
@@ -275,6 +312,14 @@ class AppKitPopupThemeSizeData with Diagnosticable {
       inlineChildPadding: other.inlineChildPadding,
       containerPadding: other.containerPadding,
       inlineContainerPadding: other.inlineContainerPadding,
+      inlineBorderRadius: other.inlineBorderRadius,
+      inlineHeight: other.inlineHeight,
+      inlineBackgroundColor: other.inlineBackgroundColor,
+      inlineHoveredBackgroundColor: other.inlineHoveredBackgroundColor,
+      inlinePressedBackgroundColor: other.inlinePressedBackgroundColor,
+      arrowsButtonSize: other.arrowsButtonSize,
+      iconSize: other.iconSize,
+      inlineIconsSize: other.inlineIconsSize,
     );
   }
 
@@ -296,6 +341,17 @@ class AppKitPopupThemeSizeData with Diagnosticable {
         DiagnosticsProperty<EdgeInsets>('containerPadding', containerPadding));
     properties.add(DiagnosticsProperty<EdgeInsets>(
         'inlineContainerPadding', inlineContainerPadding));
+    properties.add(DoubleProperty('inlineBorderRadius', inlineBorderRadius));
+    properties.add(DoubleProperty('inlineHeight', inlineHeight));
+    properties
+        .add(ColorProperty('inlineBackgroundColor', inlineBackgroundColor));
+    properties.add(ColorProperty(
+        'inlineHoveredBackgroundColor', inlineHoveredBackgroundColor));
+    properties.add(ColorProperty(
+        'inlinePressedBackgroundColor', inlinePressedBackgroundColor));
+    properties.add(DoubleProperty('arrowsButtonSize', arrowsButtonSize));
+    properties.add(DoubleProperty('iconSize', iconSize));
+    properties.add(DoubleProperty('inlineIconsSize', inlineIconsSize));
   }
 
   static AppKitPopupThemeSizeData lerp(
@@ -315,6 +371,18 @@ class AppKitPopupThemeSizeData with Diagnosticable {
           EdgeInsets.lerp(a.containerPadding, b.containerPadding, t)!,
       inlineContainerPadding: EdgeInsets.lerp(
           a.inlineContainerPadding, b.inlineContainerPadding, t)!,
+      inlineBorderRadius:
+          lerpDouble(a.inlineBorderRadius, b.inlineBorderRadius, t)!,
+      inlineHeight: lerpDouble(a.inlineHeight, b.inlineHeight, t)!,
+      inlineBackgroundColor:
+          Color.lerp(a.inlineBackgroundColor, b.inlineBackgroundColor, t),
+      inlineHoveredBackgroundColor: Color.lerp(
+          a.inlineHoveredBackgroundColor, b.inlineHoveredBackgroundColor, t),
+      inlinePressedBackgroundColor: Color.lerp(
+          a.inlinePressedBackgroundColor, b.inlinePressedBackgroundColor, t),
+      arrowsButtonSize: lerpDouble(a.arrowsButtonSize, b.arrowsButtonSize, t)!,
+      iconSize: lerpDouble(a.iconSize, b.iconSize, t)!,
+      inlineIconsSize: lerpDouble(a.inlineIconsSize, b.inlineIconsSize, t)!,
     );
   }
 }

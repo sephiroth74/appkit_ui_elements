@@ -25,9 +25,7 @@ class AppKitToolbarOverflowButton extends StatelessWidget {
       placement: ToolbarPopupPlacement.end,
       child: AppKitToolBarIconButton(
         label: "",
-        icon: const Icon(
-          CupertinoIcons.chevron_right_2,
-        ),
+        icon: CupertinoIcons.chevron_right_2,
         onPressed: () {
           popupKey.currentState?.openPopup();
         },

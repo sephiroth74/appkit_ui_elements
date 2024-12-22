@@ -1,7 +1,7 @@
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter/material.dart';
 
 const _kSize = 22.0;
 const _kBorderRadiusRatio = 4.4;
@@ -12,14 +12,17 @@ class AppKitCustomPainterButton extends StatefulWidget {
   final String? semanticLabel;
   final VoidCallback? onPressed;
   final AppKitControlButtonIcon icon;
+  final AppKitControlButtonIconStyle style;
 
-  const AppKitCustomPainterButton(
-      {super.key,
-      this.color,
-      this.size = _kSize,
-      this.semanticLabel,
-      this.onPressed,
-      required this.icon});
+  const AppKitCustomPainterButton({
+    super.key,
+    this.color,
+    this.size = _kSize,
+    this.semanticLabel,
+    this.onPressed,
+    required this.icon,
+    this.style = AppKitControlButtonIconStyle.bordered,
+  });
 
   bool get enabled => onPressed != null;
 
@@ -29,25 +32,37 @@ class AppKitCustomPainterButton extends StatefulWidget {
 }
 
 class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
-  @visibleForTesting
-  bool buttonHeldDown = false;
+  bool _buttonHeldDown = false;
+  bool _isHovered = false;
 
   void _handleTapDown(TapDownDetails event) {
-    if (!buttonHeldDown) {
-      setState(() => buttonHeldDown = true);
+    if (!_buttonHeldDown) {
+      setState(() => _buttonHeldDown = true);
     }
   }
 
   void _handleTapUp(TapUpDetails event) {
-    if (buttonHeldDown) {
-      setState(() => buttonHeldDown = false);
+    if (_buttonHeldDown) {
+      setState(() => _buttonHeldDown = false);
     }
   }
 
   void _handleTapCancel() {
-    if (buttonHeldDown) {
-      setState(() => buttonHeldDown = false);
+    if (_buttonHeldDown) {
+      setState(() => _buttonHeldDown = false);
     }
+  }
+
+  void _handleMouseEnter() {
+    setState(() {
+      _isHovered = true;
+    });
+  }
+
+  void _handleMouseExit() {
+    setState(() {
+      _isHovered = false;
+    });
   }
 
   @override
@@ -65,90 +80,107 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTapDown: widget.enabled ? _handleTapDown : null,
-      onTapUp: widget.enabled ? _handleTapUp : null,
-      onTapCancel: widget.enabled ? _handleTapCancel : null,
-      onTap: widget.enabled ? () => widget.onPressed?.call() : null,
-      child: Semantics(
-        label: widget.semanticLabel,
-        button: true,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-              minWidth: widget.size,
-              minHeight: widget.size,
-              maxWidth: widget.size,
-              maxHeight: widget.size),
-          child: UiElementColorBuilder(builder: (context, colorContainer) {
-            return Builder(
-              builder: (context) {
-                final bool isMainWindow =
-                    MainWindowStateListener.instance.isMainWindow.value;
-                final Color color = widget.enabled
-                    ? (isMainWindow
-                        ? widget.color ?? colorContainer.controlBackgroundColor
-                        : colorContainer.controlBackgroundColor)
-                    : colorContainer.controlBackgroundColor
-                        .multiplyOpacity(0.5);
 
-                final colorLuminance = color.computeLuminance();
+    final theme = AppKitTheme.of(context);
 
-                final iconColor = colorLuminance >= 0.5
-                    ? widget.enabled
-                        ? MacosColors.labelColor.color
-                        : MacosColors.tertiaryLabelColor.color
-                    : widget.enabled
-                        ? MacosColors.labelColor.darkColor
-                        : MacosColors.tertiaryLabelColor.darkColor;
-
-                final foregroundColor = colorLuminance >= 0.5
-                    ? MacosColors.labelColor.color.withOpacity(0.1)
-                    : MacosColors.labelColor.darkColor.withOpacity(0.1);
-
-                return Container(
-                  foregroundDecoration: BoxDecoration(
-                    color: buttonHeldDown ? foregroundColor : null,
-                    borderRadius: BorderRadius.circular(
-                        widget.size / _kBorderRadiusRatio),
-                  ),
-                  child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          color: color,
-                          borderRadius: BorderRadius.circular(
-                              widget.size / _kBorderRadiusRatio),
-                          boxShadow: [
-                            BoxShadow(
-                                color: MacosColors.black
-                                    .withOpacity(widget.enabled ? 0.25 : 0.15),
-                                blurStyle: BlurStyle.outer,
-                                offset: const Offset(0, 0.15),
-                                blurRadius: 1.0,
-                                spreadRadius: 0),
-                            BoxShadow(
-                              color: MacosColors.black
-                                  .withOpacity(widget.enabled ? 0.055 : 0.025),
-                              offset: const Offset(0, 0),
-                              blurStyle: BlurStyle.solid,
-                              blurRadius: 0,
-                              spreadRadius: 0.5,
-                            )
-                          ]),
-                      child: SizedBox.expand(
-                        child: CustomPaint(
-                          painter: IconButtonPainter(
-                            color: iconColor,
-                            size: widget.size * 0.8,
-                            icon: widget.icon,
-                          ),
-                        ),
-                      )),
-                );
-              },
-            );
-          }),
+    return MouseRegion(
+      onEnter: widget.enabled ? (_) => _handleMouseEnter : null,
+      onExit: widget.enabled ? (_) => _handleMouseExit : null,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: widget.enabled ? _handleTapDown : null,
+        onTapUp: widget.enabled ? _handleTapUp : null,
+        onTapCancel: widget.enabled ? _handleTapCancel : null,
+        onTap: widget.enabled ? () => widget.onPressed?.call() : null,
+        child: Semantics(
+          label: widget.semanticLabel,
+          button: true,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                minWidth: widget.size,
+                minHeight: widget.size,
+                maxWidth: widget.size,
+                maxHeight: widget.size),
+            child: UiElementColorBuilder(builder: (context, colorContainer) {
+              return Builder(
+                builder: (context) {
+                  switch (widget.style) {
+                    case AppKitControlButtonIconStyle.bordered:
+                      return buildBorderedContainer(
+                          colorContainer: colorContainer, theme: theme);
+                  }
+                },
+              );
+            }),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget buildBorderedContainer({
+    required UiElementColorContainer colorContainer,
+    required AppKitThemeData theme,
+  }) {
+    final bool isMainWindow =
+        MainWindowStateListener.instance.isMainWindow.value;
+
+    final Color color = widget.enabled
+        ? (isMainWindow
+            ? widget.color ?? colorContainer.controlBackgroundColor
+            : colorContainer.controlBackgroundColor)
+        : colorContainer.controlBackgroundColor.multiplyOpacity(0.5);
+
+    final colorLuminance = color.computeLuminance();
+
+    final iconColor = colorLuminance >= 0.5
+        ? widget.enabled
+            ? AppKitColors.labelColor.color
+            : AppKitColors.fills.opaque.tertiary.color
+        : widget.enabled
+            ? AppKitColors.labelColor.darkColor
+            : AppKitColors.fills.opaque.tertiary.darkColor;
+
+    final foregroundColor = colorLuminance >= 0.5
+        ? AppKitColors.labelColor.color.withOpacity(0.1)
+        : AppKitColors.labelColor.darkColor.withOpacity(0.1);
+
+    return Container(
+      foregroundDecoration: BoxDecoration(
+        color: _buttonHeldDown ? foregroundColor : null,
+        borderRadius: BorderRadius.circular(widget.size / _kBorderRadiusRatio),
+      ),
+      child: DecoratedBox(
+          decoration: BoxDecoration(
+              color: color,
+              borderRadius:
+                  BorderRadius.circular(widget.size / _kBorderRadiusRatio),
+              boxShadow: [
+                BoxShadow(
+                    color:
+                        Colors.black.withOpacity(widget.enabled ? 0.25 : 0.15),
+                    blurStyle: BlurStyle.outer,
+                    offset: const Offset(0, 0.15),
+                    blurRadius: 1.0,
+                    spreadRadius: 0),
+                BoxShadow(
+                  color:
+                      Colors.black.withOpacity(widget.enabled ? 0.055 : 0.025),
+                  offset: const Offset(0, 0),
+                  blurStyle: BlurStyle.solid,
+                  blurRadius: 0,
+                  spreadRadius: 0.5,
+                )
+              ]),
+          child: SizedBox.expand(
+            child: CustomPaint(
+              painter: IconButtonPainter(
+                color: iconColor,
+                size: widget.size * 0.8,
+                icon: widget.icon,
+              ),
+            ),
+          )),
     );
   }
 }
@@ -178,7 +210,7 @@ class IconButtonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final path = Path();
+    Path path = Path();
     final double halfSize = size.width / 2;
 
     // canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), Paint()..color = Colors.amber.withOpacity(0.5));
@@ -223,6 +255,21 @@ class IconButtonPainter extends CustomPainter {
               halfSize - arrowHeightSize + offset.dy);
           break;
         }
+
+      case AppKitControlButtonIcon.arrowLeft:
+        {
+          // draw an arrow pointing left
+          final double arrowWidthSize = size.width / 11;
+          final double arrowHeightSize = size.width / 6.285;
+          path.moveTo(halfSize + arrowWidthSize + offset.dx,
+              halfSize - arrowHeightSize + offset.dy);
+          path.lineTo(
+              halfSize - arrowWidthSize + offset.dx, halfSize + offset.dy);
+          path.lineTo(halfSize + arrowWidthSize + offset.dx,
+              halfSize + arrowHeightSize + offset.dy);
+
+          break;
+        }
     }
 
     canvas.drawPath(path, _paint);
@@ -234,4 +281,6 @@ class IconButtonPainter extends CustomPainter {
   }
 }
 
-enum AppKitControlButtonIcon { arrows, disclosureUp, disclosureDown }
+enum AppKitControlButtonIcon { arrows, disclosureUp, disclosureDown, arrowLeft }
+
+enum AppKitControlButtonIconStyle { bordered }

@@ -7,11 +7,11 @@ import 'package:flutter/widgets.dart';
 
 import 'context_menu_state.dart';
 
-class MenuEntryWidget<T> extends StatefulWidget {
+class AppKitMenuEntryWidget<T> extends StatefulWidget {
   final AppKitContextMenuEntry<T> entry;
   final bool focused;
   final bool enabled;
-  const MenuEntryWidget({
+  const AppKitMenuEntryWidget({
     super.key,
     required this.entry,
     this.focused = false,
@@ -19,10 +19,11 @@ class MenuEntryWidget<T> extends StatefulWidget {
   });
 
   @override
-  State<MenuEntryWidget<T>> createState() => _MenuEntryWidgetState<T>();
+  State<AppKitMenuEntryWidget<T>> createState() =>
+      _AppKitMenuEntryWidgetState<T>();
 }
 
-class _MenuEntryWidgetState<T> extends State<MenuEntryWidget<T>> {
+class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
   late final FocusNode focusNode;
 
   bool get enabled => widget.enabled && widget.entry.enabled;

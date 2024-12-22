@@ -225,10 +225,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     toggleButtonTheme ??= AppKitToggleButtonThemeData.copyFrom(pushButtonTheme);
 
     helpButtonTheme ??= AppKitHelpButtonThemeData(
-      color: isDark ? MacosColors.textBackgroundColor : MacosColors.textColor,
+      color: isDark ? const Color(0xff1e1e1e) : Colors.white,
       disabledColor: isDark
-          ? MacosColors.textBackgroundColor.withOpacity(0.5)
-          : MacosColors.textColor.withOpacity(0.5),
+          ? const Color(0xff1e1e1e).withOpacity(0.5)
+          : Colors.white.withOpacity(0.5),
     );
 
     sliderTheme ??= AppKitSliderThemeData(
@@ -267,19 +267,17 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     circularSliderTheme ??= AppKitCircularSliderThemeData(
       backgroundColor:
-          isDark ? MacosColors.systemGrayColor.darkColor : Colors.white,
+          isDark ? AppKitColors.systemGray.darkColor : Colors.white,
       thumbColor:
           isDark ? const Color(0x7fffffff) : Colors.black.withOpacity(0.5),
       thumbColorUnfocused: accentColorUnfocused,
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      dividerColorMultipleSelection: isDark
-          ? MacosColors.systemGrayColor.darkColor
-          : const Color(0xFFE8E8E8),
-      dividerColorSingleSelection: isDark
-          ? MacosColors.systemGrayColor.darkColor
-          : const Color(0xFFCCCBCB),
+      dividerColorMultipleSelection:
+          isDark ? AppKitColors.systemGray.darkColor : const Color(0xFFE8E8E8),
+      dividerColorSingleSelection:
+          isDark ? AppKitColors.systemGray.darkColor : const Color(0xFFCCCBCB),
     );
 
     switchTheme ??= AppKitSwitchThemeData(

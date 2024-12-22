@@ -12,7 +12,7 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
   });
 
   final String label;
-  final Widget icon;
+  final IconData icon;
   final VoidCallback? onPressed;
   final bool showLabel;
   final String? tooltipMessage;
@@ -21,25 +21,34 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
   Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
     final brightness = AppKitTheme.of(context).brightness;
     if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      Widget iconButton = AppKitIconButton(
-        padding: const EdgeInsets.all(5),
-        disabledColor: Colors.transparent,
-        icon: AppKitIconTheme(
-          data: AppKitTheme.of(context).iconTheme.copyWith(
-                color: brightness.resolve(
-                  const Color.fromRGBO(0, 0, 0, 0.5),
-                  const Color.fromRGBO(255, 255, 255, 0.5),
-                ),
-                size: showLabel ? 15.0 : 20.0,
-              ),
-          child: icon,
+      Widget iconButton = AppKitIconTheme(
+        data: AppKitIconThemeData(
+          size: showLabel ? 20.0 : 20.0,
         ),
-        onPressed: onPressed,
-        boxConstraints: BoxConstraints(
-          minHeight: showLabel ? 15 : 19,
-          minWidth: 15,
-          maxWidth: 35,
-          maxHeight: 28,
+        child: AppKitIconButton(
+          icon: icon,
+          padding: showLabel
+              ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
+              : const EdgeInsets.all(5),
+          disabledColor: Colors.transparent,
+          color: brightness.resolve(
+            const Color.fromRGBO(0, 0, 0, 0.5),
+            const Color.fromRGBO(255, 255, 255, 0.5),
+          ),
+          onPressed: onPressed,
+          boxConstraints: showLabel
+              ? const BoxConstraints(
+                  minHeight: 19,
+                  minWidth: 35,
+                  maxWidth: 35,
+                  maxHeight: 22,
+                )
+              : const BoxConstraints(
+                  minHeight: 19,
+                  minWidth: 15,
+                  maxWidth: 35,
+                  maxHeight: 28,
+                ),
         ),
       );
 
@@ -50,12 +59,12 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
             children: [
               iconButton,
               Padding(
-                padding: const EdgeInsets.only(top: 4.0),
+                padding: const EdgeInsets.only(top: 3.0),
                 child: Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11.0,
-                    color: AppKitColors.systemGray,
+                    color: AppKitColors.text.opaque.secondary,
                   ),
                 ),
               ),

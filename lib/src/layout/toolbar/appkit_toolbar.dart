@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/layout/appkit_wallpaper_tinting_override.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 const _kToolbarHeight = 52.0;
 
@@ -100,7 +102,8 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   @override
   Widget build(BuildContext context) {
     final scope = MacosWindowScope.maybeOf(context);
-    final MacosThemeData theme = MacosTheme.of(context);
+    final AppKitThemeData theme = AppKitTheme.of(context);
+    final brightness = AppKitTheme.of(context).brightness;
     Color dividerColor = widget.dividerColor ?? theme.dividerColor;
     final route = ModalRoute.of(context);
     double overflowBreakpoint = 0.0;
@@ -111,13 +114,25 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
         leading = Container(
           width: _kLeadingWidth,
           alignment: Alignment.centerLeft,
-          child: MacosBackButton(
-            fillColor: MacosColors.transparent,
-            onPressed: () => Navigator.maybePop(context),
+          child: AppKitIconTheme(
+            data: const AppKitIconThemeData(
+              size: 20.0,
+            ),
+            child: AppKitIconButton(
+              padding: const EdgeInsets.all(5),
+              disabledColor: Colors.transparent,
+              color: brightness.resolve(
+                const Color.fromRGBO(0, 0, 0, 0.5),
+                const Color.fromRGBO(255, 255, 255, 0.5),
+              ),
+              icon: CupertinoIcons.back,
+              onPressed: () => Navigator.maybePop(context),
+            ),
           ),
         );
       }
     }
+
     if (widget.leading != null) {
       overflowBreakpoint += _kLeadingWidth;
     }
@@ -184,39 +199,44 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
             boxShadow: widget.decoration?.boxShadow,
             gradient: widget.decoration?.gradient,
           ),
-          child: NavigationToolbar(
-            middle: title,
-            centerMiddle: widget.centerTitle,
-            trailing: AppKitOverflowHandler(
-              overflowBreakpoint: overflowBreakpoint,
-              overflowWidget: ToolbarOverflowButton(
-                isDense: doAllItemsShowLabel,
-                overflowContentBuilder: (context) => ToolbarOverflowMenu(
-                  children: overflowedActions
-                      .map((action) => action.build(
-                            context,
-                            AppKitToolbarItemDisplayMode.overflowed,
-                          ))
-                      .toList(),
+          child: AppKitMeasureSingleChildWidget(
+            onSizeChanged: (value) {
+              debugPrint('toolbar size: $value');
+            },
+            child: NavigationToolbar(
+              middle: title,
+              centerMiddle: widget.centerTitle,
+              trailing: AppKitOverflowHandler(
+                overflowBreakpoint: overflowBreakpoint,
+                overflowWidget: ToolbarOverflowButton(
+                  isDense: doAllItemsShowLabel,
+                  overflowContentBuilder: (context) => ToolbarOverflowMenu(
+                    children: overflowedActions
+                        .map((action) => action.build(
+                              context,
+                              AppKitToolbarItemDisplayMode.overflowed,
+                            ))
+                        .toList(),
+                  ),
                 ),
+                children: inToolbarActions
+                    .map(
+                      (e) => e.build(
+                          context, AppKitToolbarItemDisplayMode.inToolbar),
+                    )
+                    .toList(),
+                overflowChangedCallback: (hiddenItems) {
+                  setState(() => overflowedActionsCount = hiddenItems.length);
+                },
               ),
-              children: inToolbarActions
-                  .map(
-                    (e) => e.build(
-                        context, AppKitToolbarItemDisplayMode.inToolbar),
-                  )
-                  .toList(),
-              overflowChangedCallback: (hiddenItems) {
-                setState(() => overflowedActionsCount = hiddenItems.length);
-              },
-            ),
-            middleSpacing: 8,
-            leading: SafeArea(
-              top: false,
-              right: false,
-              bottom: false,
-              left: !(scope?.isSidebarShown ?? false),
-              child: leading ?? const SizedBox.shrink(),
+              middleSpacing: 8,
+              leading: SafeArea(
+                top: false,
+                right: false,
+                bottom: false,
+                left: !(scope?.isSidebarShown ?? false),
+                child: leading ?? const SizedBox.shrink(),
+              ),
             ),
           ),
         ),

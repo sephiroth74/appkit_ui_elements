@@ -10,14 +10,23 @@ class AppKitToolBarDivider extends AppKitToolbarItem {
 
   @override
   Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
-    Color color = AppKitTheme.brightnessOf(context).resolve(
-      const Color.fromRGBO(0, 0, 0, 0.25),
-      const Color.fromRGBO(255, 255, 255, 0.25),
-    );
+    final color = AppKitTheme.of(context).dividerColor;
+
     if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      return Container(color: color, width: 1, height: 28, padding: padding!);
+      return SizedBox(
+          width: (padding?.horizontal ?? 0) + 1,
+          height: 28,
+          child: Padding(padding: padding!, child: Container(color: color)));
     } else {
-      return Container(color: color, height: 1, padding: padding!);
+      return SizedBox(
+        height: 1,
+        child: Padding(
+          padding: padding!,
+          child: Container(
+            color: color,
+          ),
+        ),
+      );
     }
   }
 }

@@ -19,6 +19,7 @@ class AppKitPulldownButton<T> extends StatefulWidget {
   final String? semanticLabel;
   final FocusNode? focusNode;
   final bool canRequestFocus;
+  final Color? iconColor;
 
   const AppKitPulldownButton({
     super.key,
@@ -36,6 +37,7 @@ class AppKitPulldownButton<T> extends StatefulWidget {
     this.canRequestFocus = false,
     this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
+    this.iconColor,
   }) : assert(title != null || icon != null);
 
   @override
@@ -178,11 +180,13 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
       ),
     );
 
-    final iconWidget = Icon(
-      widget.icon,
-      size: iconSize,
-      color: textColor,
-    );
+    final iconWidget = widget.icon != null
+        ? AppKitIcon(
+            icon: widget.icon!,
+            size: iconSize,
+            color: widget.iconColor ?? textColor,
+          )
+        : null;
 
     return LayoutBuilder(builder: (context, constraints) {
       return Row(
@@ -193,7 +197,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
           if (widget.icon != null &&
               (widget.imageAlignment == AppKitMenuImageAlignment.start ||
                   widget.imageAlignment == AppKitMenuImageAlignment.leading))
-            iconWidget,
+            iconWidget!,
           if (widget.title != null) ...[
             if (widget.imageAlignment == AppKitMenuImageAlignment.leading ||
                 widget.imageAlignment == AppKitMenuImageAlignment.trailing) ...[
@@ -205,7 +209,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
           if (widget.icon != null &&
               (widget.imageAlignment == AppKitMenuImageAlignment.end ||
                   widget.imageAlignment == AppKitMenuImageAlignment.trailing))
-            iconWidget,
+            iconWidget!,
         ],
       );
     });
@@ -710,9 +714,13 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
         theme: popupButtonTheme, controlSize: controlSize);
 
     if (isHovered) {
-      controlBackgroundColor = Colors.black.withOpacity(0.2);
+      controlBackgroundColor = popupButtonTheme
+              .sizeData[controlSize]?.inlineHoveredBackgroundColor ??
+          Colors.black.withOpacity(0.2);
     } else {
-      controlBackgroundColor = Colors.black.withOpacity(0.05);
+      controlBackgroundColor =
+          popupButtonTheme.sizeData[controlSize]?.inlineBackgroundColor ??
+              Colors.black.withOpacity(0.05);
     }
 
     return Container(
@@ -720,8 +728,10 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
       width: width,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
-              color: style.getPressedBackgroundColor(
-                  theme: theme, backgroundColor: controlBackgroundColor),
+              color: popupButtonTheme
+                      .sizeData[controlSize]?.inlinePressedBackgroundColor ??
+                  style.getPressedBackgroundColor(
+                      theme: theme, backgroundColor: controlBackgroundColor),
               borderRadius: BorderRadius.circular(borderRadius),
             )
           : const BoxDecoration(),
@@ -742,12 +752,11 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
                 child: Padding(
                   padding: style.getChildPadding(
                       theme: popupButtonTheme, controlSize: controlSize),
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return SizedBox(
-                        width: parentConstraints.maxWidth,
-                        height: parentConstraints.maxHeight,
-                        child: child);
-                  }),
+                  child: SizedBox(
+                    width: parentConstraints.maxWidth,
+                    height: parentConstraints.maxHeight,
+                    child: child,
+                  ),
                 ),
               ),
               Padding(
@@ -772,5 +781,111 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
         }),
       ),
     );
+  }
+}
+
+@protected
+extension AppKitPulldownButtonStyleX on AppKitPulldownButtonStyle {
+  EdgeInsets getContainerPadding({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitMenuEdge menuEdge,
+    required AppKitControlSize controlSize,
+  }) {
+    final paddings = (this == AppKitPulldownButtonStyle.inline)
+        ? theme.sizeData[controlSize]!.inlineContainerPadding
+        : theme.sizeData[controlSize]!.containerPadding;
+    if (menuEdge.isLeft) {
+      return paddings.invertHorizontally();
+    } else {
+      return paddings;
+    }
+  }
+
+  EdgeInsetsGeometry getChildPadding({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    switch (this) {
+      case AppKitPulldownButtonStyle.inline:
+        return theme.sizeData[controlSize]!.inlineChildPadding;
+      default:
+        return theme.sizeData[controlSize]!.childPadding;
+    }
+  }
+
+  double getCaretButtonSize({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    return theme.sizeData[controlSize]!.arrowsButtonSize;
+  }
+
+  Size getCaretSize({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    return theme.sizeData[controlSize]!.arrowsSize;
+  }
+
+  double getCaretStrokeWidth({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    return theme.sizeData[controlSize]!.arrowsStrokeWidth;
+  }
+
+  double getBorderRadius({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    switch (this) {
+      case AppKitPulldownButtonStyle.push:
+      case AppKitPulldownButtonStyle.bevel:
+      case AppKitPulldownButtonStyle.plain:
+        return theme.sizeData[controlSize]!.borderRadius;
+      case AppKitPulldownButtonStyle.inline:
+        return theme.sizeData[controlSize]!.inlineBorderRadius;
+    }
+  }
+
+  double getHeight({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    switch (this) {
+      case AppKitPulldownButtonStyle.push:
+      case AppKitPulldownButtonStyle.bevel:
+      case AppKitPulldownButtonStyle.plain:
+        return theme.sizeData[controlSize]!.height;
+      case AppKitPulldownButtonStyle.inline:
+        return theme.sizeData[controlSize]!.inlineHeight;
+    }
+  }
+
+  Color getPressedBackgroundColor(
+      {required AppKitThemeData theme, required Color backgroundColor}) {
+    final blendedBackgroundColor = Color.lerp(
+      theme.canvasColor,
+      backgroundColor,
+      backgroundColor.opacity,
+    )!;
+
+    final luminance = blendedBackgroundColor.computeLuminance();
+    final color = luminance > 0.5
+        ? theme.controlBackgroundPressedColor.color
+        : theme.controlBackgroundPressedColor.darkColor;
+    return color;
+  }
+
+  TextStyle getTextStyle({
+    required AppKitPopupButtonThemeData theme,
+    required AppKitControlSize controlSize,
+  }) {
+    switch (this) {
+      case AppKitPulldownButtonStyle.inline:
+        return theme.sizeData[controlSize]!.inlineTextStyle;
+      default:
+        return theme.sizeData[controlSize]!.textStyle;
+    }
   }
 }

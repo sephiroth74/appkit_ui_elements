@@ -22,9 +22,12 @@ class AppKitIconButton extends StatefulWidget {
     ),
     this.padding,
     this.mouseCursor = SystemMouseCursors.basic,
+    this.color,
   });
 
-  final Widget icon;
+  final Color? color;
+
+  final IconData icon;
 
   final Color? backgroundColor;
 
@@ -116,12 +119,16 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitIconButtonTheme.of(context);
+    final iconTheme = AppKitTheme.of(context).iconTheme;
 
     final Color backgroundColor =
         widget.backgroundColor ?? theme.backgroundColor!;
     final Color hoverColor = widget.hoverColor ?? theme.hoverColor!;
     final Color? disabledColor = widget.disabledColor ?? theme.disabledColor;
     final Color pressedColor = widget.pressedColor ?? theme.pressedColor!;
+    final Color? iconColor =
+        (widget.color ?? iconTheme.color)?.multiplyOpacity(enabled ? 1.0 : 0.5);
+
     final padding = widget.padding ?? theme.padding ?? const EdgeInsets.all(8);
 
     return MouseRegion(
@@ -166,7 +173,10 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
                   heightFactor: 1.0,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: widget.icon,
+                    child: AppKitIconTheme(
+                      data: iconTheme.copyWith(color: iconColor),
+                      child: AppKitIcon(icon: widget.icon),
+                    ),
                   ),
                 ),
               ),
