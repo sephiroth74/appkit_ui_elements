@@ -51,6 +51,7 @@ class GraphicalDatePicker extends StatefulWidget {
 }
 
 class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
+  // ignore: unused_field
   late final _logger = newLogger('GraphicalDatePicker');
 
   FocusNode? _focusNode;
@@ -92,7 +93,6 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
   }
 
   void _handleUpdateCalendarView(DateTime dateTime) {
-    _logger.d('_handleUpdateCalendarView($dateTime)');
     setState(() {
       if (_effectiveFocusNode.canRequestFocus) {
         FocusScope.of(context).requestFocus(_effectiveFocusNode);
@@ -469,23 +469,16 @@ class _GraphicalDatePickerMonthViewState
   @override
   void didUpdateWidget(covariant _GraphicalDatePickerMonthView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _logger.d('didUpdateWidget()');
     if (oldWidget.currentDateTime != widget.currentDateTime) {
-      _logger.t(
-          'currentDateTime: ${oldWidget.currentDateTime} => ${widget.currentDateTime}');
       _currentDateTime = widget.currentDateTime;
 
       if (widget.currentDateTime.start != _pointerDownDate &&
           widget.currentDateTime.end != _pointerDownDate) {
-        _logger.t(
-            'pointerDownDate: $_pointerDownDate => ${widget.currentDateTime.start}');
         _pointerDownDate = widget.currentDateTime.start;
       }
     }
 
     if (widget.initialDateTime != oldWidget.initialDateTime) {
-      _logger.t(
-          'initialDateTime: ${oldWidget.initialDateTime} => ${widget.initialDateTime}');
       _initialDateTime = widget.initialDateTime;
     }
   }
@@ -493,8 +486,6 @@ class _GraphicalDatePickerMonthViewState
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
     final bool isShiftPressed =
         isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
-    _logger.i('_handleKeyEvent($event)');
-    _logger.d('_pointerDownDate: $_pointerDownDate');
 
     if (event is KeyDownEvent || event is KeyRepeatEvent) {
       /// -->
@@ -587,7 +578,6 @@ class _GraphicalDatePickerMonthViewState
   }
 
   void _handlePanDown() {
-    _logger.i('_handlePanDown($_hoveredDateTime)');
     if (!enabled || _hoveredDateTime == null) {
       return;
     }
@@ -623,7 +613,6 @@ class _GraphicalDatePickerMonthViewState
       return;
     }
 
-    _logger.i('_handlePanUpdate(hoveredDateTime: $_hoveredDateTime)');
     final day = _hoveredDateTime!;
 
     final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth);
@@ -656,7 +645,6 @@ class _GraphicalDatePickerMonthViewState
   }
 
   void _handlePanEnd() {
-    _logger.i('_handlePanEnd()');
     setState(() {
       _pointerDownDate = null;
       _isMousePressed = false;
@@ -665,7 +653,6 @@ class _GraphicalDatePickerMonthViewState
   }
 
   void _handleTap(DateTime day) {
-    _logger.i('_handleTap($day)');
     final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth);
     final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
     final isBeforeMinimumDate =
@@ -716,9 +703,6 @@ class _GraphicalDatePickerMonthViewState
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
-
-    _logger.i(
-        'build(currentDateTime: $_currentDateTime, initialDateTime: $_initialDateTime)');
 
     if (widget.focusNode?.hasFocus == true && !widget.childFocusNode.hasFocus) {
       widget.childFocusNode.requestFocus();
@@ -1179,7 +1163,6 @@ class _GraphicalTimerPickerHandleState
   }
 
   void _handlePanDown(DragDownDetails details) {
-    debugPrint('[$element] _handlePanDown(details: $details)');
     _thumbAngle = atan2(details.localPosition.dy - radius,
             details.localPosition.dx - radius) +
         pi / 2;
@@ -1187,7 +1170,6 @@ class _GraphicalTimerPickerHandleState
   }
 
   void _handlePanEnd() {
-    debugPrint('[$element] _handlePanEnd()');
     panStarted = false;
   }
 
@@ -1508,7 +1490,6 @@ class _GrahicalTimePickerHandlePainter extends CustomPainter {
       return false;
     }
     final test = _hitTestPath!.contains(position);
-    // debugPrint('==> [$element] [${_hitTestPath!.getBounds()}] Hit test: $test');
     return test;
   }
 }

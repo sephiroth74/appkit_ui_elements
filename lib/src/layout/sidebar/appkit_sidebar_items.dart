@@ -55,6 +55,10 @@ class AppKitSidebarItems extends StatelessWidget {
     this.selectedColor,
     this.unselectedColor,
     this.shape,
+    this.textColor,
+    this.selectedTextColor,
+    this.iconColor,
+    this.selectedIconColor,
     this.cursor = SystemMouseCursors.basic,
   }) : assert(currentIndex >= 0);
 
@@ -88,6 +92,11 @@ class AppKitSidebarItems extends StatelessWidget {
   ///
   /// Defaults to transparent.
   final Color? unselectedColor;
+
+  final Color? textColor;
+  final Color? selectedTextColor;
+  final Color? iconColor;
+  final Color? selectedIconColor;
 
   /// The [shape] property specifies the outline (border) of the
   /// decoration. The shape must not be null. It's used alongside
@@ -144,6 +153,10 @@ class AppKitSidebarItems extends StatelessWidget {
             unselectedColor: unselectedColor ?? Colors.transparent,
             shape: shape ?? _defaultShape,
             itemSize: itemSize,
+            textColor: textColor,
+            iconColor: iconColor,
+            selectedIconColor: selectedIconColor,
+            selectedTextColor: selectedTextColor,
             child: ListView(
               controller: scrollController,
               physics: const ClampingScrollPhysics(),
@@ -188,8 +201,16 @@ class _SidebarItemsConfiguration extends InheritedWidget {
     this.unselectedColor = Colors.transparent,
     this.shape = _defaultShape,
     this.itemSize = AppKitSidebarItemSize.medium,
+    this.textColor,
+    this.selectedTextColor,
+    this.iconColor,
+    this.selectedIconColor,
   }) : super(key: key);
 
+  final Color? textColor;
+  final Color? selectedTextColor;
+  final Color? iconColor;
+  final Color? selectedIconColor;
   final Color selectedColor;
   final Color unselectedColor;
   final ShapeBorder shape;
@@ -254,6 +275,16 @@ class _SidebarItem extends StatelessWidget {
     final unselectedColor = item.unselectedColor ??
         _SidebarItemsConfiguration.of(context).unselectedColor;
 
+    final selectedTextColor = item.selectedTextColor ??
+        _SidebarItemsConfiguration.of(context).selectedTextColor;
+    final unselectedTextColor =
+        item.textColor ?? _SidebarItemsConfiguration.of(context).textColor;
+
+    final selectedIconColor = item.selectedIconColor ??
+        _SidebarItemsConfiguration.of(context).selectedIconColor;
+    final unselectedIconColor =
+        item.iconColor ?? _SidebarItemsConfiguration.of(context).iconColor;
+
     final double spacing = 10.0 + theme.visualDensity.horizontal;
     final itemSize = _SidebarItemsConfiguration.of(context).itemSize;
     TextStyle? labelStyle;
@@ -271,12 +302,17 @@ class _SidebarItem extends StatelessWidget {
 
     final Color? iconColor;
     if (selected) {
-      iconColor = selectedColor.computeLuminance() >= 0.5
-          ? CupertinoColors.black
-          : CupertinoColors.white;
+      iconColor = selectedIconColor ??
+          (selectedColor.computeLuminance() >= 0.5
+              ? CupertinoColors.black
+              : CupertinoColors.white);
     } else {
-      iconColor = theme.primaryColor;
+      iconColor = unselectedIconColor ?? theme.primaryColor;
     }
+
+    final Color? textColor = selected
+        ? selectedTextColor ?? _textLuminance(selectedColor)
+        : unselectedTextColor;
 
     return Semantics(
       label: item.semanticLabel,
@@ -320,7 +356,7 @@ class _SidebarItem extends StatelessWidget {
                 Expanded(
                   child: DefaultTextStyle(
                     style: labelStyle.copyWith(
-                      color: selected ? _textLuminance(selectedColor) : null,
+                      color: textColor,
                       overflow: TextOverflow.ellipsis,
                     ),
                     child: item.label,
@@ -330,7 +366,7 @@ class _SidebarItem extends StatelessWidget {
                   const Spacer(),
                   DefaultTextStyle(
                     style: labelStyle.copyWith(
-                      color: selected ? _textLuminance(selectedColor) : null,
+                      color: textColor,
                     ),
                     child: item.trailing!,
                   ),

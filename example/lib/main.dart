@@ -81,8 +81,15 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, scrollController) {
               return AppKitSidebarItems(
                   scrollController: scrollController,
+                  itemSize: AppKitSidebarItemSize.large,
+                  textColor:
+                      AppKitColors.text.opaque.primary.resolveFrom(context),
+                  selectedTextColor:
+                      AppKitColors.text.opaque.primary.resolveFrom(context),
+                  iconColor: AppKitTheme.of(context).primaryColor,
+                  selectedIconColor: AppKitTheme.of(context).primaryColor,
                   selectedColor:
-                      AppKitTheme.of(context).primaryColor?.withOpacity(0.5),
+                      AppKitColors.text.opaque.quaternary.resolveFrom(context),
                   items: const [
                     AppKitSidebarItem(label: Text('Buttons'), disclosureItems: [
                       AppKitSidebarItem(label: Text('Push Button')),

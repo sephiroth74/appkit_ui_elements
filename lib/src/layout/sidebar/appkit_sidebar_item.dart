@@ -13,6 +13,10 @@ class AppKitSidebarItem with Diagnosticable {
     this.disclosureItems,
     this.expandDisclosureItems = false,
     this.trailing,
+    this.textColor,
+    this.selectedTextColor,
+    this.iconColor,
+    this.selectedIconColor,
   });
 
   /// The widget before [label].
@@ -34,6 +38,11 @@ class AppKitSidebarItem with Diagnosticable {
   ///
   /// Defaults to transparent.
   final Color? unselectedColor;
+
+  final Color? textColor;
+  final Color? selectedTextColor;
+  final Color? iconColor;
+  final Color? selectedIconColor;
 
   /// The [shape] property specifies the outline (border) of the
   /// decoration. The shape must not be null. It's used alongside
@@ -78,5 +87,11 @@ class AppKitSidebarItem with Diagnosticable {
     properties.add(
         FlagProperty('expandDisclosureItems', value: expandDisclosureItems));
     properties.add(DiagnosticsProperty<Widget?>('trailing', trailing));
+    properties.add(DiagnosticsProperty<Widget?>('leading', leading));
+    properties.add(DiagnosticsProperty<Widget>('label', label));
+    properties.add(ColorProperty('textColor', textColor));
+    properties.add(ColorProperty('selectedTextColor', selectedTextColor));
+    properties.add(ColorProperty('iconColor', iconColor));
+    properties.add(ColorProperty('selectedIconColor', selectedIconColor));
   }
 }
