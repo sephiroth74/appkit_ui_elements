@@ -94,7 +94,6 @@ extension RenderBoxExtensions on RenderBox? {
   Rect currentRect() => Offset(x, y) & menuRect.size;
 
   if (isWidthExceed()) {
-    debugPrint('isWidthExceed');
     if (isSubmenu && parentRect != null) {
       final toRightSide = parentRect.right;
       final toLeftSide = parentRect.left - menuRect.width;

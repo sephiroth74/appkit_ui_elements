@@ -269,6 +269,15 @@ class _SidebarItem extends StatelessWidget {
         break;
     }
 
+    final Color? iconColor;
+    if (selected) {
+      iconColor = selectedColor.computeLuminance() >= 0.5
+          ? CupertinoColors.black
+          : CupertinoColors.white;
+    } else {
+      iconColor = theme.primaryColor;
+    }
+
     return Semantics(
       label: item.semanticLabel,
       button: true,
@@ -302,7 +311,7 @@ class _SidebarItem extends StatelessWidget {
                     padding: EdgeInsets.only(right: spacing),
                     child: AppKitIconTheme.merge(
                       data: AppKitIconThemeData(
-                        color: selected ? Colors.white : theme.primaryColor,
+                        color: iconColor,
                         size: itemSize.iconSize,
                       ),
                       child: item.leading!,

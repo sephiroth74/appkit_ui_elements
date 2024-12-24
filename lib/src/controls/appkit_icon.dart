@@ -18,7 +18,6 @@ class AppKitIcon extends StatelessWidget {
     final theme = AppKitIconTheme.of(context);
     final size = this.size ?? theme.size;
     final color = this.color ?? theme.color;
-    debugPrint('AppKitIcon: size: $size');
     return Icon(
       icon,
       size: size,

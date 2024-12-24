@@ -81,6 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, scrollController) {
               return AppKitSidebarItems(
                   scrollController: scrollController,
+                  selectedColor:
+                      AppKitTheme.of(context).primaryColor?.withOpacity(0.5),
                   items: const [
                     AppKitSidebarItem(label: Text('Buttons'), disclosureItems: [
                       AppKitSidebarItem(label: Text('Push Button')),
@@ -91,52 +93,60 @@ class _MyHomePageState extends State<MyHomePage> {
                     ]),
                     AppKitSidebarItem(
                         label: Text('Controls'),
-                        leading: Icon(Icons.radio_button_checked, size: 13)),
+                        leading: AppKitIcon(
+                            icon: Icons.radio_button_checked, size: 13)),
                     AppKitSidebarItem(
                         label: Text('Indicators'),
-                        leading:
-                            Icon(CupertinoIcons.circle_grid_hex, size: 13)),
+                        leading: AppKitIcon(
+                            icon: CupertinoIcons.circle_grid_hex, size: 13)),
                     AppKitSidebarItem(
                         label: Text('Sliders'),
-                        leading:
-                            Icon(CupertinoIcons.slider_horizontal_3, size: 13)),
+                        leading: AppKitIcon(
+                            icon: CupertinoIcons.slider_horizontal_3,
+                            size: 13)),
                     AppKitSidebarItem(
                         label: Text('Dialogs'),
-                        leading: Icon(Icons.window_outlined, size: 13)),
+                        leading:
+                            AppKitIcon(icon: Icons.window_outlined, size: 13)),
                     AppKitSidebarItem(label: Text('Layout'), disclosureItems: [
                       AppKitSidebarItem(
                         label: Text('Segmented Controls'),
-                        leading: Icon(
-                            CupertinoIcons.rectangle_stack_badge_minus,
+                        leading: AppKitIcon(
+                            icon: CupertinoIcons.rectangle_stack_badge_minus,
                             size: 13),
                       ),
                       AppKitSidebarItem(
                         label: Text('Tab View'),
-                        leading:
-                            Icon(CupertinoIcons.uiwindow_split_2x1, size: 13),
+                        leading: AppKitIcon(
+                            icon: CupertinoIcons.uiwindow_split_2x1, size: 13),
                       ),
                       AppKitSidebarItem(
                         label: Text('Group Box'),
-                        leading: Icon(CupertinoIcons.rectangle_3_offgrid_fill,
+                        leading: AppKitIcon(
+                            icon: CupertinoIcons.rectangle_3_offgrid_fill,
                             size: 13),
                       ),
                       AppKitSidebarItem(
-                          leading: Icon(CupertinoIcons.rectangle_split_3x1,
+                          leading: AppKitIcon(
+                              icon: CupertinoIcons.rectangle_split_3x1,
                               size: 13),
                           label: Text('Resizable Panel')),
                       AppKitSidebarItem(
-                          leading: Icon(CupertinoIcons.macwindow, size: 13),
+                          leading: AppKitIcon(
+                              icon: CupertinoIcons.macwindow, size: 13),
                           label: Text('Toolbar')),
                     ]),
                     AppKitSidebarItem(
                         label: Text('Selectors'),
-                        leading: Icon(Icons.date_range_outlined, size: 13)),
+                        leading: AppKitIcon(
+                            icon: Icons.date_range_outlined, size: 13)),
                     AppKitSidebarItem(
                         label: Text('Colors'),
-                        leading: Icon(CupertinoIcons.paintbrush, size: 13)),
+                        leading: AppKitIcon(
+                            icon: CupertinoIcons.paintbrush, size: 13)),
                     AppKitSidebarItem(
-                        leading: Icon(
-                          Icons.text_fields,
+                        leading: AppKitIcon(
+                          icon: Icons.text_fields,
                           size: 13,
                         ),
                         label: Text('Fields')),
