@@ -1,11 +1,9 @@
 import 'dart:ui';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/layout/appkit_wallpaper_tinting_override.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 const _kToolbarHeight = 52.0;
 
@@ -101,7 +99,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
 
   @override
   Widget build(BuildContext context) {
-    final scope = MacosWindowScope.maybeOf(context);
+    final scope = AppKitWindowScope.maybeOf(context);
     final AppKitThemeData theme = AppKitTheme.of(context);
     final brightness = AppKitTheme.of(context).brightness;
     Color dividerColor = widget.dividerColor ?? theme.dividerColor;
@@ -144,7 +142,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
         child: DefaultTextStyle(
           style: theme.typography.title3.copyWith(
             fontSize: 15,
-            fontWeight: MacosFontWeight.w590,
+            fontWeight: AppKitFontWeight.w590,
           ),
           child: title,
         ),
@@ -199,44 +197,39 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
             boxShadow: widget.decoration?.boxShadow,
             gradient: widget.decoration?.gradient,
           ),
-          child: AppKitMeasureSingleChildWidget(
-            onSizeChanged: (value) {
-              debugPrint('toolbar size: $value');
-            },
-            child: NavigationToolbar(
-              middle: title,
-              centerMiddle: widget.centerTitle,
-              trailing: AppKitOverflowHandler(
-                overflowBreakpoint: overflowBreakpoint,
-                overflowWidget: ToolbarOverflowButton(
-                  isDense: doAllItemsShowLabel,
-                  overflowContentBuilder: (context) => ToolbarOverflowMenu(
-                    children: overflowedActions
-                        .map((action) => action.build(
-                              context,
-                              AppKitToolbarItemDisplayMode.overflowed,
-                            ))
-                        .toList(),
-                  ),
+          child: NavigationToolbar(
+            middle: title,
+            centerMiddle: widget.centerTitle,
+            trailing: AppKitOverflowHandler(
+              overflowBreakpoint: overflowBreakpoint,
+              overflowWidget: AppKitToolbarOverflowButton(
+                isDense: doAllItemsShowLabel,
+                overflowContentBuilder: (context) => AppKitToolbarOverflowMenu(
+                  children: overflowedActions
+                      .map((action) => action.build(
+                            context,
+                            AppKitToolbarItemDisplayMode.overflowed,
+                          ))
+                      .toList(),
                 ),
-                children: inToolbarActions
-                    .map(
-                      (e) => e.build(
-                          context, AppKitToolbarItemDisplayMode.inToolbar),
-                    )
-                    .toList(),
-                overflowChangedCallback: (hiddenItems) {
-                  setState(() => overflowedActionsCount = hiddenItems.length);
-                },
               ),
-              middleSpacing: 8,
-              leading: SafeArea(
-                top: false,
-                right: false,
-                bottom: false,
-                left: !(scope?.isSidebarShown ?? false),
-                child: leading ?? const SizedBox.shrink(),
-              ),
+              children: inToolbarActions
+                  .map(
+                    (e) => e.build(
+                        context, AppKitToolbarItemDisplayMode.inToolbar),
+                  )
+                  .toList(),
+              overflowChangedCallback: (hiddenItems) {
+                setState(() => overflowedActionsCount = hiddenItems.length);
+              },
+            ),
+            middleSpacing: 8,
+            leading: SafeArea(
+              top: false,
+              right: false,
+              bottom: false,
+              left: !(scope?.isSidebarShown ?? false),
+              child: leading ?? const SizedBox.shrink(),
             ),
           ),
         ),
@@ -276,7 +269,7 @@ class _WallpaperTintedAreaOrBlurFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (enableWallpaperTintedArea) {
-      return WallpaperTintedArea(
+      return AppKitWallpaperTintedArea(
         backgroundColor: backgroundColor,
         insertRepaintBoundary: true,
         child: child,

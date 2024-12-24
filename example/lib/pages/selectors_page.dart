@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class SelectorsPage extends StatefulWidget {
   const SelectorsPage({super.key});
@@ -39,13 +38,13 @@ class _SelectorsPageState extends State<SelectorsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Selectors'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             return Container(
               color: const Color(0xFFf0efef),
@@ -72,7 +71,8 @@ class _SelectorsPageState extends State<SelectorsPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(text: Text('Textual (start)')),
+                                const AppKitLabel(
+                                    text: Text('Textual (start)')),
                                 const SizedBox(height: 8.0),
                                 SizedBox(
                                   width: 190,
@@ -104,7 +104,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
+                                const AppKitLabel(
                                     text: Text('Textual with Stepper (end)')),
                                 const SizedBox(height: 8.0),
                                 SizedBox(
@@ -140,7 +140,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Label(
+                                    const AppKitLabel(
                                         text: Text('Graphical (start date)')),
                                     const SizedBox(height: 8.0),
                                     AppKitDatePicker(
@@ -172,7 +172,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Label(
+                                    const AppKitLabel(
                                         text: Text('Graphical (start time)')),
                                     const SizedBox(height: 8.0),
                                     AppKitDatePicker(
@@ -206,7 +206,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Label(
+                                const AppKitLabel(
                                     text: Text('Graphical (date range)')),
                                 const SizedBox(height: 8.0),
                                 AppKitDatePicker(

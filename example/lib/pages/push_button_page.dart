@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class PushButtonPage extends StatefulWidget {
   const PushButtonPage({super.key});
@@ -13,13 +12,13 @@ class PushButtonPage extends StatefulWidget {
 class _PushButtonPageState extends State<PushButtonPage> {
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Push Button'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, scrollController) {
             return SingleChildScrollView(
               controller: scrollController,
@@ -42,7 +41,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               child: AppKitPushButton(
                                 onPressed: () {},
                                 controlSize: AppKitControlSize.large,
-                                color: MacosColors.systemYellowColor
+                                color: AppKitColors.systemYellow
                                     .resolveFrom(context),
                                 type: AppKitPushButtonType.primary,
                                 child: const Text('Label'),
@@ -122,7 +121,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               onPressed: () {},
                               type: AppKitPushButtonType.secondary,
                               controlSize: AppKitControlSize.large,
-                              color: MacosColors.systemYellowColor
+                              color: AppKitColors.systemYellow
                                   .resolveFrom(context),
                               child: const Text('Label'),
                             ),

@@ -45,10 +45,6 @@ class AppKitContextMenu<T> {
     return _firstWhereOrNull(entries, (e) => e.value == value);
   }
 
-  Future<AppKitContextMenuItem<T>?> show(BuildContext context) {
-    return showContextMenu(context, contextMenu: this);
-  }
-
   AppKitContextMenu<T> copyWith({
     Offset? position,
     List<AppKitContextMenuEntry<T>>? entries,

@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class ComboBoxButtonPage extends StatefulWidget {
   const ComboBoxButtonPage({super.key});
@@ -12,13 +11,13 @@ class ComboBoxButtonPage extends StatefulWidget {
 class _ComboBoxButtonPageState extends State<ComboBoxButtonPage> {
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('ComboBox Button'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, scrollController) {
             return SingleChildScrollView(
               controller: scrollController,

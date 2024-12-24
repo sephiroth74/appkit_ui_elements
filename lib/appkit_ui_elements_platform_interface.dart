@@ -1,32 +1,34 @@
+import 'dart:async';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'appkit_ui_elements_method_channel.dart';
 
-abstract class AppkitUiElementsPlatform extends PlatformInterface {
+abstract class AppKitUiElementsPlatform extends PlatformInterface {
   /// Constructs a AppkitUiElementsPlatform.
-  AppkitUiElementsPlatform() : super(token: _token);
+  AppKitUiElementsPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static AppkitUiElementsPlatform _instance = MethodChannelAppkitUiElements();
+  static AppKitUiElementsPlatform _instance = MethodChannelAppkitUiElements();
 
-  /// The default instance of [AppkitUiElementsPlatform] to use.
+  /// The default instance of [AppKitUiElementsPlatform] to use.
   ///
   /// Defaults to [MethodChannelAppkitUiElements].
-  static AppkitUiElementsPlatform get instance => _instance;
+  static AppKitUiElementsPlatform get instance => _instance;
 
   /// Platform-specific implementations should set this with their own
-  /// platform-specific class that extends [AppkitUiElementsPlatform] when
+  /// platform-specific class that extends [AppKitUiElementsPlatform] when
   /// they register themselves.
-  static set instance(AppkitUiElementsPlatform instance) {
+  static set instance(AppKitUiElementsPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
 
   Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError('getPlatformVersion() has not been implemented.');
   }
 
   Future<void> colorPicker({

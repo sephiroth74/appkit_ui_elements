@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const groupMessage =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
@@ -15,13 +14,13 @@ class GroupedBoxPage extends StatefulWidget {
 class _GroupedBoxPageState extends State<GroupedBoxPage> {
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Group Box'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             final theme = AppKitTheme.of(context);
             final textStyle = theme.typography.body;

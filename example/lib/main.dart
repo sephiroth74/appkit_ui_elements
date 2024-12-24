@@ -9,7 +9,7 @@ import 'package:example/pages/dialogs_page.dart';
 import 'package:example/pages/fields_page.dart';
 import 'package:example/pages/group_box_page.dart';
 import 'package:example/pages/indicators_page.dart';
-import 'package:example/pages/popup_button.dart';
+import 'package:example/pages/popup_button_page.dart';
 import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/resizable_panel_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
@@ -22,24 +22,19 @@ import 'package:example/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
 Future<void> _configureMacosWindowUtils() async {
-  const config = MacosWindowUtilsConfig();
-  await config.apply();
+  const config2 = AppKitWindowUtilsConfig();
+  config2.apply();
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (!kIsWeb) {
-    if (Platform.isMacOS) {
-      await _configureMacosWindowUtils();
-
-      await AppKitUiElements.ensureInitialized();
-    }
-  }
+  assert(Platform.isMacOS && !kIsWeb,
+      'This example is intended to run on macOS desktop only.');
+  await _configureMacosWindowUtils();
+  await AppKitUiElements.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -53,7 +48,7 @@ class MyApp extends StatelessWidget {
       create: (_) => AppTheme(),
       builder: (context, child) {
         final appTheme = context.watch<AppTheme>();
-        return MacosApp(
+        return AppKitMacosApp(
           debugShowCheckedModeBanner: false,
           themeMode: appTheme.mode,
           title: 'AppKit Elements Demo',
@@ -80,66 +75,66 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return PlatformMenuBar(
       menus: const [],
-      child: MacosWindow(
-        sidebar: Sidebar(
-            top: const MacosSearchField(),
+      child: AppKitWindow(
+        sidebar: AppKitSidebar(
+            // top: const AppKitSearchField(),
             builder: (context, scrollController) {
-              return SidebarItems(
+              return AppKitSidebarItems(
                   scrollController: scrollController,
                   items: const [
-                    SidebarItem(label: Text('Buttons'), disclosureItems: [
-                      SidebarItem(label: Text('Push Button')),
-                      SidebarItem(label: Text('Toggle Button')),
-                      SidebarItem(label: Text('Combo Button')),
-                      SidebarItem(label: Text('ComboBox Button')),
-                      SidebarItem(label: Text('Popup/Pulldown Button')),
+                    AppKitSidebarItem(label: Text('Buttons'), disclosureItems: [
+                      AppKitSidebarItem(label: Text('Push Button')),
+                      AppKitSidebarItem(label: Text('Toggle Button')),
+                      AppKitSidebarItem(label: Text('Combo Button')),
+                      AppKitSidebarItem(label: Text('ComboBox Button')),
+                      AppKitSidebarItem(label: Text('Popup/Pulldown Button')),
                     ]),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         label: Text('Controls'),
                         leading: Icon(Icons.radio_button_checked, size: 13)),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         label: Text('Indicators'),
                         leading:
                             Icon(CupertinoIcons.circle_grid_hex, size: 13)),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         label: Text('Sliders'),
                         leading:
                             Icon(CupertinoIcons.slider_horizontal_3, size: 13)),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         label: Text('Dialogs'),
                         leading: Icon(Icons.window_outlined, size: 13)),
-                    SidebarItem(label: Text('Layout'), disclosureItems: [
-                      SidebarItem(
+                    AppKitSidebarItem(label: Text('Layout'), disclosureItems: [
+                      AppKitSidebarItem(
                         label: Text('Segmented Controls'),
                         leading: Icon(
                             CupertinoIcons.rectangle_stack_badge_minus,
                             size: 13),
                       ),
-                      SidebarItem(
+                      AppKitSidebarItem(
                         label: Text('Tab View'),
                         leading:
                             Icon(CupertinoIcons.uiwindow_split_2x1, size: 13),
                       ),
-                      SidebarItem(
+                      AppKitSidebarItem(
                         label: Text('Group Box'),
                         leading: Icon(CupertinoIcons.rectangle_3_offgrid_fill,
                             size: 13),
                       ),
-                      SidebarItem(
+                      AppKitSidebarItem(
                           leading: Icon(CupertinoIcons.rectangle_split_3x1,
                               size: 13),
                           label: Text('Resizable Panel')),
-                      SidebarItem(
+                      AppKitSidebarItem(
                           leading: Icon(CupertinoIcons.macwindow, size: 13),
                           label: Text('Toolbar')),
                     ]),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         label: Text('Selectors'),
                         leading: Icon(Icons.date_range_outlined, size: 13)),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         label: Text('Colors'),
                         leading: Icon(CupertinoIcons.paintbrush, size: 13)),
-                    SidebarItem(
+                    AppKitSidebarItem(
                         leading: Icon(
                           Icons.text_fields,
                           size: 13,

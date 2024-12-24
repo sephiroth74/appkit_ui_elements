@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const _kDefaultFontFamily = '.AppleSystemUIFont';
 
@@ -118,25 +117,6 @@ class AppKitTypography extends Equatable with Diagnosticable {
       footnote: footnote,
       caption1: caption1,
       caption2: caption2,
-    );
-  }
-
-  factory AppKitTypography.fromMacosTypograhpy(MacosTypography from) {
-    return AppKitTypography(
-      color: from.largeTitle.color!,
-      largeTitle: from.largeTitle,
-      title1: from.title1,
-      title2: from.title2,
-      title3: from.title3,
-      headline: from.headline,
-      subheadline: from.subheadline,
-      body: from.body,
-      callout: from.callout,
-      tooltip:
-          from.callout.copyWith(color: const Color(0xFF4D4D4D), fontSize: 13.0),
-      footnote: from.footnote,
-      caption1: from.caption1,
-      caption2: from.caption2,
     );
   }
 

@@ -19,6 +19,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   final overlayController = OverlayPortalController(debugLabel: 'ContextMenu');
 
+  final bool enableWallpaperTinting;
+
   AppKitContextMenuEntry<T>? _futureSelectedEntry;
 
   AppKitContextMenuEntry<T>? _focusedEntry;
@@ -52,6 +54,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   AppKitContextMenuState({
     required this.menu,
     this.parentItem,
+    this.enableWallpaperTinting = true,
     AppKitContextMenuItem<T>? focusedEntry,
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   })  : _parentItemRect = null,
@@ -64,6 +67,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     required this.menu,
     required this.selfClose,
     this.parentItem,
+    this.enableWallpaperTinting = true,
     AlignmentGeometry? spawnAlignmen,
     Rect? parentItemRect,
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,

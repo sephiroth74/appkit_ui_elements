@@ -147,6 +147,7 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
           contextMenu: menu,
           transitionDuration: kContextMenuTrasitionDuration,
           barrierDismissible: true,
+          enableWallpaperTinting: false,
           opaque: false,
           selectedItem:
               menu.entries.firstOrNull as AppKitContextMenuItem<String>?,
@@ -398,7 +399,7 @@ class _PushButtonStyleWidget extends StatelessWidget {
     Color arrowsColor;
 
     caretBackgroundColor = isMainWindow && enabled
-        ? (color ?? theme.accentColor ?? colorContainer.controlAccentColor)
+        ? (color ?? theme.primaryColor ?? colorContainer.controlAccentColor)
         : colorContainer.controlBackgroundColor;
 
     final carteBackgroundColorLiminance =

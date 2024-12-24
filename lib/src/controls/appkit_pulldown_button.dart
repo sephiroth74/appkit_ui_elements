@@ -247,6 +247,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
         barrierDismissible: true,
         opaque: false,
         menuEdge: widget.menuEdge,
+        enableWallpaperTinting: false,
       );
 
       setState(() {
@@ -386,7 +387,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     } else {
       caretBackgroundColor = color ??
           popupButtonTheme.elevatedButtonColor ??
-          theme.accentColor ??
+          theme.primaryColor ??
           colorContainer.controlAccentColor;
 
       final carteBackgroundColorLiminance =

@@ -33,7 +33,23 @@ class _ToolbarPageState extends State<ToolbarPage> {
           ],
         ),
         titleWidth: 200,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AppKitIconTheme.toolbar(
+            context,
+            icon: CupertinoIcons.sidebar_left,
+            onPressed: () {
+              AppKitWindowScope.of(context).toggleSidebar();
+            },
+          ),
+        ),
         actions: [
+          AppKitToolBarIconButton(
+            label: 'Toggle Sidebar',
+            icon: CupertinoIcons.sidebar_left,
+            onPressed: () => AppKitWindowScope.of(context).toggleSidebar(),
+            showLabel: false,
+          ),
           AppKitToolBarIconButton(
             tooltipMessage: 'Add new item',
             label: 'Add',

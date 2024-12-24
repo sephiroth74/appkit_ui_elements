@@ -127,6 +127,7 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
         barrierDismissible: true,
         opaque: false,
         menuEdge: AppKitMenuEdge.auto,
+        enableWallpaperTinting: false,
       );
 
       if (value?.value != null) {

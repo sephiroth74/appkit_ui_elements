@@ -155,7 +155,7 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
                 final color = isMainWindow
                     ? (widget.color ??
                         progressTheme.color ??
-                        theme.accentColor ??
+                        theme.primaryColor ??
                         colorContainer.controlAccentColor)
                     : (progressTheme.accentColorUnfocused ??
                         theme.accentColorUnfocused);

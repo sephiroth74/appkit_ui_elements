@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class IndicatorsPage extends StatefulWidget {
   const IndicatorsPage({super.key});
@@ -15,13 +14,13 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Indicators'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             return SingleChildScrollView(
               clipBehavior: Clip.none,
@@ -40,7 +39,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                           AppKitProgress.linear(
                             value: slider1Value,
                             height: 12,
-                            color: MacosColors.appleMagenta,
+                            color: AppKitColors.appleMagenta,
                           ),
                           const SizedBox(height: 16.0),
                           AppKitProgress.linear(value: slider1Value),
@@ -73,7 +72,7 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                               const SizedBox(width: 20.0),
                               AppKitProgress.circle(
                                 value: slider1Value,
-                                color: MacosColors.appleMagenta,
+                                color: AppKitColors.appleMagenta,
                                 size: 24.0,
                                 strokeWidth: 6,
                               ),

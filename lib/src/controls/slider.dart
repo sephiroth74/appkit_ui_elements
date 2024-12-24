@@ -246,7 +246,7 @@ class _AppKitSliderState extends State<AppKitSlider>
 
               final accentColor = isMainWindow
                   ? (sliderTheme.sliderColor ??
-                      theme.accentColor ??
+                      theme.primaryColor ??
                       colorContainer.controlAccentColor)
                   : (sliderTheme.accentColorUnfocused ??
                       theme.accentColorUnfocused);

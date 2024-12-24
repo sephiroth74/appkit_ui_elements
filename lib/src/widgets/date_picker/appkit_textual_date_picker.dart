@@ -397,7 +397,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
             textStyle: textStyle,
             index: i,
             color: widget.color ??
-                theme.accentColor ??
+                theme.primaryColor ??
                 colorContainer.controlAccentColor,
             isMainWindow: isMainWindow,
             isFocused: enabled &&
@@ -432,7 +432,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
             textStyle: textStyle,
             index: i + dateFormatterSegments.length,
             color: widget.color ??
-                theme.accentColor ??
+                theme.primaryColor ??
                 colorContainer.controlAccentColor,
             isMainWindow: isMainWindow,
             isFocused: _effectiveFocusNode.hasPrimaryFocus &&

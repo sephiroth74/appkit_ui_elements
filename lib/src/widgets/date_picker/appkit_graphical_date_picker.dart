@@ -115,7 +115,7 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
         child: UiElementColorBuilder(builder: (context, colorContainer) {
           final theme = AppKitTheme.of(context);
           final accentColor = widget.color ??
-              theme.accentColor?.multiplyLuminance(0.85) ??
+              theme.primaryColor?.multiplyLuminance(0.85) ??
               colorContainer.controlAccentColor;
 
           return Container(
@@ -749,10 +749,6 @@ class _GraphicalDatePickerMonthViewState
               widget.minimumDate != null && day.isBefore(widget.minimumDate!);
           final isAfterMaximumDate =
               widget.maximumDate != null && day.isAfter(widget.maximumDate!);
-          final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth);
-          final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
-          final isWithinValidRange =
-              !isBeforeMinimumDate && !isAfterMaximumDate;
           final isSelected = _currentDateTime.contains(day);
 
           final isPreviousDaySelected =

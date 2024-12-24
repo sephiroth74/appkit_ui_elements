@@ -1,6 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const double _kScrollbarMinLength = 36.0;
 const double _kScrollbarMinOverscrollLength = 8.0;
@@ -114,7 +114,7 @@ class _RawMacosScrollBarState extends RawScrollbarState<_RawMacosScrollBar> {
       duration: _kScrollbarResizeDuration,
     );
     _trackColorTween = ColorTween(
-      begin: MacosColors.transparent,
+      begin: Colors.transparent,
       end: widget.effectiveThumbColor.withOpacity(0.15),
     ).animate(_trackColorAnimationController);
     _thumbThicknessAnimationController.addListener(() {

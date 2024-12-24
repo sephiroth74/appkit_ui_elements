@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class AppKitToolbarOverflowButton extends StatelessWidget {
   const AppKitToolbarOverflowButton({
@@ -15,14 +14,14 @@ class AppKitToolbarOverflowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final popupKey = GlobalKey<ToolbarPopupState>();
-    return ToolbarPopup(
+    final popupKey = GlobalKey<AppKitToolbarPopupState>();
+    return AppKitToolbarPopup(
       key: popupKey,
       content: overflowContentBuilder,
       verticalOffset: 8.0,
       horizontalOffset: 10.0,
-      position: ToolbarPopupPosition.below,
-      placement: ToolbarPopupPlacement.end,
+      position: AppKitToolbarPopupPosition.below,
+      placement: AppKitToolbarPopupPlacement.end,
       child: AppKitToolBarIconButton(
         label: "",
         icon: CupertinoIcons.chevron_right_2,

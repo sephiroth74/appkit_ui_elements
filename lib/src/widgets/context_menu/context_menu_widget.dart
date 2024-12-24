@@ -49,6 +49,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
         final theme = AppKitContextMenuTheme.of(context);
 
         return AppKitOverlayFilterWidget(
+          enableWallpaperTinting: menuState.enableWallpaperTinting,
           backgroundBlur: theme.backgroundBlur,
           borderRadius: BorderRadius.circular(theme.borderRadius),
           color: theme.backgroundColor ??

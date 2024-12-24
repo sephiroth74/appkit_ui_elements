@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class SlidersPage extends StatefulWidget {
   const SlidersPage({super.key});
@@ -17,13 +16,13 @@ class _SlidersPageState extends State<SlidersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Sliders'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             return SingleChildScrollView(
               clipBehavior: Clip.none,
@@ -207,7 +206,7 @@ class _SlidersPageState extends State<SlidersPage> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text('${(slider1Value * 100).toInt()}',
-                                      style: MacosTheme.of(context)
+                                      style: AppKitTheme.of(context)
                                           .typography
                                           .body
                                           .copyWith(fontSize: 10)),
@@ -229,7 +228,7 @@ class _SlidersPageState extends State<SlidersPage> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text('${(slider1Value * 100).toInt()}',
-                                      style: MacosTheme.of(context)
+                                      style: AppKitTheme.of(context)
                                           .typography
                                           .body
                                           .copyWith(

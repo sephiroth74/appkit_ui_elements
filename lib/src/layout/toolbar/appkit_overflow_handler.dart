@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:macos_ui/src/library.dart';
+import 'package:flutter/widgets.dart';
 
 typedef OverflowHandlerChangedCallback = void Function(
   List<int> hiddenChildren,

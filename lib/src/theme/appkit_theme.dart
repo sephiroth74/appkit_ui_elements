@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 ///
 /// https://www.figma.com/design/IX6ph2VWrJiRoMTI1Byz0K/Apple-Design-Resources---macOS-(Community)?node-id=0-1745&node-type=frame&t=2SWN7P0O7eB3nXKr-0
@@ -38,24 +37,13 @@ class AppKitTheme extends StatelessWidget {
   static AppKitThemeData of(BuildContext context) {
     final _InheritedAppKitTheme? inheritedTheme =
         context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
-    return (inheritedTheme?.theme.data ??
-        AppKitThemeData.fromMacosTheme(MacosTheme.of(context),
-            highContrast: MediaQuery.of(context).highContrast));
+    return (inheritedTheme?.theme.data ?? AppKitThemeData.fallback());
   }
 
   static AppKitThemeData? maybeOf(BuildContext context) {
     final _InheritedAppKitTheme? inheritedTheme =
         context.dependOnInheritedWidgetOfExactType<_InheritedAppKitTheme>();
-    if (inheritedTheme != null) {
-      return inheritedTheme.theme.data;
-    } else {
-      final parentTheme = MacosTheme.maybeOf(context);
-      if (parentTheme != null) {
-        return AppKitThemeData.fromMacosTheme(parentTheme,
-            highContrast: MediaQuery.maybeOf(context)?.highContrast ?? false);
-      }
-    }
-    return null;
+    return inheritedTheme?.theme.data;
   }
 
   static Brightness brightnessOf(BuildContext context) {
@@ -88,7 +76,8 @@ class _InheritedAppKitTheme extends InheritedWidget {
 
 class AppKitThemeData extends Equatable with Diagnosticable {
   final Brightness brightness;
-  final Color? accentColor;
+  final AppKitAccentColor accentColor;
+  final Color? primaryColor;
   final Color focusColor;
   final Color dividerColor;
   final bool isMainWindow;
@@ -150,8 +139,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   }) {
     final bool isDark = brightness == Brightness.dark;
 
+    accentColor ??= AppKitAccentColor.blue;
+
     primaryColor ??= _ColorProvider.getPrimaryColor(
-      accentColor: accentColor ?? AppKitAccentColor.blue,
+      accentColor: accentColor,
       isDark: isDark,
       isMainWindow: isMainWindow ?? true,
     );
@@ -162,17 +153,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     isMainWindow ??= true;
     canvasColor ??= isDark
         ? const Color.fromRGBO(40, 40, 40, 1.0)
-        : const Color.fromRGBO(246, 246, 246, 1.0);
+        : const Color.fromRGBO(206, 246, 246, 1.0); // 0xFFECECEC
     typography ??=
         isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
 
-    controlBackgroundColor ??= isDark
-        ? MacosColors.controlBackgroundColor.darkColor
-        : MacosColors.controlBackgroundColor.color;
+    controlBackgroundColor ??= isDark ? Colors.black : Colors.white;
 
-    controlBackgroundColorDisabled ??= isDark
-        ? MacosColors.controlBackgroundColor.darkColor.withOpacity(0.5)
-        : MacosColors.controlBackgroundColor.color.withOpacity(0.5);
+    controlBackgroundColorDisabled ??=
+        isDark ? Colors.black.withOpacity(0.5) : Colors.white.withOpacity(0.5);
 
     controlBackgroundPressedColor ??=
         const CupertinoDynamicColor.withBrightness(
@@ -391,7 +379,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
-      accentColor: primaryColor,
+      primaryColor: primaryColor,
+      accentColor: accentColor,
       focusColor: focusColor,
       dividerColor: dividerColor,
       isMainWindow: isMainWindow,
@@ -422,7 +411,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     final customData = defaultData.copyWith(
       brightness: brightness,
-      accentColor: primaryColor,
+      accentColor: accentColor,
+      primaryColor: primaryColor,
       focusColor: focusColor,
       dividerColor: dividerColor,
       isMainWindow: isMainWindow,
@@ -479,22 +469,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       );
 
-  factory AppKitThemeData.fromMacosTheme(MacosThemeData themeData,
-      {bool highContrast = false}) {
-    return AppKitThemeData(
-      brightness: themeData.brightness,
-      accentColor: AppKitAccentColor.fromAccentColor(
-          themeData.accentColor ?? AccentColor.blue),
-      isMainWindow: themeData.isMainWindow,
-      visualDensity: themeData.visualDensity,
-      canvasColor: themeData.canvasColor,
-      typography: AppKitTypography.fromMacosTypograhpy(themeData.typography),
-    );
-  }
-
   const AppKitThemeData.raw({
     required this.brightness,
     required this.accentColor,
+    required this.primaryColor,
     required this.focusColor,
     required this.dividerColor,
     required this.isMainWindow,
@@ -526,7 +504,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   @override
   List<Object?> get props => [
         brightness,
-        accentColor,
+        primaryColor,
         focusColor,
         isMainWindow,
         visualDensity,
@@ -557,7 +535,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
   AppKitThemeData copyWith({
     Brightness? brightness,
-    Color? accentColor,
+    Color? primaryColor,
+    AppKitAccentColor? accentColor,
     Color? focusColor,
     Color? dividerColor,
     bool? isMainWindow,
@@ -589,6 +568,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
+      primaryColor: primaryColor ?? this.primaryColor,
       accentColor: accentColor ?? this.accentColor,
       focusColor: focusColor ?? this.focusColor,
       isMainWindow: isMainWindow ?? this.isMainWindow,
@@ -626,6 +606,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return copyWith(
       brightness: other.brightness,
       accentColor: other.accentColor,
+      primaryColor: other.primaryColor,
       focusColor: other.focusColor,
       isMainWindow: other.isMainWindow,
       visualDensity: other.visualDensity,
@@ -659,6 +640,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return AppKitThemeData.raw(
       brightness: t < 0.5 ? a.brightness : b.brightness,
       accentColor: t < 0.5 ? a.accentColor : b.accentColor,
+      primaryColor: Color.lerp(a.primaryColor, b.primaryColor, t),
       focusColor: Color.lerp(a.focusColor, b.focusColor, t)!,
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
@@ -713,7 +695,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<Brightness>('brightness', brightness));
-    properties.add(ColorProperty('accentColor', accentColor));
+    properties.add(ColorProperty('accentColor', primaryColor));
     properties.add(ColorProperty('focusColor', focusColor));
     properties.add(FlagProperty('isMainWindow',
         value: isMainWindow, ifTrue: 'main window'));

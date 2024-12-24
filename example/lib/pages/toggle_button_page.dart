@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class ToggleButtonPage extends StatefulWidget {
   const ToggleButtonPage({super.key});
@@ -18,13 +17,13 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Toggle Button'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             return SingleChildScrollView(
               controller: scrollController,
@@ -107,7 +106,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               }),
                               controlSize: AppKitControlSize.regular,
                               type: AppKitToggleButtonType.primary,
-                              color: MacosColors.applePurple,
+                              color: AppKitColors.applePurple,
                               childOff: const Text('Label'),
                               childOn: const Text('Label'),
                             ),
@@ -132,7 +131,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               }),
                               controlSize: AppKitControlSize.regular,
                               type: AppKitToggleButtonType.secondary,
-                              color: MacosColors.applePurple,
+                              color: AppKitColors.applePurple,
                               childOff: const Text('Label'),
                               childOn: const Text('Label'),
                             ),

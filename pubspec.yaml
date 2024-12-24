@@ -14,7 +14,6 @@ dependencies:
     sdk: flutter
   gradient_borders: ^1.0.1
   logger: ^2.4.0
-  macos_ui: ^2.0.9
   macos_window_utils: ^1.6.0
   rxdart: ^0.28.0
   system_theme: ^3.1.2

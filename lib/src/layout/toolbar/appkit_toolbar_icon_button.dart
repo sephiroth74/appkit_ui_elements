@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/material.dart';
 
 class AppKitToolBarIconButton extends AppKitToolbarItem {
   const AppKitToolBarIconButton({
@@ -19,38 +18,9 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
 
   @override
   Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
-    final brightness = AppKitTheme.of(context).brightness;
     if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      Widget iconButton = AppKitIconTheme(
-        data: AppKitIconThemeData(
-          size: showLabel ? 20.0 : 20.0,
-        ),
-        child: AppKitIconButton(
-          icon: icon,
-          padding: showLabel
-              ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
-              : const EdgeInsets.all(5),
-          disabledColor: Colors.transparent,
-          color: brightness.resolve(
-            const Color.fromRGBO(0, 0, 0, 0.5),
-            const Color.fromRGBO(255, 255, 255, 0.5),
-          ),
-          onPressed: onPressed,
-          boxConstraints: showLabel
-              ? const BoxConstraints(
-                  minHeight: 19,
-                  minWidth: 35,
-                  maxWidth: 35,
-                  maxHeight: 22,
-                )
-              : const BoxConstraints(
-                  minHeight: 19,
-                  minWidth: 15,
-                  maxWidth: 35,
-                  maxHeight: 28,
-                ),
-        ),
-      );
+      Widget iconButton = AppKitIconTheme.toolbar(context,
+          showLabel: showLabel, icon: icon, onPressed: onPressed);
 
       if (showLabel) {
         iconButton = Padding(

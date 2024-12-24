@@ -238,6 +238,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         opaque: false,
         selectedItem: selectedItem,
         menuEdge: widget.menuEdge,
+        enableWallpaperTinting: false,
       );
 
       setState(() {
@@ -422,7 +423,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     } else {
       caretBackgroundColor = color ??
           popupButtonTheme.elevatedButtonColor ??
-          theme.accentColor ??
+          theme.primaryColor ??
           colorContainer.controlAccentColor;
 
       final carteBackgroundColorLiminance =

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const _kBezelBorderRadius = 1.0;
 const _kRoundedBorderRadius = 6.0;
@@ -221,27 +220,6 @@ enum AppKitAccentColor {
   yellow,
   green,
   graphite;
-
-  static AppKitAccentColor fromAccentColor(AccentColor accentColor) {
-    switch (accentColor) {
-      case AccentColor.blue:
-        return AppKitAccentColor.blue;
-      case AccentColor.purple:
-        return AppKitAccentColor.purple;
-      case AccentColor.pink:
-        return AppKitAccentColor.pink;
-      case AccentColor.red:
-        return AppKitAccentColor.red;
-      case AccentColor.orange:
-        return AppKitAccentColor.orange;
-      case AccentColor.yellow:
-        return AppKitAccentColor.yellow;
-      case AccentColor.green:
-        return AppKitAccentColor.green;
-      case AccentColor.graphite:
-        return AppKitAccentColor.graphite;
-    }
-  }
 }
 
 enum AppKitResizableSide {

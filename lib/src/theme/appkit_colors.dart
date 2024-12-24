@@ -211,6 +211,27 @@ class AppKitColors {
     highContrastColor: Color.fromRGBO(132, 132, 137, 1),
     darkHighContrastColor: Color.fromRGBO(162, 162, 167, 1),
   );
+
+  static const CupertinoDynamicColor controlTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xD8000000),
+    darkColor: Color(0xFFFFFFFF), // TBD
+  );
+
+  static const toolbarIconColor = CupertinoDynamicColor.withBrightness(
+    color: Color.fromRGBO(0, 0, 0, 0.5),
+    darkColor: Color.fromRGBO(255, 255, 255, 0.5),
+  );
+
+  static const appleBlue = Color(0xff0433ff);
+  static const appleBrown = Color(0xffaa7942);
+  static const appleCyan = Color(0xff00fdff);
+  static const appleGreen = Color(0xff00f900);
+  static const appleMagenta = Color(0xffff40ff);
+  static const appleOrange = Color(0xffff9300);
+  static const applePurple = Color(0xff094219);
+  static const appleRed = Color(0xffff2600);
+  static const appleYellow = Color(0xfffffb00);
 }
 
 class AppKitMaterial {

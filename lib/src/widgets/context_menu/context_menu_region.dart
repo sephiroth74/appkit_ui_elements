@@ -33,7 +33,11 @@ class AppKitContextMenuRegion extends StatelessWidget {
   void _showMenu(BuildContext context, Offset mousePosition) async {
     final menu =
         contextMenu.copyWith(position: contextMenu.position ?? mousePosition);
-    final value = await showContextMenu(context, contextMenu: menu);
+    final value = await showContextMenu(
+      context,
+      contextMenu: menu,
+      enableWallpaperTinting: true,
+    );
     onItemSelected?.call(value);
   }
 }

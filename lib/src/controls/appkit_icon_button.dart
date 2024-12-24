@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class AppKitIconButton extends StatefulWidget {
   const AppKitIconButton({
@@ -119,13 +120,15 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitIconButtonTheme.of(context);
-    final iconTheme = AppKitTheme.of(context).iconTheme;
+    final iconTheme = AppKitIconTheme.of(context);
 
     final Color backgroundColor =
-        widget.backgroundColor ?? theme.backgroundColor!;
-    final Color hoverColor = widget.hoverColor ?? theme.hoverColor!;
+        widget.backgroundColor ?? theme.backgroundColor ?? Colors.transparent;
+    final Color hoverColor =
+        widget.hoverColor ?? theme.hoverColor ?? Colors.transparent;
     final Color? disabledColor = widget.disabledColor ?? theme.disabledColor;
-    final Color pressedColor = widget.pressedColor ?? theme.pressedColor!;
+    final Color pressedColor =
+        widget.pressedColor ?? theme.pressedColor ?? Colors.transparent;
     final Color? iconColor =
         (widget.color ?? iconTheme.color)?.multiplyOpacity(enabled ? 1.0 : 0.5);
 

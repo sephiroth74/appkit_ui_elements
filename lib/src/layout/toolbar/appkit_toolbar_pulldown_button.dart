@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart' hide BrightnessX;
 
 class AppKitToolBarPullDownButton<T> extends AppKitToolbarItem {
   const AppKitToolBarPullDownButton({
@@ -89,32 +88,31 @@ class AppKitToolBarPullDownButton<T> extends AppKitToolbarItem {
       return pulldownButton;
     } else {
       // // We should show a submenu for the pulldown button items.
-      final subMenuKey = GlobalKey<ToolbarPopupState>();
+      final subMenuKey = GlobalKey<AppKitToolbarPopupState>();
       List<AppKitToolbarOverflowMenuItem> subMenuItems = [];
       bool isSelected = false;
-      // // Convert the original pulldown menu items to toolbar overflow menu items.
-      // items?.forEach((element) {
-      //   if (element is MacosPulldownMenuItem) {
-      //     assert(element.label != null,
-      //         'When you use a MacosPulldownButton in the Toolbar, you must set the label property for all MacosPulldownMenuItems.');
-      //     subMenuItems.add(
-      //       AppKitToolbarOverflowMenuItem(
-      //         label: element.label!,
-      //         onPressed: () {
-      //           element.onTap?.call();
-      //           // Close the initial overflow menu as well.
-      //           Navigator.of(context).pop();
-      //         },
-      //       ),
-      //     );
-      //   }
-      // });
+      // Convert the original pulldown menu items to toolbar overflow menu items.
+      for (var element in items) {
+        if (element is AppKitContextMenuItem) {
+          final item = element as AppKitContextMenuItem;
+          subMenuItems.add(
+            AppKitToolbarOverflowMenuItem(
+              label: item.title,
+              onPressed: () {
+                item.onSelected?.call(item);
+                // Close the initial overflow menu as well.
+                Navigator.of(context).pop();
+              },
+            ),
+          );
+        }
+      }
       return StatefulBuilder(
         builder: (context, setState) {
-          return ToolbarPopup(
+          return AppKitToolbarPopup(
             key: subMenuKey,
             content: (context) => MouseRegion(
-              child: ToolbarOverflowMenu(children: subMenuItems),
+              child: AppKitToolbarOverflowMenu(children: subMenuItems),
               onExit: (e) {
                 // Moving the mouse cursor outside of the submenu should
                 // dismiss it.
@@ -124,8 +122,8 @@ class AppKitToolBarPullDownButton<T> extends AppKitToolbarItem {
             ),
             verticalOffset: 0.0,
             horizontalOffset: 0.0,
-            position: ToolbarPopupPosition.side,
-            placement: ToolbarPopupPlacement.start,
+            position: AppKitToolbarPopupPosition.side,
+            placement: AppKitToolbarPopupPlacement.start,
             child: MouseRegion(
               onHover: (e) {
                 subMenuKey.currentState

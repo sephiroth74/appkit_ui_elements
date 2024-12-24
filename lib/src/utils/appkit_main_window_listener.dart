@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:macos_window_utils/macos/ns_window_delegate.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MainWindowStreamBuilder extends StreamBuilder {

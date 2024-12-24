@@ -1,5 +1,4 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:macos_window_utils/macos/ns_visual_effect_view_material.dart';
 import 'package:macos_window_utils/widgets/visual_effect_subview_container/visual_effect_subview_container.dart';
 
 class AppKitWallpaperTintedArea extends StatelessWidget {
@@ -26,8 +25,6 @@ class AppKitWallpaperTintedArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-        'AppKitWallpaperTintedArea::build, insertRepaintBoundary: $insertRepaintBoundary');
     if (insertRepaintBoundary) {
       return RepaintBoundary(
         child: _WallpaperTintedAreaLayoutBuilder(
@@ -78,6 +75,8 @@ class _WallpaperTintedAreaLayoutBuilder extends StatelessWidget {
           child: AppKitWallpaperTintingSettingsBuilder(
             builder: (context, data) {
               final isWallpaperTintingEnabled = data.isWallpaperTintingEnabled;
+              debugPrint(
+                  'isWallpaperTintingEnabled: $isWallpaperTintingEnabled');
 
               return _WallpaperTintedAreaTweenAnimationBuilder(
                 isWallpaperTintingEnabled: isWallpaperTintingEnabled,

@@ -16,9 +16,14 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
   bool maintainState = false,
   AppKitContextMenuItem<T>? selectedItem,
   AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
+  bool enableWallpaperTinting = true,
 }) async {
   final menuState = AppKitContextMenuState<T>(
-      menu: contextMenu, focusedEntry: selectedItem, menuEdge: menuEdge);
+    menu: contextMenu,
+    focusedEntry: selectedItem,
+    menuEdge: menuEdge,
+    enableWallpaperTinting: enableWallpaperTinting,
+  );
   return await Navigator.push<AppKitContextMenuItem<T>>(
     context,
     PageRouteBuilder<AppKitContextMenuItem<T>>(

@@ -183,7 +183,7 @@ class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
         final accentColor = isMainWindow
             ? (widget.progressColor ??
                 sliderTheme.sliderColor ??
-                theme.accentColor ??
+                theme.primaryColor ??
                 colorContainer.controlAccentColor)
             : (sliderTheme.accentColorUnfocused ?? theme.accentColorUnfocused);
 

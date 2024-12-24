@@ -10,7 +10,10 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
     required this.borderRadius,
     required this.backgroundBlur,
     this.color,
+    this.enableWallpaperTinting = true,
   });
+
+  final bool enableWallpaperTinting;
 
   final double backgroundBlur;
 
@@ -30,6 +33,7 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppKitWallpaperTintingOverride(
+      enabled: enableWallpaperTinting,
       child: UiElementColorBuilder(builder: (context, colorContainer) {
         return Container(
           decoration: BoxDecoration(

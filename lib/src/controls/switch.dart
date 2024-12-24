@@ -343,7 +343,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
 
             final checkedColor = enabled
                 ? (widget.color ??
-                    theme.accentColor ??
+                    theme.primaryColor ??
                     colorContainer.controlAccentColor)
                 : uncheckedColor;
 

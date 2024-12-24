@@ -2,7 +2,7 @@ import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter/material.dart';
 
 const _kSize = 20.0;
 const _kSizeIconRatio = 0.65;
@@ -91,24 +91,22 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                 final color = widget.enabled
                     ? (widget.color ??
                         helpButtonTheme.color ??
-                        MacosColors.controlBackgroundColor)
+                        colorContainer.controlBackgroundColor)
                     : (widget.disabledColor ??
                         helpButtonTheme.disabledColor ??
-                        MacosColors.controlBackgroundColor.withOpacity(0.5));
+                        colorContainer.controlBackgroundColor.withOpacity(0.5));
 
                 final colorLuminance = color.computeLuminance();
 
-                Color iconColor = colorLuminance > 0.5
-                    ? MacosColors.controlTextColor.color
-                    : MacosColors.controlTextColor.darkColor;
+                Color iconColor = colorContainer.controlTextColor;
 
                 if (!widget.enabled) {
-                  iconColor = MacosColors.tertiaryLabelColor.color;
+                  iconColor = AppKitColors.text.opaque.tertiary.color;
                 }
 
                 final foregroundColor = colorLuminance > 0.5
-                    ? MacosColors.black.withOpacity(0.1)
-                    : MacosColors.white.withOpacity(0.2);
+                    ? Colors.black.withOpacity(0.1)
+                    : Colors.white.withOpacity(0.2);
 
                 return Container(
                   foregroundDecoration: buttonHeldDown
@@ -125,13 +123,13 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                               offset: const Offset(0, 0.25),
                               blurRadius: 1.5,
                               spreadRadius: 0,
-                              color: MacosColors.black.withOpacity(0.3)),
+                              color: Colors.black.withOpacity(0.3)),
                           BoxShadow(
                               blurStyle: BlurStyle.outer,
                               offset: const Offset(0, 0),
                               blurRadius: 0,
                               spreadRadius: 0.5,
-                              color: MacosColors.black.withOpacity(0.05))
+                              color: Colors.black.withOpacity(0.05))
                         ]),
                     child: Align(
                       alignment: Alignment.center,

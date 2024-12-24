@@ -2,7 +2,6 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class SegmentedControlsPage extends StatefulWidget {
   const SegmentedControlsPage({super.key});
@@ -24,13 +23,13 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Indicators'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             return Container(
               color: const Color(0xFFf0efef),

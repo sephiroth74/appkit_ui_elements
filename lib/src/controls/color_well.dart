@@ -54,7 +54,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
 
   Stream<Color?> get onColorChanged {
     _onColorChanged ??=
-        AppkitUiElementsPlatform.instance.listenForColorChange(widget.uuid);
+        AppKitUiElementsPlatform.instance.listenForColorChange(widget.uuid);
     return _onColorChanged!;
   }
 
@@ -106,7 +106,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     });
 
     try {
-      await AppkitUiElementsPlatform.instance.colorPicker(
+      await AppKitUiElementsPlatform.instance.colorPicker(
         mode: mode,
         uuid: widget.uuid,
         withAlpha: withAlpha,
@@ -186,7 +186,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
 
     final theme = AppKitTheme.of(context);
     Color selectedColor =
-        _selectedColor ?? theme.accentColor ?? AppKitColors.systemBlue;
+        _selectedColor ?? theme.primaryColor ?? AppKitColors.systemBlue;
 
     if (!enabled) {
       selectedColor = selectedColor.withOpacity(selectedColor.opacity * 0.5);

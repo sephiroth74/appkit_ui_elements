@@ -223,14 +223,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.0"
-  macos_ui:
-    dependency: "direct main"
-    description:
-      name: macos_ui
-      sha256: "80f6539aba5a3a1182d5225a6c27969a780bcb1d2d8135b4ffb708570cf0c854"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.9"
   macos_window_utils:
     dependency: transitive
     description:

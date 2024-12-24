@@ -3,7 +3,6 @@ import 'package:example/theme.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
 class ControlsPage extends StatefulWidget {
@@ -92,13 +91,13 @@ class _ControlsPageState extends State<ControlsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: const ToolBar(
+    return AppKitScaffold(
+      toolBar: const AppKitToolBar(
         title: Text('Controls'),
         titleWidth: 200,
       ),
       children: [
-        ContentArea(
+        AppKitContentArea(
           builder: (context, ScrollController scrollController) {
             return SingleChildScrollView(
               controller: scrollController,
@@ -133,7 +132,7 @@ class _ControlsPageState extends State<ControlsPage> {
                           AppKitSwitch(
                               size: AppKitControlSize.small,
                               checked: switchValue1,
-                              color: MacosColors.systemOrangeColor,
+                              color: AppKitColors.systemOrange,
                               onChanged: (value) {
                                 setState(() => switchValue1 = value);
                               }),
@@ -169,7 +168,7 @@ class _ControlsPageState extends State<ControlsPage> {
                           ),
                           const SizedBox(width: 16.0),
                           AppKitCheckbox(
-                            color: MacosColors.systemOrangeColor,
+                            color: AppKitColors.systemOrange,
                             value: checkboxValue1,
                             onChanged: (value) {
                               setState(() {
@@ -290,7 +289,7 @@ class _ControlsPageState extends State<ControlsPage> {
                               Row(
                                 children: [
                                   AppKitRadioButton<bool>(
-                                    color: MacosColors.systemOrangeColor,
+                                    color: AppKitColors.systemOrange,
                                     groupValue: radioButtonValue2,
                                     value: true,
                                     onChanged: (value) {
@@ -376,7 +375,7 @@ class _ControlsPageState extends State<ControlsPage> {
                           ),
                           const SizedBox(width: 16.0),
                           AppKitHelpButton(
-                            color: MacosColors.appleBlue,
+                            color: AppKitColors.systemBlue,
                             onPressed: () {},
                           ),
                           const SizedBox(width: 16.0),
@@ -396,7 +395,7 @@ class _ControlsPageState extends State<ControlsPage> {
                           ),
                           const SizedBox(width: 16.0),
                           AppKitArrowButton(
-                            color: MacosColors.systemOrangeColor,
+                            color: AppKitColors.systemOrange,
                             onPressed: () {},
                           ),
                           const SizedBox(width: 16.0),

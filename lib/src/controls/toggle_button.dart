@@ -236,7 +236,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
               constraints: _getButtonConstraints(theme: buttonTheme),
               child: UiElementColorBuilder(builder: (context, colorContainer) {
                 final Color accentColor = widget.color ??
-                    theme.accentColor ??
+                    theme.primaryColor ??
                     colorContainer.controlAccentColor;
                 final isMainWindow =
                     MainWindowStateListener.instance.isMainWindow.value;

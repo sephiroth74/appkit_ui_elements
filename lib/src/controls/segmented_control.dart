@@ -3,7 +3,6 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class AppKitSegmentedControl extends StatefulWidget {
   final AppKitSegmentedController controller;
@@ -109,7 +108,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
     return UiElementColorBuilder(
       builder: (context, colorContainer) {
         final accentColor = widget.color ??
-            theme.accentColor ??
+            theme.primaryColor ??
             colorContainer.controlAccentColor;
         final backgroundColor = multiSelectionStyle
             ? colorContainer.controlBackgroundColor
@@ -289,14 +288,14 @@ class _MultipleSegmentedChild extends StatelessWidget {
               : const BoxDecoration(),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: isDown ? MacosColors.black.withOpacity(0.1) : null,
+              color: isDown ? Colors.black.withOpacity(0.1) : null,
               gradient: isDown
                   ? null
                   : isSelected
                       ? LinearGradient(
                           colors: [
-                              MacosColors.white.withOpacity(0.17),
-                              MacosColors.white.withOpacity(0.0),
+                              Colors.white.withOpacity(0.17),
+                              Colors.white.withOpacity(0.0),
                             ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter)
@@ -423,7 +422,7 @@ class _SingleSegmentedChild extends StatelessWidget {
                 : const BoxDecoration(),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: isDown ? MacosColors.black.withOpacity(0.035) : null,
+                color: isDown ? Colors.black.withOpacity(0.035) : null,
                 borderRadius: (!isDown || !isSelected)
                     ? null
                     : BorderRadius.circular(borderRadius),

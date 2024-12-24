@@ -1,8 +1,8 @@
 import 'dart:ui' as ui;
 
-import 'package:appkit_ui_elements/src/theme/library.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
-import 'package:macos_ui/src/library.dart';
+import 'package:flutter/material.dart';
 
 class AppKitIconTheme extends InheritedTheme {
   const AppKitIconTheme({
@@ -10,6 +10,40 @@ class AppKitIconTheme extends InheritedTheme {
     required this.data,
     required super.child,
   });
+
+  factory AppKitIconTheme.toolbar(BuildContext context,
+      {required IconData icon,
+      bool showLabel = false,
+      VoidCallback? onPressed}) {
+    return AppKitIconTheme(
+      data: AppKitIconThemeData(
+        size: showLabel ? 16.0 : 20.0,
+        color: AppKitColors.systemCyan.color,
+      ),
+      child: AppKitIconButton(
+        icon: icon,
+        padding: showLabel
+            ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
+            : const EdgeInsets.all(5),
+        disabledColor: Colors.transparent,
+        color: AppKitColors.toolbarIconColor.resolveFrom(context),
+        onPressed: onPressed,
+        boxConstraints: showLabel
+            ? const BoxConstraints(
+                minHeight: 19,
+                minWidth: 35,
+                maxWidth: 35,
+                maxHeight: 22,
+              )
+            : const BoxConstraints(
+                minHeight: 19,
+                minWidth: 15,
+                maxWidth: 35,
+                maxHeight: 28,
+              ),
+      ),
+    );
+  }
 
   static Widget merge({
     Key? key,

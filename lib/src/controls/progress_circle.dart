@@ -65,7 +65,7 @@ class AppKitProgressCircle extends StatelessWidget {
         final color = isMainWindow
             ? (this.color ??
                 progressTheme.color ??
-                theme.accentColor ??
+                theme.primaryColor ??
                 colorContainer.controlAccentColor)
             : (progressTheme.accentColorUnfocused ?? const Color(0xFFbababa));
         final trackColor = this.trackColor ?? progressTheme.trackColor;

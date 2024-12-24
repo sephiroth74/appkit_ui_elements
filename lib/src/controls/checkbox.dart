@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 const _kSize = 14.0;
 const _kCornerRadiusRatio = 4.0;
@@ -98,7 +97,7 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
         child: UiElementColorBuilder(
           builder: (context, colorContainer) {
             final Color accentColor = widget.color ??
-                theme.accentColor ??
+                theme.primaryColor ??
                 colorContainer.controlAccentColor;
             final isMainWindow =
                 MainWindowStateListener.instance.isMainWindow.value;
@@ -180,9 +179,9 @@ class _DecoratedContainer extends StatelessWidget {
     final shadowSpread = size / _kBoxShadowSpreadRatio;
     final iconColor = enabled
         ? color.computeLuminance() > 0.5
-            ? MacosColors.black
-            : MacosColors.white
-        : MacosColors.tertiaryLabelColor;
+            ? Colors.black
+            : Colors.white
+        : AppKitColors.text.opaque.tertiary.resolveFrom(context);
 
     return Container(
       foregroundDecoration:
@@ -198,7 +197,7 @@ class _DecoratedContainer extends StatelessWidget {
           boxShadow: [
             if (value == false || !isMainWindow && enabled) ...[
               BoxShadow(
-                color: MacosColors.black.withOpacity(0.1),
+                color: Colors.black.withOpacity(0.1),
               ),
               BoxShadow(
                 color: colorContainer.controlBackgroundColor

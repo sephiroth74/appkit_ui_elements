@@ -124,7 +124,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
       onTap: () => enabled ? handleItemSelection(context) : null,
       child: UiElementColorBuilder(builder: (context, colorContainer) {
         final accentColor =
-            theme.accentColor ?? colorContainer.controlAccentColor;
+            theme.primaryColor ?? colorContainer.controlAccentColor;
 
         final isSelectionAnimating = menuState.isSelectionAnimating &&
             menuState.focusedEntry == this &&

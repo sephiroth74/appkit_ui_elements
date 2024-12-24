@@ -1,17 +1,21 @@
+import 'dart:async';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:flutter/services.dart';
 
 import 'appkit_ui_elements_platform_interface.dart';
 
-/// An implementation of [AppkitUiElementsPlatform] that uses method channels.
-class MethodChannelAppkitUiElements extends AppkitUiElementsPlatform {
+/// An implementation of [AppKitUiElementsPlatform] that uses method channels.
+class MethodChannelAppkitUiElements extends AppKitUiElementsPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
+  @protected
   final methodChannel =
       const MethodChannel('dev.sephiroth74.appkit_ui_elements');
 
   @visibleForTesting
+  @protected
   final eventChannel =
       const EventChannel('dev.sephiroth74.appkit_ui_elements/color_picker');
 

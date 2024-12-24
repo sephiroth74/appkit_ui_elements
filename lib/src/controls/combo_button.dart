@@ -114,6 +114,7 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
           transitionDuration: kContextMenuTrasitionDuration,
           barrierDismissible: true,
           opaque: false,
+          enableWallpaperTinting: false,
         );
 
         isContextMenuOpened = false;
