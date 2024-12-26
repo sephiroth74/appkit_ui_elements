@@ -98,10 +98,21 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    debugPrint('[$this] initialized');
+  }
+
+  @override
+  void dispose() {
+    debugPrint('[$this] disposed');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final scope = AppKitWindowScope.maybeOf(context);
     final AppKitThemeData theme = AppKitTheme.of(context);
-    final brightness = AppKitTheme.of(context).brightness;
     Color dividerColor = widget.dividerColor ?? theme.dividerColor;
     final route = ModalRoute.of(context);
     double overflowBreakpoint = 0.0;
@@ -119,10 +130,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
             child: AppKitIconButton(
               padding: const EdgeInsets.all(5),
               disabledColor: Colors.transparent,
-              color: brightness.resolve(
-                const Color.fromRGBO(0, 0, 0, 0.5),
-                const Color.fromRGBO(255, 255, 255, 0.5),
-              ),
+              color: AppKitColors.toolbarIconColor.resolveFrom(context),
               icon: CupertinoIcons.back,
               onPressed: () => Navigator.maybePop(context),
             ),
@@ -171,16 +179,14 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
       }
     }
 
-    final isMacOS = defaultTargetPlatform == TargetPlatform.macOS;
-
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(
-        padding: EdgeInsets.only(
-          left: !kIsWeb && isMacOS ? 70 : 0,
+        padding: const EdgeInsets.only(
+          left: 70,
         ),
       ),
       child: _WallpaperTintedAreaOrBlurFilter(
-        enableWallpaperTintedArea: kIsWeb ? false : !widget.enableBlur,
+        enableWallpaperTintedArea: !widget.enableBlur,
         isWidgetVisible: widget.allowWallpaperTintingOverrides,
         backgroundColor: theme.canvasColor,
         widgetOpacity: widget.decoration?.color?.opacity,
@@ -203,16 +209,17 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
             trailing: AppKitOverflowHandler(
               overflowBreakpoint: overflowBreakpoint,
               overflowWidget: AppKitToolbarOverflowButton(
-                isDense: doAllItemsShowLabel,
-                overflowContentBuilder: (context) => AppKitToolbarOverflowMenu(
-                  children: overflowedActions
-                      .map((action) => action.build(
-                            context,
-                            AppKitToolbarItemDisplayMode.overflowed,
-                          ))
-                      .toList(),
-                ),
-              ),
+                  isDense: doAllItemsShowLabel,
+                  overflowContentBuilder: (context) {
+                    return AppKitToolbarOverflowMenu(
+                      children: overflowedActions
+                          .map((action) => action.build(
+                                context,
+                                AppKitToolbarItemDisplayMode.overflowed,
+                              ))
+                          .toList(),
+                    );
+                  }),
               children: inToolbarActions
                   .map(
                     (e) => e.build(

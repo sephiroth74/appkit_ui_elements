@@ -19,7 +19,6 @@ class AppKitToolbarOverflowMenu extends StatelessWidget {
       explicitChildNodes: true,
       child: IntrinsicWidth(
         child: AppKitOverlayFilterWidget(
-          enableWallpaperTinting: false,
           backgroundBlur: theme.backgroundBlur,
           color: theme.backgroundColor,
           borderRadius: _kBorderRadius,

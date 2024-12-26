@@ -228,6 +228,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
   }
 
   void _handleTap() async {
+    if (!mounted) return;
     final itemRect = context.getWidgetBounds();
     if (null != itemRect && widget.menuBuilder != null) {
       final menu = _contextMenu.copyWith(
@@ -250,6 +251,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
         enableWallpaperTinting: false,
       );
 
+      if (!mounted) return;
       setState(() {
         _isMenuOpened = false;
       });

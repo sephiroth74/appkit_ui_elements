@@ -87,7 +87,52 @@ class _ToolbarPageState extends State<ToolbarPage> {
               debugPrint('onPressed: Print');
             },
           ),
-          const AppKitToolBarSpacer(),
+          AppKitToolBarIconButton(
+            label: 'Airplane',
+            icon: CupertinoIcons.airplane,
+            showLabel: true,
+            onPressed: () {
+              debugPrint('onPressed: Airplane');
+            },
+          ),
+          const AppKitToolBarDivider(),
+          AppKitToolBarIconButton(
+            label: 'Share',
+            icon: CupertinoIcons.share,
+            showLabel: true,
+            onPressed: () {
+              debugPrint('onPressed: Share');
+            },
+          ),
+          AppKitToolBarPullDownButton(
+            label: 'Other',
+            icon: CupertinoIcons.ellipsis_vertical,
+            tooltipMessage: 'Perform tasks with the selected items',
+            items: [
+              const AppKitContextMenuItem(title: 'New Folder'),
+              const AppKitContextMenuItem(title: 'Open'),
+              const AppKitContextMenuItem(title: 'Open with...'),
+              const AppKitContextMenuItem(title: 'Import from iPhone...'),
+              const AppKitContextMenuDivider(),
+              const AppKitContextMenuItem(title: 'Remove'),
+              const AppKitContextMenuItem(title: 'Move to Bin'),
+              const AppKitContextMenuDivider(),
+              const AppKitContextMenuItem(title: 'Tags...'),
+            ],
+            onItemSelected: (item) {
+              debugPrint('onItemSelected: ${item?.title}');
+            },
+          ),
+          const AppKitToolBarDivider(),
+          AppKitToolBarIconButton(
+            label: 'Right Sidebar',
+            icon: CupertinoIcons.sidebar_right,
+            tooltipMessage: 'Toggle right sidebar',
+            showLabel: false,
+            onPressed: () {
+              debugPrint('onPressed: Share');
+            },
+          ),
         ],
       ),
       children: [

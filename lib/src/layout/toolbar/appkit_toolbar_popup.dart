@@ -75,6 +75,8 @@ class AppKitToolbarPopupState<T> extends State<AppKitToolbarPopup<T>> {
   _ToolbarPopupRoute<T>? _dropdownRoute;
 
   Future<void> openPopup() {
+    debugPrint('openPopup');
+
     assert(_dropdownRoute == null, 'You can not open a popup twice.');
     final NavigatorState navigator = Navigator.of(context);
     final RenderBox itemBox = context.findRenderObject()! as RenderBox;
@@ -134,6 +136,7 @@ class AppKitToolbarPopupState<T> extends State<AppKitToolbarPopup<T>> {
     }();
 
     final Rect itemRect = directionalityTarget & itemBox.size;
+
     _dropdownRoute = _ToolbarPopupRoute<T>(
       target: directionalityTarget,
       placementOffset: directionalityTarget,
@@ -151,6 +154,7 @@ class AppKitToolbarPopupState<T> extends State<AppKitToolbarPopup<T>> {
       horizontalOffset: widget.horizontalOffset,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     );
+
     return navigator.push(_dropdownRoute!).then((T? newValue) {
       removeToolbarPopupRoute();
       if (!mounted || newValue == null) return;
@@ -160,13 +164,23 @@ class AppKitToolbarPopupState<T> extends State<AppKitToolbarPopup<T>> {
   bool get isOpen => _dropdownRoute != null;
 
   void removeToolbarPopupRoute() {
+    debugPrint('removeToolbarPopupRoute');
     _dropdownRoute?._dismiss();
     _dropdownRoute = null;
   }
 
   @override
+  void initState() {
+    super.initState();
+    debugPrint('[$this] initialized');
+  }
+
+  @override
   void dispose() {
-    removeToolbarPopupRoute();
+    debugPrint('[$this] disposed');
+    if (_dropdownRoute != null) {
+      removeToolbarPopupRoute();
+    }
     super.dispose();
   }
 
@@ -353,6 +367,7 @@ class _ToolbarPopupRoute<T> extends PopupRoute<T> {
   }
 
   void _dismiss() {
+    debugPrint('_dismiss');
     if (isActive) {
       navigator?.removeRoute(this);
     }

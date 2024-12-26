@@ -153,7 +153,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     isMainWindow ??= true;
     canvasColor ??= isDark
         ? const Color.fromRGBO(40, 40, 40, 1.0)
-        : const Color.fromRGBO(206, 246, 246, 1.0); // 0xFFECECEC
+        : const Color.fromRGBO(246, 246, 246, 1.0); // 0xFFECECEC
     typography ??=
         isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
 

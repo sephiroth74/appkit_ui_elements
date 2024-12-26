@@ -75,9 +75,6 @@ class _WallpaperTintedAreaLayoutBuilder extends StatelessWidget {
           child: AppKitWallpaperTintingSettingsBuilder(
             builder: (context, data) {
               final isWallpaperTintingEnabled = data.isWallpaperTintingEnabled;
-              debugPrint(
-                  'isWallpaperTintingEnabled: $isWallpaperTintingEnabled');
-
               return _WallpaperTintedAreaTweenAnimationBuilder(
                 isWallpaperTintingEnabled: isWallpaperTintingEnabled,
                 backgroundColor: backgroundColor,
