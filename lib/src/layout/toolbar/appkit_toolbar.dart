@@ -4,6 +4,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 const _kToolbarHeight = 52.0;
 
@@ -100,12 +101,12 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   @override
   void initState() {
     super.initState();
-    debugPrint('[$this] initialized');
+    // debugPrint('[$this] initialized');
   }
 
   @override
   void dispose() {
-    debugPrint('[$this] disposed');
+    // debugPrint('[$this] disposed');
     super.dispose();
   }
 
@@ -168,6 +169,11 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
       overflowedActions = inToolbarActions
           .sublist(inToolbarActions.length - overflowedActionsCount)
           .toList();
+
+      if (overflowedActions.firstOrNull is AppKitToolBarDivider) {
+        overflowedActions.removeAt(0);
+      }
+
       // If all toolbar actions have labels shown below their icons,
       // reduce the overflow button's size as well.
       for (AppKitToolbarItem item in widget.actions!) {
@@ -211,19 +217,24 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
               overflowWidget: AppKitToolbarOverflowButton(
                   isDense: doAllItemsShowLabel,
                   overflowContentBuilder: (context) {
-                    return AppKitToolbarOverflowMenu(
-                      children: overflowedActions
-                          .map((action) => action.build(
-                                context,
-                                AppKitToolbarItemDisplayMode.overflowed,
-                              ))
-                          .toList(),
-                    );
+                    return AppKitContextMenu(
+                        entries: overflowedActions
+                            .map((action) => action.toContextMenuEntry(context))
+                            .whereNotNull()
+                            .toList());
+
+                    // return AppKitToolbarOverflowMenu(
+                    //   children: overflowedActions
+                    //       .map((action) => action.build(
+                    //             context,
+                    //             AppKitToolbarItemDisplayMode.overflowed,
+                    //           ))
+                    //       .toList(),
+                    // );
                   }),
               children: inToolbarActions
                   .map(
-                    (e) => e.build(
-                        context, AppKitToolbarItemDisplayMode.inToolbar),
+                    (e) => e.build(context),
                   )
                   .toList(),
               overflowChangedCallback: (hiddenItems) {
@@ -245,17 +256,14 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   }
 }
 
-enum AppKitToolbarItemDisplayMode {
-  inToolbar,
-  overflowed,
-}
-
 abstract class AppKitToolbarItem with Diagnosticable {
   const AppKitToolbarItem({required this.key});
 
   final Key? key;
 
-  Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode);
+  Widget build(BuildContext context);
+
+  AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context);
 }
 
 class _WallpaperTintedAreaOrBlurFilter extends StatelessWidget {

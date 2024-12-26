@@ -11,13 +11,14 @@ class AppKitToolBarSpacer extends AppKitToolbarItem {
   final double spacerUnits;
 
   @override
-  Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
-    if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      return SizedBox(
-        width: spacerUnits * _kToolbarItemWidth,
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: spacerUnits * _kToolbarItemWidth,
+    );
+  }
+
+  @override
+  AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
+    return null;
   }
 }

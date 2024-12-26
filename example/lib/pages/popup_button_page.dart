@@ -59,18 +59,38 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
             const AppKitContextMenuItem(
                 title: 'Select None', value: 3, enabled: true),
             const AppKitContextMenuDivider(),
-            const AppKitContextMenuItem(
+            AppKitContextMenuItem(
                 title: 'Other...',
                 value: 6,
                 enabled: true,
                 items: [
                   AppKitContextMenuItem(
-                      title: 'Submenu Item 1', value: 7, enabled: true),
-                  AppKitContextMenuItem(
-                      title: 'Submenu Item 2', value: 8, enabled: true),
-                  AppKitContextMenuDivider(),
-                  AppKitContextMenuItem(
-                      title: 'Submenu Item 3', value: 9, enabled: false),
+                    title: 'Submenu Item 1',
+                    value: 7,
+                    enabled: true,
+                    onPressed: (value) {
+                      debugPrint('Selected: ${value.title}');
+                    },
+                  ),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 2', value: 12, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 3', value: 13, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 4', value: 14, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 5', value: 15, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 6', value: 16, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 7', value: 17, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 8', value: 18, enabled: true),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 9', value: 19, enabled: true),
+                  const AppKitContextMenuDivider(),
+                  const AppKitContextMenuItem(
+                      title: 'Submenu Item 10', value: 20, enabled: false),
                 ]),
           ],
         );
@@ -174,7 +194,9 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                           AppKitMenuImageAlignment.leading,
                                       icon: Icons.open_in_new,
                                       width: popupButtonWidth,
-                                      onItemSelected: (value) {},
+                                      onItemSelected: (value) {
+                                        debugPrint('onItemSelected: $value');
+                                      },
                                       menuBuilder: pullDownMenuBuilder,
                                       style: style,
                                     ),

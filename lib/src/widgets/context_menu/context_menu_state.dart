@@ -206,6 +206,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
         menu: menu.copyWith(
           entries: items,
           position: submenuPosition,
+          size: Size.infinite,
         ),
         spawnAlignmen: spawnAlignment,
         parentItemRect: submenuParentRect,
@@ -254,8 +255,12 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   /// Closes the context menu and removes the overlay.
   void close() {
+    try {
+      focusScopeNode.dispose();
+    } catch (e) {
+      debugPrint('[$this] error: $e');
+    }
     closeSubmenu();
-    focusScopeNode.dispose();
   }
 
   @override

@@ -9,24 +9,17 @@ class AppKitToolBarDivider extends AppKitToolbarItem {
   final EdgeInsets? padding;
 
   @override
-  Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
+  Widget build(BuildContext context) {
     final color = AppKitTheme.of(context).dividerColor;
 
-    if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      return SizedBox(
-          width: (padding?.horizontal ?? 0) + 1,
-          height: 28,
-          child: Padding(padding: padding!, child: Container(color: color)));
-    } else {
-      return SizedBox(
-        height: 1,
-        child: Padding(
-          padding: padding!,
-          child: Container(
-            color: color,
-          ),
-        ),
-      );
-    }
+    return SizedBox(
+        width: (padding?.horizontal ?? 0) + 1,
+        height: 28,
+        child: Padding(padding: padding!, child: Container(color: color)));
+  }
+
+  @override
+  AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
+    return const AppKitContextMenuDivider();
   }
 }

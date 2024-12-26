@@ -9,6 +9,7 @@ const kContextMenuTrasitionDuration = Duration(milliseconds: 200);
 
 typedef ContextMenuBuilder<T> = AppKitContextMenu<T> Function(
     BuildContext context);
+
 typedef SelectedItemBuilder<T> = Widget Function(
     BuildContext context, AppKitContextMenuItem<T>? value);
 

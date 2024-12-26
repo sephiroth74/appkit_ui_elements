@@ -164,7 +164,6 @@ class AppKitToolbarPopupState<T> extends State<AppKitToolbarPopup<T>> {
   bool get isOpen => _dropdownRoute != null;
 
   void removeToolbarPopupRoute() {
-    debugPrint('removeToolbarPopupRoute');
     _dropdownRoute?._dismiss();
     _dropdownRoute = null;
   }
@@ -172,12 +171,11 @@ class AppKitToolbarPopupState<T> extends State<AppKitToolbarPopup<T>> {
   @override
   void initState() {
     super.initState();
-    debugPrint('[$this] initialized');
   }
 
   @override
   void dispose() {
-    debugPrint('[$this] disposed');
+    // debugPrint('[$this] disposed');
     if (_dropdownRoute != null) {
       removeToolbarPopupRoute();
     }
@@ -367,7 +365,6 @@ class _ToolbarPopupRoute<T> extends PopupRoute<T> {
   }
 
   void _dismiss() {
-    debugPrint('_dismiss');
     if (isActive) {
       navigator?.removeRoute(this);
     }

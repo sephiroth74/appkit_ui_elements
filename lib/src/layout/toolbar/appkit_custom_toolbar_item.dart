@@ -15,20 +15,19 @@ class AppKitCustomToolbarItem extends AppKitToolbarItem {
   final String? tooltipMessage;
 
   @override
-  Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
-    if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      Widget widget = inToolbarBuilder(context);
-      if (tooltipMessage != null) {
-        widget = AppKitTooltip.plain(
-          message: tooltipMessage!,
-          child: widget,
-        );
-      }
-      return widget;
-    } else {
-      return (inOverflowedBuilder != null)
-          ? inOverflowedBuilder!(context)
-          : const SizedBox.shrink();
+  Widget build(BuildContext context) {
+    Widget widget = inToolbarBuilder(context);
+    if (tooltipMessage != null) {
+      widget = AppKitTooltip.plain(
+        message: tooltipMessage!,
+        child: widget,
+      );
     }
+    return widget;
+  }
+
+  @override
+  AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
+    throw UnimplementedError("Not implemented");
   }
 }

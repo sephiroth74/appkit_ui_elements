@@ -64,19 +64,32 @@ class _ToolbarPageState extends State<ToolbarPage> {
             icon: CupertinoIcons.ellipsis_circle,
             tooltipMessage: 'Perform tasks with the selected items',
             items: [
-              const AppKitContextMenuItem(title: 'New Folder'),
-              const AppKitContextMenuItem(title: 'Open'),
-              const AppKitContextMenuItem(title: 'Open with...'),
-              const AppKitContextMenuItem(title: 'Import from iPhone...'),
+              AppKitContextMenuItem(
+                  title: 'New Folder',
+                  onPressed: (value) => debugPrint('onPressed: $value')),
+              AppKitContextMenuItem(
+                  title: 'Open',
+                  onPressed: (value) => debugPrint('onPressed: $value')),
+              AppKitContextMenuItem(
+                title: 'Open with...',
+                onPressed: (value) =>
+                    debugPrint('[toolbar_page] Selected: $value'),
+              ),
+              AppKitContextMenuItem(
+                  title: 'Import from iPhone...',
+                  onPressed: (value) => debugPrint('onPressed: $value')),
               const AppKitContextMenuDivider(),
-              const AppKitContextMenuItem(title: 'Remove'),
-              const AppKitContextMenuItem(title: 'Move to Bin'),
+              AppKitContextMenuItem(
+                  title: 'Remove',
+                  onPressed: (value) => debugPrint('onPressed: $value')),
+              AppKitContextMenuItem(
+                  title: 'Move to Bin',
+                  onPressed: (value) => debugPrint('onPressed: $value')),
               const AppKitContextMenuDivider(),
-              const AppKitContextMenuItem(title: 'Tags...'),
+              AppKitContextMenuItem(
+                  title: 'Tags...',
+                  onPressed: (value) => debugPrint('onPressed: $value')),
             ],
-            onItemSelected: (item) {
-              debugPrint('onItemSelected: ${item?.title}');
-            },
           ),
           const AppKitToolBarDivider(),
           AppKitToolBarIconButton(
@@ -109,19 +122,16 @@ class _ToolbarPageState extends State<ToolbarPage> {
             icon: CupertinoIcons.ellipsis_vertical,
             tooltipMessage: 'Perform tasks with the selected items',
             items: [
-              const AppKitContextMenuItem(title: 'New Folder'),
-              const AppKitContextMenuItem(title: 'Open'),
-              const AppKitContextMenuItem(title: 'Open with...'),
-              const AppKitContextMenuItem(title: 'Import from iPhone...'),
+              AppKitContextMenuItem(
+                  title: 'Action 1', onPressed: (_) => debugPrint('Action 1')),
+              AppKitContextMenuItem(
+                  title: 'Action 2', onPressed: (_) => debugPrint('Action 2')),
+              AppKitContextMenuItem(
+                  title: 'Action 3', onPressed: (_) => debugPrint('Action 3')),
               const AppKitContextMenuDivider(),
-              const AppKitContextMenuItem(title: 'Remove'),
-              const AppKitContextMenuItem(title: 'Move to Bin'),
-              const AppKitContextMenuDivider(),
-              const AppKitContextMenuItem(title: 'Tags...'),
+              AppKitContextMenuItem(
+                  title: 'Action 4', onPressed: (_) => debugPrint('Action 4')),
             ],
-            onItemSelected: (item) {
-              debugPrint('onItemSelected: ${item?.title}');
-            },
           ),
           const AppKitToolBarDivider(),
           AppKitToolBarIconButton(
@@ -130,7 +140,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
             tooltipMessage: 'Toggle right sidebar',
             showLabel: false,
             onPressed: () {
-              debugPrint('onPressed: Share');
+              debugPrint('onPressed: Right Sidebar');
             },
           ),
         ],

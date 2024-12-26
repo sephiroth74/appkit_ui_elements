@@ -17,44 +17,47 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
   final String? tooltipMessage;
 
   @override
-  Widget build(BuildContext context, AppKitToolbarItemDisplayMode displayMode) {
-    if (displayMode == AppKitToolbarItemDisplayMode.inToolbar) {
-      Widget iconButton = AppKitIconTheme.toolbar(context,
-          showLabel: showLabel, icon: icon, onPressed: onPressed);
+  Widget build(BuildContext context) {
+    Widget iconButton = AppKitIconTheme.toolbar(context,
+        showLabel: showLabel, icon: icon, onPressed: onPressed);
 
-      if (showLabel) {
-        iconButton = Padding(
-          padding: const EdgeInsets.only(left: 6.0, top: 6.0, right: 6.0),
-          child: Column(
-            children: [
-              iconButton,
-              Padding(
-                padding: const EdgeInsets.only(top: 3.0),
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11.0,
-                    color: AppKitColors.text.opaque.secondary,
-                  ),
+    if (showLabel) {
+      iconButton = Padding(
+        padding: const EdgeInsets.only(left: 6.0, top: 6.0, right: 6.0),
+        child: Column(
+          children: [
+            iconButton,
+            Padding(
+              padding: const EdgeInsets.only(top: 3.0),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11.0,
+                  color: AppKitColors.text.opaque.secondary,
                 ),
               ),
-            ],
-          ),
-        );
-      }
-
-      if (tooltipMessage != null) {
-        iconButton = AppKitTooltip.plain(
-          message: tooltipMessage!,
-          child: iconButton,
-        );
-      }
-      return iconButton;
-    } else {
-      return AppKitToolbarOverflowMenuItem(
-        label: label,
-        onPressed: onPressed,
+            ),
+          ],
+        ),
       );
     }
+
+    if (tooltipMessage != null) {
+      iconButton = AppKitTooltip.plain(
+        message: tooltipMessage!,
+        child: iconButton,
+      );
+    }
+    return iconButton;
+  }
+
+  @override
+  AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
+    return AppKitContextMenuItem(
+      title: label,
+      value: label,
+      image: icon,
+      onPressed: (value) => onPressed?.call(),
+    );
   }
 }

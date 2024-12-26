@@ -23,7 +23,7 @@ class MainWindowBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainWindowStreamBuilder(builder: (context, snapshot) {
-      final isMainWindow = snapshot.hasData ? snapshot.data as bool : false;
+      final isMainWindow = snapshot.hasData ? snapshot.data as bool : true;
       return builder(context, isMainWindow);
     });
   }

@@ -56,7 +56,7 @@ class _FieldsPageState extends State<FieldsPage> {
               title: 'Clear',
               value: null,
               enabled: true,
-              onSelected: (value) {
+              onPressed: (value) {
                 _searchResults.clear();
                 textFieldController.clear();
               },

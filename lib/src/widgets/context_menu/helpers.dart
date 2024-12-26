@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/scheduler.dart';
 
 /// Shows the root context menu popup.
 Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
@@ -24,9 +25,10 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
     menuEdge: menuEdge,
     enableWallpaperTinting: enableWallpaperTinting,
   );
+
   return await Navigator.push<AppKitContextMenuItem<T>>(
     context,
-    PageRouteBuilder<AppKitContextMenuItem<T>>(
+    _AppKitContextMenuPageRoute<AppKitContextMenuItem<T>>(
       pageBuilder: (context, animation, secondaryAnimation) {
         return Stack(
           children: [
@@ -55,4 +57,58 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
 Widget _defaultTransitionsBuilder(
     context, animation, secondaryAnimation, child) {
   return child;
+}
+
+class _AppKitContextMenuPageRoute<T> extends PageRoute<T> {
+  @override
+  final Color? barrierColor;
+
+  @override
+  final String? barrierLabel;
+
+  final RouteTransitionsBuilder? transitionsBuilder;
+
+  @override
+  final Duration transitionDuration;
+
+  @override
+  final Duration reverseTransitionDuration;
+
+  @override
+  final bool opaque;
+
+  @override
+  final bool maintainState;
+
+  final RoutePageBuilder pageBuilder;
+
+  _AppKitContextMenuPageRoute({
+    super.settings,
+    super.fullscreenDialog,
+    super.allowSnapshotting = true,
+    super.barrierDismissible = false,
+    required this.barrierColor,
+    required this.barrierLabel,
+    required this.transitionsBuilder,
+    required this.transitionDuration,
+    required this.reverseTransitionDuration,
+    required this.opaque,
+    required this.maintainState,
+    required this.pageBuilder,
+  });
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return MainWindowBuilder(builder: (context, isMainWindow) {
+        if (!isMainWindow) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            Navigator.removeRoute(context, this);
+          });
+        }
+        return pageBuilder(context, animation, secondaryAnimation);
+      });
+    });
+  }
 }
