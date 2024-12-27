@@ -27,9 +27,7 @@ class _AppKitToolbarOverflowButtonState
     if (null != itemRect) {
       final menu = contextMenu.copyWith(
           position: contextMenu.position ?? menuEdge.getRectPosition(itemRect));
-      setState(() {
-        // _isMenuOpened = true;
-      });
+      setState(() {});
 
       final _ = await showContextMenu<String>(
         context,
@@ -41,11 +39,7 @@ class _AppKitToolbarOverflowButtonState
         enableWallpaperTinting: false,
       );
 
-      setState(() {
-        // _isMenuOpened = false;
-      });
-
-      // widget.onItemSelected?.call(value);
+      setState(() {});
     }
   }
 

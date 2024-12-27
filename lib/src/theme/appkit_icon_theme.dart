@@ -11,14 +11,15 @@ class AppKitIconTheme extends InheritedTheme {
     required super.child,
   });
 
-  factory AppKitIconTheme.toolbar(BuildContext context,
-      {required IconData icon,
-      bool showLabel = false,
-      VoidCallback? onPressed}) {
+  factory AppKitIconTheme.toolbar(
+    BuildContext context, {
+    required IconData icon,
+    bool showLabel = false,
+    VoidCallback? onPressed,
+  }) {
     return AppKitIconTheme(
       data: AppKitIconThemeData(
         size: showLabel ? 16.0 : 20.0,
-        color: AppKitColors.systemCyan.color,
       ),
       child: AppKitIconButton(
         icon: icon,

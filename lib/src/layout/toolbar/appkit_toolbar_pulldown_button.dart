@@ -54,17 +54,11 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
           ),
         }),
         child: AppKitPulldownButton(
-          iconColor: brightness.resolve(
-            const Color.fromRGBO(0, 0, 0, 0.5),
-            const Color.fromRGBO(255, 255, 255, 0.5),
-          ),
+          iconColor: AppKitColors.toolbarIconColor.resolveFrom(context),
           canRequestFocus: false,
           controlSize: AppKitControlSize.regular,
           width: 44,
-          color: brightness.resolve(
-            const Color.fromRGBO(0, 0, 0, 0.5),
-            const Color.fromRGBO(255, 255, 255, 0.5),
-          ),
+          color: AppKitColors.toolbarIconColor.resolveFrom(context),
           menuEdge: AppKitMenuEdge.bottom,
           icon: icon,
           style: AppKitPulldownButtonStyle.inline,

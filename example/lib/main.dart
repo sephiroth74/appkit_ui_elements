@@ -14,6 +14,7 @@ import 'package:example/pages/push_button_page.dart';
 import 'package:example/pages/resizable_panel_page.dart';
 import 'package:example/pages/segmented_controls_page.dart';
 import 'package:example/pages/selectors_page.dart';
+import 'package:example/pages/sliver_toolbar_page.dart';
 import 'package:example/pages/sliders_page.dart';
 import 'package:example/pages/tab_view_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
@@ -142,6 +143,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           leading: AppKitIcon(
                               icon: CupertinoIcons.macwindow, size: 13),
                           label: Text('Toolbar')),
+                      AppKitSidebarItem(
+                          leading: AppKitIcon(
+                              icon: CupertinoIcons.macwindow, size: 13),
+                          label: Text('Sliver Toolbar')),
                     ]),
                     AppKitSidebarItem(
                         label: Text('Selectors'),
@@ -181,6 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const GroupedBoxPage(),
           const ResizablePanelPage(),
           const ToolbarPage(),
+          const SliverToolbarPage(),
           const SelectorsPage(),
           const ColorsPage(),
           const FieldsPage(),

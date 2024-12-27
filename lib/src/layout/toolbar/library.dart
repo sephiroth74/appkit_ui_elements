@@ -1,11 +1,9 @@
 export 'appkit_custom_toolbar_item.dart';
 export 'appkit_overflow_handler.dart';
+export 'appkit_sliver_toolbar.dart';
 export 'appkit_toolbar_divider.dart';
 export 'appkit_toolbar_icon_button.dart';
 export 'appkit_toolbar_overflow_button.dart';
-export 'appkit_toolbar_overflow_menu_item.dart';
-export 'appkit_toolbar_overflow_menu.dart';
-export 'appkit_toolbar_popup.dart';
 export 'appkit_toolbar_pulldown_button.dart';
 export 'appkit_toolbar_spacer.dart';
 export 'appkit_toolbar.dart';
