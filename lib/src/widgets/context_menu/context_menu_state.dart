@@ -212,6 +212,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
         parentItemRect: submenuParentRect,
         selfClose: closeSubmenu,
         parentItem: parent,
+        enableWallpaperTinting: enableWallpaperTinting,
       );
 
       return AppKitContextMenuWidget(menuState: subMenuState);
