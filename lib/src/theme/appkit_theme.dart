@@ -152,8 +152,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
     isMainWindow ??= true;
     canvasColor ??= isDark
-        ? const Color.fromRGBO(40, 40, 40, 1.0)
-        : const Color.fromRGBO(246, 246, 246, 1.0); // 0xFFECECEC
+        ? AppKitColors.canvasColor.darkColor
+        : AppKitColors.canvasColor.color;
     typography ??=
         isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
 
@@ -756,7 +756,6 @@ class _ColorProvider {
     required bool isDark,
     required bool isMainWindow,
   }) {
-    debugPrint('getPrimaryColor: $accentColor, $isDark, $isMainWindow');
     if (!isMainWindow) {
       return isDark
           ? const Color.fromRGBO(100, 100, 100, 0.625)

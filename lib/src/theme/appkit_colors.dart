@@ -242,6 +242,10 @@ class AppKitColors {
     darkColor: Color(0xFF323232),
   );
 
+  static const canvasColor = CupertinoDynamicColor.withBrightness(
+      color: Color.fromRGBO(246, 246, 246, 1.0),
+      darkColor: Color.fromRGBO(40, 40, 40, 1.0));
+
   static const CupertinoDynamicColor windowFrameTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),

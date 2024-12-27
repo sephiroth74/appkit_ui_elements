@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 class AppKitScaffold extends StatefulWidget {
@@ -48,8 +47,9 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
       'AppKitScaffold cannot have more than one AppKitContentArea widget',
     );
 
-    final AppKitThemeData theme = AppKitTheme.of(context);
-    Color backgroundColor = widget.backgroundColor ?? theme.canvasColor;
+    // final AppKitThemeData theme = AppKitTheme.of(context);
+    Color backgroundColor = widget.backgroundColor ??
+        AppKitColors.windowBackgroundColor.resolveFrom(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -62,34 +62,14 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
 
         return Stack(
           children: [
-            if (!kIsWeb) ...[
-              // Content Area
-              Positioned(
-                top: 0,
-                width: width,
-                height: height,
-                child: AppKitWallpaperTintedArea(
-                  backgroundColor: backgroundColor,
-                  insertRepaintBoundary: true,
-                  child: MediaQuery(
-                    data: mediaQuery.copyWith(
-                      padding: EdgeInsets.only(top: topPadding),
-                    ),
-                    child: _ScaffoldBody(children: children),
-                  ),
-                ),
-              ),
-            ] else ...[
-              // Background color
-              Positioned.fill(
-                child: ColoredBox(color: backgroundColor),
-              ),
-
-              // Content Area
-              Positioned(
-                top: 0,
-                width: width,
-                height: height,
+            // Content Area
+            Positioned(
+              top: 0,
+              width: width,
+              height: height,
+              child: AppKitWallpaperTintedArea(
+                backgroundColor: backgroundColor,
+                insertRepaintBoundary: true,
                 child: MediaQuery(
                   data: mediaQuery.copyWith(
                     padding: EdgeInsets.only(top: topPadding),
@@ -97,7 +77,7 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
                   child: _ScaffoldBody(children: children),
                 ),
               ),
-            ],
+            ),
 
             // Toolbar
             if (widget.toolBar != null)

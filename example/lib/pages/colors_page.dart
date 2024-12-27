@@ -338,6 +338,10 @@ class _ColorsPageState extends State<ColorsPage> {
                                 colorName: 'Window Background',
                                 isDark: isDark),
                             ColorBox(
+                                color: AppKitColors.canvasColor,
+                                colorName: 'Canvas',
+                                isDark: isDark),
+                            ColorBox(
                                 color: AppKitColors.windowFrameTextColor,
                                 colorName: 'Window Frame',
                                 isDark: isDark),
