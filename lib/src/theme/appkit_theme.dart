@@ -756,6 +756,7 @@ class _ColorProvider {
     required bool isDark,
     required bool isMainWindow,
   }) {
+    debugPrint('getPrimaryColor: $accentColor, $isDark, $isMainWindow');
     if (!isMainWindow) {
       return isDark
           ? const Color.fromRGBO(100, 100, 100, 0.625)

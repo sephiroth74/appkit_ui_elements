@@ -114,7 +114,14 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
     )!;
 
     final luminance = blendedBackgroundColor.computeLuminance();
-    return luminance > 0.5 ? textColor : Colors.white;
+
+    if (theme.brightness.isDark) {
+      return luminance > 0.5 ? AppKitColors.controlTextColor.color : textColor;
+    } else {
+      return luminance > 0.5
+          ? textColor
+          : AppKitColors.controlTextColor.darkColor;
+    }
   }
 
   BoxDecoration _getBackgroundBoxDecoration({
@@ -145,7 +152,7 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
         ? BoxDecoration(
             borderRadius: borderRadius,
             gradient: LinearGradient(colors: [
-              Colors.white.withOpacity(0.39),
+              Colors.white.withOpacity(0.4),
               Colors.white.withOpacity(0.0),
             ], transform: const GradientRotation(pi / 2)))
         : const BoxDecoration();
@@ -235,8 +242,8 @@ class _AppKitPushButtonState extends State<AppKitPushButton> {
               constraints: _getButtonConstraints(theme: buttonTheme),
               child: UiElementColorBuilder(builder: (context, colorContainer) {
                 final Color accentColor = widget.color ??
-                    theme.primaryColor ??
-                    colorContainer.controlAccentColor;
+                    (theme.primaryColor ?? colorContainer.controlAccentColor)
+                        .multiplyLuminance(0.5);
                 final isMainWindow =
                     MainWindowStateListener.instance.isMainWindow.value;
 

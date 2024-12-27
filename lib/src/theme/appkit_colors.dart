@@ -80,13 +80,202 @@ class AppKitColors {
         color: Color(0xBF0A82FF), darkColor: Color(0xBF0A82FF), blur: 30),
   );
 
-  static const controlAccentColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xFF007AFF),
-    darkColor: Color(0xFF0A84FF),
+  static const CupertinoDynamicColor labelColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xD8000000),
+    darkColor: Color(0xD8FFFFFF),
+  );
+
+  static const secondaryLabelColor = CupertinoDynamicColor.withBrightness(
+    color: Color.fromRGBO(0, 0, 0, 0.5),
+    darkColor: Color(0x8CFFFFFF),
+  );
+
+  static const tertiaryLabelColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0x42000000),
+    darkColor: Color(0x3FFFFFFF),
+  );
+
+  static const quaternaryLabelColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0x19000000),
+    darkColor: Color(0x19FFFFFF),
+  );
+
+  static const CupertinoDynamicColor textColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF000000),
+    darkColor: Color(0xFFFFFFFF),
+  );
+
+  static const CupertinoDynamicColor placeholderTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0x3F000000),
+    darkColor: Color(0x3FFFFFFF),
+  );
+
+  static const CupertinoDynamicColor selectedTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF000000),
+    darkColor: Color(0xFFFFFFFF),
+  );
+
+  static const CupertinoDynamicColor textBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF),
+    darkColor: Color(0xFF1E1E1E),
+  );
+
+  static const CupertinoDynamicColor selectedTextBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFDFC5E0),
+    darkColor: Color(0xFF705771),
+  );
+
+  static const CupertinoDynamicColor keyboardFocusIndicatorColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0x7F842685),
+    darkColor: Color(0x7FDC78DE),
+  );
+
+  static const CupertinoDynamicColor unemphasizedSelectedTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF000000),
+    darkColor: Color(0xFFFFFFFF),
+  );
+
+  static const CupertinoDynamicColor unemphasizedSelectedTextBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFDCDCDC),
+    darkColor: Color(0xFF464646),
+  );
+
+  static const CupertinoDynamicColor linkColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF0068DA),
+    darkColor: Color(0xFF419CFF),
+  );
+
+  static const CupertinoDynamicColor separatorColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0x19000000),
+    darkColor: Color(0x19FFFFFF),
+  );
+
+  static const List<CupertinoDynamicColor> alternatingContentBackgroundColors =
+      [
+    CupertinoDynamicColor.withBrightness(
+        color: Color(0xFFFFFFFF), darkColor: Color(0xFF1E1E1E)),
+    CupertinoDynamicColor.withBrightness(
+        color: Color(0xFFF4F5F5), darkColor: Color(0x0CFFFFFF)),
+  ];
+
+  static const CupertinoDynamicColor
+      unemphasizedSelectedContentBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFDCDCDC),
+    darkColor: Color(0xFF464646),
+  );
+
+  static const CupertinoDynamicColor selectedMenuItemTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF), // TBD
+    darkColor: Color(0xFFFFFFFF),
+  );
+
+  static const CupertinoDynamicColor gridColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFE6E6E6),
+    darkColor: Color(0xFF1A1A1A),
+  );
+
+  static const CupertinoDynamicColor headerTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xD8000000),
+    darkColor: Color(0xFFFFFFFF),
+  );
+
+  static const CupertinoDynamicColor controlColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF),
+    darkColor: Color(0x3FFFFFFF),
+  );
+
+  static const CupertinoDynamicColor controlBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF),
+    darkColor: Color(0xFF1E1E1E),
+  );
+
+  static const CupertinoDynamicColor controlTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xD8000000),
+    darkColor: Color(0xD8FFFFFF),
+  );
+
+  static const CupertinoDynamicColor disabledControlTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0x3F000000),
+    darkColor: Color(0x3FFFFFFF),
+  );
+
+  static const CupertinoDynamicColor selectedControlColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFDFC5E0),
+    darkColor: Color(0xFF705771),
+  );
+
+  static const CupertinoDynamicColor selectedControlTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xD8000000),
+    darkColor: Color(0xD8FFFFFF),
+  );
+
+  static const CupertinoDynamicColor alternateSelectedControlTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF),
+    darkColor: Color(0xFFFFFFFF),
+  );
+
+  static const CupertinoDynamicColor windowBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFECECEC),
+    darkColor: Color(0xFF323232),
+  );
+
+  static const CupertinoDynamicColor windowFrameTextColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xD8000000),
+    darkColor: Color(0xD8FFFFFF),
+  );
+
+  static const CupertinoDynamicColor underPageBackgroundColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xE5969696),
+    darkColor: Color(0xFF282828),
+  );
+
+  static const CupertinoDynamicColor findHighlightColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFF00), // TBD
+    darkColor: Color(0xFFFFFF00),
+  );
+
+  static const CupertinoDynamicColor highlightColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF),
+    darkColor: Color(0xFFB4B4B4),
+  );
+
+  static const CupertinoDynamicColor shadowColor =
+      CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF000000),
+    darkColor: Color(0xFF000000),
   );
 
   static const dividerColor = CupertinoDynamicColor.withBrightness(
-      color: Color(0x1F000000), darkColor: Color(0x1FFFFFFF));
+    color: Color(0x1F000000),
+    darkColor: Color(0x1FFFFFFF),
+  );
 
   static CupertinoDynamicColor scrollbarColor =
       CupertinoDynamicColor.withBrightness(
@@ -94,24 +283,11 @@ class AppKitColors {
     darkColor: AppKitColors.systemGray.darkColor.withOpacity(0.8),
   );
 
-  /// The text of a label containing primary content.
-  static const labelColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromRGBO(0, 0, 0, 0.85),
-    darkColor: Color.fromRGBO(255, 255, 255, 0.85),
-  );
-
-  /// The text of a label of lesser importance than a primary label, such as
-  /// a label used to represent a subheading or additional information.
-  static const secondaryLabelColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromRGBO(0, 0, 0, 0.5),
-    darkColor: Color.fromRGBO(255, 255, 255, 0.55),
-  );
-
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemRed =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 59, 48, 1),
-    darkColor: Color.fromRGBO(255, 69, 58, 1),
+    darkColor: Color(0xFFFF453A),
     highContrastColor: Color.fromRGBO(255, 49, 38, 1),
     darkHighContrastColor: Color.fromRGBO(255, 79, 68, 1),
   );
@@ -119,7 +295,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemOrange =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 149, 0, 1),
-    darkColor: Color.fromRGBO(255, 159, 10, 1),
+    darkColor: Color(0xFFFF9F0A),
     highContrastColor: Color.fromRGBO(245, 139, 0, 1),
     darkHighContrastColor: Color.fromRGBO(255, 169, 20, 1),
   );
@@ -127,7 +303,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemYellow =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 204, 0, 1),
-    darkColor: Color.fromRGBO(255, 214, 10, 1),
+    darkColor: Color(0xFFFFD60A),
     highContrastColor: Color.fromRGBO(245, 194, 0, 1),
     darkHighContrastColor: Color.fromRGBO(255, 224, 20, 1),
   );
@@ -135,7 +311,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemGreen =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(40, 205, 65, 1),
-    darkColor: Color.fromRGBO(50, 215, 75, 1),
+    darkColor: Color(0xFF32D74B),
     highContrastColor: Color.fromRGBO(30, 195, 55, 1),
     darkHighContrastColor: Color.fromRGBO(60, 225, 85, 1),
   );
@@ -151,7 +327,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemTeal =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(89, 173, 196, 1),
-    darkColor: Color.fromRGBO(106, 196, 220, 1),
+    darkColor: Color(0xFF6AC4DC),
     highContrastColor: Color.fromRGBO(46, 167, 189, 1),
     darkHighContrastColor: Color.fromRGBO(68, 212, 237, 1),
   );
@@ -167,7 +343,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemBlue =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(0, 122, 255, 1),
-    darkColor: Color.fromRGBO(10, 132, 255, 1),
+    darkColor: Color(0xFF0A84FF),
     highContrastColor: Color.fromRGBO(0, 122, 245, 1),
     darkHighContrastColor: Color.fromRGBO(20, 142, 255, 1),
   );
@@ -175,7 +351,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemIndigo =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(88, 86, 214, 1),
-    darkColor: Color.fromRGBO(94, 92, 230, 1),
+    darkColor: Color(0xFF5E5CE6),
     highContrastColor: Color.fromRGBO(84, 82, 204, 1),
     darkHighContrastColor: Color.fromRGBO(99, 97, 242, 1),
   );
@@ -183,7 +359,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemPurple =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(175, 82, 222, 1),
-    darkColor: Color.fromRGBO(191, 90, 242, 1),
+    darkColor: Color(0xFFBF5AF2),
     highContrastColor: Color.fromRGBO(159, 75, 201, 1),
     darkHighContrastColor: Color.fromRGBO(204, 101, 255, 1),
   );
@@ -191,7 +367,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemPink =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(255, 45, 85, 1),
-    darkColor: Color.fromRGBO(255, 55, 95, 1),
+    darkColor: Color(0xFFFF375F),
     highContrastColor: Color.fromRGBO(245, 35, 75, 1),
     darkHighContrastColor: Color.fromRGBO(255, 65, 105, 1),
   );
@@ -199,7 +375,7 @@ class AppKitColors {
   static const CupertinoDynamicColor systemBrown =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(162, 132, 94, 1),
-    darkColor: Color.fromRGBO(172, 142, 104, 1),
+    darkColor: Color(0xFFAC8E68),
     highContrastColor: Color.fromRGBO(152, 122, 84, 1),
     darkHighContrastColor: Color.fromRGBO(182, 152, 114, 1),
   );
@@ -207,15 +383,9 @@ class AppKitColors {
   static const CupertinoDynamicColor systemGray =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(142, 142, 147, 1),
-    darkColor: Color.fromRGBO(152, 152, 157, 1),
+    darkColor: Color(0xFF98989D),
     highContrastColor: Color.fromRGBO(132, 132, 137, 1),
     darkHighContrastColor: Color.fromRGBO(162, 162, 167, 1),
-  );
-
-  static const CupertinoDynamicColor controlTextColor =
-      CupertinoDynamicColor.withBrightness(
-    color: Color(0xD8000000),
-    darkColor: Color(0xFFFFFFFF), // TBD
   );
 
   static const toolbarIconColor = CupertinoDynamicColor.withBrightness(
