@@ -11,9 +11,16 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
         return nil
     }
     
+    func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        print("colorpanel.onCancel()")
+        eventSink = nil
+        return nil
+    }
+    
     func openPanel(pickerMode: String, uuid: String? = nil, withAlpha: Bool = false, color: Dictionary<String, Any>? = nil) {
+        print("openPanel(pickerMode: \(pickerMode), uuid: \(uuid ?? "nil"))")
         let panelMode = NSColorPanel.Mode.from(from: pickerMode)
-        print("panelMode: \(panelMode)")
+        print("resolved panelMode: \(panelMode)")
         
         NSColorPanel.setPickerMode(panelMode)
         
@@ -38,7 +45,6 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
                 colorPanel.color = rgba!
             }
         }
-        
     }
     
     func setPickerMode(panelMode: String) {
@@ -69,24 +75,15 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
         let result = ColorResult(color: colorPanel.color, uuid: colorPanelUuid, action: "stream")
         eventSink?(result.toFlutter())
     }
-    
-    func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        print("colorpanel.onCancel()")
-        eventSink = nil
-        return nil
-    }
+
     
     @MainActor func windowWillClose(_ notification: Notification) {
         print("windowWillClose(notification: \(notification))")
-        
         if(notification.object is NSColorPanel) {
             let colorPanelUuid = (notification.object as! NSColorPanel).identifier?.rawValue
             let result = ColorResult(color: nil, uuid: colorPanelUuid, action: "close")
             eventSink?(result.toFlutter())
         }
-        
-        // let result = ColorResult(color: colorPanel.color, uuid: colorPanelUuid)
-        // eventSink?(result.toFlutter())
     }
 
 }

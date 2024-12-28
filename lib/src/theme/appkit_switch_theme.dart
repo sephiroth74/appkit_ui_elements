@@ -27,10 +27,12 @@ class AppKitSwitchTheme extends InheritedTheme {
 class AppKitSwitchThemeData with Diagnosticable {
   final Color uncheckedColor;
   final Color uncheckedColorDisabled;
+  final Color checkedColor;
 
   AppKitSwitchThemeData({
     required this.uncheckedColor,
     required this.uncheckedColorDisabled,
+    required this.checkedColor,
   });
 
   @override
@@ -39,16 +41,19 @@ class AppKitSwitchThemeData with Diagnosticable {
     properties.add(ColorProperty('uncheckedColor', uncheckedColor));
     properties
         .add(ColorProperty('uncheckedColorDisabled', uncheckedColorDisabled));
+    properties.add(ColorProperty('checkedColor', checkedColor));
   }
 
   AppKitSwitchThemeData copyWith({
     Color? uncheckedColor,
     Color? uncheckedColorDisabled,
+    Color? checkedColor,
   }) {
     return AppKitSwitchThemeData(
       uncheckedColor: uncheckedColor ?? this.uncheckedColor,
       uncheckedColorDisabled:
           uncheckedColorDisabled ?? this.uncheckedColorDisabled,
+      checkedColor: checkedColor ?? this.checkedColor,
     );
   }
 
@@ -57,6 +62,7 @@ class AppKitSwitchThemeData with Diagnosticable {
     return copyWith(
       uncheckedColor: other.uncheckedColor,
       uncheckedColorDisabled: other.uncheckedColorDisabled,
+      checkedColor: other.checkedColor,
     );
   }
 
@@ -66,6 +72,7 @@ class AppKitSwitchThemeData with Diagnosticable {
       uncheckedColor: Color.lerp(a.uncheckedColor, b.uncheckedColor, t)!,
       uncheckedColorDisabled:
           Color.lerp(a.uncheckedColorDisabled, b.uncheckedColorDisabled, t)!,
+      checkedColor: Color.lerp(a.checkedColor, b.checkedColor, t)!,
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
@@ -76,8 +77,6 @@ class AppKitColors {
         color: Color(0x7AF6F6F6), darkColor: Color(0x33000000), blur: 30),
     ultraThin: const AppKitMaterialColor.withBrightness(
         color: Color(0x5CF6F6F6), darkColor: Color(0x1A000000), blur: 30),
-    selectionFocus: const AppKitMaterialColor.withBrightness(
-        color: Color(0xBF0A82FF), darkColor: Color(0xBF0A82FF), blur: 30),
   );
 
   static const CupertinoDynamicColor labelColor =
@@ -131,10 +130,15 @@ class AppKitColors {
     darkColor: Color(0xFF705771),
   );
 
-  static const CupertinoDynamicColor keyboardFocusIndicatorColor =
+  // static const CupertinoDynamicColor keyboardFocusIndicatorColor = CupertinoDynamicColor.withBrightness(
+  //   color: Color(0x7F842685),
+  //   darkColor: Color(0x7FDC78DE),
+  // );
+
+  static const controlBackgroundPressedColor =
       CupertinoDynamicColor.withBrightness(
-    color: Color(0x7F842685),
-    darkColor: Color(0x7FDC78DE),
+    color: Color.fromRGBO(0, 0, 0, 0.06),
+    darkColor: Color.fromRGBO(255, 255, 255, 0.15),
   );
 
   static const CupertinoDynamicColor unemphasizedSelectedTextColor =
@@ -287,6 +291,11 @@ class AppKitColors {
     darkColor: AppKitColors.systemGray.darkColor.withOpacity(0.8),
   );
 
+  static const toolbarIconColor = CupertinoDynamicColor.withBrightness(
+    color: Color.fromRGBO(0, 0, 0, 0.5),
+    darkColor: Color.fromRGBO(255, 255, 255, 0.5),
+  );
+
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemRed =
       CupertinoDynamicColor.withBrightnessAndContrast(
@@ -392,11 +401,6 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(162, 162, 167, 1),
   );
 
-  static const toolbarIconColor = CupertinoDynamicColor.withBrightness(
-    color: Color.fromRGBO(0, 0, 0, 0.5),
-    darkColor: Color.fromRGBO(255, 255, 255, 0.5),
-  );
-
   static const appleBlue = Color(0xff0433ff);
   static const appleBrown = Color(0xffaa7942);
   static const appleCyan = Color(0xff00fdff);
@@ -414,15 +418,13 @@ class AppKitMaterial {
   final AppKitMaterialColor medium;
   final AppKitMaterialColor thin;
   final AppKitMaterialColor ultraThin;
-  final AppKitMaterialColor selectionFocus;
 
   AppKitMaterial(
       {required this.ultraThick,
       required this.thick,
       required this.medium,
       required this.thin,
-      required this.ultraThin,
-      required this.selectionFocus});
+      required this.ultraThin});
 }
 
 class AppKitMaterialColor extends CupertinoDynamicColor {
@@ -539,7 +541,7 @@ class AppKitColor with Diagnosticable {
   }
 }
 
-extension AppKitColorX on CupertinoDynamicColor {
+extension AppKitDynamicColor on CupertinoDynamicColor {
   bool get isPlatformBrightnessDependent {
     return color != darkColor ||
         elevatedColor != darkElevatedColor ||
@@ -547,8 +549,107 @@ extension AppKitColorX on CupertinoDynamicColor {
         highContrastElevatedColor != darkHighContrastElevatedColor;
   }
 
+  bool get isHighContrastDependent {
+    return color != highContrastColor ||
+        darkColor != darkHighContrastColor ||
+        elevatedColor != highContrastElevatedColor ||
+        darkElevatedColor != darkHighContrastElevatedColor;
+  }
+
+  bool get isInterfaceElevationDependent {
+    return color != elevatedColor ||
+        darkColor != darkElevatedColor ||
+        highContrastColor != highContrastElevatedColor ||
+        darkHighContrastColor != darkHighContrastElevatedColor;
+  }
+
   Color resolveWith(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     return isDark ? darkColor : color;
   }
+
+  static Color resolve(BuildContext context, Color resolvable) {
+    if (resolvable is CupertinoDynamicColor) {
+      final Brightness brightness = resolvable.isPlatformBrightnessDependent
+          ? AppKitTheme.maybeBrightnessOf(context) ?? Brightness.light
+          : Brightness.light;
+
+      final CupertinoUserInterfaceLevelData level =
+          resolvable.isInterfaceElevationDependent
+              ? CupertinoUserInterfaceLevel.maybeOf(context) ??
+                  CupertinoUserInterfaceLevelData.base
+              : CupertinoUserInterfaceLevelData.base;
+
+      final bool highContrast = resolvable.isHighContrastDependent &&
+          (MediaQuery.maybeHighContrastOf(context) ?? false);
+
+      final Color resolved = switch ((brightness, level, highContrast)) {
+        (Brightness.light, CupertinoUserInterfaceLevelData.base, false) =>
+          resolvable.color,
+        (Brightness.light, CupertinoUserInterfaceLevelData.base, true) =>
+          resolvable.highContrastColor,
+        (Brightness.light, CupertinoUserInterfaceLevelData.elevated, false) =>
+          resolvable.elevatedColor,
+        (Brightness.light, CupertinoUserInterfaceLevelData.elevated, true) =>
+          resolvable.highContrastElevatedColor,
+        (Brightness.dark, CupertinoUserInterfaceLevelData.base, false) =>
+          resolvable.darkColor,
+        (Brightness.dark, CupertinoUserInterfaceLevelData.base, true) =>
+          resolvable.darkHighContrastColor,
+        (Brightness.dark, CupertinoUserInterfaceLevelData.elevated, false) =>
+          resolvable.darkElevatedColor,
+        (Brightness.dark, CupertinoUserInterfaceLevelData.elevated, true) =>
+          resolvable.darkHighContrastElevatedColor,
+      };
+
+      Element? debugContext;
+      assert(() {
+        debugContext = context as Element;
+        return true;
+      }());
+      return AppKitResolvedDynamicColor(
+        resolved,
+        resolvable.color,
+        resolvable.darkColor,
+        resolvable.highContrastColor,
+        resolvable.darkHighContrastColor,
+        resolvable.elevatedColor,
+        resolvable.darkElevatedColor,
+        resolvable.highContrastElevatedColor,
+        resolvable.darkHighContrastElevatedColor,
+        debugContext,
+      );
+    } else {
+      return resolvable;
+    }
+  }
+}
+
+class AppKitResolvedDynamicColor extends CupertinoDynamicColor {
+  const AppKitResolvedDynamicColor(
+    this.resolvedColor,
+    Color color,
+    Color darkColor,
+    Color highContrastColor,
+    Color darkHighContrastColor,
+    Color elevatedColor,
+    Color darkElevatedColor,
+    Color highContrastElevatedColor,
+    Color darkHighContrastElevatedColor,
+    Element? debugResolveContext,
+  ) : super(
+          color: color,
+          darkColor: darkColor,
+          highContrastColor: highContrastColor,
+          darkHighContrastColor: darkHighContrastColor,
+          elevatedColor: elevatedColor,
+          darkElevatedColor: darkElevatedColor,
+          highContrastElevatedColor: highContrastElevatedColor,
+          darkHighContrastElevatedColor: darkHighContrastElevatedColor,
+        );
+
+  final Color resolvedColor;
+
+  @override
+  int get value => resolvedColor.value;
 }

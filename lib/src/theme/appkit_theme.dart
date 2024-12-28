@@ -77,13 +77,15 @@ class _InheritedAppKitTheme extends InheritedWidget {
 class AppKitThemeData extends Equatable with Diagnosticable {
   final Brightness brightness;
   final AppKitAccentColor accentColor;
-  final Color? primaryColor;
+  final Color primaryColor;
+  final Color activeColor;
   final Color focusColor;
   final Color dividerColor;
   final bool isMainWindow;
   final VisualDensity visualDensity;
   final Color canvasColor;
-  final CupertinoDynamicColor controlBackgroundPressedColor;
+  final Color controlBackgroundColor;
+  final Color controlBackgroundPressedColor;
   final Color accentColorUnfocused;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
@@ -108,6 +110,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
     Color? primaryColor,
+    Color? activeColor,
     VisualDensity? visualDensity,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
@@ -131,7 +134,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitAccentColor? accentColor,
     bool? isMainWindow,
     Color? controlBackgroundColor,
-    CupertinoDynamicColor? controlBackgroundPressedColor,
+    Color? controlBackgroundPressedColor,
     Color? controlBackgroundColorDisabled,
     Color? accentColorUnfocused,
     AppKitTypography? typography,
@@ -147,6 +150,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? true,
     );
 
+    activeColor ??= _ColorProvider.getActiveColor(
+      accentColor: accentColor,
+      isDark: isDark,
+      isMainWindow: isMainWindow ?? true,
+    );
+
     Color focusColor = primaryColor.withOpacity(0.749);
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
@@ -157,15 +166,17 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     typography ??=
         isDark ? AppKitTypography.lightOpaque() : AppKitTypography.darkOpaque();
 
-    controlBackgroundColor ??= isDark ? Colors.black : Colors.white;
+    controlBackgroundColor ??= isDark
+        ? AppKitColors.controlBackgroundColor.darkColor
+        : AppKitColors.controlBackgroundColor.color;
 
-    controlBackgroundColorDisabled ??=
-        isDark ? Colors.black.withOpacity(0.5) : Colors.white.withOpacity(0.5);
+    controlBackgroundColorDisabled ??= isDark
+        ? AppKitColors.controlBackgroundColor.darkColor.withOpacity(0.5)
+        : AppKitColors.controlBackgroundColor.color.withOpacity(0.5);
 
-    controlBackgroundPressedColor ??=
-        const CupertinoDynamicColor.withBrightness(
-            color: Color.fromRGBO(0, 0, 0, 0.06),
-            darkColor: Color.fromRGBO(255, 255, 255, 0.15));
+    controlBackgroundPressedColor ??= isDark
+        ? AppKitColors.controlBackgroundPressedColor.darkColor
+        : AppKitColors.controlBackgroundPressedColor.color;
 
     accentColorUnfocused ??=
         isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
@@ -220,9 +231,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     sliderTheme ??= AppKitSliderThemeData(
-      trackColor: AppKitColors.fills.opaque.primary.resolveWith(brightness),
+      trackColor: isDark
+          ? AppKitColors.fills.opaque.primary.darkColor
+          : AppKitColors.fills.opaque.primary.color,
       thumbColor: controlBackgroundColor,
-      sliderColor: primaryColor,
+      sliderColor: activeColor,
       tickColor: const Color(0xFFC9C9C7),
       discreteAnchorThreshold: 0.01,
       animationDuration: 200,
@@ -269,13 +282,18 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     switchTheme ??= AppKitSwitchThemeData(
-      uncheckedColor: const Color.fromRGBO(200, 200, 200, 1.0),
-      uncheckedColorDisabled: const Color.fromRGBO(200, 200, 200, 0.5),
+      checkedColor: activeColor,
+      uncheckedColor: isDark
+          ? const Color(0xFF414141)
+          : const Color.fromRGBO(200, 200, 200, 1.0),
+      uncheckedColorDisabled: isDark
+          ? const Color(0x7F414141)
+          : const Color.fromRGBO(200, 200, 200, 0.5),
     );
 
     progressTheme ??= AppKitProgressThemeData(
-      trackColor: isDark ? const Color(0xFFe1e0de) : const Color(0xFFe1e0de),
-      color: primaryColor,
+      trackColor: isDark ? const Color(0xFF262728) : const Color(0xFFe1e0de),
+      color: activeColor,
       accentColorUnfocused: accentColorUnfocused,
     );
 
@@ -380,6 +398,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     final defaultData = AppKitThemeData.raw(
       brightness: brightness,
       primaryColor: primaryColor,
+      activeColor: activeColor,
       accentColor: accentColor,
       focusColor: focusColor,
       dividerColor: dividerColor,
@@ -398,6 +417,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       levelIndicatorsTheme: levelIndicatorsTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       canvasColor: canvasColor,
+      controlBackgroundColor: controlBackgroundColor,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       accentColorUnfocused: accentColorUnfocused,
       tooltipTheme: tooltipTheme,
@@ -473,6 +493,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.brightness,
     required this.accentColor,
     required this.primaryColor,
+    required this.activeColor,
     required this.focusColor,
     required this.dividerColor,
     required this.isMainWindow,
@@ -489,6 +510,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.circularSliderTheme,
     required this.canvasColor,
     required this.controlBackgroundPressedColor,
+    required this.controlBackgroundColor,
     required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
     required this.ratingIndicatorTheme,
@@ -518,6 +540,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         switchTheme,
         progressTheme,
         colorWellTheme,
+        controlBackgroundColor,
         controlBackgroundPressedColor,
         accentColorUnfocused,
         circularSliderTheme,
@@ -536,6 +559,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   AppKitThemeData copyWith({
     Brightness? brightness,
     Color? primaryColor,
+    Color? activeColor,
     AppKitAccentColor? accentColor,
     Color? focusColor,
     Color? dividerColor,
@@ -545,7 +569,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? canvasColor,
     Color? controlBackgroundColor,
     Color? controlBackgroundColorDisabled,
-    CupertinoDynamicColor? controlBackgroundPressedColor,
+    Color? controlBackgroundPressedColor,
     Color? accentColorUnfocused,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
@@ -569,6 +593,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
       primaryColor: primaryColor ?? this.primaryColor,
+      activeColor: activeColor ?? this.activeColor,
       accentColor: accentColor ?? this.accentColor,
       focusColor: focusColor ?? this.focusColor,
       isMainWindow: isMainWindow ?? this.isMainWindow,
@@ -581,6 +606,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       segmentedControlTheme:
           segmentedControlTheme ?? this.segmentedControlTheme,
       canvasColor: canvasColor ?? this.canvasColor,
+      controlBackgroundColor:
+          controlBackgroundColor ?? this.controlBackgroundColor,
       controlBackgroundPressedColor:
           controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
       switchTheme: switchTheme ?? this.switchTheme,
@@ -617,6 +644,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       helpButtonTheme: other.helpButtonTheme,
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
+      controlBackgroundColor: other.controlBackgroundColor,
       controlBackgroundPressedColor: other.controlBackgroundPressedColor,
       switchTheme: other.switchTheme,
       progressTheme: other.progressTheme,
@@ -640,7 +668,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return AppKitThemeData.raw(
       brightness: t < 0.5 ? a.brightness : b.brightness,
       accentColor: t < 0.5 ? a.accentColor : b.accentColor,
-      primaryColor: Color.lerp(a.primaryColor, b.primaryColor, t),
+      primaryColor: Color.lerp(a.primaryColor, b.primaryColor, t)!,
+      activeColor: Color.lerp(a.activeColor, b.activeColor, t)!,
       focusColor: Color.lerp(a.focusColor, b.focusColor, t)!,
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
@@ -655,12 +684,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
       segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
           a.segmentedControlTheme, b.segmentedControlTheme, t),
-      controlBackgroundPressedColor: CupertinoDynamicColor.withBrightness(
-        color: Color.lerp(a.controlBackgroundPressedColor.color,
-            b.controlBackgroundPressedColor.color, t)!,
-        darkColor: Color.lerp(a.controlBackgroundPressedColor.darkColor,
-            b.controlBackgroundPressedColor.darkColor, t)!,
-      ),
+      controlBackgroundColor:
+          Color.lerp(a.controlBackgroundColor, b.controlBackgroundColor, t)!,
+      controlBackgroundPressedColor: Color.lerp(
+          a.controlBackgroundPressedColor, b.controlBackgroundPressedColor, t)!,
       switchTheme: AppKitSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
       progressTheme:
           AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
@@ -696,6 +723,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<Brightness>('brightness', brightness));
     properties.add(ColorProperty('accentColor', primaryColor));
+    properties.add(ColorProperty('primaryColor', primaryColor));
     properties.add(ColorProperty('focusColor', focusColor));
     properties.add(FlagProperty('isMainWindow',
         value: isMainWindow, ifTrue: 'main window'));
@@ -843,7 +871,7 @@ class _ColorProvider {
 
       case AppKitAccentColor.purple:
         if (isDark) {
-          return const Color.fromRGBO(191, 90, 242, 1.0);
+          return const Color(0xFFbb3dc4);
         } else {
           return const Color.fromRGBO(218, 142, 255, 1.0);
         }

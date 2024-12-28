@@ -1,6 +1,6 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 const _kHeight = 6.0;
 const _kAnimationDuration = Duration(milliseconds: 1500);
@@ -136,9 +136,10 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
     return Semantics(
         value: widget.value?.toStringAsFixed(2) ?? 'Indeterminate',
         label: widget.semanticsLabel,
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
+        child: Builder(builder: (context) {
           final theme = AppKitTheme.of(context);
           final progressTheme = AppKitProgressTheme.of(context);
+          final isDark = theme.brightness == Brightness.dark;
           return ConstrainedBox(
             constraints: BoxConstraints(
                 maxHeight: widget.height, minHeight: widget.height),
@@ -153,10 +154,7 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
                 final trackColor =
                     widget.trackColor ?? progressTheme.trackColor;
                 final color = isMainWindow
-                    ? (widget.color ??
-                        progressTheme.color ??
-                        theme.primaryColor ??
-                        colorContainer.controlAccentColor)
+                    ? (widget.color ?? progressTheme.color ?? theme.activeColor)
                     : (progressTheme.accentColorUnfocused ??
                         theme.accentColorUnfocused);
 
@@ -187,16 +185,20 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
                       decoration: BoxDecoration(
                         color: trackColor,
                         borderRadius: borderRadius,
-                        boxShadow: [
-                          BoxShadow(
-                            color: colorContainer.shadowColor.withOpacity(0.1),
-                          ),
-                          BoxShadow(
-                            color: trackColor,
-                            spreadRadius: -widget.height / 6,
-                            blurRadius: widget.height / 6,
-                          ),
-                        ],
+                        border: Border.all(
+                          color: isDark
+                              ? AppKitColors.fills.opaque.quaternary.color
+                              : AppKitColors.fills.opaque.quaternary.darkColor,
+                          width: 1.0,
+                        ),
+                        // TODO: Check this
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: AppKitDynamicColor.resolve(context, AppKitColors.shadowColor).withOpacity(0.5),
+                        //     spreadRadius: -widget.height / 6,
+                        //     blurRadius: widget.height / 6,
+                        //   ),
+                        // ],
                       ),
                       child: CustomPaint(
                         painter: _ProgressPainter(

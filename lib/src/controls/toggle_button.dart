@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -61,18 +60,16 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     required Color accentColor,
     required bool isDark,
     required bool isMainWindow,
-    required UiElementColorContainer colorContainer,
   }) {
     return _BoxDecorationBuilder.buildBoxDecoration(
-            theme: theme,
-            accentColor: accentColor,
-            isEnabled: widget.enabled,
-            isDark: isDark,
-            isMainWindow: isMainWindow,
-            type: widget.type,
-            isOn: widget.isOn,
-            colorContainer: colorContainer)
-        .color!;
+      theme: theme,
+      accentColor: accentColor,
+      isEnabled: widget.enabled,
+      isDark: isDark,
+      isMainWindow: isMainWindow,
+      type: widget.type,
+      isOn: widget.isOn,
+    ).color!;
   }
 
   Color _getForegroundColor({
@@ -82,7 +79,6 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     required Color backgroundColor,
     required bool isDark,
     required bool isMainWindow,
-    required UiElementColorContainer colorContainer,
   }) {
     final bool isPrimary =
         widget.type == AppKitToggleButtonType.primary && isMainWindow;
@@ -93,7 +89,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
     final textColor = ((widget.isOn && !isPrimary)
             ? accentColor
-            : colorContainer.controlTextColor)
+            : AppKitColors.controlTextColor.resolveFrom(context))
         .multiplyOpacity(widget.enabled ? 1.0 : 0.25);
 
     final blendedBackgroundColor = Color.lerp(
@@ -104,12 +100,15 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
 
     final luminance = blendedBackgroundColor.computeLuminance();
 
-    return luminance > 0.5
-        ? textColor
-        : Colors.white.multiplyOpacity(widget.enabled ? 1 : 0.25);
-    // : luminance > 0.5
-    //     ? colorContainer.controlTextColor.withOpacity(0.25)
-    //     : Colors.white.withOpacity(0.25);
+    // return luminance > 0.5 ? textColor : Colors.white.multiplyOpacity(widget.enabled ? 1 : 0.25);
+
+    if (theme.brightness.isDark) {
+      return luminance > 0.5 ? AppKitColors.controlTextColor.color : textColor;
+    } else {
+      return luminance > 0.5
+          ? textColor
+          : AppKitColors.controlTextColor.darkColor;
+    }
   }
 
   BoxDecoration _getBackgroundBoxDecoration({
@@ -117,7 +116,6 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     required Color accentColor,
     required bool isMainWindow,
     required bool isDark,
-    required UiElementColorContainer colorContainer,
   }) {
     return _BoxDecorationBuilder.buildBoxDecoration(
       theme: theme,
@@ -127,7 +125,6 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
       isOn: widget.isOn,
       type: widget.type,
       isMainWindow: isMainWindow,
-      colorContainer: colorContainer,
     );
   }
 
@@ -234,10 +231,8 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
           label: widget.semanticLabel,
           child: ConstrainedBox(
               constraints: _getButtonConstraints(theme: buttonTheme),
-              child: UiElementColorBuilder(builder: (context, colorContainer) {
-                final Color accentColor = widget.color ??
-                    theme.primaryColor ??
-                    colorContainer.controlAccentColor;
+              child: Builder(builder: (context) {
+                final Color accentColor = widget.color ?? theme.primaryColor;
                 final isMainWindow =
                     MainWindowStateListener.instance.isMainWindow.value;
 
@@ -246,7 +241,6 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                   accentColor: accentColor,
                   isDark: theme.brightness.isDark,
                   isMainWindow: isMainWindow,
-                  colorContainer: colorContainer,
                 );
                 final Color foregroundColor = _getForegroundColor(
                     accentColor: accentColor,
@@ -254,8 +248,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                     theme: theme,
                     buttonTheme: buttonTheme,
                     isDark: theme.brightness.isDark,
-                    isMainWindow: isMainWindow,
-                    colorContainer: colorContainer);
+                    isMainWindow: isMainWindow);
                 final baseStyle =
                     theme.typography.body.copyWith(color: foregroundColor);
                 final borderRadius = _getBorderRadius(buttonTheme);
@@ -266,7 +259,6 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
                     accentColor: backgroundColor,
                     isMainWindow: isMainWindow,
                     isDark: theme.brightness.isDark,
-                    colorContainer: colorContainer,
                   ).copyWith(
                     borderRadius: borderRadius,
                   ),
@@ -317,7 +309,6 @@ class _BoxDecorationBuilder {
     required bool isDark,
     required bool isMainWindow,
     required AppKitToggleButtonType type,
-    required UiElementColorContainer colorContainer,
   }) {
     final color = getBackgroundColor(
       theme: theme,
@@ -327,7 +318,6 @@ class _BoxDecorationBuilder {
       isMainWindow: isMainWindow,
       type: type,
       isOn: isOn,
-      colorContainer: colorContainer,
     );
     return BoxDecoration(
       border: _getBoxBorder(
@@ -358,12 +348,12 @@ class _BoxDecorationBuilder {
     required bool isMainWindow,
     required bool isOn,
     required AppKitToggleButtonType type,
-    required UiElementColorContainer colorContainer,
   }) {
     final isPrimary = type == AppKitToggleButtonType.primary && isMainWindow;
-    final controlBackgroundColor = isEnabled
-        ? colorContainer.controlBackgroundColor
-        : colorContainer.controlBackgroundColor.withOpacity(0.5);
+    final isDark = theme.brightness.isDark;
+    final controlBackgroundColor = isDark
+        ? AppKitColors.controlBackgroundColor.darkColor
+        : AppKitColors.controlBackgroundColor.color;
     return isPrimary && isEnabled && isOn
         ? accentColor
         : (isEnabled

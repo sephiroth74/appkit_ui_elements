@@ -241,10 +241,6 @@ class _ColorsPageState extends State<ColorsPage> {
                                 colorName: 'Highlight',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.keyboardFocusIndicatorColor,
-                                colorName: 'Keyboard Focus Indicator',
-                                isDark: isDark),
-                            ColorBox(
                                 color: AppKitColors.labelColor,
                                 colorName: 'Label',
                                 isDark: isDark),

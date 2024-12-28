@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -94,11 +94,13 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
       child: Semantics(
         checked: widget.value == true,
         label: widget.semanticLabel,
-        child: UiElementColorBuilder(
-          builder: (context, colorContainer) {
-            final Color accentColor = widget.color ??
-                theme.primaryColor ??
-                colorContainer.controlAccentColor;
+        child: Builder(
+          builder: (context) {
+            final isDark = theme.brightness == Brightness.dark;
+            final controlBackgroundColor = isDark
+                ? AppKitColors.controlBackgroundColor.darkColor
+                : AppKitColors.controlBackgroundColor.color;
+            final Color accentColor = widget.color ?? theme.activeColor;
             final isMainWindow =
                 MainWindowStateListener.instance.isMainWindow.value;
             return Container(
@@ -130,16 +132,13 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
               child: SizedBox.expand(
                 child: _DecoratedContainer(
                   isDown: buttonHeldDown,
-                  color: isMainWindow
-                      ? accentColor
-                      : colorContainer.controlBackgroundColor,
+                  color: isMainWindow ? accentColor : controlBackgroundColor,
                   value: widget.value,
                   enabled: widget.enabled,
                   theme: theme,
                   size: widget.size,
                   isMainWindow: isMainWindow,
-                  isDark: theme.brightness == Brightness.dark,
-                  colorContainer: colorContainer,
+                  isDark: isDark,
                 ),
               ),
             );
@@ -159,7 +158,6 @@ class _DecoratedContainer extends StatelessWidget {
   final bool isDark;
   final bool isDown;
   final AppKitThemeData theme;
-  final UiElementColorContainer colorContainer;
 
   const _DecoratedContainer({
     required this.color,
@@ -170,18 +168,21 @@ class _DecoratedContainer extends StatelessWidget {
     required this.isMainWindow,
     required this.isDark,
     required this.isDown,
-    required this.colorContainer,
   });
 
   @override
   Widget build(BuildContext context) {
+    final controlBackgroundColor = isDark
+        ? AppKitColors.controlBackgroundColor.darkColor
+        : AppKitColors.controlBackgroundColor.color;
     final radius = size / _kCornerRadiusRatio;
     final shadowSpread = size / _kBoxShadowSpreadRatio;
     final iconColor = enabled
         ? color.computeLuminance() > 0.5
             ? Colors.black
             : Colors.white
-        : AppKitColors.text.opaque.tertiary.resolveFrom(context);
+        : AppKitDynamicColor.resolve(
+            context, AppKitColors.text.opaque.tertiary);
 
     return Container(
       foregroundDecoration:
@@ -189,7 +190,7 @@ class _DecoratedContainer extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: !enabled
-              ? colorContainer.controlBackgroundColor.withOpacity(0.5)
+              ? controlBackgroundColor.withOpacity(0.5)
               : value != false && isMainWindow
                   ? color
                   : null,
@@ -200,8 +201,7 @@ class _DecoratedContainer extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
               ),
               BoxShadow(
-                color: colorContainer.controlBackgroundColor
-                    .withOpacity(enabled ? 1 : 0.5),
+                color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.5),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),

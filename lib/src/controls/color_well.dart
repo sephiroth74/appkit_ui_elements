@@ -83,6 +83,9 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
 
   void _showColorPicker(
       {required AppKitColorPickerMode mode, required bool withAlpha}) async {
+    debugPrint('AppKitColorWell: _showColorPicker');
+    debugPrint('_isColorPickerOpened: $_isColorPickerOpened');
+
     if (!enabled || _isColorPickerOpened) {
       return;
     }
@@ -169,6 +172,10 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
   @override
   void dispose() {
     _colorSubscription?.cancel();
+    if (_colorSubscription != null) {
+      debugPrint('AppKitColorWell: dispose color subscription ${widget.uuid}');
+      _onColorChanged = null;
+    }
     super.dispose();
   }
 

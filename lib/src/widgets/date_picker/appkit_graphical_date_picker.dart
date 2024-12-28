@@ -115,7 +115,7 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
         child: UiElementColorBuilder(builder: (context, colorContainer) {
           final theme = AppKitTheme.of(context);
           final accentColor = widget.color ??
-              theme.primaryColor?.multiplyLuminance(0.85) ??
+              theme.primaryColor.multiplyLuminance(0.85) ??
               colorContainer.controlAccentColor;
 
           return Container(

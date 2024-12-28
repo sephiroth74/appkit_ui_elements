@@ -7,7 +7,8 @@ import 'package:gradient_borders/gradient_borders.dart';
 class AppKitPulldownButton<T> extends StatefulWidget {
   final ContextMenuBuilder<T>? menuBuilder;
   final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
-  final double width;
+  final double minWidth;
+  final double maxWidth;
   final AppKitMenuEdge menuEdge;
   final AppKitPulldownButtonStyle style;
   final Color? color;
@@ -23,7 +24,8 @@ class AppKitPulldownButton<T> extends StatefulWidget {
 
   const AppKitPulldownButton({
     super.key,
-    required this.width,
+    required this.minWidth,
+    double? maxWidth,
     this.onItemSelected,
     this.menuBuilder,
     this.color,
@@ -38,7 +40,8 @@ class AppKitPulldownButton<T> extends StatefulWidget {
     this.imageAlignment = AppKitMenuImageAlignment.start,
     this.textAlign = TextAlign.start,
     this.iconColor,
-  }) : assert(title != null || icon != null);
+  })  : assert(title != null || icon != null),
+        maxWidth = maxWidth ?? minWidth;
 
   @override
   State<AppKitPulldownButton<T>> createState() =>
@@ -70,24 +73,26 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('enabled', enabled));
-    properties.add(DiagnosticsProperty('style', style));
-    properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
-    properties.add(DiagnosticsProperty('width', widget.width));
-    properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
-    properties
-        .add(DiagnosticsProperty('onItemSelected', widget.onItemSelected));
-    properties.add(DiagnosticsProperty('color', widget.color));
-    properties.add(DiagnosticsProperty('controlSize', widget.controlSize));
-    properties.add(DiagnosticsProperty('semanticLabel', widget.semanticLabel));
-    properties.add(DiagnosticsProperty('focusNode', widget.focusNode));
     properties
         .add(DiagnosticsProperty('canRequestFocus', widget.canRequestFocus));
+    properties.add(DiagnosticsProperty('color', widget.color));
+    properties.add(DiagnosticsProperty('controlSize', widget.controlSize));
+    properties.add(DiagnosticsProperty('enabled', enabled));
+    properties.add(DiagnosticsProperty('focusNode', widget.focusNode));
+    properties.add(DiagnosticsProperty('icon', widget.icon));
+    properties.add(DiagnosticsProperty('iconColor', widget.iconColor));
     properties
         .add(DiagnosticsProperty('imageAlignment', widget.imageAlignment));
+    properties.add(DiagnosticsProperty('maxWidth', widget.maxWidth));
+    properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
+    properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
+    properties.add(DiagnosticsProperty('minWidth', widget.minWidth));
+    properties
+        .add(DiagnosticsProperty('onItemSelected', widget.onItemSelected));
+    properties.add(DiagnosticsProperty('semanticLabel', widget.semanticLabel));
+    properties.add(DiagnosticsProperty('style', style));
     properties.add(DiagnosticsProperty('textAlign', widget.textAlign));
     properties.add(DiagnosticsProperty('title', widget.title));
-    properties.add(DiagnosticsProperty('icon', widget.icon));
   }
 
   @override
@@ -128,15 +133,15 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
     Color textColor;
 
     if (style == AppKitPulldownButtonStyle.inline) {
-      textColor =
-          (textStyle.color ?? AppKitColors.labelColor.resolveFrom(context))
-              .multiplyOpacity(0.7);
+      textColor = (textStyle.color ??
+              AppKitDynamicColor.resolve(context, AppKitColors.labelColor))
+          .multiplyOpacity(0.7);
       if (!isMainWindow) {
         textColor = textColor.multiplyOpacity(0.5);
       }
     } else {
-      textColor =
-          textStyle.color ?? AppKitColors.labelColor.resolveFrom(context);
+      textColor = textStyle.color ??
+          AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     }
 
     if (!enabled) {
@@ -275,7 +280,6 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
           final popupButtonTheme = AppKitPopupButtonTheme.of(context);
           final height = style.getHeight(
               theme: popupButtonTheme, controlSize: controlSize);
-          final width = widget.width;
           final menuEdge = widget.menuEdge;
 
           return Focus.withExternalFocusNode(
@@ -287,7 +291,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
               if (style == AppKitPulldownButtonStyle.push ||
                   style == AppKitPulldownButtonStyle.bevel) {
                 return _PushButtonStyleWidget<T>(
-                  width: width,
+                  minWidth: widget.minWidth,
+                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -301,7 +306,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
                 );
               } else if (style == AppKitPulldownButtonStyle.plain) {
                 return _PlainButtonStyleWidget<T>(
-                  width: width,
+                  minWidth: widget.minWidth,
+                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -314,7 +320,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
                 );
               } else if (style == AppKitPulldownButtonStyle.inline) {
                 return _InlineButtonStyleWidget<T>(
-                  width: width,
+                  minWidth: widget.minWidth,
+                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -337,7 +344,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
 }
 
 class _PushButtonStyleWidget<T> extends StatelessWidget {
-  final double width;
+  final double minWidth;
+  final double maxWidth;
   final double height;
   final AppKitMenuEdge menuEdge;
   final bool enabled;
@@ -351,7 +359,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
   const _PushButtonStyleWidget({
     super.key,
-    required this.width,
+    required this.minWidth,
+    required this.maxWidth,
     required this.height,
     required this.menuEdge,
     required this.enabled,
@@ -383,14 +392,12 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
-      arrowsColor = popupButtonTheme.arrowsColor
-          .resolveFrom(context)
-          .multiplyOpacity(enabledFactor);
+      arrowsColor =
+          AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
+              .multiplyOpacity(enabledFactor);
     } else {
-      caretBackgroundColor = color ??
-          popupButtonTheme.elevatedButtonColor ??
-          theme.primaryColor ??
-          colorContainer.controlAccentColor;
+      caretBackgroundColor =
+          color ?? popupButtonTheme.elevatedButtonColor ?? theme.activeColor;
 
       final carteBackgroundColorLiminance =
           caretBackgroundColor.computeLuminance();
@@ -413,8 +420,11 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     }
 
     return Container(
-      height: height,
-      width: width,
+      constraints: BoxConstraints(
+          minWidth: minWidth,
+          minHeight: height,
+          maxHeight: height,
+          maxWidth: maxWidth),
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: style.getPressedBackgroundColor(
@@ -446,7 +456,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
               controlSize: controlSize),
           child: LayoutBuilder(builder: (context, parentConstraints) {
             return Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
                   flex: 1,
@@ -538,7 +548,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 }
 
 class _PlainButtonStyleWidget<T> extends StatelessWidget {
-  final double width;
+  final double minWidth;
+  final double maxWidth;
   final double height;
   final AppKitMenuEdge menuEdge;
   final bool enabled;
@@ -552,7 +563,8 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 
   const _PlainButtonStyleWidget({
     super.key,
-    required this.width,
+    required this.minWidth,
+    required this.maxWidth,
     required this.height,
     required this.menuEdge,
     required this.enabled,
@@ -576,9 +588,9 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
         theme: popupButtonTheme, controlSize: controlSize);
     final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
-    final arrowsColor = popupButtonTheme.arrowsColor
-        .resolveFrom(context)
-        .multiplyOpacity(enabledFactor);
+    final arrowsColor =
+        AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
+            .multiplyOpacity(enabledFactor);
 
     if (isHovered) {
       caretBackgroundColor = Colors.transparent;
@@ -591,8 +603,11 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     }
 
     return Container(
-      height: height,
-      width: width,
+      constraints: BoxConstraints(
+          minWidth: minWidth,
+          minHeight: height,
+          maxHeight: height,
+          maxWidth: maxWidth),
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: style.getPressedBackgroundColor(
@@ -675,7 +690,8 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 }
 
 class _InlineButtonStyleWidget<T> extends StatelessWidget {
-  final double width;
+  final double minWidth;
+  final double maxWidth;
   final double height;
   final AppKitMenuEdge menuEdge;
   final bool enabled;
@@ -689,7 +705,8 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
 
   const _InlineButtonStyleWidget({
     super.key,
-    required this.width,
+    required this.minWidth,
+    required this.maxWidth,
     required this.height,
     required this.menuEdge,
     required this.enabled,
@@ -710,9 +727,9 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     final Color controlBackgroundColor;
     final caretButtonSize = style.getCaretButtonSize(
         theme: popupButtonTheme, controlSize: controlSize);
-    final arrowsColor = popupButtonTheme.arrowsColor
-        .resolveFrom(context)
-        .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
+    final arrowsColor =
+        AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
+            .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
     final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
 
@@ -727,8 +744,11 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     }
 
     return Container(
-      height: height,
-      width: width,
+      constraints: BoxConstraints(
+          minWidth: minWidth,
+          minHeight: height,
+          maxHeight: height,
+          maxWidth: maxWidth),
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: popupButtonTheme
@@ -875,8 +895,8 @@ extension AppKitPulldownButtonStyleX on AppKitPulldownButtonStyle {
 
     final luminance = blendedBackgroundColor.computeLuminance();
     final color = luminance > 0.5
-        ? theme.controlBackgroundPressedColor.color
-        : theme.controlBackgroundPressedColor.darkColor;
+        ? AppKitColors.controlBackgroundPressedColor.color
+        : AppKitColors.controlBackgroundPressedColor.darkColor;
     return color;
   }
 

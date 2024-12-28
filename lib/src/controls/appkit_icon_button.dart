@@ -200,8 +200,8 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
 
     final luminance = blendedBackgroundColor.computeLuminance();
     final color = luminance > 0.5
-        ? theme.controlBackgroundPressedColor.color
-        : theme.controlBackgroundPressedColor.darkColor;
+        ? AppKitColors.controlBackgroundPressedColor.color
+        : AppKitColors.controlBackgroundPressedColor.darkColor;
     return color;
   }
 }

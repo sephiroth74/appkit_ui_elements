@@ -68,6 +68,7 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
+    final theme = AppKitTheme.of(context);
     final helpButtonTheme = AppKitHelpButtonTheme.of(context);
     return MouseRegion(
       cursor: widget.cursor,
@@ -86,22 +87,29 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                 minHeight: widget.size,
                 maxWidth: widget.size,
                 maxHeight: widget.size),
-            child: UiElementColorBuilder(
-              builder: (context, colorContainer) {
+            child: Builder(
+              builder: (context) {
                 final color = widget.enabled
                     ? (widget.color ??
                         helpButtonTheme.color ??
-                        colorContainer.controlBackgroundColor)
+                        theme.controlBackgroundColor)
                     : (widget.disabledColor ??
                         helpButtonTheme.disabledColor ??
-                        colorContainer.controlBackgroundColor.withOpacity(0.5));
+                        theme.controlBackgroundColor.withOpacity(0.5));
 
                 final colorLuminance = color.computeLuminance();
 
-                Color iconColor = colorContainer.controlTextColor;
+                final isDark = theme.brightness == Brightness.dark;
+                Color iconColor = isDark
+                    ? AppKitColors.controlTextColor.darkColor
+                    : AppKitColors.controlTextColor.color;
+                debugPrint(
+                    'iconColor: $iconColor, isDark: ${theme.brightness == Brightness.dark}');
 
                 if (!widget.enabled) {
-                  iconColor = AppKitColors.text.opaque.tertiary.color;
+                  iconColor = isDark
+                      ? AppKitColors.text.opaque.tertiary.darkColor
+                      : AppKitColors.text.opaque.tertiary.color;
                 }
 
                 final foregroundColor = colorLuminance > 0.5

@@ -193,7 +193,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                       imageAlignment:
                                           AppKitMenuImageAlignment.leading,
                                       icon: Icons.open_in_new,
-                                      width: popupButtonWidth,
+                                      minWidth: popupButtonWidth,
                                       onItemSelected: (value) {
                                         debugPrint('onItemSelected: $value');
                                       },
@@ -220,7 +220,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                       imageAlignment:
                                           AppKitMenuImageAlignment.start,
                                       icon: Icons.add,
-                                      width: 55,
+                                      minWidth: 55,
                                       onItemSelected: (value) {},
                                       menuBuilder: pullDownMenuBuilder,
                                       style: style,

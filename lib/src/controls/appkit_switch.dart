@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -329,33 +328,38 @@ class _AppKitSwitchState extends State<AppKitSwitch>
         button: true,
         label: widget.semanticLabel,
         checked: widget.checked,
-        child: UiElementColorBuilder(
-          builder: (context, UiElementColorContainer colorContainer) {
+        child: Builder(
+          builder: (context) {
             final animationValue = positionCurvedAnimation.value;
             final theme = AppKitTheme.of(context);
             final switchTheme = AppKitSwitchTheme.of(context);
-
+            final isDark = theme.brightness == Brightness.dark;
             final enableFactor = enabled ? 1.0 : 0.5;
-
             final uncheckedColor = enabled
                 ? switchTheme.uncheckedColor
                 : switchTheme.uncheckedColorDisabled;
-
             final checkedColor = enabled
-                ? (widget.color ??
-                    theme.primaryColor ??
-                    colorContainer.controlAccentColor)
+                ? (widget.color ?? switchTheme.checkedColor)
                 : uncheckedColor;
+            final controlBackgroundColor =
+                AppKitColors.controlBackgroundColor.color;
 
             final accentColor = enabled
                 ? Color.lerp(uncheckedColor, checkedColor, animationValue)!
-                : colorContainer.controlBackgroundColor.withOpacity(0.2);
+                : controlBackgroundColor.withOpacity(0.2);
 
             final containerBackgroundColor = enabled
-                ? AppKitColors.fills.opaque.secondary.color.withOpacity(
-                    AppKitColors.fills.opaque.secondary.color.opacity *
+                ? AppKitColors.fills.opaque.secondary
+                    .resolveFrom(context)
+                    .withOpacity(AppKitColors.fills.opaque.secondary
+                            .resolveFrom(context)
+                            .opacity *
                         (1.0 - animationValue))
                 : AppKitColors.fills.opaque.primary.color.withOpacity(0.04);
+
+            final Color borderColor = isDark
+                ? Colors.white.withOpacity(0.2)
+                : Colors.black.withOpacity(0.2);
 
             final Color innerShadowColor;
             if (enabled) {
@@ -406,7 +410,12 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                     ),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
+                        border: Border.all(
+                          color: borderColor,
+                          width: 0.5,
+                        ),
                         borderRadius: BorderRadius.circular(_borderRadius),
+                        color: accentColor,
                         boxShadow: [
                           BoxShadow(
                             color: innerShadowColor,
@@ -458,10 +467,8 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                           color: enabled
-                                              ? colorContainer
-                                                  .controlBackgroundColor
-                                              : colorContainer
-                                                  .controlBackgroundColor
+                                              ? controlBackgroundColor
+                                              : controlBackgroundColor
                                                   .multiplyOpacity(0.75),
                                           shape: BoxShape.circle,
                                           boxShadow: [

@@ -26,7 +26,7 @@ public class AppKitUiElementsPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      print("handle(\(call.method))")
+      print("handle(method: \(call.method))")
       
     switch call.method {
     case "getPlatformVersion":

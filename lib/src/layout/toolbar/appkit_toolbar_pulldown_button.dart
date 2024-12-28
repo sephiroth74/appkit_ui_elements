@@ -5,18 +5,24 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
   const AppKitToolBarPullDownButton({
     super.key,
     required this.label,
-    required this.icon,
     required this.items,
+    this.icon,
     this.tooltipMessage,
-  });
+    this.showLabel = true,
+    double? width,
+  }) : width = width ?? (showLabel ? 100 : 44);
 
   final List<AppKitContextMenuEntry<String>> items;
 
   final String label;
 
-  final IconData icon;
+  final IconData? icon;
 
   final String? tooltipMessage;
+
+  final bool showLabel;
+
+  final double width;
 
   get menuBuilder => (context) {
         return AppKitContextMenu<String>(
@@ -48,20 +54,20 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
             inlineHoveredBackgroundColor: isDark
                 ? const Color(0xff333336)
                 : Colors.black.withOpacity(0.05),
-            inlinePressedBackgroundColor: isDark
-                ? const Color(0xff333336)
-                : Colors.black.withOpacity(0.2),
           ),
         }),
         child: AppKitPulldownButton(
-          iconColor: AppKitColors.toolbarIconColor.resolveFrom(context),
+          iconColor: AppKitDynamicColor.resolve(
+              context, AppKitColors.toolbarIconColor),
           canRequestFocus: false,
           controlSize: AppKitControlSize.regular,
-          width: 44,
-          color: AppKitColors.toolbarIconColor.resolveFrom(context),
+          minWidth: width,
+          color: AppKitDynamicColor.resolve(
+              context, AppKitColors.toolbarIconColor),
           menuEdge: AppKitMenuEdge.bottom,
           icon: icon,
           style: AppKitPulldownButtonStyle.inline,
+          title: label,
           menuBuilder: menuBuilder,
           onItemSelected: (_) {},
         ),

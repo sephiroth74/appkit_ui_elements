@@ -93,11 +93,13 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
       child: Semantics(
         checked: widget.isSelected,
         label: widget.semanticLabel,
-        child: UiElementColorBuilder(
-          builder: (context, colorContainer) {
-            final Color accentColor = widget.color ??
-                theme.primaryColor ??
-                colorContainer.controlAccentColor;
+        child: Builder(
+          builder: (context) {
+            final isDark = theme.brightness == Brightness.dark;
+            final controlBackgroundColor = isDark
+                ? AppKitColors.controlBackgroundColor.darkColor
+                : AppKitColors.controlBackgroundColor.color;
+            final Color accentColor = widget.color ?? theme.activeColor;
             final isMainWindow =
                 MainWindowStateListener.instance.isMainWindow.value;
             return Container(
@@ -127,11 +129,8 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
               ),
               child: SizedBox.expand(
                 child: _DecoratedContainer(
-                  colorContainer: colorContainer,
                   isDown: buttonHeldDown,
-                  color: isMainWindow
-                      ? accentColor
-                      : colorContainer.controlBackgroundColor,
+                  color: isMainWindow ? accentColor : controlBackgroundColor,
                   value: widget.groupValue == null
                       ? null
                       : widget.groupValue == widget.value,
@@ -140,6 +139,7 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
                   size: widget.size,
                   isMainWindow: isMainWindow,
                   isDark: theme.brightness == Brightness.dark,
+                  controlBackgroundColor: controlBackgroundColor,
                 ),
               ),
             );
@@ -159,7 +159,7 @@ class _DecoratedContainer extends StatelessWidget {
   final bool isMainWindow;
   final bool isDark;
   final bool isDown;
-  final UiElementColorContainer colorContainer;
+  final Color controlBackgroundColor;
 
   const _DecoratedContainer({
     required this.color,
@@ -170,7 +170,7 @@ class _DecoratedContainer extends StatelessWidget {
     required this.isMainWindow,
     required this.isDark,
     required this.isDown,
-    required this.colorContainer,
+    required this.controlBackgroundColor,
   });
 
   @override
@@ -189,7 +189,7 @@ class _DecoratedContainer extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: !enabled
-              ? colorContainer.controlBackgroundColor.multiplyOpacity(0.5)
+              ? controlBackgroundColor.multiplyOpacity(0.5)
               : value != false && isMainWindow
                   ? color
                   : null,
@@ -199,8 +199,8 @@ class _DecoratedContainer extends StatelessWidget {
                 color: Colors.black.withOpacity(0.1),
               ),
               BoxShadow(
-                color: colorContainer.controlBackgroundColor
-                    .multiplyOpacity(enabled ? 1 : 0.5),
+                color:
+                    controlBackgroundColor.multiplyOpacity(enabled ? 1 : 0.5),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),

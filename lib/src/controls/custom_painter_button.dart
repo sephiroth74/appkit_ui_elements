@@ -101,13 +101,12 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                 minHeight: widget.size,
                 maxWidth: widget.size,
                 maxHeight: widget.size),
-            child: UiElementColorBuilder(builder: (context, colorContainer) {
+            child: Builder(builder: (context) {
               return Builder(
                 builder: (context) {
                   switch (widget.style) {
                     case AppKitControlButtonIconStyle.bordered:
-                      return buildBorderedContainer(
-                          colorContainer: colorContainer, theme: theme);
+                      return buildBorderedContainer(theme: theme);
                   }
                 },
               );
@@ -119,7 +118,6 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
   }
 
   Widget buildBorderedContainer({
-    required UiElementColorContainer colorContainer,
     required AppKitThemeData theme,
   }) {
     final bool isMainWindow =
@@ -127,9 +125,9 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
 
     final Color color = widget.enabled
         ? (isMainWindow
-            ? widget.color ?? colorContainer.controlBackgroundColor
-            : colorContainer.controlBackgroundColor)
-        : colorContainer.controlBackgroundColor.multiplyOpacity(0.5);
+            ? widget.color ?? theme.controlBackgroundColor
+            : theme.controlBackgroundColor)
+        : theme.controlBackgroundColor.multiplyOpacity(0.5);
 
     final colorLuminance = color.computeLuminance();
 
