@@ -231,12 +231,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     sliderTheme ??= AppKitSliderThemeData(
-      trackColor: isDark
-          ? AppKitColors.fills.opaque.primary.darkColor
-          : AppKitColors.fills.opaque.primary.color,
-      thumbColor: controlBackgroundColor,
+      trackColor: isDark ? const Color(0xFF262728) : const Color(0xFFe1e0de),
+      thumbColor: AppKitColors.controlBackgroundColor.color,
       sliderColor: activeColor,
-      tickColor: const Color(0xFFC9C9C7),
+      tickColor: isDark ? const Color(0xFF212424) : const Color(0xFFC9C9C7),
       discreteAnchorThreshold: 0.01,
       animationDuration: 200,
       discreteThumbCornerRadius: 4.0,
@@ -267,10 +265,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     circularSliderTheme ??= AppKitCircularSliderThemeData(
-      backgroundColor:
-          isDark ? AppKitColors.systemGray.darkColor : Colors.white,
-      thumbColor:
-          isDark ? const Color(0x7fffffff) : Colors.black.withOpacity(0.5),
+      backgroundColor: AppKitColors.controlBackgroundColor.color,
+      thumbColor: isDark
+          ? Colors.black.withOpacity(0.75)
+          : Colors.black.withOpacity(0.5),
       thumbColorUnfocused: accentColorUnfocused,
     );
 

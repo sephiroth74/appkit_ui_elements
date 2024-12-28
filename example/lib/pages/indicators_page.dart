@@ -1,9 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:example/theme.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class IndicatorsPage extends StatefulWidget {
   const IndicatorsPage({super.key});

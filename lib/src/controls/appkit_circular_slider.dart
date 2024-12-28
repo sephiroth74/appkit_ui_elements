@@ -218,7 +218,9 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
       child: SizedBox(
         width: size,
         height: size,
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
+        child: Builder(builder: (context) {
+          final controlBackgroundColor =
+              AppKitColors.controlBackgroundColor.color;
           final isMainWindow =
               MainWindowStateListener.instance.isMainWindow.value;
           final sliderTheme = AppKitCircularSliderTheme.of(context);
@@ -233,11 +235,10 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
 
           var backgroundColor = enabled
               ? sliderTheme.backgroundColor
-              : colorContainer.controlBackgroundColor.withOpacity(0.5);
+              : controlBackgroundColor.withOpacity(0.5);
 
           if (isMainWindow) {
-            thumbColor =
-                thumbColor.withOpacity(thumbColor.opacity * enabledFactor);
+            thumbColor = thumbColor.multiplyOpacity(enabledFactor);
           }
 
           return GestureDetector(
@@ -251,9 +252,9 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: backgroundColor,
-                boxShadow: [
-                  colorContainer.shadowPrimary,
-                  colorContainer.shadowSecondary,
+                boxShadow: const [
+                  AppKitColors.shadowPrimary,
+                  AppKitColors.shadowSecondary,
                 ],
               ),
               child: Stack(

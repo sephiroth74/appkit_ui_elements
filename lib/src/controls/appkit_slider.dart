@@ -343,8 +343,8 @@ class _AppKitSliderState extends State<AppKitSlider>
                                       ? accentColor
                                       : accentColor.withOpacity(0.5),
                                   backgroundColor: sliderTheme.tickColor ??
-                                      AppKitColors.fills.opaque.primary
-                                          .resolveFrom(context),
+                                      AppKitDynamicColor.resolve(context,
+                                          AppKitColors.fills.opaque.primary),
                                   selectedPercentage: percentage,
                                   stops: widget.stops
                                       .map((e) => _getValuePercentage(e))
@@ -373,7 +373,8 @@ class _AppKitSliderState extends State<AppKitSlider>
                                   continuousThumbSize: continuousThumbSize,
                                   color: sliderTheme.thumbColor,
                                   foregroundColor: enabled && _thumbHeldDown
-                                      ? AppKitColors.fills.opaque.tertiary.color
+                                      ? AppKitDynamicColor.resolve(context,
+                                          AppKitColors.fills.opaque.tertiary)
                                       : null,
                                 ),
                               ),

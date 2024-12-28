@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +18,12 @@ class _SlidersPageState extends State<SlidersPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Sliders'),
+      toolBar: AppKitToolBar(
+        title: const Text('Sliders'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(
@@ -211,7 +215,7 @@ class _SlidersPageState extends State<SlidersPage> {
                                           .body
                                           .copyWith(fontSize: 10)),
                                 ),
-                                AppKitCircleSlider2(
+                                AppKitArcSlider(
                                   size: 48,
                                   value: slider1Value,
                                   onChanged: (value) =>
@@ -233,10 +237,12 @@ class _SlidersPageState extends State<SlidersPage> {
                                           .body
                                           .copyWith(
                                               fontSize: 16,
-                                              color: AppKitColors
-                                                  .text.opaque.tertiary)),
+                                              color: AppKitDynamicColor.resolve(
+                                                  context,
+                                                  AppKitColors
+                                                      .text.opaque.tertiary))),
                                 ),
-                                AppKitCircleSlider2(
+                                AppKitArcSlider(
                                   sweepAngle: 40,
                                   size: 84,
                                   progressWidth: 4,
@@ -244,7 +250,7 @@ class _SlidersPageState extends State<SlidersPage> {
                                   trackWidth: 0.5,
                                   trackColor:
                                       AppKitColors.systemGray.withOpacity(0.3),
-                                  progressColor: AppKitColors.systemPurple,
+                                  progressColor: AppKitColors.appleGreen,
                                   value: slider1Value,
                                   onChanged: (value) =>
                                       setState(() => slider1Value = value),

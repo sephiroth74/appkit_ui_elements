@@ -296,6 +296,19 @@ class AppKitColors {
     darkColor: Color.fromRGBO(255, 255, 255, 0.5),
   );
 
+  static const BoxShadow shadowPrimary = BoxShadow(
+      color: Color(0x66000000),
+      offset: Offset(0.0, 1.0),
+      blurRadius: 0.5,
+      spreadRadius: 0.0,
+      blurStyle: BlurStyle.outer);
+  static const BoxShadow shadowSecondary = BoxShadow(
+      color: Color(0x1a000000),
+      offset: Offset(0.0, 0.0),
+      blurRadius: 0.0,
+      spreadRadius: 0.5,
+      blurStyle: BlurStyle.outer);
+
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemRed =
       CupertinoDynamicColor.withBrightnessAndContrast(

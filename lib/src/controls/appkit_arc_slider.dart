@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 const _kArcSweepAngle = 20.0;
 const _kSize = 48.0;
 
-class AppKitCircleSlider2 extends StatefulWidget {
+class AppKitArcSlider extends StatefulWidget {
   final double size;
   final double value;
   final double min;
@@ -22,7 +22,7 @@ class AppKitCircleSlider2 extends StatefulWidget {
   final double? trackWidth;
   final double? progressWidth;
 
-  const AppKitCircleSlider2({
+  const AppKitArcSlider({
     super.key,
     required this.value,
     this.size = _kSize,
@@ -44,10 +44,10 @@ class AppKitCircleSlider2 extends StatefulWidget {
             thumbRadius == null || thumbRadius > 0 || thumbRadius < size / 3);
 
   @override
-  State<AppKitCircleSlider2> createState() => _AppKitCircleSlider2State();
+  State<AppKitArcSlider> createState() => _AppKitArcSliderState();
 }
 
-class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
+class _AppKitArcSliderState extends State<AppKitArcSlider> {
   double thumbRadius = 0;
 
   double get sweepAngle => widget.sweepAngle;
@@ -167,7 +167,7 @@ class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
       slider: true,
       label: widget.semanticLabel,
       value: value.toStringAsFixed(2),
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
+      child: Builder(builder: (context) {
         final AppKitThemeData theme = AppKitTheme.of(context);
         final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
 
@@ -183,8 +183,7 @@ class _AppKitCircleSlider2State extends State<AppKitCircleSlider2> {
         final accentColor = isMainWindow
             ? (widget.progressColor ??
                 sliderTheme.sliderColor ??
-                theme.primaryColor ??
-                colorContainer.controlAccentColor)
+                theme.activeColor)
             : (sliderTheme.accentColorUnfocused ?? theme.accentColorUnfocused);
 
         final trackColor = widget.trackColor ?? sliderTheme.trackColor;

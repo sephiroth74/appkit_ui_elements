@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/theme.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -92,9 +93,12 @@ class _ControlsPageState extends State<ControlsPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Controls'),
+      toolBar: AppKitToolBar(
+        title: const Text('Controls'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(

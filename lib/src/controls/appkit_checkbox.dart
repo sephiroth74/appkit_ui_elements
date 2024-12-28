@@ -97,9 +97,8 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
         child: Builder(
           builder: (context) {
             final isDark = theme.brightness == Brightness.dark;
-            final controlBackgroundColor = isDark
-                ? AppKitColors.controlBackgroundColor.darkColor
-                : AppKitColors.controlBackgroundColor.color;
+            final controlBackgroundColor =
+                AppKitColors.controlBackgroundColor.color;
             final Color accentColor = widget.color ?? theme.activeColor;
             final isMainWindow =
                 MainWindowStateListener.instance.isMainWindow.value;
@@ -172,36 +171,37 @@ class _DecoratedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controlBackgroundColor = isDark
-        ? AppKitColors.controlBackgroundColor.darkColor
-        : AppKitColors.controlBackgroundColor.color;
+    final controlBackgroundColor = AppKitColors.controlBackgroundColor.color;
     final radius = size / _kCornerRadiusRatio;
     final shadowSpread = size / _kBoxShadowSpreadRatio;
     final iconColor = enabled
         ? color.computeLuminance() > 0.5
             ? Colors.black
             : Colors.white
-        : AppKitDynamicColor.resolve(
-            context, AppKitColors.text.opaque.tertiary);
+        : AppKitColors.text.opaque.tertiary.color;
 
     return Container(
       foregroundDecoration:
           isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black.withOpacity(0.2),
+            width: 0.5,
+          ),
           color: !enabled
               ? controlBackgroundColor.withOpacity(0.5)
               : value != false && isMainWindow
                   ? color
-                  : null,
+                  : controlBackgroundColor.withOpacity(0.5),
           borderRadius: BorderRadius.circular(radius),
           boxShadow: [
             if (value == false || !isMainWindow && enabled) ...[
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withOpacity(0.05),
               ),
               BoxShadow(
-                color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.5),
+                color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.1),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),

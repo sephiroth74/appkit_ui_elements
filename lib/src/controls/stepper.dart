@@ -77,8 +77,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
             ? AppKitColors.labelColor.color
             : AppKitColors.text.opaque.tertiary.color
         : widget.enabled
-            ? AppKitColors.labelColor.darkColor
-            : AppKitColors.text.opaque.tertiary.darkColor;
+            ? AppKitColors.labelColor.color
+            : AppKitColors.text.opaque.tertiary.color;
 
     final strokeWidth = widget.controlSize.strokeWidth;
     final separatorWidth = widget.controlSize.separatorWidth;
@@ -95,7 +95,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
           onPanCancel: widget.enabled ? _onPanCancel : null,
           onPanUpdate: widget.enabled ? _onPanUpdate : null,
           onPanStart: widget.enabled ? _onPanStart : null,
-          child: UiElementColorBuilder(builder: (context, colorContainer) {
+          child: Builder(builder: (context) {
             return DecoratedBox(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius),
@@ -131,8 +131,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: widget.enabled
-                              ? colorContainer.controlBackgroundColor
-                              : colorContainer.controlBackgroundColor
+                              ? AppKitColors.controlBackgroundColor.color
+                              : AppKitColors.controlBackgroundColor.color
                                   .multiplyOpacity(0.5),
                           border: Border(
                             top: BorderSide(
@@ -179,8 +179,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                         child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: widget.enabled
-                                  ? colorContainer.controlBackgroundColor
-                                  : colorContainer.controlBackgroundColor
+                                  ? AppKitColors.controlBackgroundColor.color
+                                  : AppKitColors.controlBackgroundColor.color
                                       .multiplyOpacity(0.5),
                               border: Border(
                                 left: BorderSide(

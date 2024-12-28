@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -95,10 +94,8 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
         label: widget.semanticLabel,
         child: Builder(
           builder: (context) {
-            final isDark = theme.brightness == Brightness.dark;
-            final controlBackgroundColor = isDark
-                ? AppKitColors.controlBackgroundColor.darkColor
-                : AppKitColors.controlBackgroundColor.color;
+            final controlBackgroundColor =
+                AppKitColors.controlBackgroundColor.color;
             final Color accentColor = widget.color ?? theme.activeColor;
             final isMainWindow =
                 MainWindowStateListener.instance.isMainWindow.value;
@@ -109,6 +106,10 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.black.withOpacity(0.2),
+                  width: 0.5,
+                ),
                 boxShadow: [
                   if ((widget.isSelected || widget.isIndeterminate) &&
                       isMainWindow &&
