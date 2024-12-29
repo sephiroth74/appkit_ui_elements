@@ -871,7 +871,7 @@ class _ColorProvider {
         if (isDark) {
           return const Color(0xFFbb3dc4);
         } else {
-          return const Color.fromRGBO(218, 142, 255, 1.0);
+          return const Color(0xFF92259e);
         }
 
       case AppKitAccentColor.pink:

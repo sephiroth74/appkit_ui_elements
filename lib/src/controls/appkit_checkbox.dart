@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -97,11 +96,14 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
         child: Builder(
           builder: (context) {
             final isDark = theme.brightness == Brightness.dark;
-            final controlBackgroundColor =
-                AppKitColors.controlBackgroundColor.color;
+
+            final controlBackgroundColor = AppKitDynamicColor.resolve(
+                context, AppKitColors.controlBackgroundColor);
             final Color accentColor = widget.color ?? theme.activeColor;
+
             final isMainWindow =
                 MainWindowStateListener.instance.isMainWindow.value;
+
             return Container(
               width: widget.size,
               height: widget.size,
@@ -111,21 +113,14 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
                 borderRadius:
                     BorderRadius.circular(widget.size / _kCornerRadiusRatio),
                 boxShadow: [
-                  if (widget.value != false &&
-                      isMainWindow &&
-                      widget.enabled) ...[
-                    BoxShadow(
-                      color: accentColor.withOpacity(0.24),
-                      offset: Offset(0, widget.size / _kBoxShadowSpreadRatio),
-                      blurRadius: (widget.size / 5.6).clamp(0, 20),
-                    ),
-                    BoxShadow(
-                      color: accentColor.withOpacity(0.12),
-                      offset: const Offset(0, 0),
-                      blurRadius: 0,
-                      spreadRadius: 0.25,
-                    ),
-                  ],
+                  if (isDark) ...[
+                    const BoxShadow(
+                      color: AppKitColors.shadowColor,
+                      offset: Offset(0, 0),
+                      blurRadius: 0.5,
+                      spreadRadius: 0.0,
+                    )
+                  ]
                 ],
               ),
               child: SizedBox.expand(
@@ -178,17 +173,42 @@ class _DecoratedContainer extends StatelessWidget {
         ? color.computeLuminance() > 0.5
             ? Colors.black
             : Colors.white
-        : AppKitColors.text.opaque.tertiary.color;
+        : AppKitDynamicColor.resolve(
+            context, AppKitColors.text.opaque.tertiary);
 
     return Container(
-      foregroundDecoration:
-          isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,
+      foregroundDecoration: isDown
+          ? BoxDecoration(
+              color: AppKitDynamicColor.resolve(
+                  context, AppKitColors.controlBackgroundPressedColor))
+          : value != false && enabled
+              ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.white.withOpacity(0.1), Colors.transparent],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                )
+              : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black.withOpacity(0.2),
-            width: 0.5,
-          ),
+          border: ((value == false || !isMainWindow) && enabled)
+              ? GradientBoxBorder(
+                  gradient: LinearGradient(
+                    colors: [
+                      isDark
+                          ? Colors.white.withOpacity(0.4)
+                          : Colors.black.withOpacity(0.5),
+                      isDark
+                          ? Colors.white.withOpacity(0.0)
+                          : Colors.black.withOpacity(0.2),
+                    ],
+                    transform: const GradientRotation(pi / 2),
+                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1],
+                  ),
+                  width: size / _kBorderWidthRatio,
+                )
+              : null,
           color: !enabled
               ? controlBackgroundColor.withOpacity(0.5)
               : value != false && isMainWindow
@@ -198,7 +218,7 @@ class _DecoratedContainer extends StatelessWidget {
           boxShadow: [
             if (value == false || !isMainWindow && enabled) ...[
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withOpacity(0.2),
               ),
               BoxShadow(
                 color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.1),
@@ -211,18 +231,6 @@ class _DecoratedContainer extends StatelessWidget {
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: ((value == false || !isMainWindow) && enabled)
-                ? GradientBoxBorder(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.2),
-                        Colors.black.withOpacity(0.15),
-                      ],
-                      transform: const GradientRotation(pi / 2),
-                    ),
-                    width: size / _kBorderWidthRatio,
-                  )
-                : null,
             borderRadius: BorderRadius.circular(radius),
             gradient: value != false && isMainWindow
                 ? LinearGradient(
@@ -232,7 +240,19 @@ class _DecoratedContainer extends StatelessWidget {
                     ],
                     transform: const GradientRotation(pi / 2),
                   )
-                : null,
+                : value == false && enabled
+                    ? LinearGradient(
+                        colors: [
+                          isDark
+                              ? Colors.black.withOpacity(0.5)
+                              : Colors.white.withOpacity(0.5),
+                          isDark
+                              ? Colors.black.withOpacity(0.0)
+                              : Colors.white.withOpacity(0.0),
+                        ],
+                        transform: const GradientRotation(pi / 2),
+                      )
+                    : null,
           ),
           child: (value != false)
               ? Center(

@@ -137,8 +137,8 @@ class AppKitColors {
 
   static const controlBackgroundPressedColor =
       CupertinoDynamicColor.withBrightness(
-    color: Color.fromRGBO(0, 0, 0, 0.06),
-    darkColor: Color.fromRGBO(255, 255, 255, 0.15),
+    color: Color.fromRGBO(0, 0, 0, 0.2),
+    darkColor: Color.fromRGBO(255, 255, 255, 0.2),
   );
 
   static const CupertinoDynamicColor unemphasizedSelectedTextColor =
