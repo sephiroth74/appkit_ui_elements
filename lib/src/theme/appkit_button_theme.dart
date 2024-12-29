@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 
@@ -29,17 +27,25 @@ class AppKitButtonTheme extends InheritedTheme {
 class AppKitButtonThemeData with Diagnosticable {
   final AppKitMaterialButtonThemeData material;
 
-  AppKitButtonThemeData({required this.material});
+  AppKitButtonThemeData({
+    required this.material,
+  });
 
-  AppKitButtonThemeData copyWith({AppKitMaterialButtonThemeData? material}) {
-    return AppKitButtonThemeData(material: material ?? this.material);
+  AppKitButtonThemeData copyWith({
+    AppKitMaterialButtonThemeData? material,
+  }) {
+    return AppKitButtonThemeData(
+      material: material ?? this.material,
+    );
   }
 
   AppKitButtonThemeData merge(AppKitButtonThemeData? other) {
     if (other == null) {
       return this;
     }
-    return copyWith(material: other.material);
+    return copyWith(
+      material: other.material,
+    );
   }
 
   @override
@@ -59,36 +65,44 @@ class AppKitButtonThemeData with Diagnosticable {
 
 abstract class AppKitButtonThemeBaseData with Diagnosticable {
   final Color? accentColor;
-  final Color controlBackgroundColorDisabled;
+  final Color? secondaryColor;
+  final Color? destructiveColor;
+  final Color backgroundColorDisabled;
 
   AppKitButtonThemeBaseData({
-    required this.controlBackgroundColorDisabled,
+    required this.backgroundColorDisabled,
     this.accentColor,
+    this.secondaryColor,
+    this.destructiveColor,
   });
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('accentColor', accentColor));
-    properties.add(ColorProperty(
-        'controlBackgroundColorDisabled', controlBackgroundColorDisabled));
+    properties
+        .add(ColorProperty('backgroundColorDisabled', backgroundColorDisabled));
+    properties.add(ColorProperty('secondaryColor', secondaryColor));
+    properties.add(ColorProperty('destructiveColor', destructiveColor));
   }
 }
 
 class AppKitMaterialButtonThemeData extends AppKitButtonThemeBaseData {
   AppKitMaterialButtonThemeData({
-    required super.controlBackgroundColorDisabled,
+    required super.backgroundColorDisabled,
     super.accentColor,
+    super.secondaryColor,
+    super.destructiveColor,
   });
 
   static AppKitMaterialButtonThemeData lerp(AppKitMaterialButtonThemeData? a,
       AppKitMaterialButtonThemeData? b, double t) {
     return AppKitMaterialButtonThemeData(
       accentColor: Color.lerp(a?.accentColor, b?.accentColor, t),
-      controlBackgroundColorDisabled: Color.lerp(
-          a?.controlBackgroundColorDisabled,
-          b?.controlBackgroundColorDisabled,
-          t)!,
+      backgroundColorDisabled: Color.lerp(
+          a?.backgroundColorDisabled, b?.backgroundColorDisabled, t)!,
+      secondaryColor: Color.lerp(a?.secondaryColor, b?.secondaryColor, t),
+      destructiveColor: Color.lerp(a?.destructiveColor, b?.destructiveColor, t),
     );
   }
 }

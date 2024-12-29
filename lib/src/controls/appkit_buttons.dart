@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class AppKitButton extends StatefulWidget {
   final AppKitButtonStyle style;
+  final AppKitButtonType type;
   final AppKitControlSize size;
   final Widget child;
   final VoidCallback? onPressed;
@@ -13,7 +14,7 @@ class AppKitButton extends StatefulWidget {
   final MouseCursor? mouseCursor;
 
   const AppKitButton({
-    required this.style,
+    super.key,
     required this.size,
     required this.child,
     this.onPressed,
@@ -21,6 +22,8 @@ class AppKitButton extends StatefulWidget {
     this.padding,
     this.semanticLabel,
     this.mouseCursor = SystemMouseCursors.basic,
+    this.style = AppKitButtonStyle.inline,
+    this.type = AppKitButtonType.primary,
   });
 
   @override
@@ -68,9 +71,6 @@ class _AppKitButtonState extends State<AppKitButton> {
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    final theme = AppKitTheme.of(context);
-    final buttonTheme = AppKitButtonTheme.of(context);
-    final isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
     return Semantics(
       label: widget.semanticLabel,
       button: true,
@@ -82,9 +82,12 @@ class _AppKitButtonState extends State<AppKitButton> {
         hitTestBehavior: HitTestBehavior.opaque,
         onEnter: enabled ? _handleMouseEnter : null,
         onExit: enabled ? _handleMouseExit : null,
-        child: Builder(builder: (context) {
-          if (widget.style == AppKitButtonStyle.material) {
+        child: MainWindowBuilder(builder: (context, isMainWindow) {
+          final theme = AppKitTheme.of(context);
+          final buttonTheme = AppKitButtonTheme.of(context);
+          if (widget.style == AppKitButtonStyle.inline) {
             return _MaterialButton(
+              type: widget.type,
               theme: theme,
               buttonTheme: buttonTheme,
               isMainWindow: isMainWindow,
@@ -119,6 +122,7 @@ class _MaterialButton extends StatefulWidget {
   final bool isEnabled;
   final AppKitThemeData theme;
   final AppKitButtonThemeData buttonTheme;
+  final AppKitButtonType type;
 
   const _MaterialButton({
     required this.size,
@@ -127,6 +131,7 @@ class _MaterialButton extends StatefulWidget {
     required this.isEnabled,
     required this.theme,
     required this.buttonTheme,
+    required this.type,
     this.onPressed,
     this.accentColor,
     this.padding,
@@ -142,19 +147,72 @@ class _MaterialButtonState extends State<_MaterialButton>
   bool isDown = false;
 
   late AnimationController controller;
-  late Animation<Color?> colorAnimation;
+  late Animation<double> colorAnimation;
+  late Color backgroundColor;
+  late Color backgroundColorPressed;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(_MaterialButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.isEnabled != widget.isEnabled ||
+        oldWidget.accentColor != widget.accentColor ||
+        oldWidget.theme != widget.theme ||
+        oldWidget.buttonTheme != widget.buttonTheme ||
+        oldWidget.type != widget.type ||
+        oldWidget.isMainWindow != widget.isMainWindow) {
+      _computeColors();
+    }
+  }
+
+  void _computeColors() {
+    if (!widget.isEnabled) {
+      backgroundColor = widget.buttonTheme.material.backgroundColorDisabled;
+    } else {
+      if (widget.type == AppKitButtonType.primary) {
+        backgroundColor = widget.accentColor ??
+            widget.buttonTheme.material.accentColor ??
+            widget.theme.activeColor;
+      } else if (widget.type == AppKitButtonType.secondary) {
+        backgroundColor = widget.accentColor ??
+            widget.buttonTheme.material.secondaryColor ??
+            widget.theme.controlBackgroundColor;
+      } else {
+        backgroundColor = widget.accentColor ??
+            widget.buttonTheme.material.destructiveColor ??
+            AppKitColors.systemRed;
+      }
+    }
+
+    final blendedColor = Color.lerp(
+        widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+    final blendedColorLuminance = blendedColor.computeLuminance();
+
+    if (blendedColorLuminance > 0.15) {
+      backgroundColorPressed = Color.lerp(backgroundColor, Colors.black, 0.15)!;
+    } else {
+      backgroundColorPressed = Color.lerp(backgroundColor, Colors.white, 0.15)!;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _computeColors();
+
     controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
 
-    colorAnimation = ColorTween(
-      begin: backgroundColor,
-      end: backgroundColorPressed,
+    colorAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
     ).animate(controller)
       ..addListener(() {
         setState(() {});
@@ -166,18 +224,6 @@ class _MaterialButtonState extends State<_MaterialButton>
     controller.dispose();
     super.dispose();
   }
-
-  late Color backgroundColor = !widget.isEnabled
-      ? widget.buttonTheme.material.controlBackgroundColorDisabled
-      : widget.accentColor ??
-          widget.buttonTheme.material.accentColor ??
-          widget.theme.activeColor;
-
-  late Color backgroundColorPressed =
-      Color.lerp(backgroundColor, Colors.black, 0.2) ??
-          widget.theme.controlBackgroundPressedColor;
-
-  late Color controlBackgroundColor = backgroundColor;
 
   void _handleTapDown(TapDownDetails details) {
     setState(() {
@@ -204,27 +250,18 @@ class _MaterialButtonState extends State<_MaterialButton>
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: widget.size.getBoxConstraints(AppKitButtonStyle.material),
+      constraints: widget.size.getBoxConstraints(AppKitButtonStyle.inline),
       child: GestureDetector(
         onTapDown: widget.isEnabled ? _handleTapDown : null,
         onTapUp: widget.isEnabled ? _handleTapUp : null,
         onTapCancel: widget.isEnabled ? _handleTapCancel : null,
         child: LayoutBuilder(builder: (context, constraints) {
-          final controlBackgroundColor =
-              colorAnimation.value ?? backgroundColor;
-          // Color backgroundColor = widget.accentColor ?? buttonTheme.material.accentColor ?? theme.activeColor;
-
-          // if (!widget.isEnabled) {
-          //   backgroundColor = buttonTheme.material.controlBackgroundColorDisabled;
-          // } else {
-          //   if (isDown) {
-          //     backgroundColor = Color.lerp(backgroundColor, Colors.black, 0.2) ?? theme.controlBackgroundPressedColor;
-          //   }
-          // }
-
           Color textColor;
-
-          if (controlBackgroundColor.computeLuminance() > 0.5) {
+          final controlBackgroundColor = Color.lerp(
+              backgroundColor, backgroundColorPressed, colorAnimation.value);
+          final blendedColor = Color.lerp(widget.theme.canvasColor,
+              backgroundColor, backgroundColor.opacity)!;
+          if (blendedColor.computeLuminance() > 0.5) {
             textColor = AppKitColors.textColor.color;
           } else {
             textColor = AppKitColors.textColor.darkColor;
@@ -232,8 +269,8 @@ class _MaterialButtonState extends State<_MaterialButton>
 
           final textStyle = widget.theme.typography.body.copyWith(
             color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.5),
-            fontSize: widget.size.getFontSize(AppKitButtonStyle.material),
-            fontWeight: widget.size.getFontWeight(AppKitButtonStyle.material),
+            fontSize: widget.size.getFontSize(AppKitButtonStyle.inline),
+            fontWeight: widget.size.getFontWeight(AppKitButtonStyle.inline),
           );
 
           return DecoratedBox(
@@ -247,7 +284,7 @@ class _MaterialButtonState extends State<_MaterialButton>
                 alignment: AlignmentDirectional.bottomCenter,
                 child: Padding(
                   padding: widget.padding ??
-                      widget.size.getPadding(AppKitButtonStyle.material),
+                      widget.size.getPadding(AppKitButtonStyle.inline),
                   child: DefaultTextStyle(
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -266,7 +303,13 @@ class _MaterialButtonState extends State<_MaterialButton>
 }
 
 enum AppKitButtonStyle {
-  material,
+  inline,
+}
+
+enum AppKitButtonType {
+  primary,
+  secondary,
+  destructive,
 }
 
 extension _AppKitControlSizeX on AppKitControlSize {
@@ -280,14 +323,14 @@ extension _AppKitControlSizeX on AppKitControlSize {
 
       case AppKitControlSize.regular:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return const BoxConstraints(
                 minWidth: 48, maxHeight: 24, minHeight: 24);
         }
 
       case AppKitControlSize.large:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return const BoxConstraints(
                 minWidth: 54, maxHeight: 29, minHeight: 29);
         }
@@ -298,25 +341,25 @@ extension _AppKitControlSizeX on AppKitControlSize {
     switch (this) {
       case AppKitControlSize.mini:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return 7.5;
         }
 
       case AppKitControlSize.small:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return 9;
         }
 
       case AppKitControlSize.regular:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return 12;
         }
 
       case AppKitControlSize.large:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return 13.5;
         }
     }
@@ -330,19 +373,19 @@ extension _AppKitControlSizeX on AppKitControlSize {
 
       case AppKitControlSize.small:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return const EdgeInsets.only(
                 left: 13.5, right: 13.5, top: 0.0, bottom: 2.5);
         }
       case AppKitControlSize.regular:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return const EdgeInsets.only(
                 left: 20, right: 20, top: 0.0, bottom: 5.5);
         }
       case AppKitControlSize.large:
         switch (style) {
-          case AppKitButtonStyle.material:
+          case AppKitButtonStyle.inline:
             return const EdgeInsets.only(
                 left: 26.5, right: 26.5, top: 0.0, bottom: 6.5);
         }

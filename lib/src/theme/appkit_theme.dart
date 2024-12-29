@@ -159,6 +159,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? true,
     );
 
+    debugPrint('activeColor: $activeColor');
+
     activeColorUnfocused ??=
         _ColorProvider.getActiveColorUnfocused(isDark: isDark);
 
@@ -234,8 +236,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     buttonTheme ??= AppKitButtonThemeData(
       material: AppKitMaterialButtonThemeData(
+        secondaryColor: controlBackgroundColor,
+        destructiveColor: AppKitColors.systemRed.color,
         accentColor: activeColor,
-        controlBackgroundColorDisabled: isDark
+        backgroundColorDisabled: isDark
             ? controlBackgroundColorDisabledLight
             : controlBackgroundColorDisabledDark,
       ),

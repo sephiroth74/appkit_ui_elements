@@ -30,70 +30,133 @@ class _PushButtonPageState extends State<PushButtonPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const WidgetTitle(label: 'Material Button'),
+                        const WidgetTitle(label: 'Inline Button'),
                         const SizedBox(height: 16.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AppKitTooltip.plain(
-                                message: 'Material button',
-                                child: AppKitButton(
-                                    onPressed: () {
-                                      debugPrint('Material button pressed');
-                                    },
-                                    style: AppKitButtonStyle.material,
-                                    size: AppKitControlSize.large,
-                                    child: const Text('Get'))),
-                            const SizedBox(width: 8.0),
-                            AppKitTooltip.rich(
-                                message: TextSpan(children: [
-                                  const TextSpan(
-                                    text: 'Material Button with ',
-                                  ),
-                                  TextSpan(
-                                    text: 'custom color',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: AppKitDynamicColor.resolve(
-                                            context, AppKitColors.systemMint)),
-                                  ),
-                                ]),
-                                child: AppKitButton(
-                                    accentColor: AppKitDynamicColor.resolve(
-                                        context, AppKitColors.systemMint),
-                                    onPressed: () {
-                                      debugPrint('Material button pressed');
-                                    },
-                                    style: AppKitButtonStyle.material,
-                                    size: AppKitControlSize.large,
-                                    child: const Text('Get'))),
-                            const SizedBox(width: 8.0),
-                            AppKitTooltip.plain(
-                                message: 'Material button disabled',
-                                child: AppKitButton(
-                                    style: AppKitButtonStyle.material,
-                                    size: AppKitControlSize.large,
-                                    child: const Text('Get'))),
-                            const SizedBox(width: 8.0),
-                            AppKitButton(
-                                onPressed: () {},
-                                style: AppKitButtonStyle.material,
-                                size: AppKitControlSize.regular,
-                                child: const Text('Get')),
-                            const SizedBox(width: 8.0),
-                            AppKitButton(
-                                onPressed: () {},
-                                style: AppKitButtonStyle.material,
-                                size: AppKitControlSize.small,
-                                child: const Text('Get')),
-                            const SizedBox(width: 8.0),
-                            AppKitButton(
-                                onPressed: () {},
-                                style: AppKitButtonStyle.material,
-                                size: AppKitControlSize.mini,
-                                child: const Text('Get')),
-                          ],
-                        ),
+
+                        for (final controlSize in AppKitControlSize.values) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AppKitTooltip.plain(
+                                  message: 'Inline button (primary)',
+                                  child: AppKitButton(
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.inline,
+                                      type: AppKitButtonType.primary,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.plain(
+                                  message: 'Inline button (secondary)',
+                                  child: AppKitButton(
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.inline,
+                                      type: AppKitButtonType.secondary,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.plain(
+                                  message: 'Inline button (destructive)',
+                                  child: AppKitButton(
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.inline,
+                                      type: AppKitButtonType.destructive,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.rich(
+                                  message: TextSpan(children: [
+                                    const TextSpan(
+                                      text: 'Inline Button with ',
+                                    ),
+                                    TextSpan(
+                                      text: 'custom color',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppKitDynamicColor.resolve(
+                                              context,
+                                              AppKitColors.systemMint)),
+                                    ),
+                                  ]),
+                                  child: AppKitButton(
+                                      accentColor: AppKitDynamicColor.resolve(
+                                          context, AppKitColors.systemMint),
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.inline,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.plain(
+                                  message: 'Inline button disabled',
+                                  child: AppKitButton(
+                                      style: AppKitButtonStyle.inline,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                            ],
+                          ),
+                          const SizedBox(height: 16.0),
+                        ],
+
+                        // AppKitControlSize.values.map((controlSize) {
+                        //   return Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       AppKitTooltip.plain(
+                        //           message: 'Inline button (primary)',
+                        //           child: AppKitButton(
+                        //               onPressed: () {},
+                        //               style: AppKitButtonStyle.inline,
+                        //               type: AppKitButtonType.primary,
+                        //               size: AppKitControlSize.large,
+                        //               child: const Text('Get'))),
+                        //       const SizedBox(width: 8.0),
+                        //       AppKitTooltip.plain(
+                        //           message: 'Inline button (secondary)',
+                        //           child: AppKitButton(
+                        //               onPressed: () {},
+                        //               style: AppKitButtonStyle.inline,
+                        //               type: AppKitButtonType.secondary,
+                        //               size: AppKitControlSize.large,
+                        //               child: const Text('Get'))),
+                        //       const SizedBox(width: 8.0),
+                        //       AppKitTooltip.plain(
+                        //           message: 'Inline button (destructive)',
+                        //           child: AppKitButton(
+                        //               onPressed: () {},
+                        //               style: AppKitButtonStyle.inline,
+                        //               type: AppKitButtonType.destructive,
+                        //               size: AppKitControlSize.large,
+                        //               child: const Text('Get'))),
+                        //       const SizedBox(width: 8.0),
+                        //       AppKitTooltip.rich(
+                        //           message: TextSpan(children: [
+                        //             const TextSpan(
+                        //               text: 'Inline Button with ',
+                        //             ),
+                        //             TextSpan(
+                        //               text: 'custom color',
+                        //               style: TextStyle(
+                        //                   fontWeight: FontWeight.bold,
+                        //                   color: AppKitDynamicColor.resolve(context, AppKitColors.systemMint)),
+                        //             ),
+                        //           ]),
+                        //           child: AppKitButton(
+                        //               accentColor: AppKitDynamicColor.resolve(context, AppKitColors.systemMint),
+                        //               onPressed: () {},
+                        //               style: AppKitButtonStyle.inline,
+                        //               size: AppKitControlSize.large,
+                        //               child: const Text('Get'))),
+                        //       const SizedBox(width: 8.0),
+                        //       AppKitTooltip.plain(
+                        //           message: 'Inline button disabled',
+                        //           child: const AppKitButton(
+                        //               style: AppKitButtonStyle.inline,
+                        //               size: AppKitControlSize.large,
+                        //               child: Text('Get'))),
+                        //     ],
+                        //   );
+                        // }).toList(),
+
                         const WidgetTitle(label: 'Push Button'),
                         const SizedBox(height: 16.0),
                         Row(
