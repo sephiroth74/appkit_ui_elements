@@ -30,6 +30,70 @@ class _PushButtonPageState extends State<PushButtonPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        const WidgetTitle(label: 'Material Button'),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppKitTooltip.plain(
+                                message: 'Material button',
+                                child: AppKitButton(
+                                    onPressed: () {
+                                      debugPrint('Material button pressed');
+                                    },
+                                    style: AppKitButtonStyle.material,
+                                    size: AppKitControlSize.large,
+                                    child: const Text('Get'))),
+                            const SizedBox(width: 8.0),
+                            AppKitTooltip.rich(
+                                message: TextSpan(children: [
+                                  const TextSpan(
+                                    text: 'Material Button with ',
+                                  ),
+                                  TextSpan(
+                                    text: 'custom color',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppKitDynamicColor.resolve(
+                                            context, AppKitColors.systemMint)),
+                                  ),
+                                ]),
+                                child: AppKitButton(
+                                    accentColor: AppKitDynamicColor.resolve(
+                                        context, AppKitColors.systemMint),
+                                    onPressed: () {
+                                      debugPrint('Material button pressed');
+                                    },
+                                    style: AppKitButtonStyle.material,
+                                    size: AppKitControlSize.large,
+                                    child: const Text('Get'))),
+                            const SizedBox(width: 8.0),
+                            AppKitTooltip.plain(
+                                message: 'Material button disabled',
+                                child: AppKitButton(
+                                    style: AppKitButtonStyle.material,
+                                    size: AppKitControlSize.large,
+                                    child: const Text('Get'))),
+                            const SizedBox(width: 8.0),
+                            AppKitButton(
+                                onPressed: () {},
+                                style: AppKitButtonStyle.material,
+                                size: AppKitControlSize.regular,
+                                child: const Text('Get')),
+                            const SizedBox(width: 8.0),
+                            AppKitButton(
+                                onPressed: () {},
+                                style: AppKitButtonStyle.material,
+                                size: AppKitControlSize.small,
+                                child: const Text('Get')),
+                            const SizedBox(width: 8.0),
+                            AppKitButton(
+                                onPressed: () {},
+                                style: AppKitButtonStyle.material,
+                                size: AppKitControlSize.mini,
+                                child: const Text('Get')),
+                          ],
+                        ),
                         const WidgetTitle(label: 'Push Button'),
                         const SizedBox(height: 16.0),
                         Row(

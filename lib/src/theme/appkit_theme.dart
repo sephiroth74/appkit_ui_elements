@@ -88,6 +88,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color controlBackgroundPressedColor;
   final Color accentColorUnfocused;
   final AppKitPushButtonThemeData pushButtonTheme;
+  final AppKitButtonThemeData buttonTheme;
   final AppKitToggleButtonThemeData toggleButtonTheme;
   final AppKitHelpButtonThemeData helpButtonTheme;
   final AppKitSliderThemeData sliderTheme;
@@ -113,6 +114,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? activeColor,
     VisualDensity? visualDensity,
     AppKitPushButtonThemeData? pushButtonTheme,
+    AppKitButtonThemeData? buttonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
@@ -137,6 +139,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlBackgroundPressedColor,
     Color? controlBackgroundColorDisabled,
     Color? accentColorUnfocused,
+    Color? activeColorUnfocused,
     AppKitTypography? typography,
     Color? dividerColor,
   }) {
@@ -156,6 +159,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? true,
     );
 
+    activeColorUnfocused ??=
+        _ColorProvider.getActiveColorUnfocused(isDark: isDark);
+
     Color focusColor = primaryColor.withOpacity(0.749);
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
@@ -170,9 +176,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         ? AppKitColors.controlBackgroundColor.darkColor
         : AppKitColors.controlBackgroundColor.color;
 
+    Color controlBackgroundColorDisabledDark =
+        AppKitColors.controlBackgroundColor.darkColor.withOpacity(0.35);
+    Color controlBackgroundColorDisabledLight =
+        AppKitColors.controlBackgroundColor.color.withOpacity(0.35);
+
     controlBackgroundColorDisabled ??= isDark
-        ? AppKitColors.controlBackgroundColor.darkColor.withOpacity(0.5)
-        : AppKitColors.controlBackgroundColor.color.withOpacity(0.5);
+        ? controlBackgroundColorDisabledDark
+        : controlBackgroundColorDisabledLight;
 
     controlBackgroundPressedColor ??= isDark
         ? AppKitColors.controlBackgroundPressedColor.darkColor
@@ -218,6 +229,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       overlayPressedColor: CupertinoDynamicColor.withBrightness(
         color: Color.fromRGBO(0, 0, 0, 0.1),
         darkColor: Color.fromRGBO(255, 255, 255, 0.15),
+      ),
+    );
+
+    buttonTheme ??= AppKitButtonThemeData(
+      material: AppKitMaterialButtonThemeData(
+        accentColor: activeColor,
+        controlBackgroundColorDisabled: isDark
+            ? controlBackgroundColorDisabledLight
+            : controlBackgroundColorDisabledDark,
       ),
     );
 
@@ -404,6 +424,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       visualDensity: visualDensity,
       typography: typography,
       pushButtonTheme: pushButtonTheme,
+      buttonTheme: buttonTheme,
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
       sliderTheme: sliderTheme,
@@ -441,6 +462,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       pushButtonTheme: pushButtonTheme,
+      buttonTheme: buttonTheme,
       toggleButtonTheme: toggleButtonTheme,
       helpButtonTheme: helpButtonTheme,
       sliderTheme: sliderTheme,
@@ -498,6 +520,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.visualDensity,
     required this.typography,
     required this.pushButtonTheme,
+    required this.buttonTheme,
     required this.toggleButtonTheme,
     required this.helpButtonTheme,
     required this.sliderTheme,
@@ -531,6 +554,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         canvasColor,
         typography,
         pushButtonTheme,
+        buttonTheme,
         toggleButtonTheme,
         helpButtonTheme,
         sliderTheme,
@@ -570,6 +594,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlBackgroundPressedColor,
     Color? accentColorUnfocused,
     AppKitPushButtonThemeData? pushButtonTheme,
+    AppKitButtonThemeData? buttonTheme,
     AppKitToggleButtonThemeData? toggleButtonTheme,
     AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
@@ -598,6 +623,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       visualDensity: visualDensity ?? this.visualDensity,
       typography: typography ?? this.typography,
       pushButtonTheme: pushButtonTheme ?? this.pushButtonTheme,
+      buttonTheme: buttonTheme ?? this.buttonTheme,
       toggleButtonTheme: toggleButtonTheme ?? this.toggleButtonTheme,
       helpButtonTheme: helpButtonTheme ?? this.helpButtonTheme,
       sliderTheme: sliderTheme ?? this.sliderTheme,
@@ -638,6 +664,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: other.typography,
       canvasColor: other.canvasColor,
       pushButtonTheme: other.pushButtonTheme,
+      buttonTheme: other.buttonTheme,
       toggleButtonTheme: other.toggleButtonTheme,
       helpButtonTheme: other.helpButtonTheme,
       sliderTheme: other.sliderTheme,
@@ -674,6 +701,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: AppKitTypography.lerp(a.typography, b.typography, t),
       pushButtonTheme: AppKitPushButtonThemeData.lerp(
           a.pushButtonTheme, b.pushButtonTheme, t),
+      buttonTheme: AppKitButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
       toggleButtonTheme: AppKitToggleButtonThemeData.lerp(
           a.toggleButtonTheme, b.toggleButtonTheme, t),
       helpButtonTheme: AppKitHelpButtonThemeData.lerp(
@@ -732,6 +760,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         .add(DiagnosticsProperty<AppKitTypography>('typography', typography));
     properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>(
         'pushButtonTheme', pushButtonTheme));
+    properties.add(
+        DiagnosticsProperty<AppKitButtonThemeData>('buttonTheme', buttonTheme));
     properties.add(DiagnosticsProperty<AppKitToggleButtonThemeData>(
         'toggleButtonTheme', toggleButtonTheme));
     properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
@@ -847,6 +877,12 @@ class _ColorProvider {
     }
   }
 
+  static Color getActiveColorUnfocused({required bool isDark}) {
+    return isDark
+        ? const Color.fromRGBO(76, 78, 65, 1.0)
+        : const Color.fromRGBO(180, 180, 180, 1.0);
+  }
+
   /// Returns the active color based on the provided parameters.
   static Color getActiveColor({
     required AppKitAccentColor accentColor,
@@ -854,9 +890,7 @@ class _ColorProvider {
     required bool isMainWindow,
   }) {
     if (!isMainWindow) {
-      return isDark
-          ? const Color.fromRGBO(76, 78, 65, 1.0)
-          : const Color.fromRGBO(180, 180, 180, 1.0);
+      return getActiveColorUnfocused(isDark: isDark);
     }
 
     switch (accentColor) {
@@ -871,7 +905,7 @@ class _ColorProvider {
         if (isDark) {
           return const Color(0xFFbb3dc4);
         } else {
-          return const Color(0xFF92259e);
+          return const Color(0xFF9b32a2);
         }
 
       case AppKitAccentColor.pink:
