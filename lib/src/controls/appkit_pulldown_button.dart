@@ -447,7 +447,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
             ),
             width: 0.5,
           ),
-          boxShadow: getElevatedShadow(context, colorContainer),
+          boxShadow: getElevatedShadow(context),
         ),
         child: Padding(
           padding: style.getContainerPadding(
@@ -633,8 +633,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
                   width: 0.5,
                 )
               : null,
-          boxShadow:
-              isHovered ? getElevatedShadow(context, colorContainer) : null,
+          boxShadow: isHovered ? getElevatedShadow(context) : null,
         ),
         child: Padding(
           padding: style.getContainerPadding(
