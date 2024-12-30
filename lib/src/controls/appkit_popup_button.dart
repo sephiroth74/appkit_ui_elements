@@ -631,6 +631,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     final theme = AppKitTheme.of(context);
     final popupButtonTheme = AppKitPopupButtonTheme.of(context);
     final enabledFactor = enabled ? 1.0 : 0.5;
+    final bool isDark = theme.brightness == Brightness.dark;
 
     final Color controlBackgroundColor;
     final Color caretBackgroundColor;
@@ -671,12 +672,26 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
           border: isHovered
               ? GradientBoxBorder(
                   gradient: LinearGradient(
-                    colors: [
-                      AppKitColors.text.opaque.tertiary.multiplyOpacity(0.75),
-                      AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
-                    ],
+                    colors: isDark
+                        ? [
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.primary)
+                                .multiplyOpacity(0.5),
+                            AppKitDynamicColor.resolve(context,
+                                    AppKitColors.text.opaque.quaternary)
+                                .multiplyOpacity(0.0)
+                          ]
+                        : [
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.tertiary)
+                                .multiplyOpacity(0.5),
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.secondary)
+                                .multiplyOpacity(0.5)
+                          ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
                   ),
                   width: 0.5,
                 )
