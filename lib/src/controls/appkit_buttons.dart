@@ -101,6 +101,7 @@ class _AppKitButtonState extends State<AppKitButton> {
   }
 }
 
+// #region PushButton
 class _PushButton extends _ButtonBase {
   const _PushButton({
     required super.size,
@@ -160,7 +161,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
                 widget.isEnabled
             ? LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(0.17),
+                  Colors.white.withOpacity(isDark ? 0.05 : 0.17),
                   Colors.white.withOpacity(0.0),
                 ],
                 begin: Alignment.topCenter,
@@ -175,15 +176,30 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
               BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
           border: widget.type != AppKitButtonType.primary ||
                   !widget.isMainWindow ||
-                  !widget.isEnabled
+                  !widget.isEnabled ||
+                  isDark
               ? GradientBoxBorder(
                   gradient: LinearGradient(
-                    colors: [
-                      AppKitColors.text.opaque.tertiary.multiplyOpacity(0.5),
-                      AppKitColors.text.opaque.secondary.multiplyOpacity(0.5)
-                    ],
+                    colors: isDark
+                        ? [
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.primary)
+                                .multiplyOpacity(0.5),
+                            AppKitDynamicColor.resolve(context,
+                                    AppKitColors.text.opaque.quaternary)
+                                .multiplyOpacity(0.0)
+                          ]
+                        : [
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.tertiary)
+                                .multiplyOpacity(0.5),
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.secondary)
+                                .multiplyOpacity(0.5)
+                          ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
                   ),
                   width: 0.5,
                 )
@@ -192,7 +208,8 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
           boxShadow: [
             if (widget.type == AppKitButtonType.primary &&
                 widget.isMainWindow &&
-                widget.isEnabled) ...[
+                widget.isEnabled &&
+                !isDark) ...[
               BoxShadow(
                 color: backgroundColor.withOpacity(0.5),
                 blurRadius: 0.5,
@@ -201,10 +218,12 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
               ),
             ] else ...[
               BoxShadow(
-                color: AppKitColors.shadowColor.color.withOpacity(0.15),
+                color: AppKitColors.shadowColor.color
+                    .withOpacity(isDark ? 0.75 : 0.15),
                 blurRadius: 0.5,
                 spreadRadius: 0,
                 offset: const Offset(0, 0.5),
+                blurStyle: BlurStyle.outer,
               ),
             ],
           ],
@@ -251,12 +270,18 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {
-      backgroundColorPressed = Color.lerp(backgroundColor, Colors.black, 0.08)!;
+      backgroundColorPressed =
+          Color.lerp(backgroundColor, Colors.black, isDark ? 0.15 : 0.08)!;
     } else {
-      backgroundColorPressed = Color.lerp(backgroundColor, Colors.white, 0.08)!;
+      backgroundColorPressed =
+          Color.lerp(backgroundColor, Colors.white, isDark ? 0.15 : 0.08)!;
     }
   }
 }
+
+// #endregion
+
+// #region FlatButton
 
 class _FlatButton extends _ButtonBase {
   const _FlatButton({
@@ -302,7 +327,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
     }
 
     final textStyle = widget.theme.typography.body.copyWith(
-      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.5),
+      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
       fontSize: widget.size.getFontSize(widget.style),
       fontWeight: widget.size.getFontWeight(widget.style),
     );
@@ -338,7 +363,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
     if (!widget.isEnabled) {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
-      if (widget.type == AppKitButtonType.primary) {
+      if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
         backgroundColor = widget.accentColor ??
             themeData.accentColor ??
             widget.theme.activeColor;
@@ -361,6 +386,9 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
   }
 }
 
+// #endregion
+
+// #region InlineButton
 class _InlineButton extends _ButtonBase {
   const _InlineButton({
     required super.size,
@@ -406,7 +434,7 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
     }
 
     final textStyle = widget.theme.typography.body.copyWith(
-      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.5),
+      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
       fontSize: widget.size.getFontSize(widget.style),
       fontWeight: widget.size.getFontWeight(widget.style),
     );
@@ -441,7 +469,7 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
     if (!widget.isEnabled) {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
-      if (widget.type == AppKitButtonType.primary) {
+      if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
         backgroundColor = widget.accentColor ??
             themeData.accentColor ??
             widget.theme.activeColor;
@@ -464,6 +492,9 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
   }
 }
 
+// #endregion
+
+// #region ButtonBase
 abstract class _ButtonBase extends StatefulWidget {
   final AppKitControlSize size;
   final Widget child;
@@ -496,6 +527,8 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> colorAnimation;
+
+  bool get isDark => widget.theme.brightness == Brightness.dark;
 
   @override
   void didChangeDependencies() {
@@ -579,6 +612,8 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
     );
   }
 }
+
+// #endregion
 
 extension _AppKitControlSizeX on AppKitControlSize {
   double getBorderRadius(AppKitButtonStyle style) {

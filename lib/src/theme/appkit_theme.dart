@@ -178,6 +178,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         ? AppKitColors.controlBackgroundColor.darkColor
         : AppKitColors.controlBackgroundColor.color;
 
+    Color controlColor = isDark
+        ? AppKitColors.controlColor.darkColor
+        : AppKitColors.controlColor.color;
+
     Color controlBackgroundColorDisabledDark =
         AppKitColors.controlBackgroundColor.darkColor.withOpacity(0.35);
     Color controlBackgroundColorDisabledLight =
@@ -236,28 +240,34 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     buttonTheme ??= AppKitButtonThemeData(
       inline: AppKitInlineButtonThemeData(
-        secondaryColor: controlBackgroundColor,
-        destructiveColor: AppKitColors.systemRed.color,
+        secondaryColor: controlColor,
+        destructiveColor: isDark
+            ? AppKitColors.systemRed.darkColor
+            : AppKitColors.systemRed.color,
         accentColor: activeColor,
         backgroundColorDisabled: isDark
-            ? controlBackgroundColorDisabledLight
-            : controlBackgroundColorDisabledDark,
+            ? controlColor.multiplyOpacity(0.5)
+            : controlColor.multiplyOpacity(0.5),
       ),
       flat: AppKitFlatButtonThemeData(
-        secondaryColor: controlBackgroundColor,
-        destructiveColor: AppKitColors.systemRed.color,
+        secondaryColor: controlColor,
+        destructiveColor: isDark
+            ? AppKitColors.systemRed.darkColor
+            : AppKitColors.systemRed.color,
         accentColor: activeColor,
         backgroundColorDisabled: isDark
-            ? controlBackgroundColor.multiplyOpacity(0.5)
-            : controlBackgroundColor.multiplyOpacity(0.5),
+            ? controlColor.multiplyOpacity(0.5)
+            : controlColor.multiplyOpacity(0.5),
       ),
       push: AppKitPushButtonThemeData2(
-        secondaryColor: controlBackgroundColor,
-        destructiveColor: AppKitColors.systemRed.color,
+        secondaryColor: controlColor,
+        destructiveColor: isDark
+            ? AppKitColors.systemRed.darkColor
+            : AppKitColors.systemRed.color,
         accentColor: activeColor,
         backgroundColorDisabled: isDark
-            ? controlBackgroundColor.multiplyOpacity(0.75)
-            : controlBackgroundColor.multiplyOpacity(0.75),
+            ? controlColor.multiplyOpacity(0.75)
+            : controlColor.multiplyOpacity(0.75),
       ),
     );
 
