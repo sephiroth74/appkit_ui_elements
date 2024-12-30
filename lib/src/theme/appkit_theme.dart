@@ -248,8 +248,16 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         destructiveColor: AppKitColors.systemRed.color,
         accentColor: activeColor,
         backgroundColorDisabled: isDark
-            ? controlBackgroundColorDisabledLight
-            : controlBackgroundColorDisabledDark,
+            ? controlBackgroundColor.multiplyOpacity(0.5)
+            : controlBackgroundColor.multiplyOpacity(0.5),
+      ),
+      push: AppKitPushButtonThemeData2(
+        secondaryColor: controlBackgroundColor,
+        destructiveColor: AppKitColors.systemRed.color,
+        accentColor: activeColor,
+        backgroundColorDisabled: isDark
+            ? controlBackgroundColor.multiplyOpacity(0.75)
+            : controlBackgroundColor.multiplyOpacity(0.75),
       ),
     );
 
@@ -588,6 +596,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         scrollbarTheme,
         dividerColor,
         iconButtonTheme,
+        buttonTheme,
       ];
 
   AppKitThemeData copyWith({

@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 100);
 
@@ -50,7 +51,7 @@ class _AppKitButtonState extends State<AppKitButton> {
           final theme = AppKitTheme.of(context);
           final buttonTheme = AppKitButtonTheme.of(context);
           if (widget.style == AppKitButtonStyle.inline) {
-            return _MaterialButtonImpl(
+            return _InlineButton(
               type: widget.type,
               theme: theme,
               buttonTheme: buttonTheme,
@@ -63,7 +64,20 @@ class _AppKitButtonState extends State<AppKitButton> {
               child: widget.child,
             );
           } else if (widget.style == AppKitButtonStyle.flat) {
-            return _FlatButtonImpl(
+            return _FlatButton(
+              type: widget.type,
+              theme: theme,
+              buttonTheme: buttonTheme,
+              isMainWindow: isMainWindow,
+              size: widget.size,
+              onPressed: widget.onPressed,
+              accentColor: widget.accentColor,
+              padding: widget.padding,
+              isEnabled: enabled,
+              child: widget.child,
+            );
+          } else if (widget.style == AppKitButtonStyle.push) {
+            return _PushButton(
               type: widget.type,
               theme: theme,
               buttonTheme: buttonTheme,
@@ -87,8 +101,8 @@ class _AppKitButtonState extends State<AppKitButton> {
   }
 }
 
-class _FlatButtonImpl extends _ButtonBase {
-  const _FlatButtonImpl({
+class _PushButton extends _ButtonBase {
+  const _PushButton({
     required super.size,
     required super.child,
     required super.isMainWindow,
@@ -105,10 +119,10 @@ class _FlatButtonImpl extends _ButtonBase {
   final AppKitButtonStyle style = AppKitButtonStyle.flat;
 
   @override
-  State<_FlatButtonImpl> createState() => _FlatButtonImplState();
+  State<_PushButton> createState() => _PushButtonState();
 }
 
-class _FlatButtonImplState extends _ButtonBaseState<_FlatButtonImpl> {
+class _PushButtonState extends _ButtonBaseState<_PushButton> {
   late Color backgroundColor;
   late Color backgroundColorPressed;
 
@@ -117,24 +131,186 @@ class _FlatButtonImplState extends _ButtonBaseState<_FlatButtonImpl> {
     Color textColor;
     final controlBackgroundColor = Color.lerp(
         backgroundColor, backgroundColorPressed, colorAnimation.value);
+
+    if (widget.type == AppKitButtonType.destructive) {
+      textColor =
+          widget.buttonTheme.push.destructiveColor ?? AppKitColors.systemRed;
+    } else {
+      final blendedColor = Color.lerp(
+          widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+      if (blendedColor.computeLuminance() > 0.5) {
+        textColor = AppKitColors.text.opaque.primary.color;
+      } else {
+        textColor = AppKitColors.text.opaque.primary.darkColor;
+      }
+    }
+
+    final textStyle = widget.theme.typography.body.copyWith(
+      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
+      fontSize: widget.size.getFontSize(widget.style),
+      fontWeight: widget.size.getFontWeight(widget.style),
+    );
+
+    return Container(
+      foregroundDecoration: BoxDecoration(
+        borderRadius:
+            BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
+        gradient: widget.type == AppKitButtonType.primary &&
+                widget.isMainWindow &&
+                widget.isEnabled
+            ? LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(0.17),
+                  Colors.white.withOpacity(0.0),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.5],
+              )
+            : null,
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
+          border: widget.type != AppKitButtonType.primary ||
+                  !widget.isMainWindow ||
+                  !widget.isEnabled
+              ? GradientBoxBorder(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppKitColors.text.opaque.tertiary.multiplyOpacity(0.5),
+                      AppKitColors.text.opaque.secondary.multiplyOpacity(0.5)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  width: 0.5,
+                )
+              : null,
+          color: controlBackgroundColor,
+          boxShadow: [
+            if (widget.type == AppKitButtonType.primary &&
+                widget.isMainWindow &&
+                widget.isEnabled) ...[
+              BoxShadow(
+                color: backgroundColor.withOpacity(0.5),
+                blurRadius: 0.5,
+                spreadRadius: 0,
+                offset: const Offset(0, 0.5),
+              ),
+            ] else ...[
+              BoxShadow(
+                color: AppKitColors.shadowColor.color.withOpacity(0.15),
+                blurRadius: 0.5,
+                spreadRadius: 0,
+                offset: const Offset(0, 0.5),
+              ),
+            ],
+          ],
+        ),
+        child: SizedBox(
+          height: constraints.maxHeight,
+          child: Align(
+            alignment: AlignmentDirectional.bottomCenter,
+            child: Padding(
+              padding: widget.padding ?? widget.size.getPadding(widget.style),
+              child: DefaultTextStyle(
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: textStyle,
+                child: widget.child,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void computeColors() {
+    final themeData = widget.buttonTheme.push;
+    if (!widget.isEnabled) {
+      backgroundColor = themeData.backgroundColorDisabled;
+    } else {
+      if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
+        backgroundColor = widget.accentColor ??
+            themeData.accentColor ??
+            widget.theme.activeColor;
+      } else {
+        backgroundColor = widget.accentColor ??
+            themeData.secondaryColor ??
+            widget.theme.controlBackgroundColor;
+      }
+    }
+
     final blendedColor = Color.lerp(
         widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
-    if (blendedColor.computeLuminance() > 0.5) {
-      textColor = AppKitColors.textColor.color;
+    final blendedColorLuminance = blendedColor.computeLuminance();
+
+    if (blendedColorLuminance > 0.15) {
+      backgroundColorPressed = Color.lerp(backgroundColor, Colors.black, 0.08)!;
     } else {
-      textColor = AppKitColors.textColor.darkColor;
+      backgroundColorPressed = Color.lerp(backgroundColor, Colors.white, 0.08)!;
+    }
+  }
+}
+
+class _FlatButton extends _ButtonBase {
+  const _FlatButton({
+    required super.size,
+    required super.child,
+    required super.isMainWindow,
+    required super.isEnabled,
+    required super.theme,
+    required super.buttonTheme,
+    required super.type,
+    super.onPressed,
+    super.padding,
+    super.accentColor,
+  });
+
+  @override
+  final AppKitButtonStyle style = AppKitButtonStyle.flat;
+
+  @override
+  State<_FlatButton> createState() => _FlatButtonState();
+}
+
+class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
+  late Color backgroundColor;
+  late Color backgroundColorPressed;
+
+  @override
+  Widget buildButton(BuildContext context, BoxConstraints constraints) {
+    Color textColor;
+    final controlBackgroundColor = Color.lerp(
+        backgroundColor, backgroundColorPressed, colorAnimation.value);
+    if (widget.type == AppKitButtonType.destructive) {
+      textColor =
+          widget.buttonTheme.flat.destructiveColor ?? AppKitColors.systemRed;
+    } else {
+      final blendedColor = Color.lerp(
+          widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+      if (blendedColor.computeLuminance() > 0.5) {
+        textColor = AppKitColors.textColor.color;
+      } else {
+        textColor = AppKitColors.textColor.darkColor;
+      }
     }
 
     final textStyle = widget.theme.typography.body.copyWith(
       color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.5),
-      fontSize: widget.size.getFontSize(AppKitButtonStyle.flat),
-      fontWeight: widget.size.getFontWeight(AppKitButtonStyle.flat),
+      fontSize: widget.size.getFontSize(widget.style),
+      fontWeight: widget.size.getFontWeight(widget.style),
     );
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-            widget.size.getBorderRadius(AppKitButtonStyle.flat)),
+        borderRadius:
+            BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
         color: controlBackgroundColor,
       ),
       child: SizedBox(
@@ -142,8 +318,7 @@ class _FlatButtonImplState extends _ButtonBaseState<_FlatButtonImpl> {
         child: Align(
           alignment: AlignmentDirectional.bottomCenter,
           child: Padding(
-            padding: widget.padding ??
-                widget.size.getPadding(AppKitButtonStyle.flat),
+            padding: widget.padding ?? widget.size.getPadding(widget.style),
             child: DefaultTextStyle(
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -159,21 +334,18 @@ class _FlatButtonImplState extends _ButtonBaseState<_FlatButtonImpl> {
 
   @override
   void computeColors() {
+    final themeData = widget.buttonTheme.flat;
     if (!widget.isEnabled) {
-      backgroundColor = widget.buttonTheme.flat.backgroundColorDisabled;
+      backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary) {
         backgroundColor = widget.accentColor ??
-            widget.buttonTheme.flat.accentColor ??
+            themeData.accentColor ??
             widget.theme.activeColor;
-      } else if (widget.type == AppKitButtonType.secondary) {
-        backgroundColor = widget.accentColor ??
-            widget.buttonTheme.flat.secondaryColor ??
-            widget.theme.controlBackgroundColor;
       } else {
         backgroundColor = widget.accentColor ??
-            widget.buttonTheme.flat.destructiveColor ??
-            AppKitColors.systemRed;
+            themeData.secondaryColor ??
+            widget.theme.controlBackgroundColor;
       }
     }
 
@@ -189,8 +361,8 @@ class _FlatButtonImplState extends _ButtonBaseState<_FlatButtonImpl> {
   }
 }
 
-class _MaterialButtonImpl extends _ButtonBase {
-  const _MaterialButtonImpl({
+class _InlineButton extends _ButtonBase {
+  const _InlineButton({
     required super.size,
     required super.child,
     required super.isMainWindow,
@@ -207,10 +379,10 @@ class _MaterialButtonImpl extends _ButtonBase {
   final AppKitButtonStyle style = AppKitButtonStyle.inline;
 
   @override
-  State<_MaterialButtonImpl> createState() => _MaterialButtonImplState();
+  State<_InlineButton> createState() => _InlineButtonState();
 }
 
-class _MaterialButtonImplState extends _ButtonBaseState<_MaterialButtonImpl> {
+class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
   late Color backgroundColor;
   late Color backgroundColorPressed;
 
@@ -219,18 +391,24 @@ class _MaterialButtonImplState extends _ButtonBaseState<_MaterialButtonImpl> {
     Color textColor;
     final controlBackgroundColor = Color.lerp(
         backgroundColor, backgroundColorPressed, colorAnimation.value);
-    final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
-    if (blendedColor.computeLuminance() > 0.5) {
-      textColor = AppKitColors.textColor.color;
+
+    if (widget.type == AppKitButtonType.destructive) {
+      textColor =
+          widget.buttonTheme.inline.destructiveColor ?? AppKitColors.systemRed;
     } else {
-      textColor = AppKitColors.textColor.darkColor;
+      final blendedColor = Color.lerp(
+          widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+      if (blendedColor.computeLuminance() > 0.5) {
+        textColor = AppKitColors.textColor.color;
+      } else {
+        textColor = AppKitColors.textColor.darkColor;
+      }
     }
 
     final textStyle = widget.theme.typography.body.copyWith(
       color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.5),
-      fontSize: widget.size.getFontSize(AppKitButtonStyle.inline),
-      fontWeight: widget.size.getFontWeight(AppKitButtonStyle.inline),
+      fontSize: widget.size.getFontSize(widget.style),
+      fontWeight: widget.size.getFontWeight(widget.style),
     );
 
     return DecoratedBox(
@@ -243,8 +421,7 @@ class _MaterialButtonImplState extends _ButtonBaseState<_MaterialButtonImpl> {
         child: Align(
           alignment: AlignmentDirectional.bottomCenter,
           child: Padding(
-            padding: widget.padding ??
-                widget.size.getPadding(AppKitButtonStyle.inline),
+            padding: widget.padding ?? widget.size.getPadding(widget.style),
             child: DefaultTextStyle(
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -260,21 +437,18 @@ class _MaterialButtonImplState extends _ButtonBaseState<_MaterialButtonImpl> {
 
   @override
   void computeColors() {
+    final themeData = widget.buttonTheme.inline;
     if (!widget.isEnabled) {
-      backgroundColor = widget.buttonTheme.inline.backgroundColorDisabled;
+      backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary) {
         backgroundColor = widget.accentColor ??
-            widget.buttonTheme.inline.accentColor ??
+            themeData.accentColor ??
             widget.theme.activeColor;
-      } else if (widget.type == AppKitButtonType.secondary) {
-        backgroundColor = widget.accentColor ??
-            widget.buttonTheme.inline.secondaryColor ??
-            widget.theme.controlBackgroundColor;
       } else {
         backgroundColor = widget.accentColor ??
-            widget.buttonTheme.inline.destructiveColor ??
-            AppKitColors.systemRed;
+            themeData.secondaryColor ??
+            widget.theme.controlBackgroundColor;
       }
     }
 
@@ -414,6 +588,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 6.5;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 2.0;
         }
 
@@ -422,6 +597,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 8.0;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 3.0;
         }
 
@@ -430,6 +606,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 12.0;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 5.0;
         }
 
@@ -438,6 +615,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 14.5;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 5.5;
         }
     }
@@ -451,6 +629,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
             return const BoxConstraints(
                 minWidth: 26, maxHeight: 13, minHeight: 13);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const BoxConstraints(
                 minWidth: 26, maxHeight: 12, minHeight: 12);
         }
@@ -461,6 +640,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
             return const BoxConstraints(
                 minWidth: 42, maxHeight: 16, minHeight: 16);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const BoxConstraints(
                 minWidth: 42, maxHeight: 14, minHeight: 14);
         }
@@ -471,6 +651,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
             return const BoxConstraints(
                 minWidth: 48, maxHeight: 24, minHeight: 24);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const BoxConstraints(
                 minWidth: 48, maxHeight: 22, minHeight: 22);
         }
@@ -481,6 +662,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
             return const BoxConstraints(
                 minWidth: 54, maxHeight: 29, minHeight: 29);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const BoxConstraints(
                 minWidth: 54, maxHeight: 26, minHeight: 26);
         }
@@ -495,6 +677,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
             return 7.5;
 
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 8.0;
         }
 
@@ -503,6 +686,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 9;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 10;
         }
 
@@ -511,6 +695,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 12;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 13;
         }
 
@@ -519,6 +704,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return 13.5;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return 15;
         }
     }
@@ -531,6 +717,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 1.5);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const EdgeInsets.only(left: 6.0, right: 6.0, bottom: 1.5);
         }
 
@@ -539,6 +726,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return const EdgeInsets.only(left: 13.5, right: 13.5, bottom: 2.5);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const EdgeInsets.only(left: 7.0, right: 7.0, bottom: 1.5);
         }
 
@@ -547,6 +735,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return const EdgeInsets.only(left: 20, right: 20, bottom: 5.5);
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0);
         }
       case AppKitControlSize.large:
@@ -554,7 +743,8 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return const EdgeInsets.only(left: 26.5, right: 26.5, bottom: 6.5);
           case AppKitButtonStyle.flat:
-            return const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4.5);
+          case AppKitButtonStyle.push:
+            return const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 5.0);
         }
     }
   }
@@ -575,6 +765,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
           case AppKitButtonStyle.inline:
             return AppKitFontWeight.w500;
           case AppKitButtonStyle.flat:
+          case AppKitButtonStyle.push:
             return AppKitFontWeight.normal;
         }
     }
@@ -582,6 +773,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
 }
 
 enum AppKitButtonStyle {
+  push,
   inline,
   flat,
 }

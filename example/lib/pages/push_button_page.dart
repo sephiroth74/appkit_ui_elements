@@ -119,7 +119,9 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                       style: AppKitButtonStyle.flat,
                                       type: AppKitButtonType.secondary,
                                       size: controlSize,
-                                      child: const Text('Get'))),
+                                      child: const Text(
+                                        'Get',
+                                      ))),
                               const SizedBox(width: 8.0),
                               AppKitTooltip.plain(
                                   message: 'Flat button (destructive)',
@@ -162,6 +164,46 @@ class _PushButtonPageState extends State<PushButtonPage> {
                           ),
                           const SizedBox(height: 16.0),
                         ],
+
+                        const WidgetTitle(label: 'Push Button'),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppKitButton(
+                              size: AppKitControlSize.regular,
+                              style: AppKitButtonStyle.push,
+                              type: AppKitButtonType.primary,
+                              child: const Text('Push'),
+                              onPressed: () {},
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitButton(
+                              size: AppKitControlSize.regular,
+                              style: AppKitButtonStyle.push,
+                              type: AppKitButtonType.secondary,
+                              child: const Text('Push'),
+                              onPressed: () {},
+                            ),
+                            const SizedBox(width: 16.0),
+                            AppKitButton(
+                              size: AppKitControlSize.regular,
+                              style: AppKitButtonStyle.push,
+                              type: AppKitButtonType.destructive,
+                              child: const Text('Push'),
+                              onPressed: () {},
+                            ),
+                            const SizedBox(width: 16.0),
+                            const AppKitButton(
+                              size: AppKitControlSize.regular,
+                              style: AppKitButtonStyle.push,
+                              type: AppKitButtonType.primary,
+                              child: Text('Push'),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16.0),
 
                         // AppKitControlSize.values.map((controlSize) {
                         //   return Row(
