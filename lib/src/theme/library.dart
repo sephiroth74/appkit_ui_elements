@@ -16,7 +16,6 @@ export 'appkit_segmented_control_theme.dart';
 export 'appkit_slider_theme.dart';
 export 'appkit_switch_theme.dart';
 export 'appkit_theme.dart';
-export 'appkit_toggle_button_theme.dart';
 export 'appkit_tooltip_theme.dart';
 export 'appkit_typography.dart';
 export 'appkit_button_theme.dart';

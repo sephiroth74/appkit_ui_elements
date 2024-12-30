@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
@@ -14,22 +15,41 @@ class AppKitButton extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final String? semanticLabel;
   final MouseCursor? mouseCursor;
+  final TextStyle? textStyle;
 
   const AppKitButton({
     super.key,
-    required this.size,
     required this.child,
     this.onPressed,
     this.accentColor,
     this.padding,
     this.semanticLabel,
+    this.textStyle,
+    this.size = AppKitControlSize.regular,
     this.mouseCursor = SystemMouseCursors.basic,
-    this.style = AppKitButtonStyle.inline,
+    this.style = AppKitButtonStyle.push,
     this.type = AppKitButtonType.primary,
   });
 
   @override
   State<AppKitButton> createState() => _AppKitButtonState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty<AppKitButtonStyle>('style', style));
+    properties.add(EnumProperty<AppKitButtonType>('type', type));
+    properties.add(EnumProperty<AppKitControlSize>('size', size));
+    properties.add(DiagnosticsProperty<Widget>('child', child));
+    properties
+        .add(ObjectFlagProperty<VoidCallback>.has('onPressed', onPressed));
+    properties.add(ColorProperty('accentColor', accentColor));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
+    properties.add(StringProperty('semanticLabel', semanticLabel));
+    properties
+        .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
+    properties.add(DiagnosticsProperty<TextStyle>('textStyle', textStyle));
+  }
 }
 
 class _AppKitButtonState extends State<AppKitButton> {
@@ -61,6 +81,7 @@ class _AppKitButtonState extends State<AppKitButton> {
               accentColor: widget.accentColor,
               padding: widget.padding,
               isEnabled: enabled,
+              textStyle: widget.textStyle,
               child: widget.child,
             );
           } else if (widget.style == AppKitButtonStyle.flat) {
@@ -74,6 +95,7 @@ class _AppKitButtonState extends State<AppKitButton> {
               accentColor: widget.accentColor,
               padding: widget.padding,
               isEnabled: enabled,
+              textStyle: widget.textStyle,
               child: widget.child,
             );
           } else if (widget.style == AppKitButtonStyle.push) {
@@ -87,6 +109,7 @@ class _AppKitButtonState extends State<AppKitButton> {
               accentColor: widget.accentColor,
               padding: widget.padding,
               isEnabled: enabled,
+              textStyle: widget.textStyle,
               child: widget.child,
             );
           }
@@ -114,6 +137,7 @@ class _PushButton extends _ButtonBase {
     super.onPressed,
     super.padding,
     super.accentColor,
+    super.textStyle,
   });
 
   @override
@@ -127,6 +151,15 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
   late Color backgroundColor;
   late Color backgroundColorPressed;
 
+  late double borderRadius = widget.size.getBorderRadius(widget.style);
+
+  late double fontSize = widget.size.getFontSize(widget.style);
+
+  late FontWeight fontWeight = widget.size.getFontWeight(widget.style);
+
+  late EdgeInsetsGeometry padding =
+      widget.padding ?? widget.size.getPadding(widget.style);
+
   @override
   Widget buildButton(BuildContext context, BoxConstraints constraints) {
     Color textColor;
@@ -135,7 +168,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
 
     if (widget.type == AppKitButtonType.destructive) {
       textColor =
-          widget.buttonTheme.push.destructiveColor ?? AppKitColors.systemRed;
+          widget.buttonTheme.push.destructiveColor ?? AppKitColors.appleRed;
     } else {
       final blendedColor = Color.lerp(
           widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
@@ -146,16 +179,17 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
       }
     }
 
-    final textStyle = widget.theme.typography.body.copyWith(
-      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
-      fontSize: widget.size.getFontSize(widget.style),
-      fontWeight: widget.size.getFontWeight(widget.style),
-    );
+    final textStyle = widget.theme.typography.body
+        .copyWith(
+          color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+        )
+        .merge(widget.textStyle);
 
     return Container(
       foregroundDecoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
+        borderRadius: BorderRadius.circular(borderRadius),
         gradient: widget.type == AppKitButtonType.primary &&
                 widget.isMainWindow &&
                 widget.isEnabled
@@ -172,8 +206,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
+          borderRadius: BorderRadius.circular(borderRadius),
           border: widget.type != AppKitButtonType.primary ||
                   !widget.isMainWindow ||
                   !widget.isEnabled ||
@@ -233,7 +266,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
           child: Align(
             alignment: AlignmentDirectional.bottomCenter,
             child: Padding(
-              padding: widget.padding ?? widget.size.getPadding(widget.style),
+              padding: padding,
               child: DefaultTextStyle(
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -295,6 +328,7 @@ class _FlatButton extends _ButtonBase {
     super.onPressed,
     super.padding,
     super.accentColor,
+    super.textStyle,
   });
 
   @override
@@ -401,6 +435,7 @@ class _InlineButton extends _ButtonBase {
     super.onPressed,
     super.padding,
     super.accentColor,
+    super.textStyle,
   });
 
   @override
@@ -506,6 +541,7 @@ abstract class _ButtonBase extends StatefulWidget {
   final AppKitThemeData theme;
   final AppKitButtonThemeData buttonTheme;
   final AppKitButtonType type;
+  final TextStyle? textStyle;
 
   abstract final AppKitButtonStyle style;
 
@@ -520,6 +556,7 @@ abstract class _ButtonBase extends StatefulWidget {
     this.onPressed,
     this.accentColor,
     this.padding,
+    this.textStyle,
   });
 }
 

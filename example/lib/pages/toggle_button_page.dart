@@ -1,5 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ToggleButtonPage extends StatefulWidget {
@@ -18,9 +20,12 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Toggle Button'),
+      toolBar: AppKitToolBar(
+        title: const Text('Toggle Buttons'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(
@@ -30,6 +35,8 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
               padding: const EdgeInsets.all(20),
               child: Builder(
                 builder: (context) {
+                  final isDark =
+                      AppKitTheme.of(context).brightness == Brightness.dark;
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -54,10 +61,22 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                                   button1Value = value;
                                 });
                               },
-                              controlSize: AppKitControlSize.regular,
-                              type: AppKitToggleButtonType.primary,
-                              childOff: const Text('Label'),
-                              childOn: const Text('Label'),
+                              size: AppKitControlSize.large,
+                              type: AppKitButtonType.primary,
+                              childOff: Icon(
+                                CupertinoIcons.volume_off,
+                                size: 16,
+                                color: AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.primary),
+                              ),
+                              childOn: Icon(CupertinoIcons.volume_mute,
+                                  size: 16,
+                                  color: AppKitDynamicColor.resolve(
+                                      context,
+                                      isDark
+                                          ? AppKitColors.text.opaque.tertiary
+                                          : AppKitColors
+                                              .text.opaque.secondary)),
                             ),
                           ],
                         ),
@@ -80,82 +99,18 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                                   button2Value = value;
                                 });
                               },
-                              controlSize: AppKitControlSize.regular,
-                              type: AppKitToggleButtonType.secondary,
-                              childOff: const Text('Label'),
-                              childOn: const Text('Label'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 16.0, height: 16.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const SizedBox(
-                                width: 200,
-                                child: Text('Primary (color)',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis)),
-                            const SizedBox(width: 16.0),
-                            AppKitToggleButton(
-                              key: const Key('button3'),
-                              isOn: button3Value,
-                              onChanged: (value) => setState(() {
-                                button3Value = value;
-                              }),
-                              controlSize: AppKitControlSize.regular,
-                              type: AppKitToggleButtonType.primary,
-                              color: AppKitColors.applePurple,
-                              childOff: const Text('Label'),
-                              childOn: const Text('Label'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 16.0, height: 16.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const SizedBox(
-                                width: 200,
-                                child: Text('Secondary (color)',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis)),
-                            const SizedBox(width: 16.0),
-                            AppKitToggleButton(
-                              key: const Key('button4'),
-                              isOn: button4Value,
-                              onChanged: (value) => setState(() {
-                                button4Value = value;
-                              }),
-                              controlSize: AppKitControlSize.regular,
-                              type: AppKitToggleButtonType.secondary,
-                              color: AppKitColors.applePurple,
-                              childOff: const Text('Label'),
-                              childOn: const Text('Label'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 16.0, height: 16.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const SizedBox(
-                                width: 200,
-                                child: Text('Secondary (color)',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis)),
-                            const SizedBox(width: 16.0),
-                            AppKitToggleButton(
-                              key: const Key('button4'),
-                              isOn: button4Value,
-                              onChanged: null,
-                              controlSize: AppKitControlSize.regular,
-                              type: AppKitToggleButtonType.primary,
-                              childOff: const Text('Label'),
-                              childOn: const Text('Label'),
+                              size: AppKitControlSize.large,
+                              type: AppKitButtonType.secondary,
+                              childOff: const Text(
+                                'Off',
+                                style: TextStyle(
+                                    fontWeight: AppKitFontWeight.w590),
+                              ),
+                              childOn: const Text(
+                                'On',
+                                style: TextStyle(
+                                    fontWeight: AppKitFontWeight.w590),
+                              ),
                             ),
                           ],
                         ),
@@ -168,9 +123,9 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            AppKitPushButton(
-                              type: AppKitPushButtonType.secondary,
-                              controlSize: AppKitControlSize.large,
+                            AppKitButton(
+                              type: AppKitButtonType.secondary,
+                              size: AppKitControlSize.large,
                               onPressed: () {
                                 setState(() {
                                   button1Value = true;
@@ -182,9 +137,9 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               child: const Text('Set All On'),
                             ),
                             const SizedBox(width: 16.0),
-                            AppKitPushButton(
-                              type: AppKitPushButtonType.secondary,
-                              controlSize: AppKitControlSize.large,
+                            AppKitButton(
+                              type: AppKitButtonType.secondary,
+                              size: AppKitControlSize.large,
                               onPressed: () {
                                 setState(() {
                                   button1Value = false;

@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
+import 'package:flutter/material.dart';
 
 class PushButtonPage extends StatefulWidget {
   const PushButtonPage({super.key});
@@ -37,7 +38,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                         const SizedBox(height: 16.0),
                         for (final controlSize in AppKitControlSize.values) ...[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               AppKitTooltip.plain(
                                   message: 'Inline button (primary)',
@@ -98,11 +99,16 @@ class _PushButtonPageState extends State<PushButtonPage> {
                           ),
                           const SizedBox(height: 16.0),
                         ],
+                        const Divider(
+                          height: 0.5,
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(height: 16.0),
                         const WidgetTitle(label: 'Flat Button'),
                         const SizedBox(height: 16.0),
                         for (final controlSize in AppKitControlSize.values) ...[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               AppKitTooltip.plain(
                                   message: 'Flat button (primary)',
@@ -165,11 +171,16 @@ class _PushButtonPageState extends State<PushButtonPage> {
                           ),
                           const SizedBox(height: 16.0),
                         ],
+                        const Divider(
+                          height: 0.5,
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(height: 16.0),
                         const WidgetTitle(label: 'Push Button'),
                         const SizedBox(height: 16.0),
                         for (final controlSize in AppKitControlSize.values) ...[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               AppKitButton(
                                 size: controlSize,

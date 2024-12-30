@@ -151,6 +151,21 @@ class AppKitPushButtonThemeData2 extends AppKitButtonThemeBaseData {
     super.destructiveColor,
   });
 
+  AppKitPushButtonThemeData2 copyWith({
+    Color? accentColor,
+    Color? secondaryColor,
+    Color? destructiveColor,
+    Color? backgroundColorDisabled,
+  }) {
+    return AppKitPushButtonThemeData2(
+      accentColor: accentColor ?? this.accentColor,
+      secondaryColor: secondaryColor ?? this.secondaryColor,
+      destructiveColor: destructiveColor ?? this.destructiveColor,
+      backgroundColorDisabled:
+          backgroundColorDisabled ?? this.backgroundColorDisabled,
+    );
+  }
+
   static AppKitPushButtonThemeData2 lerp(
       AppKitPushButtonThemeData2? a, AppKitPushButtonThemeData2? b, double t) {
     return AppKitPushButtonThemeData2(
