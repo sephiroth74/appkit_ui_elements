@@ -235,7 +235,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     buttonTheme ??= AppKitButtonThemeData(
-      material: AppKitMaterialButtonThemeData(
+      inline: AppKitInlineButtonThemeData(
+        secondaryColor: controlBackgroundColor,
+        destructiveColor: AppKitColors.systemRed.color,
+        accentColor: activeColor,
+        backgroundColorDisabled: isDark
+            ? controlBackgroundColorDisabledLight
+            : controlBackgroundColorDisabledDark,
+      ),
+      flat: AppKitFlatButtonThemeData(
         secondaryColor: controlBackgroundColor,
         destructiveColor: AppKitColors.systemRed.color,
         accentColor: activeColor,

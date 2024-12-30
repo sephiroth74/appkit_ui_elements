@@ -25,17 +25,21 @@ class AppKitButtonTheme extends InheritedTheme {
 }
 
 class AppKitButtonThemeData with Diagnosticable {
-  final AppKitMaterialButtonThemeData material;
+  final AppKitInlineButtonThemeData inline;
+  final AppKitFlatButtonThemeData flat;
 
   AppKitButtonThemeData({
-    required this.material,
+    required this.inline,
+    required this.flat,
   });
 
   AppKitButtonThemeData copyWith({
-    AppKitMaterialButtonThemeData? material,
+    AppKitInlineButtonThemeData? inline,
+    AppKitFlatButtonThemeData? flat,
   }) {
     return AppKitButtonThemeData(
-      material: material ?? this.material,
+      inline: inline ?? this.inline,
+      flat: flat ?? this.flat,
     );
   }
 
@@ -44,21 +48,25 @@ class AppKitButtonThemeData with Diagnosticable {
       return this;
     }
     return copyWith(
-      material: other.material,
+      inline: other.inline,
+      flat: other.flat,
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<AppKitMaterialButtonThemeData>(
-        'material', material));
+    properties.add(
+        DiagnosticsProperty<AppKitInlineButtonThemeData>('inline', inline));
+    properties
+        .add(DiagnosticsProperty<AppKitFlatButtonThemeData>('flat', flat));
   }
 
   static AppKitButtonThemeData lerp(
       AppKitButtonThemeData? a, AppKitButtonThemeData? b, double t) {
     return AppKitButtonThemeData(
-      material: AppKitMaterialButtonThemeData.lerp(a?.material, b?.material, t),
+      inline: AppKitInlineButtonThemeData.lerp(a?.inline, b?.inline, t),
+      flat: AppKitFlatButtonThemeData.lerp(a?.flat, b?.flat, t),
     );
   }
 }
@@ -87,17 +95,37 @@ abstract class AppKitButtonThemeBaseData with Diagnosticable {
   }
 }
 
-class AppKitMaterialButtonThemeData extends AppKitButtonThemeBaseData {
-  AppKitMaterialButtonThemeData({
+class AppKitInlineButtonThemeData extends AppKitButtonThemeBaseData {
+  AppKitInlineButtonThemeData({
     required super.backgroundColorDisabled,
     super.accentColor,
     super.secondaryColor,
     super.destructiveColor,
   });
 
-  static AppKitMaterialButtonThemeData lerp(AppKitMaterialButtonThemeData? a,
-      AppKitMaterialButtonThemeData? b, double t) {
-    return AppKitMaterialButtonThemeData(
+  static AppKitInlineButtonThemeData lerp(AppKitInlineButtonThemeData? a,
+      AppKitInlineButtonThemeData? b, double t) {
+    return AppKitInlineButtonThemeData(
+      accentColor: Color.lerp(a?.accentColor, b?.accentColor, t),
+      backgroundColorDisabled: Color.lerp(
+          a?.backgroundColorDisabled, b?.backgroundColorDisabled, t)!,
+      secondaryColor: Color.lerp(a?.secondaryColor, b?.secondaryColor, t),
+      destructiveColor: Color.lerp(a?.destructiveColor, b?.destructiveColor, t),
+    );
+  }
+}
+
+class AppKitFlatButtonThemeData extends AppKitButtonThemeBaseData {
+  AppKitFlatButtonThemeData({
+    required super.backgroundColorDisabled,
+    super.accentColor,
+    super.secondaryColor,
+    super.destructiveColor,
+  });
+
+  static AppKitFlatButtonThemeData lerp(
+      AppKitFlatButtonThemeData? a, AppKitFlatButtonThemeData? b, double t) {
+    return AppKitFlatButtonThemeData(
       accentColor: Color.lerp(a?.accentColor, b?.accentColor, t),
       backgroundColorDisabled: Color.lerp(
           a?.backgroundColorDisabled, b?.backgroundColorDisabled, t)!,

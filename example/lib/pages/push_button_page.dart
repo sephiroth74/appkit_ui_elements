@@ -97,6 +97,72 @@ class _PushButtonPageState extends State<PushButtonPage> {
                           const SizedBox(height: 16.0),
                         ],
 
+                        const WidgetTitle(label: 'Flat Button'),
+                        const SizedBox(height: 16.0),
+                        for (final controlSize in AppKitControlSize.values) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AppKitTooltip.plain(
+                                  message: 'Flat button (primary)',
+                                  child: AppKitButton(
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.flat,
+                                      type: AppKitButtonType.primary,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.plain(
+                                  message: 'Flat button (secondary)',
+                                  child: AppKitButton(
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.flat,
+                                      type: AppKitButtonType.secondary,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.plain(
+                                  message: 'Flat button (destructive)',
+                                  child: AppKitButton(
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.flat,
+                                      type: AppKitButtonType.destructive,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.rich(
+                                  message: TextSpan(children: [
+                                    const TextSpan(
+                                      text: 'Flat Button with ',
+                                    ),
+                                    TextSpan(
+                                      text: 'custom color',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppKitDynamicColor.resolve(
+                                              context,
+                                              AppKitColors.systemMint)),
+                                    ),
+                                  ]),
+                                  child: AppKitButton(
+                                      accentColor: AppKitDynamicColor.resolve(
+                                          context, AppKitColors.systemMint),
+                                      onPressed: () {},
+                                      style: AppKitButtonStyle.flat,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                              const SizedBox(width: 8.0),
+                              AppKitTooltip.plain(
+                                  message: 'Flat button disabled',
+                                  child: AppKitButton(
+                                      style: AppKitButtonStyle.flat,
+                                      size: controlSize,
+                                      child: const Text('Get'))),
+                            ],
+                          ),
+                          const SizedBox(height: 16.0),
+                        ],
+
                         // AppKitControlSize.values.map((controlSize) {
                         //   return Row(
                         //     mainAxisAlignment: MainAxisAlignment.center,
