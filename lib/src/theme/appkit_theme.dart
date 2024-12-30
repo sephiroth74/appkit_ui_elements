@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -932,7 +931,7 @@ class _ColorProvider {
       case AppKitAccentColor.blue:
       // TODO: Handle this case.
       case AppKitAccentColor.purple:
-        return isDark ? Color(0x7FDC78DE) : Color(0x7FDC78DE);
+        return isDark ? const Color(0x7FDC78DE) : const Color(0x7FDC78DE);
       case AppKitAccentColor.pink:
       // TODO: Handle this case.
       case AppKitAccentColor.red:
