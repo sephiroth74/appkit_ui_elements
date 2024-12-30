@@ -31,6 +31,7 @@ class ThemeSwitcherToolbarItem {
             itemState: context.watch<AppTheme>().mode == ThemeMode.dark
                 ? AppKitItemState.on
                 : AppKitItemState.off),
+        const AppKitContextMenuDivider(),
         AppKitContextMenuItem(
             onPressed: (value) =>
                 context.read<AppTheme>().mode = ThemeMode.system,

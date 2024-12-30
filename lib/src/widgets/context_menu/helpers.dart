@@ -26,6 +26,8 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
     enableWallpaperTinting: enableWallpaperTinting,
   );
 
+  final NavigatorState navigator = Navigator.of(context);
+
   return await Navigator.push<AppKitContextMenuItem<T>>(
     context,
     _AppKitContextMenuPageRoute<AppKitContextMenuItem<T>>(
@@ -39,6 +41,10 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
           ],
         );
       },
+      capturedThemes: InheritedTheme.capture(
+        from: context,
+        to: navigator.context,
+      ),
       settings: routeSettings ?? const RouteSettings(name: "context-menu"),
       fullscreenDialog: true,
       barrierDismissible: barrierDismissible ?? true,
@@ -82,6 +88,8 @@ class _AppKitContextMenuPageRoute<T> extends PageRoute<T> {
 
   final RoutePageBuilder pageBuilder;
 
+  final CapturedThemes capturedThemes;
+
   _AppKitContextMenuPageRoute({
     super.settings,
     super.fullscreenDialog,
@@ -95,20 +103,28 @@ class _AppKitContextMenuPageRoute<T> extends PageRoute<T> {
     required this.opaque,
     required this.maintainState,
     required this.pageBuilder,
+    required this.capturedThemes,
   });
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return MainWindowBuilder(builder: (context, isMainWindow) {
-        if (!isMainWindow) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
-            Navigator.removeRoute(context, this);
-          });
-        }
-        return pageBuilder(context, animation, secondaryAnimation);
-      });
-    });
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      removeBottom: true,
+      removeLeft: true,
+      removeRight: true,
+      child: capturedThemes.wrap(LayoutBuilder(builder: (context, constraints) {
+        return MainWindowBuilder(builder: (context, isMainWindow) {
+          if (!isMainWindow) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              Navigator.removeRoute(context, this);
+            });
+          }
+          return pageBuilder(context, animation, secondaryAnimation);
+        });
+      })),
+    );
   }
 }

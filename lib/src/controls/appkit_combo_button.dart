@@ -40,6 +40,8 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
   bool get isDown =>
       _isSplitButtonHeldDown || _isButtonHeldDown || _isContextMenuOpened;
 
+  bool get isDark => AppKitTheme.of(context).brightness == Brightness.dark;
+
   set isContextMenuOpened(bool value) {
     if (value != _isContextMenuOpened) {
       setState(() {
@@ -132,100 +134,123 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
       label: widget.semanticLabel,
       button: true,
       enabled: enabled,
-      child: UiElementColorBuilder(
-        builder: (context, colorContainer) {
-          final isMainWindow =
-              MainWindowStateListener.instance.isMainWindow.value;
-          final comboButtonTheme = AppKitComboButtonTheme.of(context);
-          final themeData = comboButtonTheme.get(widget.controlSize);
+      child: MainWindowBuilder(builder: (context, isMainWindow) {
+        final theme = AppKitTheme.of(context);
+        final comboButtonTheme = AppKitComboButtonTheme.of(context);
+        final comboButtonThemeDataSize =
+            comboButtonTheme.get(widget.controlSize);
 
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-                minWidth: themeData.buttonSize.width,
-                maxHeight: themeData.buttonSize.height),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(themeData.borderRadius),
-                  color: enabled
-                      ? colorContainer.controlBackgroundColor
-                      : colorContainer.controlBackgroundColor
-                          .multiplyOpacity(0.5),
-                  border: GradientBoxBorder(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppKitColors.text.opaque.tertiary.multiplyOpacity(0.5),
-                        AppKitColors.text.opaque.secondary.multiplyOpacity(0.7)
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+        return UiElementColorBuilder(
+          builder: (context, colorContainer) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                  minWidth: comboButtonThemeDataSize.buttonSize.width,
+                  maxHeight: comboButtonThemeDataSize.buttonSize.height),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        comboButtonThemeDataSize.borderRadius),
+                    color: enabled
+                        ? theme.controlColor
+                        : theme.controlColor.multiplyOpacity(0.5),
+                    border: GradientBoxBorder(
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.primary)
+                                    .multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.quaternary)
+                                    .multiplyOpacity(0.0)
+                              ]
+                            : [
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.tertiary)
+                                    .multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.secondary)
+                                    .multiplyOpacity(0.5)
+                              ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+                      ),
+                      width: 0.5,
                     ),
-                    width: 1.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      blurStyle: BlurStyle.outer,
-                      color: colorContainer.shadowColor.withOpacity(0.15),
-                      blurRadius: 0.25,
-                      spreadRadius: 0.0,
-                      offset: const Offset(0, 0.25),
-                    ),
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                        child: _ButtonWidget(
-                            padding: widget.padding,
-                            height: themeData.buttonSize.height,
-                            controlSize: widget.controlSize,
-                            style: widget.style,
-                            colorContainer: colorContainer,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppKitColors.shadowColor.color
+                            .withOpacity(isDark ? 0.75 : 0.15),
+                        blurRadius: 0.5,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 0.5),
+                        blurStyle: BlurStyle.outer,
+                      ),
+                    ]),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                          child: _ButtonWidget(
+                              padding: widget.padding,
+                              height:
+                                  comboButtonThemeDataSize.buttonSize.height,
+                              controlSize: widget.controlSize,
+                              style: widget.style,
+                              enabled: enabled,
+                              isMainWindow: isMainWindow,
+                              onTapDown: _handleButtonTapDown,
+                              onTapUp: _handleButtonTapUp,
+                              onTapCancel: _handleButtonTapCancel,
+                              onLongPress:
+                                  widget.style == AppKitComboButtonStyle.unified
+                                      ? _handleButtonLongPress
+                                      : null,
+                              isDown: _isButtonHeldDown,
+                              comboButtonTheme: comboButtonThemeDataSize,
+                              theme: theme,
+                              child: widget.child)),
+                      if (widget.style == AppKitComboButtonStyle.split) ...[
+                        VerticalDivider(
+                          indent: isDown
+                              ? 0.0
+                              : (comboButtonThemeDataSize.buttonSize.height /
+                                      5) +
+                                  1,
+                          endIndent: isDown
+                              ? 0.0
+                              : (comboButtonThemeDataSize.buttonSize.height /
+                                      5) +
+                                  1,
+                          width: 0.5,
+                          thickness: 0.5,
+                          color: AppKitColors.text.opaque.secondary
+                              .multiplyOpacity(0.8),
+                        ),
+                        _SplitButton(
+                            width:
+                                comboButtonThemeDataSize.buttonSize.height - 5,
+                            height: comboButtonThemeDataSize.buttonSize.height,
                             enabled: enabled,
                             isMainWindow: isMainWindow,
-                            onTapDown: _handleButtonTapDown,
-                            onTapUp: _handleButtonTapUp,
-                            onTapCancel: _handleButtonTapCancel,
-                            onLongPress:
-                                widget.style == AppKitComboButtonStyle.unified
-                                    ? _handleButtonLongPress
-                                    : null,
-                            isDown: _isButtonHeldDown,
-                            themeData: themeData,
-                            child: widget.child)),
-                    if (widget.style == AppKitComboButtonStyle.split) ...[
-                      VerticalDivider(
-                        indent: isDown
-                            ? 0.0
-                            : (themeData.buttonSize.height / 5) + 1,
-                        endIndent: isDown
-                            ? 0.0
-                            : (themeData.buttonSize.height / 5) + 1,
-                        width: 0.5,
-                        thickness: 0.5,
-                        color: AppKitColors.text.opaque.secondary
-                            .multiplyOpacity(0.8),
-                      ),
-                      _SplitButton(
-                          width: themeData.buttonSize.height - 5,
-                          height: themeData.buttonSize.height,
-                          colorContainer: colorContainer,
-                          enabled: enabled,
-                          isMainWindow: isMainWindow,
-                          onTapUp: _handleSplitTapUp,
-                          onTapDown: _handleSplitTapDown,
-                          onTapCancel: _handleSplitTapCancel,
-                          themeData: themeData,
-                          isDown: _isSplitButtonHeldDown),
+                            onTapUp: _handleSplitTapUp,
+                            onTapDown: _handleSplitTapDown,
+                            onTapCancel: _handleSplitTapCancel,
+                            comboButtonThemeDataSize: comboButtonThemeDataSize,
+                            themeData: theme,
+                            isDown: _isSplitButtonHeldDown),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 
@@ -256,25 +281,25 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
 class _SplitButton extends StatelessWidget {
   final double width;
   final double height;
-  final UiElementColorContainer colorContainer;
   final bool enabled;
   final bool isMainWindow;
   final ValueChanged<Rect?> onTapDown;
   final VoidCallback onTapUp;
   final VoidCallback onTapCancel;
   final bool isDown;
-  final AppKitComboButtonThemeDataSize themeData;
+  final AppKitComboButtonThemeDataSize comboButtonThemeDataSize;
+  final AppKitThemeData themeData;
 
   const _SplitButton({
     required this.width,
     required this.height,
-    required this.colorContainer,
     required this.enabled,
     required this.isMainWindow,
     required this.onTapDown,
     required this.onTapUp,
     required this.onTapCancel,
     required this.isDown,
+    required this.comboButtonThemeDataSize,
     required this.themeData,
   });
 
@@ -294,9 +319,8 @@ class _SplitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? controlBackgroundColor;
     if (enabled && isDown) {
-      controlBackgroundColor = colorContainer.controlBackgroundColor
-          .multiplyLuminance(0.9)
-          .withOpacity(0.5);
+      controlBackgroundColor =
+          themeData.controlColor.multiplyLuminance(0.9).withOpacity(0.5);
     }
 
     return GestureDetector(
@@ -308,8 +332,10 @@ class _SplitButton extends StatelessWidget {
             ? BoxDecoration(
                 backgroundBlendMode: BlendMode.darken,
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(themeData.borderRadius),
-                  bottomRight: Radius.circular(themeData.borderRadius),
+                  topRight:
+                      Radius.circular(comboButtonThemeDataSize.borderRadius),
+                  bottomRight:
+                      Radius.circular(comboButtonThemeDataSize.borderRadius),
                 ),
                 color: controlBackgroundColor,
               )
@@ -323,9 +349,9 @@ class _SplitButton extends StatelessWidget {
               child: Icon(
                 Icons.chevron_right,
                 size: width * 0.65,
-                color: enabled
-                    ? colorContainer.textColor
-                    : colorContainer.textColor.multiplyOpacity(0.5),
+                color:
+                    AppKitDynamicColor.resolve(context, AppKitColors.textColor)
+                        .multiplyOpacity(enabled ? 1.0 : 0.5),
               ),
             ),
           ),
@@ -339,7 +365,6 @@ class _ButtonWidget extends StatelessWidget {
   final Widget child;
   final AppKitControlSize controlSize;
   final AppKitComboButtonStyle style;
-  final UiElementColorContainer colorContainer;
   final bool enabled;
   final bool isMainWindow;
   final VoidCallback onTapDown;
@@ -349,13 +374,13 @@ class _ButtonWidget extends StatelessWidget {
   final bool isDown;
   final double height;
   final EdgeInsetsGeometry? padding;
-  final AppKitComboButtonThemeDataSize themeData;
+  final AppKitComboButtonThemeDataSize comboButtonTheme;
+  final AppKitThemeData theme;
 
   const _ButtonWidget({
     required this.controlSize,
     required this.style,
     required this.child,
-    required this.colorContainer,
     required this.enabled,
     required this.isMainWindow,
     required this.onTapDown,
@@ -363,7 +388,8 @@ class _ButtonWidget extends StatelessWidget {
     required this.onTapCancel,
     required this.isDown,
     required this.height,
-    required this.themeData,
+    required this.comboButtonTheme,
+    required this.theme,
     this.onLongPress,
     this.padding,
   });
@@ -372,9 +398,8 @@ class _ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? controlBackgroundColor;
     if (enabled && isDown) {
-      controlBackgroundColor = colorContainer.controlBackgroundColor
-          .multiplyLuminance(0.9)
-          .withOpacity(0.5);
+      controlBackgroundColor =
+          theme.controlColor.multiplyLuminance(0.9).withOpacity(0.5);
     }
 
     return GestureDetector(
@@ -388,7 +413,7 @@ class _ButtonWidget extends StatelessWidget {
             constraints: BoxConstraints(
               minHeight: height,
               maxHeight: height,
-              minWidth: themeData.buttonSize.width,
+              minWidth: comboButtonTheme.buttonSize.width,
             ),
             child: DecoratedBox(
               decoration: enabled && isDown
@@ -396,16 +421,19 @@ class _ButtonWidget extends StatelessWidget {
                       backgroundBlendMode: BlendMode.darken,
                       borderRadius: style == AppKitComboButtonStyle.split
                           ? BorderRadius.only(
-                              topLeft: Radius.circular(themeData.borderRadius),
-                              bottomLeft:
-                                  Radius.circular(themeData.borderRadius),
+                              topLeft: Radius.circular(
+                                  comboButtonTheme.borderRadius),
+                              bottomLeft: Radius.circular(
+                                  comboButtonTheme.borderRadius),
                             )
-                          : BorderRadius.circular(themeData.borderRadius),
+                          : BorderRadius.circular(
+                              comboButtonTheme.borderRadius),
                       color: controlBackgroundColor,
                     )
                   : const BoxDecoration(),
               child: Padding(
-                padding: themeData.padding.add(padding ?? EdgeInsets.zero),
+                padding:
+                    comboButtonTheme.padding.add(padding ?? EdgeInsets.zero),
                 child: Align(
                   widthFactor: 1.0,
                   heightFactor: 1.0,
@@ -416,7 +444,7 @@ class _ButtonWidget extends StatelessWidget {
                       style: AppKitTheme.of(context)
                           .typography
                           .body
-                          .copyWith(fontSize: themeData.fontSize),
+                          .copyWith(fontSize: comboButtonTheme.fontSize),
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: child,

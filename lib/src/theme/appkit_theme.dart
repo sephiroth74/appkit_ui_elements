@@ -84,6 +84,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final bool isMainWindow;
   final VisualDensity visualDensity;
   final Color canvasColor;
+  final Color controlColor;
   final Color controlBackgroundColor;
   final Color controlBackgroundPressedColor;
   final Color accentColorUnfocused;
@@ -134,6 +135,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitAccentColor? accentColor,
     bool? isMainWindow,
     Color? controlBackgroundColor,
+    Color? controlColor,
     Color? controlBackgroundPressedColor,
     Color? controlBackgroundColorDisabled,
     Color? accentColorUnfocused,
@@ -176,7 +178,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         ? AppKitColors.controlBackgroundColor.darkColor
         : AppKitColors.controlBackgroundColor.color;
 
-    Color controlColor = isDark
+    controlColor ??= isDark
         ? AppKitColors.controlColor.darkColor
         : AppKitColors.controlColor.color;
 
@@ -404,12 +406,12 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       backgroundBlur: 0.4,
       borderRadius: 6.0,
       backgroundColor: isDark
-          ? AppKitColors.materials.medium.darkColor.withOpacity(0.59)
+          ? AppKitColors.controlBackgroundColor.darkColor
           : const Color(0xFFe7e7e7),
     );
 
     iconTheme ??= AppKitIconThemeData(
-      color: primaryColor,
+      color: activeColor,
       size: 20,
     );
 
@@ -462,6 +464,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ratingIndicatorTheme: ratingIndicatorTheme,
       canvasColor: canvasColor,
       controlBackgroundColor: controlBackgroundColor,
+      controlColor: controlColor,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       accentColorUnfocused: accentColorUnfocused,
       tooltipTheme: tooltipTheme,
@@ -484,6 +487,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: canvasColor,
       typography: typography,
       controlBackgroundColor: controlBackgroundColor,
+      controlColor: controlColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       pushButtonTheme: pushButtonTheme,
@@ -555,6 +559,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.canvasColor,
     required this.controlBackgroundPressedColor,
     required this.controlBackgroundColor,
+    required this.controlColor,
     required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
     required this.ratingIndicatorTheme,
@@ -585,6 +590,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         progressTheme,
         colorWellTheme,
         controlBackgroundColor,
+        controlColor,
         controlBackgroundPressedColor,
         accentColorUnfocused,
         circularSliderTheme,
@@ -613,6 +619,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitTypography? typography,
     Color? canvasColor,
     Color? controlBackgroundColor,
+    Color? controlColor,
     Color? controlBackgroundColorDisabled,
     Color? controlBackgroundPressedColor,
     Color? accentColorUnfocused,
@@ -653,6 +660,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: canvasColor ?? this.canvasColor,
       controlBackgroundColor:
           controlBackgroundColor ?? this.controlBackgroundColor,
+      controlColor: controlColor ?? this.controlColor,
       controlBackgroundPressedColor:
           controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
       switchTheme: switchTheme ?? this.switchTheme,
@@ -690,6 +698,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
       controlBackgroundColor: other.controlBackgroundColor,
+      controlColor: other.controlColor,
       controlBackgroundPressedColor: other.controlBackgroundPressedColor,
       switchTheme: other.switchTheme,
       progressTheme: other.progressTheme,
@@ -730,6 +739,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.segmentedControlTheme, b.segmentedControlTheme, t),
       controlBackgroundColor:
           Color.lerp(a.controlBackgroundColor, b.controlBackgroundColor, t)!,
+      controlColor: Color.lerp(a.controlColor, b.controlColor, t)!,
       controlBackgroundPressedColor: Color.lerp(
           a.controlBackgroundPressedColor, b.controlBackgroundPressedColor, t)!,
       switchTheme: AppKitSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),

@@ -53,12 +53,18 @@ class AppKitContextMenuWidget extends StatelessWidget {
           backgroundBlur: theme.backgroundBlur,
           borderRadius: BorderRadius.circular(theme.borderRadius),
           color: theme.backgroundColor ??
-              AppKitColors.materials.medium
-                  .resolveFrom(context)
-                  .withOpacity(0.9),
+              AppKitDynamicColor.resolve(
+                  context, AppKitColors.materials.medium),
           child: Opacity(
             opacity: value,
             child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: AppKitColors.materials.medium.color,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(theme.borderRadius),
+              ),
               padding: const EdgeInsets.all(6),
               constraints: BoxConstraints(
                   maxWidth: state.maxWidth,

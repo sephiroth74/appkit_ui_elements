@@ -8,7 +8,7 @@ export 'appkit_arc_slider.dart';
 export 'appkit_circular_slider.dart';
 export 'color_well.dart';
 export 'combo_box.dart';
-export 'combo_button.dart';
+export 'appkit_combo_button.dart';
 export 'custom_painter_button.dart';
 export 'date_picker.dart';
 export 'dialog_button.dart';

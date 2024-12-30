@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +97,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   Widget builder(BuildContext context, AppKitContextMenuState menuState,
       [FocusNode? focusNode]) {
     final theme = AppKitTheme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final selectedOrFocused =
         menuState.focusedEntry == this || menuState.selectedItem == this;
 
@@ -111,8 +111,8 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     }
 
     Color textColor = selectedOrFocused && enabled
-        ? AppKitColors.labelColor.darkColor
-        : AppKitColors.labelColor;
+        ? AppKitDynamicColor.resolve(context, AppKitColors.labelColor)
+        : AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     if (!enabled) {
       textColor = textColor.withOpacity(0.3);
     }
@@ -122,9 +122,8 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
     return GestureDetector(
       onTap: () => enabled ? handleItemSelection(context) : null,
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
-        final accentColor =
-            theme.primaryColor ?? colorContainer.controlAccentColor;
+      child: Builder(builder: (context) {
+        final accentColor = theme.activeColor;
 
         final isSelectionAnimating = menuState.isSelectionAnimating &&
             menuState.focusedEntry == this &&
