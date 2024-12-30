@@ -78,6 +78,58 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
           if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
             _handleTap();
             return KeyEventResult.handled;
+          } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+            if (event is KeyDownEvent) {
+              final currentSelection = _controller.selection;
+              setState(() {
+                if (currentSelection.isCollapsed) {
+                  if (currentSelection.end > 0) {
+                    _controller.text = _controller.text
+                            .substring(0, currentSelection.end - 1) +
+                        _controller.text.substring(
+                            currentSelection.end, _controller.text.length);
+                    _controller.selection = TextSelection.collapsed(
+                        offset: currentSelection.end - 1);
+                  }
+                } else {
+                  _controller.text =
+                      _controller.text.substring(0, currentSelection.start) +
+                          _controller.text.substring(
+                              currentSelection.end, _controller.text.length);
+                  _controller.selection =
+                      TextSelection.collapsed(offset: currentSelection.start);
+                }
+                widget.onChanged?.call(_controller.text);
+              });
+            }
+
+            return KeyEventResult.handled;
+          } else if (event.logicalKey == LogicalKeyboardKey.delete) {
+            if (event is KeyDownEvent) {
+              final currentSelection = _controller.selection;
+              setState(() {
+                if (currentSelection.isCollapsed) {
+                  if (currentSelection.end < _controller.text.length) {
+                    _controller.text = _controller.text
+                            .substring(0, currentSelection.end) +
+                        _controller.text.substring(
+                            currentSelection.end + 1, _controller.text.length);
+                    _controller.selection =
+                        TextSelection.collapsed(offset: currentSelection.end);
+                  }
+                } else {
+                  _controller.text =
+                      _controller.text.substring(0, currentSelection.start) +
+                          _controller.text.substring(
+                              currentSelection.end, _controller.text.length);
+                  _controller.selection =
+                      TextSelection.collapsed(offset: currentSelection.start);
+                }
+                widget.onChanged?.call(_controller.text);
+              });
+            }
+
+            return KeyEventResult.handled;
           }
           return KeyEventResult.ignored;
         },
@@ -170,9 +222,15 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
           (e) => e.toLowerCase().startsWith(value.toLowerCase()));
       if (item != null) {
         setState(() {
+          TextSelection? currentSelection = _controller.selection;
+
           _controller.text = item;
-          _controller.selection = TextSelection(
-              baseOffset: value.length, extentOffset: item.length);
+
+          if (currentSelection.isCollapsed &&
+              currentSelection.end == value.length) {
+            _controller.selection = TextSelection(
+                baseOffset: value.length, extentOffset: item.length);
+          }
           widget.onChanged?.call(item);
         });
       }
@@ -211,14 +269,10 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
               onEnter: enabled ? _handleMouseEnter : null,
               onExit: enabled ? _handleMouseExit : null,
               child: GestureDetector(
-                child:
-                    UiElementColorBuilder(builder: (context, colorContainer) {
-                  final isMainWindow =
-                      MainWindowStateListener.instance.isMainWindow.value;
-
+                child: MainWindowBuilder(builder: (context, isMainWindow) {
+                  final theme = AppKitTheme.of(context);
                   final suffix = textFieldSize != null
                       ? _buildPullDownWidget(
-                          colorContainer: colorContainer,
                           isMainWindow: isMainWindow,
                           isHovered: _isHovered,
                           textFieldSize: textFieldSize,
@@ -226,7 +280,6 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
                       : null;
 
                   final textField = _buildTextField(
-                    colorContainer: colorContainer,
                     style: style,
                     context: context,
                     suffix: suffix,
@@ -234,6 +287,7 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
                     isHovered: _isHovered,
                     isFocused: _effectiveFocusNode.hasFocus,
                     isMenuOpened: _isMenuOpened,
+                    theme: theme,
                   );
 
                   return Opacity(
@@ -257,7 +311,6 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
   }
 
   Widget _buildPullDownWidget({
-    required UiElementColorContainer colorContainer,
     required bool isMainWindow,
     required bool isHovered,
     required Size textFieldSize,
@@ -265,12 +318,9 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
     switch (widget.style) {
       case AppKitComboBoxStyle.bordered:
         return _buildPushButton(
-            colorContainer: colorContainer,
-            isMainWindow: isMainWindow,
-            textFieldSize: textFieldSize);
+            isMainWindow: isMainWindow, textFieldSize: textFieldSize);
       case AppKitComboBoxStyle.plain:
         return _buildPlainButton(
-            colorContainer: colorContainer,
             isMainWindow: isMainWindow,
             isHovered: isHovered,
             textFieldSize: textFieldSize);
@@ -278,12 +328,10 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
   }
 
   Widget _buildPushButton({
-    required UiElementColorContainer colorContainer,
     required bool isMainWindow,
     required Size textFieldSize,
   }) {
     return _PushButtonStyleWidget(
-      colorContainer: colorContainer,
       color: widget.color,
       isMainWindow: isMainWindow,
       controlSize: widget.controlSize,
@@ -295,14 +343,12 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
   }
 
   Widget _buildPlainButton({
-    required UiElementColorContainer colorContainer,
     required bool isMainWindow,
     required bool isHovered,
     required Size textFieldSize,
   }) {
     return _PlainButtonStyleWidget(
         enabled: enabled,
-        colorContainer: colorContainer,
         contextMenuOpened: _isMenuOpened,
         isMainWindow: isMainWindow,
         isHovered: isHovered,
@@ -312,7 +358,6 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
   }
 
   Widget _buildTextField({
-    required UiElementColorContainer colorContainer,
     required AppKitComboBoxStyle style,
     required BuildContext context,
     required Widget? suffix,
@@ -320,6 +365,7 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
     required bool isHovered,
     required bool isFocused,
     required bool isMenuOpened,
+    required AppKitThemeData theme,
   }) {
     BoxDecoration? decoration;
     final borderRadius = style.getBorderRadius(controlSize: controlSize);
@@ -328,7 +374,7 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
       decoration = BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           color: isMainWindow && (isHovered || isFocused || isMenuOpened)
-              ? colorContainer.controlBackgroundColor
+              ? theme.controlBackgroundColor
               : Colors.transparent);
     }
 
@@ -366,7 +412,6 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
 }
 
 class _PushButtonStyleWidget extends StatelessWidget {
-  final UiElementColorContainer colorContainer;
   final Color? color;
   final bool isMainWindow;
   final bool isMenuOpened;
@@ -377,7 +422,6 @@ class _PushButtonStyleWidget extends StatelessWidget {
   final Size textFieldSize;
 
   const _PushButtonStyleWidget({
-    required this.colorContainer,
     this.color,
     required this.isMainWindow,
     required this.controlSize,
@@ -392,6 +436,7 @@ class _PushButtonStyleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
     final enabledFactor = enabled ? 1.0 : 0.5;
     final borderRadius = style.getBorderRadius(controlSize: controlSize) - 1;
 
@@ -399,8 +444,8 @@ class _PushButtonStyleWidget extends StatelessWidget {
     Color arrowsColor;
 
     caretBackgroundColor = isMainWindow && enabled
-        ? (color ?? theme.primaryColor ?? colorContainer.controlAccentColor)
-        : colorContainer.controlBackgroundColor;
+        ? (color ?? theme.activeColor)
+        : theme.controlColor;
 
     final carteBackgroundColorLiminance =
         caretBackgroundColor.computeLuminance();
@@ -409,7 +454,9 @@ class _PushButtonStyleWidget extends StatelessWidget {
         ? carteBackgroundColorLiminance > 0.5
             ? Colors.black.withOpacity(enabledFactor)
             : Colors.white.withOpacity(enabledFactor)
-        : Colors.black.withOpacity(enabledFactor);
+        : isDark
+            ? Colors.white.withOpacity(enabledFactor)
+            : Colors.black.withOpacity(enabledFactor);
 
     if (isMenuOpened) {
       caretBackgroundColor = caretBackgroundColor.multiplyLuminance(0.9);
@@ -419,9 +466,6 @@ class _PushButtonStyleWidget extends StatelessWidget {
       caretBackgroundColor = caretBackgroundColor.multiplyOpacity(0.5);
     }
 
-    final shadowColor = isMainWindow && enabled
-        ? colorContainer.controlAccentColor
-        : colorContainer.shadowColor;
     final caretButtonSize = textFieldSize.height - (caretButtonPadding * 2);
 
     return FocusScope(
@@ -438,55 +482,76 @@ class _PushButtonStyleWidget extends StatelessWidget {
               padding: const EdgeInsets.all(caretButtonPadding),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                    border: !isMainWindow || !enabled
+                    border: isMainWindow && enabled
                         ? GradientBoxBorder(
                             gradient: LinearGradient(
-                              colors: [
-                                AppKitColors.text.opaque.tertiary
-                                    .multiplyOpacity(0.6),
-                                AppKitColors.text.opaque.secondary
-                                    .multiplyOpacity(0.75)
-                              ],
+                              colors: isDark
+                                  ? [
+                                      AppKitDynamicColor.resolve(context,
+                                              AppKitColors.text.opaque.primary)
+                                          .multiplyOpacity(0.5),
+                                      AppKitDynamicColor.resolve(
+                                              context,
+                                              AppKitColors
+                                                  .text.opaque.quaternary)
+                                          .multiplyOpacity(0.0)
+                                    ]
+                                  : [
+                                      AppKitDynamicColor.resolve(context,
+                                              AppKitColors.text.opaque.tertiary)
+                                          .multiplyOpacity(0.5),
+                                      AppKitDynamicColor.resolve(
+                                              context,
+                                              AppKitColors
+                                                  .text.opaque.secondary)
+                                          .multiplyOpacity(0.5)
+                                    ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              stops: const [0.9, 1.0],
+                              stops:
+                                  isDark ? const [0.0, 0.5] : const [0.0, 1.0],
                             ),
-                            width: 0.5)
+                            width: 0.5,
+                          )
                         : null,
-                    color: caretBackgroundColor,
+                    color:
+                        isMainWindow && enabled ? caretBackgroundColor : null,
                     borderRadius: BorderRadius.circular(borderRadius),
                     boxShadow: [
                       if (isMainWindow && enabled) ...[
                         BoxShadow(
-                          color: shadowColor.withOpacity(0.06),
-                          blurRadius: 1.5,
-                          spreadRadius: 0.0,
+                          color: theme.activeColor.withOpacity(0.5),
+                          blurRadius: 0.5,
+                          spreadRadius: 0,
                           offset: const Offset(0, 0.5),
                         ),
-                        BoxShadow(
-                          offset: const Offset(0.0, 1.0),
-                          blurRadius: 1.0,
-                          spreadRadius: 0.0,
-                          color: shadowColor.withOpacity(0.06),
-                        ),
                       ],
-                      BoxShadow(
-                        offset: const Offset(0.0, 0.5),
-                        blurRadius: 0.5,
-                        spreadRadius: 0.0,
-                        color: shadowColor.withOpacity(0.12),
-                      )
                     ]),
-                child: Center(
-                  child: SizedBox(
-                    width: caretButtonSize,
-                    height: caretButtonSize,
-                    child: CustomPaint(
-                      painter: IconButtonPainter(
-                        icon: AppKitControlButtonIcon.disclosureDown,
-                        size: caretButtonSize,
-                        color: arrowsColor,
-                        // strokeWidth: style.getCaretStrokeWidth(theme: popupButtonTheme, controlSize: controlSize),
+                child: DecoratedBox(
+                  decoration: isMainWindow && enabled
+                      ? BoxDecoration(
+                          borderRadius: BorderRadius.circular(borderRadius - 1),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.white.withOpacity(isDark ? 0.05 : 0.17),
+                              Colors.white.withOpacity(0.0),
+                            ],
+                          ),
+                        )
+                      : const BoxDecoration(),
+                  child: Center(
+                    child: SizedBox(
+                      width: caretButtonSize,
+                      height: caretButtonSize,
+                      child: CustomPaint(
+                        painter: IconButtonPainter(
+                          icon: AppKitControlButtonIcon.disclosureDown,
+                          size: caretButtonSize,
+                          color: arrowsColor,
+                          // strokeWidth: style.getCaretStrokeWidth(theme: popupButtonTheme, controlSize: controlSize),
+                        ),
                       ),
                     ),
                   ),
@@ -502,7 +567,6 @@ class _PushButtonStyleWidget extends StatelessWidget {
 
 class _PlainButtonStyleWidget extends StatelessWidget {
   final bool enabled;
-  final UiElementColorContainer colorContainer;
   final bool contextMenuOpened;
   final bool isMainWindow;
   final bool isHovered;
@@ -515,7 +579,6 @@ class _PlainButtonStyleWidget extends StatelessWidget {
 
   const _PlainButtonStyleWidget({
     required this.enabled,
-    required this.colorContainer,
     required this.contextMenuOpened,
     required this.isMainWindow,
     required this.controlSize,
@@ -530,9 +593,9 @@ class _PlainButtonStyleWidget extends StatelessWidget {
 
     final Color caretBackgroundColor;
     final caretButtonSize = textFieldSize.height - (caretButtonPadding * 2);
-    final arrowsColor = AppKitColors.labelColor
-        .resolveFrom(context)
-        .multiplyOpacity(enabledFactor);
+    final arrowsColor =
+        AppKitDynamicColor.resolve(context, AppKitColors.labelColor)
+            .multiplyOpacity(enabledFactor);
     final borderRadius = style.getBorderRadius(controlSize: controlSize) - 1;
 
     if (isHovered) {
@@ -556,7 +619,7 @@ class _PlainButtonStyleWidget extends StatelessWidget {
             dimension: textFieldSize.height,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: caretBackgroundColor,
+                color: isMainWindow && enabled ? caretBackgroundColor : null,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
               child: Center(

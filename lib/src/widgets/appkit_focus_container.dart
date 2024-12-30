@@ -225,8 +225,8 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
           return widget.child;
         }
 
-        final focusRingColor =
-            theme.focusColor.multiplyOpacity(_alphaAnimation.value);
+        final focusRingColor = theme.keyboardFocusIndicatorColor
+            .multiplyOpacity(_alphaAnimation.value);
 
         return CustomPaint(
             isComplex: true,

@@ -107,6 +107,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitTypography typography;
   final AppKitScrollbarThemeData scrollbarTheme;
   final AppKitIconButtonThemeData iconButtonTheme;
+  final Color keyboardFocusIndicatorColor;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -142,6 +143,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? activeColorUnfocused,
     AppKitTypography? typography,
     Color? dividerColor,
+    Color? keyboardFocusIndicatorColor,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
@@ -159,10 +161,13 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? true,
     );
 
-    debugPrint('activeColor: $activeColor');
+    debugPrint('accentColor: $accentColor');
 
     activeColorUnfocused ??=
         _ColorProvider.getActiveColorUnfocused(isDark: isDark);
+    keyboardFocusIndicatorColor ??=
+        _ColorProvider.getKeyboardFocusIndicatorColor(
+            isDark: isDark, accentColor: accentColor);
 
     Color focusColor = primaryColor.withOpacity(0.749);
 
@@ -442,72 +447,74 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     final defaultData = AppKitThemeData.raw(
-      brightness: brightness,
-      primaryColor: primaryColor,
-      activeColor: activeColor,
       accentColor: accentColor,
-      focusColor: focusColor,
-      dividerColor: dividerColor,
-      isMainWindow: isMainWindow,
-      visualDensity: visualDensity,
-      typography: typography,
-      pushButtonTheme: pushButtonTheme,
-      buttonTheme: buttonTheme,
-      helpButtonTheme: helpButtonTheme,
-      sliderTheme: sliderTheme,
-      segmentedControlTheme: segmentedControlTheme,
-      switchTheme: switchTheme,
-      progressTheme: progressTheme,
-      colorWellTheme: colorWellTheme,
-      circularSliderTheme: circularSliderTheme,
-      levelIndicatorsTheme: levelIndicatorsTheme,
-      ratingIndicatorTheme: ratingIndicatorTheme,
-      canvasColor: canvasColor,
-      controlBackgroundColor: controlBackgroundColor,
-      controlColor: controlColor,
-      controlBackgroundPressedColor: controlBackgroundPressedColor,
       accentColorUnfocused: accentColorUnfocused,
-      tooltipTheme: tooltipTheme,
-      popupButtonTheme: popupButtonTheme,
-      contextMenuTheme: contextMenuTheme,
+      activeColor: activeColor,
+      brightness: brightness,
+      buttonTheme: buttonTheme,
+      canvasColor: canvasColor,
+      circularSliderTheme: circularSliderTheme,
+      colorWellTheme: colorWellTheme,
       comboButtonTheme: comboButtonTheme,
-      iconTheme: iconTheme,
-      scrollbarTheme: scrollbarTheme,
+      contextMenuTheme: contextMenuTheme,
+      controlBackgroundColor: controlBackgroundColor,
+      controlBackgroundPressedColor: controlBackgroundPressedColor,
+      controlColor: controlColor,
+      dividerColor: dividerColor,
+      focusColor: focusColor,
+      helpButtonTheme: helpButtonTheme,
       iconButtonTheme: iconButtonTheme,
+      iconTheme: iconTheme,
+      isMainWindow: isMainWindow,
+      keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
+      levelIndicatorsTheme: levelIndicatorsTheme,
+      popupButtonTheme: popupButtonTheme,
+      primaryColor: primaryColor,
+      progressTheme: progressTheme,
+      pushButtonTheme: pushButtonTheme,
+      ratingIndicatorTheme: ratingIndicatorTheme,
+      scrollbarTheme: scrollbarTheme,
+      segmentedControlTheme: segmentedControlTheme,
+      sliderTheme: sliderTheme,
+      switchTheme: switchTheme,
+      tooltipTheme: tooltipTheme,
+      typography: typography,
+      visualDensity: visualDensity,
     );
 
     final customData = defaultData.copyWith(
-      brightness: brightness,
       accentColor: accentColor,
-      primaryColor: primaryColor,
-      focusColor: focusColor,
-      dividerColor: dividerColor,
-      isMainWindow: isMainWindow,
-      visualDensity: visualDensity,
+      accentColorUnfocused: accentColorUnfocused,
+      brightness: brightness,
+      buttonTheme: buttonTheme,
       canvasColor: canvasColor,
-      typography: typography,
+      colorWellTheme: colorWellTheme,
+      comboButtonTheme: comboButtonTheme,
+      contextMenuTheme: contextMenuTheme,
       controlBackgroundColor: controlBackgroundColor,
-      controlColor: controlColor,
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
-      pushButtonTheme: pushButtonTheme,
-      buttonTheme: buttonTheme,
+      controlColor: controlColor,
+      dividerColor: dividerColor,
+      focusColor: focusColor,
       helpButtonTheme: helpButtonTheme,
-      sliderTheme: sliderTheme,
-      segmentedControlTheme: segmentedControlTheme,
-      switchTheme: switchTheme,
-      progressTheme: progressTheme,
-      accentColorUnfocused: accentColorUnfocused,
-      colorWellTheme: colorWellTheme,
-      levelIndicatorsTheme: levelIndicatorsTheme,
-      ratingIndicatorTheme: ratingIndicatorTheme,
-      tooltipTheme: tooltipTheme,
-      popupButtonTheme: popupButtonTheme,
-      contextMenuTheme: contextMenuTheme,
-      comboButtonTheme: comboButtonTheme,
-      iconTheme: iconTheme,
-      scrollbarTheme: scrollbarTheme,
       iconButtonTheme: iconButtonTheme,
+      iconTheme: iconTheme,
+      isMainWindow: isMainWindow,
+      keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
+      levelIndicatorsTheme: levelIndicatorsTheme,
+      popupButtonTheme: popupButtonTheme,
+      primaryColor: primaryColor,
+      progressTheme: progressTheme,
+      pushButtonTheme: pushButtonTheme,
+      ratingIndicatorTheme: ratingIndicatorTheme,
+      scrollbarTheme: scrollbarTheme,
+      segmentedControlTheme: segmentedControlTheme,
+      sliderTheme: sliderTheme,
+      switchTheme: switchTheme,
+      tooltipTheme: tooltipTheme,
+      typography: typography,
+      visualDensity: visualDensity,
     );
 
     return defaultData.merge(customData);
@@ -570,6 +577,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.iconTheme,
     required this.scrollbarTheme,
     required this.iconButtonTheme,
+    required this.keyboardFocusIndicatorColor,
   });
 
   @override
@@ -605,6 +613,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         dividerColor,
         iconButtonTheme,
         buttonTheme,
+        keyboardFocusIndicatorColor,
       ];
 
   AppKitThemeData copyWith({
@@ -641,6 +650,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitIconThemeData? iconTheme,
     AppKitScrollbarThemeData? scrollbarTheme,
     AppKitIconButtonThemeData? iconButtonTheme,
+    Color? keyboardFocusIndicatorColor,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -678,6 +688,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       scrollbarTheme: scrollbarTheme ?? this.scrollbarTheme,
       dividerColor: dividerColor ?? this.dividerColor,
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
+      keyboardFocusIndicatorColor:
+          keyboardFocusIndicatorColor ?? this.keyboardFocusIndicatorColor,
     );
   }
 
@@ -715,6 +727,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       scrollbarTheme: other.scrollbarTheme,
       dividerColor: other.dividerColor,
       iconButtonTheme: other.iconButtonTheme,
+      keyboardFocusIndicatorColor: other.keyboardFocusIndicatorColor,
     );
   }
 
@@ -769,6 +782,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       dividerColor: Color.lerp(a.dividerColor, b.dividerColor, t)!,
       iconButtonTheme: AppKitIconButtonThemeData.lerp(
           a.iconButtonTheme, b.iconButtonTheme, t),
+      keyboardFocusIndicatorColor: Color.lerp(
+          a.keyboardFocusIndicatorColor, b.keyboardFocusIndicatorColor, t)!,
     );
   }
 
@@ -826,6 +841,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     properties.add(ColorProperty('dividerColor', dividerColor));
     properties.add(DiagnosticsProperty<AppKitIconButtonThemeData>(
         'iconButtonTheme', iconButtonTheme));
+    properties.add(ColorProperty(
+        'keyboardFocusIndicatorColor', keyboardFocusIndicatorColor));
   }
 }
 
@@ -909,6 +926,29 @@ class _ColorProvider {
         : const Color.fromRGBO(180, 180, 180, 1.0);
   }
 
+  static Color getKeyboardFocusIndicatorColor(
+      {required AppKitAccentColor accentColor, required bool isDark}) {
+    switch (accentColor) {
+      case AppKitAccentColor.blue:
+      // TODO: Handle this case.
+      case AppKitAccentColor.purple:
+        return isDark ? Color(0x7FDC78DE) : Color(0x7FDC78DE);
+      case AppKitAccentColor.pink:
+      // TODO: Handle this case.
+      case AppKitAccentColor.red:
+      // TODO: Handle this case.
+      case AppKitAccentColor.orange:
+      // TODO: Handle this case.
+      case AppKitAccentColor.yellow:
+      // TODO: Handle this case.
+      case AppKitAccentColor.green:
+      // TODO: Handle this case.
+      case AppKitAccentColor.graphite:
+      // TODO: Handle this case.
+    }
+    return Colors.white;
+  }
+
   /// Returns the active color based on the provided parameters.
   static Color getActiveColor({
     required AppKitAccentColor accentColor,
@@ -979,20 +1019,20 @@ class _ColorProvider {
   }
 }
 
-@protected
-extension UiElementColorBuilderX on UiElementColorContainer {
-  BoxShadow get shadowPrimary => BoxShadow(
-        color: shadowColor.withOpacity(0.4),
-        blurRadius: 0.50,
-        offset: const Offset(0.0, 1),
-        blurStyle: BlurStyle.outer,
-      );
+// @protected
+// extension UiElementColorBuilderX on UiElementColorContainer {
+//   BoxShadow get shadowPrimary => BoxShadow(
+//         color: shadowColor.withOpacity(0.4),
+//         blurRadius: 0.50,
+//         offset: const Offset(0.0, 1),
+//         blurStyle: BlurStyle.outer,
+//       );
 
-  BoxShadow get shadowSecondary => BoxShadow(
-        color: shadowColor.withOpacity(0.1),
-        blurRadius: 0.0,
-        spreadRadius: 0.5,
-        blurStyle: BlurStyle.outer,
-        offset: const Offset(0.0, 0.0),
-      );
-}
+//   BoxShadow get shadowSecondary => BoxShadow(
+//         color: shadowColor.withOpacity(0.1),
+//         blurRadius: 0.0,
+//         spreadRadius: 0.5,
+//         blurStyle: BlurStyle.outer,
+//         offset: const Offset(0.0, 0.0),
+//       );
+// }

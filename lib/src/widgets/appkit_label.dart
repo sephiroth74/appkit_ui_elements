@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 
 class AppKitLabel extends StatelessWidget {
@@ -22,15 +21,15 @@ class AppKitLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    final theme = AppKitTheme.of(context);
-    final text = DefaultTextStyle(
-      style: (theme.typography.body).copyWith(
-        color: AppKitColors.labelColor.resolveFrom(context),
-        fontWeight: FontWeight.w500,
-      ),
-      child: this.text,
-    );
-    return UiElementColorBuilder(builder: (context, colorContainer) {
+    return MainWindowBuilder(builder: (context, isMainWindow) {
+      final theme = AppKitTheme.of(context);
+      final text = DefaultTextStyle(
+        style: (theme.typography.body).copyWith(
+          color: AppKitDynamicColor.resolve(context, AppKitColors.labelColor),
+          fontWeight: FontWeight.w500,
+        ),
+        child: this.text,
+      );
       return Row(
         crossAxisAlignment: crossAxisAlignment,
         mainAxisSize: MainAxisSize.min,
@@ -41,7 +40,7 @@ class AppKitLabel extends StatelessWidget {
               child: AppKitIconTheme(
                 data: AppKitIconThemeData(
                   size: theme.typography.body.fontSize ?? 24,
-                  color: colorContainer.controlAccentColor,
+                  color: theme.activeColor,
                 ),
                 child: icon!,
               ),
