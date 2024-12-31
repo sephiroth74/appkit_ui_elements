@@ -11,7 +11,6 @@ export 'appkit_combo_box.dart';
 export 'appkit_combo_button.dart';
 export 'custom_painter_button.dart';
 export 'date_picker.dart';
-export 'dialog_button.dart';
 export 'disclosure_button.dart';
 export 'appkit_help_button.dart';
 export 'appkit_level_indicator.dart';

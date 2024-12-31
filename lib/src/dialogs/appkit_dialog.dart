@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +27,9 @@ class AppKitDialog extends StatelessWidget {
 
   final Widget message;
 
-  final AppKitDialogPushButton primaryButton;
+  final AppKitButton primaryButton;
 
-  final AppKitDialogPushButton? secondaryButton;
+  final AppKitButton? secondaryButton;
 
   final bool? horizontalActions;
 
@@ -40,7 +39,7 @@ class AppKitDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
     if (secondaryButton != null) {
-      assert(secondaryButton is AppKitDialogPushButton);
+      assert(secondaryButton is AppKitButton);
     }
     final brightness = AppKitTheme.brightnessOf(context);
 
@@ -54,14 +53,14 @@ class AppKitDialog extends StatelessWidget {
       Colors.white.withOpacity(0.15),
     );
 
-    return UiElementColorBuilder(builder: (context, colorContainer) {
+    return MainWindowBuilder(builder: (context, isMainWindow) {
       final theme = AppKitTheme.of(context);
       return Dialog(
         elevation: 20,
-        shadowColor: colorContainer.shadowColor,
+        shadowColor: AppKitColors.shadowColor,
         backgroundColor: brightness.resolve(
           CupertinoColors.systemGrey6.color,
-          colorContainer.controlBackgroundColor,
+          theme.controlBackgroundColor,
         ),
         shape: const RoundedRectangleBorder(
           borderRadius: _kDialogBorderRadius,
@@ -176,9 +175,9 @@ Future<T?> showAppKitDialog<T>({
   bool useRootNavigator = true,
   RouteSettings? routeSettings,
 }) {
-  const provider = SharedUiElementColorContainerInstanceProvider();
-  final initialData = Stream.value(provider.instance);
-  final stream = provider.onInstanceUpdatedStream;
+  final provider = MainWindowStateListener.instance;
+  final initialData = Stream.value(provider.isMainWindow.value);
+  final stream = provider.isMainWindow;
 
   // combine the two streams and return the first value
   return Stream.fromFutures([initialData.first, stream.first])
@@ -187,20 +186,28 @@ Future<T?> showAppKitDialog<T>({
     if (!context.mounted) {
       return null;
     }
-    final colorContainer = data as UiElementColorContainer;
-    return Navigator.of(context, rootNavigator: useRootNavigator).push<T>(
+
+    final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+    final theme = AppKitTheme.of(context);
+
+    return navigator.push<T>(
       _AppKitDialogRoute<T>(
         settings: routeSettings,
         pageBuilder: (context, animation, secondaryAnimation) {
-          return UiElementColorBuilder(
-            builder: (context, colorContainer) {
+          return MainWindowBuilder(
+            builder: (context, isMainWindow) {
               return builder(context);
             },
           );
         },
+        capturedThemes: InheritedTheme.capture(
+          from: context,
+          // ignore: use_build_context_synchronously
+          to: navigator.context,
+        ),
         barrierDismissible: barrierDismissible,
-        barrierColor: barrierColor ??
-            colorContainer.controlBackgroundColor.multiplyOpacity(0.5),
+        barrierColor:
+            barrierColor ?? theme.controlBackgroundColor.multiplyOpacity(0.5),
         barrierLabel: barrierLabel ??
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ),
@@ -211,6 +218,7 @@ Future<T?> showAppKitDialog<T>({
 class _AppKitDialogRoute<T> extends PopupRoute<T> {
   _AppKitDialogRoute({
     required RoutePageBuilder pageBuilder,
+    required this.capturedThemes,
     bool barrierDismissible = false,
     Color? barrierColor = const Color(0x80000000),
     String? barrierLabel,
@@ -221,6 +229,8 @@ class _AppKitDialogRoute<T> extends PopupRoute<T> {
         _barrierColor = barrierColor;
 
   final RoutePageBuilder _pageBuilder;
+
+  final CapturedThemes capturedThemes;
 
   @override
   bool get barrierDismissible => _barrierDismissible;
@@ -252,7 +262,8 @@ class _AppKitDialogRoute<T> extends PopupRoute<T> {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
-      child: _pageBuilder(context, animation, secondaryAnimation),
+      child: capturedThemes
+          .wrap(_pageBuilder(context, animation, secondaryAnimation)),
     );
   }
 

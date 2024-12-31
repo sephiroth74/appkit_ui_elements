@@ -16,6 +16,7 @@ class AppKitButton extends StatefulWidget {
   final String? semanticLabel;
   final MouseCursor? mouseCursor;
   final TextStyle? textStyle;
+  final double? width;
 
   const AppKitButton({
     super.key,
@@ -25,6 +26,7 @@ class AppKitButton extends StatefulWidget {
     this.padding,
     this.semanticLabel,
     this.textStyle,
+    this.width,
     this.size = AppKitControlSize.regular,
     this.mouseCursor = SystemMouseCursors.basic,
     this.style = AppKitButtonStyle.push,
@@ -49,6 +51,7 @@ class AppKitButton extends StatefulWidget {
     properties
         .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
     properties.add(DiagnosticsProperty<TextStyle>('textStyle', textStyle));
+    properties.add(DoubleProperty('width', width));
   }
 }
 
@@ -82,6 +85,7 @@ class _AppKitButtonState extends State<AppKitButton> {
               padding: widget.padding,
               isEnabled: enabled,
               textStyle: widget.textStyle,
+              width: widget.width,
               child: widget.child,
             );
           } else if (widget.style == AppKitButtonStyle.flat) {
@@ -96,6 +100,7 @@ class _AppKitButtonState extends State<AppKitButton> {
               padding: widget.padding,
               isEnabled: enabled,
               textStyle: widget.textStyle,
+              width: widget.width,
               child: widget.child,
             );
           } else if (widget.style == AppKitButtonStyle.push) {
@@ -110,6 +115,7 @@ class _AppKitButtonState extends State<AppKitButton> {
               padding: widget.padding,
               isEnabled: enabled,
               textStyle: widget.textStyle,
+              width: widget.width,
               child: widget.child,
             );
           }
@@ -138,6 +144,7 @@ class _PushButton extends _ButtonBase {
     super.padding,
     super.accentColor,
     super.textStyle,
+    super.width,
   });
 
   @override
@@ -329,6 +336,7 @@ class _FlatButton extends _ButtonBase {
     super.padding,
     super.accentColor,
     super.textStyle,
+    super.width,
   });
 
   @override
@@ -436,6 +444,7 @@ class _InlineButton extends _ButtonBase {
     super.padding,
     super.accentColor,
     super.textStyle,
+    super.width,
   });
 
   @override
@@ -542,6 +551,7 @@ abstract class _ButtonBase extends StatefulWidget {
   final AppKitButtonThemeData buttonTheme;
   final AppKitButtonType type;
   final TextStyle? textStyle;
+  final double? width;
 
   abstract final AppKitButtonStyle style;
 
@@ -557,6 +567,7 @@ abstract class _ButtonBase extends StatefulWidget {
     this.accentColor,
     this.padding,
     this.textStyle,
+    this.width,
   });
 }
 
@@ -636,15 +647,21 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: widget.size.getBoxConstraints(widget.style),
-      child: GestureDetector(
-        onTapDown: widget.isEnabled ? _handleTapDown : null,
-        onTapUp: widget.isEnabled ? _handleTapUp : null,
-        onTapCancel: widget.isEnabled ? _handleTapCancel : null,
-        child: LayoutBuilder(builder: (context, constraints) {
-          return buildButton(context, constraints);
-        }),
+    final constraints = widget.size.getBoxConstraints(widget.style)
+      ..copyWith(maxWidth: widget.width);
+
+    return SizedBox(
+      width: widget.width,
+      child: ConstrainedBox(
+        constraints: constraints,
+        child: GestureDetector(
+          onTapDown: widget.isEnabled ? _handleTapDown : null,
+          onTapUp: widget.isEnabled ? _handleTapUp : null,
+          onTapCancel: widget.isEnabled ? _handleTapCancel : null,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return buildButton(context, constraints);
+          }),
+        ),
       ),
     );
   }

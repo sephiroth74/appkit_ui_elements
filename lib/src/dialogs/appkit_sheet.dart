@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,22 +25,23 @@ class AppKitSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    final brightness = AppKitTheme.brightnessOf(context);
-
-    final outerBorderColor = brightness.resolve(
-      Colors.black.withOpacity(0.23),
-      Colors.black.withOpacity(0.76),
-    );
-
-    final innerBorderColor = brightness.resolve(
-      Colors.white.withOpacity(0.45),
-      Colors.white.withOpacity(0.15),
-    );
 
     final EdgeInsets effectivePadding =
         MediaQuery.of(context).viewInsets + (insetPadding ?? EdgeInsets.zero);
 
-    return UiElementColorBuilder(builder: (context, colorContainer) {
+    return MainWindowBuilder(builder: (context, isMainWindow) {
+      final theme = AppKitTheme.of(context);
+      final brightness = AppKitTheme.brightnessOf(context);
+
+      final outerBorderColor = brightness.resolve(
+        Colors.black.withOpacity(0.23),
+        Colors.black.withOpacity(0.76),
+      );
+
+      final innerBorderColor = brightness.resolve(
+        Colors.white.withOpacity(0.45),
+        Colors.white.withOpacity(0.15),
+      );
       return AnimatedPadding(
         padding: effectivePadding,
         duration: insetAnimationDuration,
@@ -51,12 +51,12 @@ class AppKitSheet extends StatelessWidget {
               color: backgroundColor ??
                   brightness.resolve(
                     CupertinoColors.systemGrey6.color,
-                    colorContainer.controlBackgroundColor,
+                    theme.controlBackgroundColor,
                   ),
               borderRadius: _kSheetBorderRadius,
               boxShadow: [
                 BoxShadow(
-                  color: colorContainer.shadowColor.withOpacity(0.55),
+                  color: AppKitColors.shadowColor.withOpacity(0.55),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -93,9 +93,9 @@ Future<T?> showAppKitSheet<T>({
   bool useRootNavigator = true,
   RouteSettings? routeSettings,
 }) {
-  const provider = SharedUiElementColorContainerInstanceProvider();
-  final initialData = Stream.value(provider.instance);
-  final stream = provider.onInstanceUpdatedStream;
+  final provider = MainWindowStateListener.instance;
+  final initialData = Stream.value(provider.isMainWindow.value);
+  final stream = provider.isMainWindow;
 
   // combine the two streams and return the first value
   return Stream.fromFutures([initialData.first, stream.first])
@@ -104,20 +104,28 @@ Future<T?> showAppKitSheet<T>({
     if (!context.mounted) {
       return null;
     }
-    final colorContainer = data as UiElementColorContainer;
-    return Navigator.of(context, rootNavigator: useRootNavigator).push<T>(
+
+    final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+    final theme = AppKitTheme.of(context);
+
+    return navigator.push<T>(
       _AppKitSheetRoute<T>(
         settings: routeSettings,
         pageBuilder: (context, animation, secondaryAnimation) {
-          return UiElementColorBuilder(
-            builder: (context, colorContainer) {
+          return MainWindowBuilder(
+            builder: (context, isMainWindow) {
               return builder(context);
             },
           );
         },
+        capturedThemes: InheritedTheme.capture(
+          from: context,
+          // ignore: use_build_context_synchronously
+          to: navigator.context,
+        ),
         barrierDismissible: barrierDismissible,
-        barrierColor: barrierColor ??
-            colorContainer.controlBackgroundColor.multiplyOpacity(0.5),
+        barrierColor:
+            barrierColor ?? theme.controlBackgroundColor.multiplyOpacity(0.5),
         barrierLabel: barrierLabel ??
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ),
@@ -128,6 +136,7 @@ Future<T?> showAppKitSheet<T>({
 class _AppKitSheetRoute<T> extends PopupRoute<T> {
   _AppKitSheetRoute({
     required RoutePageBuilder pageBuilder,
+    required this.capturedThemes,
     bool barrierDismissible = false,
     Color? barrierColor = const Color(0x80000000),
     String? barrierLabel,
@@ -138,6 +147,8 @@ class _AppKitSheetRoute<T> extends PopupRoute<T> {
         _barrierColor = barrierColor;
 
   final RoutePageBuilder _pageBuilder;
+
+  final CapturedThemes capturedThemes;
 
   @override
   bool get barrierDismissible => _barrierDismissible;
@@ -169,7 +180,8 @@ class _AppKitSheetRoute<T> extends PopupRoute<T> {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
-      child: _pageBuilder(context, animation, secondaryAnimation),
+      child: capturedThemes
+          .wrap(_pageBuilder(context, animation, secondaryAnimation)),
     );
   }
 

@@ -27,106 +27,119 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const WidgetTitle(label: 'Dialogs'),
                     const SizedBox(height: 16),
-                    AppKitPushButton(
+                    SizedBox(
+                      width: 200,
+                      child: AppKitButton(
+                          onPressed: () {
+                            showAppKitDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                debugPrint('generate dialog widget');
+                                return AppKitDialog(
+                                  suppress: const DoNotNotifyRow(),
+                                  icon: CupertinoIcons.news,
+                                  title: const Text('Dialog'),
+                                  message: const Text(dialogMessage),
+                                  primaryButton: AppKitButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      type: AppKitButtonType.primary,
+                                      style: AppKitButtonStyle.flat,
+                                      child: const Text('Close')),
+                                );
+                              },
+                            );
+                          },
+                          type: AppKitButtonType.primary,
+                          child: const Text('Show Dialog 1')),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 200,
+                      child: AppKitButton(
+                          onPressed: () {
+                            showAppKitDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AppKitDialog(
+                                  suppress: const DoNotNotifyRow(),
+                                  icon: CupertinoIcons.news,
+                                  title: const Text('Dialog'),
+                                  message: const Text(dialogMessage),
+                                  secondaryButton: AppKitButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      type: AppKitButtonType.secondary,
+                                      child: const Text('Cancel')),
+                                  primaryButton: AppKitButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      type: AppKitButtonType.primary,
+                                      child: const Text('Close')),
+                                );
+                              },
+                            );
+                          },
+                          type: AppKitButtonType.primary,
+                          child: const Text('Show Dialog 2')),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 200,
+                      child: AppKitButton(
+                          onPressed: () {
+                            showAppKitDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AppKitDialog(
+                                  suppress: const DoNotNotifyRow(),
+                                  icon: CupertinoIcons.news,
+                                  title: const Text('Dialog'),
+                                  message: const Text(dialogMessage),
+                                  horizontalActions: false,
+                                  secondaryButton: AppKitButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      type: AppKitButtonType.destructive,
+                                      child: const Text('Cancel')),
+                                  primaryButton: AppKitButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      type: AppKitButtonType.primary,
+                                      child: const Text('Close')),
+                                );
+                              },
+                            );
+                          },
+                          type: AppKitButtonType.primary,
+                          child: const Text('Show Dialog 3')),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 200,
+                      child: AppKitButton(
+                        type: AppKitButtonType.primary,
+                        child: const Text('Show sheet'),
                         onPressed: () {
-                          showAppKitDialog(
-                            barrierDismissible: false,
+                          showAppKitSheet(
                             context: context,
-                            builder: (context) {
-                              debugPrint('generate dialog widget');
-                              return AppKitDialog(
-                                suppress: const DoNotNotifyRow(),
-                                icon: CupertinoIcons.news,
-                                title: const Text('Dialog'),
-                                message: const Text(dialogMessage),
-                                primaryButton: AppKitDialogPushButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    type: AppKitPushButtonType.primary,
-                                    child: const Text('Close')),
-                              );
-                            },
+                            barrierDismissible: false,
+                            builder: (_) => const DemoSheet(),
                           );
                         },
-                        type: AppKitPushButtonType.primary,
-                        child: const Text('Show Dialog 1')),
-                    const SizedBox(height: 16),
-                    AppKitPushButton(
-                        onPressed: () {
-                          showAppKitDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return AppKitDialog(
-                                suppress: const DoNotNotifyRow(),
-                                icon: CupertinoIcons.news,
-                                title: const Text('Dialog'),
-                                message: const Text(dialogMessage),
-                                secondaryButton: AppKitDialogPushButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    type: AppKitPushButtonType.secondary,
-                                    child: const Text('Cancel')),
-                                primaryButton: AppKitDialogPushButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    type: AppKitPushButtonType.primary,
-                                    child: const Text('Close')),
-                              );
-                            },
-                          );
-                        },
-                        type: AppKitPushButtonType.primary,
-                        child: const Text('Show Dialog 2')),
-                    const SizedBox(height: 16),
-                    AppKitPushButton(
-                        onPressed: () {
-                          showAppKitDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return AppKitDialog(
-                                suppress: const DoNotNotifyRow(),
-                                icon: CupertinoIcons.news,
-                                title: const Text('Dialog'),
-                                message: const Text(dialogMessage),
-                                horizontalActions: false,
-                                secondaryButton: AppKitDialogPushButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    type: AppKitPushButtonType.destructive,
-                                    child: const Text('Cancel')),
-                                primaryButton: AppKitDialogPushButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    type: AppKitPushButtonType.primary,
-                                    child: const Text('Close')),
-                              );
-                            },
-                          );
-                        },
-                        type: AppKitPushButtonType.primary,
-                        child: const Text('Show Dialog 3')),
-                    const SizedBox(height: 16),
-                    AppKitPushButton(
-                      type: AppKitPushButtonType.primary,
-                      controlSize: AppKitControlSize.regular,
-                      child: const Text('Show sheet'),
-                      onPressed: () {
-                        showAppKitSheet(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) => const DemoSheet(),
-                        );
-                      },
+                      ),
                     ),
                   ],
                 ),
@@ -203,9 +216,10 @@ class DemoSheet extends StatelessWidget {
                 title: Text('Create beautiful macOS applications in minutes'),
               ),
               const Spacer(),
-              AppKitPushButton(
-                type: AppKitPushButtonType.primary,
-                controlSize: AppKitControlSize.large,
+              AppKitButton(
+                type: AppKitButtonType.primary,
+                style: AppKitButtonStyle.flat,
+                size: AppKitControlSize.large,
                 child: const Text('Get started'),
                 onPressed: () => Navigator.of(context).pop(),
               ),
