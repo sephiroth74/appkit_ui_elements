@@ -10,7 +10,7 @@ import 'package:gradient_borders/gradient_borders.dart';
 const _kSize = 14.0;
 const _kBorderWidthRatio = 28;
 const _kBoxShadowSpreadRatio = 28;
-const _kBoxShadowOffsetRatio = 14;
+const _kBoxShadowOffsetRatio = 10;
 
 class AppKitRadioButton<T> extends StatefulWidget {
   final T? groupValue;
@@ -80,7 +80,6 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    final theme = AppKitTheme.of(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: widget.enabled ? _handleTapDown : null,
@@ -92,13 +91,12 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
       child: Semantics(
         checked: widget.isSelected,
         label: widget.semanticLabel,
-        child: Builder(
-          builder: (context) {
-            final controlBackgroundColor =
-                AppKitColors.controlBackgroundColor.color;
+        child: MainWindowBuilder(
+          builder: (context, isMainWindow) {
+            final theme = AppKitTheme.of(context);
+            final isDark = theme.brightness == Brightness.dark;
+            final controlBackgroundColor = theme.controlColor;
             final Color accentColor = widget.color ?? theme.activeColor;
-            final isMainWindow =
-                MainWindowStateListener.instance.isMainWindow.value;
             return Container(
               width: widget.size,
               height: widget.size,
@@ -106,26 +104,27 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.black.withOpacity(0.2),
-                  width: 0.5,
-                ),
                 boxShadow: [
                   if ((widget.isSelected || widget.isIndeterminate) &&
                       isMainWindow &&
-                      widget.enabled) ...[
-                    BoxShadow(
-                      color: accentColor.withOpacity(0.24),
-                      offset: Offset(0, widget.size / _kBoxShadowSpreadRatio),
-                      blurRadius: (widget.size / 5.6).clamp(0, 20),
-                    ),
+                      widget.enabled &&
+                      !isDark) ...[
                     BoxShadow(
                       color: accentColor.withOpacity(0.12),
-                      offset: const Offset(0, 0),
-                      blurRadius: 0,
+                      offset: const Offset(0, 0.5),
+                      blurRadius: 0.5,
                       spreadRadius: 0.25,
                     ),
-                  ],
+                  ] else if (isDark) ...[
+                    BoxShadow(
+                      color: AppKitColors.shadowColor.color
+                          .withOpacity(isDark ? 0.75 : 0.15),
+                      blurRadius: 0.25,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 0.25),
+                      blurStyle: BlurStyle.outer,
+                    ),
+                  ]
                 ],
               ),
               child: SizedBox.expand(
@@ -181,27 +180,40 @@ class _DecoratedContainer extends StatelessWidget {
         ? color.computeLuminance() > 0.5
             ? Colors.black
             : Colors.white
-        : AppKitColors.text.opaque.tertiary.resolveFrom(context);
+        : !isMainWindow && enabled
+            ? Colors.white
+            : Colors.black.withOpacity(0.5);
 
     return Container(
-      foregroundDecoration:
-          isDown ? BoxDecoration(color: Colors.black.withOpacity(0.1)) : null,
+      foregroundDecoration: isDown
+          ? BoxDecoration(
+              color: AppKitDynamicColor.resolve(
+                  context, AppKitColors.controlBackgroundPressedColor))
+          : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
+          border: !isDark && enabled && (value == false)
+              ? Border.all(
+                  color: Colors.black.withOpacity(0.2),
+                  width: size / _kBorderWidthRatio,
+                )
+              : null,
           color: !enabled
-              ? controlBackgroundColor.multiplyOpacity(0.5)
+              ? isDark
+                  ? AppKitColors.controlBackgroundColor.color.withOpacity(0.2)
+                  : AppKitColors.controlBackgroundColor.darkColor
+                      .withOpacity(0.1)
               : value != false && isMainWindow
                   ? color
-                  : null,
+                  : controlBackgroundColor.withOpacity(0.5),
           boxShadow: [
-            if (value == false || !isMainWindow && enabled) ...[
+            if (!isDark && enabled && (value == false || !isMainWindow)) ...[
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withOpacity(0.3),
               ),
               BoxShadow(
-                color:
-                    controlBackgroundColor.multiplyOpacity(enabled ? 1 : 0.5),
+                color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.1),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),
@@ -212,27 +224,54 @@ class _DecoratedContainer extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: ((value == false || !isMainWindow) && enabled)
+            border: isDark && enabled && isMainWindow || (value == false)
                 ? GradientBoxBorder(
                     gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.2),
-                        Colors.black.withOpacity(0.15),
-                      ],
-                      transform: const GradientRotation(pi / 2),
+                      colors: isDark
+                          ? [
+                              AppKitDynamicColor.resolve(
+                                      context, AppKitColors.text.opaque.primary)
+                                  .multiplyOpacity(0.75),
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.quaternary)
+                                  .multiplyOpacity(0.0)
+                            ]
+                          : [
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.tertiary)
+                                  .multiplyOpacity(0.75),
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.secondary)
+                                  .multiplyOpacity(0.5)
+                            ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
                     ),
-                    width: size / _kBorderWidthRatio,
+                    width: 0.5,
                   )
                 : null,
-            gradient: value != false && isMainWindow
+            gradient: value != false && isMainWindow && enabled
                 ? LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(0.17),
+                      Colors.white.withOpacity(isDark ? 0.05 : 0.17),
                       Colors.white.withOpacity(0),
                     ],
                     transform: const GradientRotation(pi / 2),
                   )
-                : null,
+                : value == false && enabled
+                    ? LinearGradient(
+                        colors: [
+                          isDark
+                              ? Colors.black.withOpacity(0.5)
+                              : Colors.white.withOpacity(0.5),
+                          isDark
+                              ? Colors.black.withOpacity(0.0)
+                              : Colors.white.withOpacity(0.0),
+                        ],
+                        transform: const GradientRotation(pi / 2),
+                      )
+                    : null,
           ),
           child: (value != false)
               ? Center(
