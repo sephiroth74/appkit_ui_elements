@@ -11,7 +11,7 @@ const _kSize = 14.0;
 const _kCornerRadiusRatio = 4.0;
 const _kBorderWidthRatio = 28;
 const _kBoxShadowSpreadRatio = 28;
-const _kBoxShadowOffsetRatio = 14;
+const _kBoxShadowOffsetRatio = 10;
 
 class AppKitCheckbox extends StatefulWidget {
   final bool? value;
@@ -93,16 +93,11 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
       child: Semantics(
         checked: widget.value == true,
         label: widget.semanticLabel,
-        child: Builder(
-          builder: (context) {
+        child: MainWindowBuilder(
+          builder: (context, isMainWindow) {
             final isDark = theme.brightness == Brightness.dark;
-
-            final controlBackgroundColor = AppKitDynamicColor.resolve(
-                context, AppKitColors.controlBackgroundColor);
+            final controlBackgroundColor = theme.controlColor;
             final Color accentColor = widget.color ?? theme.activeColor;
-
-            final isMainWindow =
-                MainWindowStateListener.instance.isMainWindow.value;
 
             return Container(
               width: widget.size,
@@ -119,6 +114,7 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
                       offset: Offset(0, 0),
                       blurRadius: 0.5,
                       spreadRadius: 0.0,
+                      blurStyle: BlurStyle.outer,
                     )
                   ]
                 ],
@@ -166,59 +162,39 @@ class _DecoratedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controlBackgroundColor = AppKitColors.controlBackgroundColor.color;
+    final theme = AppKitTheme.of(context);
+    final controlBackgroundColor = theme.controlColor;
     final radius = size / _kCornerRadiusRatio;
     final shadowSpread = size / _kBoxShadowSpreadRatio;
-    final iconColor = enabled
+    final iconColor = enabled && isMainWindow
         ? color.computeLuminance() > 0.5
             ? Colors.black
             : Colors.white
-        : AppKitDynamicColor.resolve(
-            context, AppKitColors.text.opaque.tertiary);
+        : !isMainWindow && enabled
+            ? Colors.white
+            : Colors.black.withOpacity(0.5);
 
     return Container(
       foregroundDecoration: isDown
           ? BoxDecoration(
               color: AppKitDynamicColor.resolve(
                   context, AppKitColors.controlBackgroundPressedColor))
-          : value != false && enabled
-              ? BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.white.withOpacity(0.1), Colors.transparent],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                )
-              : null,
-      child: DecoratedBox(
+          : null,
+      child: Container(
         decoration: BoxDecoration(
-          border: ((value == false || !isMainWindow) && enabled)
-              ? GradientBoxBorder(
-                  gradient: LinearGradient(
-                    colors: [
-                      isDark
-                          ? Colors.white.withOpacity(0.4)
-                          : Colors.black.withOpacity(0.5),
-                      isDark
-                          ? Colors.white.withOpacity(0.0)
-                          : Colors.black.withOpacity(0.2),
-                    ],
-                    transform: const GradientRotation(pi / 2),
-                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1],
-                  ),
-                  width: size / _kBorderWidthRatio,
-                )
-              : null,
           color: !enabled
-              ? controlBackgroundColor.withOpacity(0.5)
+              ? isDark
+                  ? AppKitColors.controlBackgroundColor.color.withOpacity(0.2)
+                  : AppKitColors.controlBackgroundColor.darkColor
+                      .withOpacity(0.1)
               : value != false && isMainWindow
                   ? color
                   : controlBackgroundColor.withOpacity(0.5),
           borderRadius: BorderRadius.circular(radius),
           boxShadow: [
-            if (value == false || !isMainWindow && enabled) ...[
+            if (!isDark && enabled && (value == false || !isMainWindow)) ...[
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withOpacity(0.5),
               ),
               BoxShadow(
                 color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.1),
@@ -232,10 +208,37 @@ class _DecoratedContainer extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius),
-            gradient: value != false && isMainWindow
+            border: enabled && isMainWindow || (!isDark && value == false)
+                ? GradientBoxBorder(
+                    gradient: LinearGradient(
+                      colors: isDark
+                          ? [
+                              AppKitDynamicColor.resolve(
+                                      context, AppKitColors.text.opaque.primary)
+                                  .multiplyOpacity(0.75),
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.quaternary)
+                                  .multiplyOpacity(0.0)
+                            ]
+                          : [
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.tertiary)
+                                  .multiplyOpacity(0.75),
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.secondary)
+                                  .multiplyOpacity(0.5)
+                            ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+                    ),
+                    width: 0.5,
+                  )
+                : null,
+            gradient: value != false && isMainWindow && enabled
                 ? LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(0.17),
+                      Colors.white.withOpacity(isDark ? 0.05 : 0.17),
                       Colors.white.withOpacity(0),
                     ],
                     transform: const GradientRotation(pi / 2),
