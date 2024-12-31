@@ -216,15 +216,13 @@ class _AppKitSliderState extends State<AppKitSlider>
       slider: true,
       label: widget.semanticLabel,
       value: widget.value.toStringAsFixed(2),
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
+      child: MainWindowBuilder(builder: (context, isMainWindow) {
         final AppKitThemeData theme = AppKitTheme.of(context);
         final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
         final discreteThumbSize = sliderTheme.discreteThumbSize;
         final continuousThumbSize = sliderTheme.continuousThumbSize;
         final overallHeight =
             sliderTheme.continuousThumbSize + _kHorizontalPaddingThreshold;
-        final isMainWindow =
-            MainWindowStateListener.instance.isMainWindow.value;
 
         return ConstrainedBox(
           constraints: const BoxConstraints(minWidth: _kOverallMinWidth),
@@ -245,9 +243,7 @@ class _AppKitSliderState extends State<AppKitSlider>
               width -= (horizontalPadding * 2);
 
               final accentColor = isMainWindow
-                  ? (sliderTheme.sliderColor ??
-                      theme.primaryColor ??
-                      colorContainer.controlAccentColor)
+                  ? (sliderTheme.sliderColor ?? theme.activeColor)
                   : (sliderTheme.accentColorUnfocused ??
                       theme.accentColorUnfocused);
 

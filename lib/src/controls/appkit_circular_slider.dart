@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:gradient_borders/gradient_borders.dart';
 
 const _kMin = 0.0;
 const _kMax = 1.0;
@@ -217,24 +219,19 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
       child: SizedBox(
         width: size,
         height: size,
-        child: Builder(builder: (context) {
+        child: MainWindowBuilder(builder: (context, isMainWindow) {
           final controlBackgroundColor =
-              AppKitColors.controlBackgroundColor.color;
-          final isMainWindow =
-              MainWindowStateListener.instance.isMainWindow.value;
+              AppKitDynamicColor.resolve(context, AppKitColors.controlColor);
           final sliderTheme = AppKitCircularSliderTheme.of(context);
-
           final thumbPosition = _thumbPosition(animationValue);
-
           final enabledFactor = enabled ? 1.0 : 0.5;
-
           var thumbColor = isMainWindow
               ? widget.color ?? sliderTheme.thumbColor
               : sliderTheme.thumbColorUnfocused;
-
           var backgroundColor = enabled
               ? sliderTheme.backgroundColor
               : controlBackgroundColor.withOpacity(0.5);
+          final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
 
           if (isMainWindow) {
             thumbColor = thumbColor.multiplyOpacity(enabledFactor);
@@ -251,9 +248,55 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: backgroundColor,
+                border: GradientBoxBorder(
+                  gradient: LinearGradient(
+                    colors: isDark
+                        ? [
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.primary)
+                                .multiplyOpacity(0.5),
+                            AppKitDynamicColor.resolve(context,
+                                    AppKitColors.text.opaque.quaternary)
+                                .multiplyOpacity(0.0)
+                          ]
+                        : [
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.tertiary)
+                                .multiplyOpacity(0.5),
+                            AppKitDynamicColor.resolve(
+                                    context, AppKitColors.text.opaque.secondary)
+                                .multiplyOpacity(0.5)
+                          ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+                  ),
+                  width: 0.5,
+                ),
+                gradient: enabled && isDark
+                    ? LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.05),
+                          backgroundColor,
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: const [0.0, 0.5],
+                      )
+                    : null,
                 boxShadow: const [
-                  AppKitColors.shadowPrimary,
-                  AppKitColors.shadowSecondary,
+                  BoxShadow(
+                      color: Color(0x66000000),
+                      offset: Offset(0.0, 1.0),
+                      blurRadius: 0.5,
+                      spreadRadius: 0.0,
+                      blurStyle: BlurStyle.outer),
+                  BoxShadow(
+                      color: Color(0x1a000000),
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 0.0,
+                      spreadRadius: 0.5,
+                      blurStyle: BlurStyle.outer),
                 ],
               ),
               child: Stack(

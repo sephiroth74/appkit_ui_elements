@@ -80,8 +80,6 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
 
-    final theme = AppKitTheme.of(context);
-
     return MouseRegion(
       onEnter: widget.enabled ? (_) => _handleMouseEnter : null,
       onExit: widget.enabled ? (_) => _handleMouseExit : null,
@@ -100,15 +98,16 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                 minHeight: widget.size,
                 maxWidth: widget.size,
                 maxHeight: widget.size),
-            child: Builder(builder: (context) {
-              return Builder(
-                builder: (context) {
-                  switch (widget.style) {
-                    case AppKitControlButtonIconStyle.bordered:
-                      return buildBorderedContainer(theme: theme);
-                  }
-                },
-              );
+            child: MainWindowBuilder(builder: (context, isMainWindow) {
+              final theme = AppKitTheme.of(context);
+              switch (widget.style) {
+                case AppKitControlButtonIconStyle.bordered:
+                  return buildBorderedContainer(
+                      theme: theme, isMainWindow: isMainWindow);
+                default:
+                  throw UnimplementedError(
+                      'Unsupported icon style: ${widget.style}');
+              }
             }),
           ),
         ),
@@ -118,25 +117,34 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
 
   Widget buildBorderedContainer({
     required AppKitThemeData theme,
+    required bool isMainWindow,
   }) {
-    final bool isMainWindow =
-        MainWindowStateListener.instance.isMainWindow.value;
-
     final Color color = widget.enabled
         ? (isMainWindow
-            ? widget.color ?? theme.controlBackgroundColor
-            : theme.controlBackgroundColor)
-        : theme.controlBackgroundColor.multiplyOpacity(0.5);
+            ? widget.color ?? theme.controlColor
+            : theme.controlColor)
+        : theme.controlColor.multiplyOpacity(0.5);
 
+    final isDark = theme.brightness == Brightness.dark;
     final colorLuminance = color.computeLuminance();
 
     final iconColor = colorLuminance >= 0.5
         ? widget.enabled
-            ? AppKitColors.labelColor.color
-            : AppKitColors.fills.opaque.tertiary.color
+            ? isDark
+                ? AppKitColors.labelColor.darkColor
+                : AppKitColors.labelColor.color
+            : (isDark
+                    ? AppKitColors.labelColor.darkColor
+                    : AppKitColors.labelColor.color)
+                .withOpacity(0.35)
         : widget.enabled
-            ? AppKitColors.labelColor.darkColor
-            : AppKitColors.fills.opaque.tertiary.darkColor;
+            ? isDark
+                ? AppKitColors.labelColor.darkColor
+                : AppKitColors.labelColor.color
+            : (isDark
+                    ? AppKitColors.labelColor.color
+                    : AppKitColors.labelColor.darkColor)
+                .withOpacity(0.35);
 
     final foregroundColor = colorLuminance >= 0.5
         ? AppKitColors.labelColor.color.withOpacity(0.1)
@@ -154,20 +162,12 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                   BorderRadius.circular(widget.size / _kBorderRadiusRatio),
               boxShadow: [
                 BoxShadow(
-                    color:
-                        Colors.black.withOpacity(widget.enabled ? 0.25 : 0.15),
-                    blurStyle: BlurStyle.outer,
-                    offset: const Offset(0, 0.15),
-                    blurRadius: 1.0,
-                    spreadRadius: 0),
-                BoxShadow(
-                  color:
-                      Colors.black.withOpacity(widget.enabled ? 0.055 : 0.025),
-                  offset: const Offset(0, 0),
-                  blurStyle: BlurStyle.solid,
-                  blurRadius: 0,
-                  spreadRadius: 0.5,
-                )
+                  color: AppKitColors.shadowColor.color.withOpacity(0.75),
+                  blurRadius: 0.5,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 0.5),
+                  blurStyle: BlurStyle.outer,
+                ),
               ]),
           child: SizedBox.expand(
             child: CustomPaint(

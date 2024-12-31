@@ -89,7 +89,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color accentColorUnfocused;
   final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitButtonThemeData buttonTheme;
-  final AppKitHelpButtonThemeData helpButtonTheme;
   final AppKitSliderThemeData sliderTheme;
   final AppKitCircularSliderThemeData circularSliderTheme;
   final AppKitSegmentedControlThemeData segmentedControlTheme;
@@ -115,7 +114,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     VisualDensity? visualDensity,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitButtonThemeData? buttonTheme,
-    AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
     AppKitCircularSliderThemeData? circularSliderTheme,
     AppKitSegmentedControlThemeData? segmentedControlTheme,
@@ -275,18 +273,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ),
     );
 
-    helpButtonTheme ??= AppKitHelpButtonThemeData(
-      color: isDark ? const Color(0xff1e1e1e) : Colors.white,
-      disabledColor: isDark
-          ? const Color(0xff1e1e1e).withOpacity(0.5)
-          : Colors.white.withOpacity(0.5),
-    );
-
     sliderTheme ??= AppKitSliderThemeData(
-      trackColor: isDark ? const Color(0xFF262728) : const Color(0xFFe1e0de),
-      thumbColor: AppKitColors.controlBackgroundColor.color,
+      trackColor: isDark
+          ? AppKitColors.controlColor.darkColor
+          : const Color(0xFFe1e0de),
+      thumbColor: AppKitColors.controlColor.color,
       sliderColor: activeColor,
-      tickColor: isDark ? const Color(0xFF212424) : const Color(0xFFC9C9C7),
+      tickColor: isDark
+          ? const Color.fromARGB(255, 155, 155, 155)
+          : const Color(0xFFC9C9C7),
       discreteAnchorThreshold: 0.01,
       animationDuration: 200,
       discreteThumbCornerRadius: 4.0,
@@ -317,7 +312,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     circularSliderTheme ??= AppKitCircularSliderThemeData(
-      backgroundColor: AppKitColors.controlBackgroundColor.color,
+      backgroundColor: isDark
+          ? AppKitColors.controlColor.darkColor
+          : AppKitColors.controlColor.color,
       thumbColor: isDark
           ? Colors.black.withOpacity(0.75)
           : Colors.black.withOpacity(0.5),
@@ -461,7 +458,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlColor: controlColor,
       dividerColor: dividerColor,
       focusColor: focusColor,
-      helpButtonTheme: helpButtonTheme,
       iconButtonTheme: iconButtonTheme,
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
@@ -496,7 +492,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlColor: controlColor,
       dividerColor: dividerColor,
       focusColor: focusColor,
-      helpButtonTheme: helpButtonTheme,
       iconButtonTheme: iconButtonTheme,
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
@@ -555,7 +550,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.typography,
     required this.pushButtonTheme,
     required this.buttonTheme,
-    required this.helpButtonTheme,
     required this.sliderTheme,
     required this.segmentedControlTheme,
     required this.switchTheme,
@@ -590,7 +584,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         typography,
         pushButtonTheme,
         buttonTheme,
-        helpButtonTheme,
         sliderTheme,
         segmentedControlTheme,
         switchTheme,
@@ -633,7 +626,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? accentColorUnfocused,
     AppKitPushButtonThemeData? pushButtonTheme,
     AppKitButtonThemeData? buttonTheme,
-    AppKitHelpButtonThemeData? helpButtonTheme,
     AppKitSliderThemeData? sliderTheme,
     AppKitSegmentedControlThemeData? segmentedControlTheme,
     AppKitSwitchThemeData? switchTheme,
@@ -662,7 +654,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       typography: typography ?? this.typography,
       pushButtonTheme: pushButtonTheme ?? this.pushButtonTheme,
       buttonTheme: buttonTheme ?? this.buttonTheme,
-      helpButtonTheme: helpButtonTheme ?? this.helpButtonTheme,
       sliderTheme: sliderTheme ?? this.sliderTheme,
       segmentedControlTheme:
           segmentedControlTheme ?? this.segmentedControlTheme,
@@ -705,7 +696,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       canvasColor: other.canvasColor,
       pushButtonTheme: other.pushButtonTheme,
       buttonTheme: other.buttonTheme,
-      helpButtonTheme: other.helpButtonTheme,
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
       controlBackgroundColor: other.controlBackgroundColor,
@@ -743,8 +733,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       pushButtonTheme: AppKitPushButtonThemeData.lerp(
           a.pushButtonTheme, b.pushButtonTheme, t),
       buttonTheme: AppKitButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
-      helpButtonTheme: AppKitHelpButtonThemeData.lerp(
-          a.helpButtonTheme, b.helpButtonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
       segmentedControlTheme: AppKitSegmentedControlThemeData.lerp(
@@ -804,8 +792,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'pushButtonTheme', pushButtonTheme));
     properties.add(
         DiagnosticsProperty<AppKitButtonThemeData>('buttonTheme', buttonTheme));
-    properties.add(DiagnosticsProperty<AppKitHelpButtonThemeData>(
-        'helpButtonTheme', helpButtonTheme));
     properties.add(
         DiagnosticsProperty<AppKitSliderThemeData>('sliderTheme', sliderTheme));
     properties.add(DiagnosticsProperty<AppKitSegmentedControlThemeData>(

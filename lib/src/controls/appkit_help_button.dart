@@ -67,8 +67,6 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    final theme = AppKitTheme.of(context);
-    final helpButtonTheme = AppKitHelpButtonTheme.of(context);
     return MouseRegion(
       cursor: widget.cursor,
       child: GestureDetector(
@@ -86,30 +84,33 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                 minHeight: widget.size,
                 maxWidth: widget.size,
                 maxHeight: widget.size),
-            child: Builder(
-              builder: (context) {
+            child: MainWindowBuilder(
+              builder: (context, isMainWindow) {
+                final theme = AppKitTheme.of(context);
+                final isDark = theme.brightness == Brightness.dark;
                 final color = widget.enabled
-                    ? (widget.color ??
-                        helpButtonTheme.color ??
-                        theme.controlBackgroundColor)
+                    ? (widget.color ?? theme.controlColor)
                     : (widget.disabledColor ??
-                        helpButtonTheme.disabledColor ??
-                        theme.controlBackgroundColor.withOpacity(0.5));
+                        theme.controlColor.withOpacity(0.25));
 
                 final colorLuminance = color.computeLuminance();
-
-                final isDark = theme.brightness == Brightness.dark;
-                Color iconColor = isDark
-                    ? AppKitColors.controlTextColor.darkColor
-                    : AppKitColors.controlTextColor.color;
-                debugPrint(
-                    'iconColor: $iconColor, isDark: ${theme.brightness == Brightness.dark}');
-
-                if (!widget.enabled) {
-                  iconColor = isDark
-                      ? AppKitColors.text.opaque.tertiary.darkColor
-                      : AppKitColors.text.opaque.tertiary.color;
-                }
+                final iconColor = colorLuminance >= 0.5
+                    ? widget.enabled
+                        ? isDark
+                            ? AppKitColors.labelColor.darkColor
+                            : AppKitColors.labelColor.color
+                        : (isDark
+                                ? AppKitColors.labelColor.darkColor
+                                : AppKitColors.labelColor.color)
+                            .withOpacity(0.35)
+                    : widget.enabled
+                        ? isDark
+                            ? AppKitColors.labelColor.darkColor
+                            : AppKitColors.labelColor.color
+                        : (isDark
+                                ? AppKitColors.labelColor.color
+                                : AppKitColors.labelColor.darkColor)
+                            .withOpacity(0.35);
 
                 final foregroundColor = colorLuminance > 0.5
                     ? Colors.black.withOpacity(0.1)
@@ -126,17 +127,13 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                         color: color,
                         boxShadow: [
                           BoxShadow(
-                              blurStyle: BlurStyle.outer,
-                              offset: const Offset(0, 0.25),
-                              blurRadius: 1.5,
-                              spreadRadius: 0,
-                              color: Colors.black.withOpacity(0.3)),
-                          BoxShadow(
-                              blurStyle: BlurStyle.outer,
-                              offset: const Offset(0, 0),
-                              blurRadius: 0,
-                              spreadRadius: 0.5,
-                              color: Colors.black.withOpacity(0.05))
+                            color: AppKitColors.shadowColor.color
+                                .withOpacity(0.75),
+                            blurRadius: 0.5,
+                            spreadRadius: 0,
+                            offset: const Offset(0, 0.5),
+                            blurStyle: BlurStyle.outer,
+                          ),
                         ]),
                     child: Align(
                       alignment: Alignment.center,

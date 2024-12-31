@@ -24,7 +24,7 @@ export 'appkit_rating_indicator.dart';
 export 'search_field.dart';
 export 'segmented_control.dart';
 export 'appkit_slider.dart';
-export 'stepper.dart';
+export 'appkit_stepper.dart';
 export 'appkit_switch.dart';
 export 'text_field.dart';
 export 'toggle_button.dart';

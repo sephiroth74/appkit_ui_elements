@@ -62,23 +62,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    final AppKitThemeData theme = AppKitTheme.of(context);
     final enabledFactor = widget.enabled ? 1.0 : 0.5;
-    final controlBorderColor = theme.brightness.isDark
-        ? Colors.white.withOpacity(0.2 * enabledFactor)
-        : Colors.black.withOpacity(0.2 * enabledFactor);
-
-    //final borderRadius = widget.height / _kBorderRadiusRatio;
-    // final borderWidth = widget.height / 40;
-
-    final iconColor = !theme.brightness.isDark
-        ? widget.enabled
-            ? AppKitColors.labelColor.color
-            : AppKitColors.text.opaque.tertiary.color
-        : widget.enabled
-            ? AppKitColors.labelColor.color
-            : AppKitColors.text.opaque.tertiary.color;
-
     final strokeWidth = widget.controlSize.strokeWidth;
     final separatorWidth = widget.controlSize.separatorWidth;
 
@@ -94,7 +78,21 @@ class _AppKitStepperState extends State<AppKitStepper> {
           onPanCancel: widget.enabled ? _onPanCancel : null,
           onPanUpdate: widget.enabled ? _onPanUpdate : null,
           onPanStart: widget.enabled ? _onPanStart : null,
-          child: Builder(builder: (context) {
+          child: MainWindowBuilder(builder: (context, isMainWindow) {
+            final AppKitThemeData theme = AppKitTheme.of(context);
+            final isDark = theme.brightness.isDark;
+            final controlBorderColor = isDark
+                ? Colors.white.withOpacity(0.2 * enabledFactor)
+                : Colors.black.withOpacity(0.2 * enabledFactor);
+
+            final iconColor = !theme.brightness.isDark
+                ? widget.enabled
+                    ? AppKitColors.labelColor.color
+                    : AppKitColors.text.opaque.tertiary.color
+                : widget.enabled
+                    ? AppKitColors.labelColor.darkColor
+                    : AppKitColors.text.opaque.tertiary.darkColor;
+
             return DecoratedBox(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius),
@@ -129,10 +127,9 @@ class _AppKitStepperState extends State<AppKitStepper> {
                               : null,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: widget.enabled
-                              ? AppKitColors.controlBackgroundColor.color
-                              : AppKitColors.controlBackgroundColor.color
-                                  .multiplyOpacity(0.5),
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.controlColor)
+                              .multiplyOpacity(widget.enabled ? 1.0 : 0.5),
                           border: Border(
                             top: BorderSide(
                                 color: controlBorderColor, width: borderWidth),
@@ -170,17 +167,18 @@ class _AppKitStepperState extends State<AppKitStepper> {
                         foregroundDecoration: _isPointerDown &&
                                 !_isPointerIncreasing
                             ? BoxDecoration(
-                                color: Colors.black.withOpacity(0.1),
+                                color: isDark
+                                    ? Colors.white.withOpacity(0.15)
+                                    : Colors.black.withOpacity(0.1),
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(borderRadius),
                                     bottomRight: Radius.circular(borderRadius)))
                             : null,
                         child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: widget.enabled
-                                  ? AppKitColors.controlBackgroundColor.color
-                                  : AppKitColors.controlBackgroundColor.color
-                                      .multiplyOpacity(0.5),
+                              color: AppKitDynamicColor.resolve(
+                                      context, AppKitColors.controlColor)
+                                  .multiplyOpacity(widget.enabled ? 1.0 : 0.5),
                               border: Border(
                                 left: BorderSide(
                                     color: controlBorderColor,
@@ -222,8 +220,9 @@ class _AppKitStepperState extends State<AppKitStepper> {
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                         colors: [
-                          Colors.black.withOpacity(0),
-                          Colors.black.withOpacity(0.05 * enabledFactor),
+                          (isDark ? Colors.white : Colors.black).withOpacity(0),
+                          (isDark ? Colors.white : Colors.black)
+                              .withOpacity(0.05 * enabledFactor),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -242,8 +241,9 @@ class _AppKitStepperState extends State<AppKitStepper> {
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                         colors: [
-                          Colors.black.withOpacity(0),
-                          Colors.black.withOpacity(0.05 * enabledFactor),
+                          (isDark ? Colors.white : Colors.black).withOpacity(0),
+                          (isDark ? Colors.white : Colors.black)
+                              .withOpacity(0.05 * enabledFactor),
                         ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
@@ -260,7 +260,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                       height: height / 10,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.05 * enabledFactor),
+                        color: (isDark ? Colors.white : Colors.black)
+                            .withOpacity(0.05 * enabledFactor),
                       )),
                     ),
                   ),
@@ -274,7 +275,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
                       height: separatorWidth,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.05 * enabledFactor),
+                        color: (isDark ? Colors.white : Colors.black)
+                            .withOpacity(0.075 * enabledFactor),
                       )),
                     ),
                   ),

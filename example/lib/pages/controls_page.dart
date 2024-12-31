@@ -378,11 +378,6 @@ class _ControlsPageState extends State<ControlsPage> {
                             onPressed: () {},
                           ),
                           const SizedBox(width: 16.0),
-                          AppKitHelpButton(
-                            color: AppKitColors.systemBlue,
-                            onPressed: () {},
-                          ),
-                          const SizedBox(width: 16.0),
                           const AppKitHelpButton(),
                         ],
                       ),
@@ -395,11 +390,6 @@ class _ControlsPageState extends State<ControlsPage> {
                       Row(
                         children: [
                           AppKitArrowButton(
-                            onPressed: () {},
-                          ),
-                          const SizedBox(width: 16.0),
-                          AppKitArrowButton(
-                            color: AppKitColors.systemOrange,
                             onPressed: () {},
                           ),
                           const SizedBox(width: 16.0),
