@@ -32,8 +32,9 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
               child: Text(
                 label,
                 style: TextStyle(
-                  fontSize: 11.0,
-                  color: AppKitColors.text.opaque.secondary,
+                  fontSize: 10.0,
+                  color: AppKitDynamicColor.resolve(
+                      context, AppKitColors.text.opaque.secondary),
                 ),
               ),
             ),

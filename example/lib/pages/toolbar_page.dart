@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:flutter/cupertino.dart';
 
 const groupMessage =
@@ -117,22 +118,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
               debugPrint('onPressed: Share');
             },
           ),
-          AppKitToolBarPullDownButton(
-            label: 'Other',
-            icon: CupertinoIcons.ellipsis_vertical,
-            tooltipMessage: 'Perform tasks with the selected items',
-            items: [
-              AppKitContextMenuItem(
-                  title: 'Action 1', onPressed: (_) => debugPrint('Action 1')),
-              AppKitContextMenuItem(
-                  title: 'Action 2', onPressed: (_) => debugPrint('Action 2')),
-              AppKitContextMenuItem(
-                  title: 'Action 3', onPressed: (_) => debugPrint('Action 3')),
-              const AppKitContextMenuDivider(),
-              AppKitContextMenuItem(
-                  title: 'Action 4', onPressed: (_) => debugPrint('Action 4')),
-            ],
-          ),
+          ThemeSwitcherToolbarItem.build(context),
           const AppKitToolBarDivider(),
           AppKitToolBarIconButton(
             label: 'Right Sidebar',

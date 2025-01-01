@@ -158,8 +158,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? true,
     );
 
-    debugPrint('accentColor: $accentColor');
-
     activeColorUnfocused ??=
         _ColorProvider.getActiveColorUnfocused(isDark: isDark);
     keyboardFocusIndicatorColor ??=
@@ -322,7 +320,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      accentColor: activeColor,
+      accentColor: _ColorProvider.getActiveColor(
+        accentColor: accentColor,
+        isDark: isDark,
+        isMainWindow: true,
+      ),
       dividerColorMultipleSelection: isDark
           ? AppKitColors.dividerColor.darkColor
           : const Color(0xFFE8E8E8),
@@ -435,14 +437,16 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     iconButtonTheme ??= AppKitIconButtonThemeData(
       backgroundColor: Colors.transparent,
       disabledColor: isDark ? const Color(0xff353535) : const Color(0xffE5E5E5),
-      hoverColor:
-          isDark ? const Color(0xff333336) : Colors.black.withOpacity(0.05),
-      pressedColor:
-          isDark ? const Color(0xff333336) : Colors.black.withOpacity(0.2),
+      hoverColor: isDark
+          ? Colors.white.withOpacity(0.07)
+          : Colors.black.withOpacity(0.05),
+      pressedColor: isDark
+          ? Colors.white.withOpacity(0.2)
+          : Colors.black.withOpacity(0.2),
       shape: BoxShape.rectangle,
       boxConstraints: const BoxConstraints(
-        minHeight: 20,
-        minWidth: 20,
+        minHeight: 22,
+        minWidth: 22,
         maxWidth: 30,
         maxHeight: 30,
       ),

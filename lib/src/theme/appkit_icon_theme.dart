@@ -19,7 +19,7 @@ class AppKitIconTheme extends InheritedTheme {
   }) {
     return AppKitIconTheme(
       data: AppKitIconThemeData(
-        size: showLabel ? 16.0 : 20.0,
+        size: showLabel ? 16.0 : 26.0,
       ),
       child: AppKitIconButton(
         icon: icon,
@@ -27,7 +27,8 @@ class AppKitIconTheme extends InheritedTheme {
             ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
             : const EdgeInsets.all(5),
         disabledColor: Colors.transparent,
-        color: AppKitColors.toolbarIconColor.resolveFrom(context),
+        color:
+            AppKitDynamicColor.resolve(context, AppKitColors.toolbarIconColor),
         onPressed: onPressed,
         boxConstraints: showLabel
             ? const BoxConstraints(
@@ -37,10 +38,10 @@ class AppKitIconTheme extends InheritedTheme {
                 maxHeight: 22,
               )
             : const BoxConstraints(
-                minHeight: 19,
-                minWidth: 15,
-                maxWidth: 35,
+                minHeight: 28,
                 maxHeight: 28,
+                minWidth: 33,
+                maxWidth: 33,
               ),
       ),
     );

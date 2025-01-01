@@ -333,7 +333,7 @@ class _MultipleSegmentedChild extends StatelessWidget {
                   : null,
               gradient: isDown
                   ? null
-                  : isSelected && isMainWindow
+                  : isSelected
                       ? LinearGradient(
                           colors: [
                             Colors.white.withOpacity(0.17),
@@ -341,7 +341,7 @@ class _MultipleSegmentedChild extends StatelessWidget {
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          stops: const [0.0, 0.5])
+                          stops: const [0.0, 0.75])
                       : null,
               borderRadius: (!isDown || !isSelected)
                   ? null
@@ -473,9 +473,7 @@ class _SingleSegmentedChild extends StatelessWidget {
                       ),
                       width: 0.5,
                     ),
-                    color: isMainWindow
-                        ? segmentedControlTheme.singleSelectionColor
-                        : theme.controlColor,
+                    color: segmentedControlTheme.singleSelectionColor,
                     boxShadow: [
                         BoxShadow(
                           color: AppKitColors.shadowColor.withOpacity(0.15),
