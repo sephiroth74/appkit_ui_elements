@@ -376,140 +376,142 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return UiElementColorBuilder(builder: (context, colorContainer) {
-      return LayoutBuilder(builder: (context, constraints) {
-        assert(constraints.hasBoundedWidth);
-        final theme = AppKitTheme.of(context);
+    return LayoutBuilder(builder: (context, constraints) {
+      assert(constraints.hasBoundedWidth);
+      final theme = AppKitTheme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
 
-        final textStyle = theme.typography.body;
-        final charWidth = _getCharWidth(textStyle);
+      final textStyle = theme.typography.body;
+      final charWidth = _getCharWidth(textStyle);
 
-        final List<Widget> children = [];
+      final List<Widget> children = [];
 
-        for (var i = 0; i < dateFormatterSegments.length; i++) {
-          String segment = _getSegmentText(i);
+      for (var i = 0; i < dateFormatterSegments.length; i++) {
+        String segment = _getSegmentText(i);
 
-          // create a string filled with zeros based on the segment length
-          final child = _TextualPickerElement(
-            enabled: enabled,
-            text: segment,
-            charWidth: charWidth,
-            textStyle: textStyle,
-            index: i,
-            color: widget.color ??
-                theme.primaryColor ??
-                colorContainer.controlAccentColor,
-            isMainWindow: isMainWindow,
-            isFocused: enabled &&
-                _focusedIndex == i &&
-                _effectiveFocusNode.hasPrimaryFocus,
-            onTap: enabled ? _handleSegmentTap : null,
-          );
+        // create a string filled with zeros based on the segment length
+        final child = _TextualPickerElement(
+          enabled: enabled,
+          text: segment,
+          charWidth: charWidth,
+          textStyle: textStyle,
+          index: i,
+          color: widget.color ?? theme.primaryColor,
+          isMainWindow: isMainWindow,
+          isFocused: enabled &&
+              _focusedIndex == i &&
+              _effectiveFocusNode.hasPrimaryFocus,
+          onTap: enabled ? _handleSegmentTap : null,
+        );
 
-          children.add(child);
+        children.add(child);
 
-          if (i < dateSegments.length - 1) {
-            children.add(DefaultTextStyle(
-                style: theme.typography.body, child: const Text('.')));
-          }
+        if (i < dateSegments.length - 1) {
+          children
+              .add(DefaultTextStyle(style: textStyle, child: const Text('.')));
         }
+      }
 
-        if (children.isNotEmpty && timeFormatterSegments.isNotEmpty) {
-          children.add(DefaultTextStyle(
-              style: theme.typography.body, child: const Text(', ')));
+      if (children.isNotEmpty && timeFormatterSegments.isNotEmpty) {
+        children
+            .add(DefaultTextStyle(style: textStyle, child: const Text(', ')));
+      }
+
+      // now add the time segments
+
+      for (var i = 0; i < timeFormatterSegments.length; i++) {
+        String segment = _getSegmentText(i + dateFormatterSegments.length);
+
+        // create a string filled with zeros based on the segment length
+        final child = _TextualPickerElement(
+          enabled: enabled,
+          text: segment,
+          charWidth: charWidth,
+          textStyle: textStyle,
+          index: i + dateFormatterSegments.length,
+          color: widget.color ?? theme.primaryColor,
+          isMainWindow: isMainWindow,
+          isFocused: _effectiveFocusNode.hasPrimaryFocus &&
+              enabled &&
+              _focusedIndex == i + dateFormatterSegments.length,
+          onTap: enabled ? _handleSegmentTap : null,
+        );
+
+        children.add(child);
+
+        if (i < timeSegments.length - 1) {
+          children
+              .add(DefaultTextStyle(style: textStyle, child: const Text(':')));
         }
+      }
 
-        // now add the time segments
+      final backgroundColor =
+          theme.controlBackgroundColor.multiplyOpacity(enabled ? 1.0 : 0.5);
 
-        for (var i = 0; i < timeFormatterSegments.length; i++) {
-          String segment = _getSegmentText(i + dateFormatterSegments.length);
-
-          // create a string filled with zeros based on the segment length
-          final child = _TextualPickerElement(
-            enabled: enabled,
-            text: segment,
-            charWidth: charWidth,
-            textStyle: textStyle,
-            index: i + dateFormatterSegments.length,
-            color: widget.color ??
-                theme.primaryColor ??
-                colorContainer.controlAccentColor,
-            isMainWindow: isMainWindow,
-            isFocused: _effectiveFocusNode.hasPrimaryFocus &&
-                enabled &&
-                _focusedIndex == i + dateFormatterSegments.length,
-            onTap: enabled ? _handleSegmentTap : null,
-          );
-
-          children.add(child);
-
-          if (i < timeSegments.length - 1) {
-            children.add(DefaultTextStyle(
-                style: theme.typography.body, child: const Text(':')));
-          }
-        }
-
-        final backgroundColor = colorContainer.controlBackgroundColor
-            .multiplyOpacity(enabled ? 1.0 : 0.5);
-
-        return ConstrainedBox(
-            constraints: constraints,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    padding: const EdgeInsets.only(
-                        left: 1.0, right: 1.0, top: 2.0, bottom: 2.0),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      border: Border(
-                        top: BorderSide(
-                            color: AppKitColors.text.opaque.tertiary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                        left: BorderSide(
-                            color: AppKitColors.text.opaque.tertiary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                        right: BorderSide(
-                            color: AppKitColors.text.opaque.tertiary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                        bottom: BorderSide(
-                            color: AppKitColors.text.opaque.secondary
-                                .multiplyOpacity(0.65),
-                            width: 1),
-                      ),
+      return ConstrainedBox(
+          constraints: constraints,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  clipBehavior: Clip.hardEdge,
+                  padding: const EdgeInsets.only(
+                      left: 1.0, right: 1.0, top: 2.0, bottom: 2.0),
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    border: Border(
+                      top: BorderSide(
+                          color: AppKitDynamicColor.resolve(
+                                  context,
+                                  isDark
+                                      ? AppKitColors.text.opaque.quaternary
+                                      : AppKitColors.text.opaque.tertiary)
+                              .multiplyOpacity(0.65),
+                          width: 1),
+                      left: BorderSide(
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.tertiary)
+                              .multiplyOpacity(0.65),
+                          width: 1),
+                      right: BorderSide(
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.tertiary)
+                              .multiplyOpacity(0.65),
+                          width: 1),
+                      bottom: BorderSide(
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.secondary)
+                              .multiplyOpacity(0.65),
+                          width: 1),
                     ),
-                    child: Focus(
-                      focusNode: _effectiveFocusNode,
-                      autofocus: widget.autofocus,
-                      canRequestFocus: widget.canRequestFocus,
-                      onFocusChange: enabled ? _handleFocusChange : null,
-                      onKeyEvent: enabled ? _handleKeyEvent : null,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: children,
-                      ),
+                  ),
+                  child: Focus(
+                    focusNode: _effectiveFocusNode,
+                    autofocus: widget.autofocus,
+                    canRequestFocus: widget.canRequestFocus,
+                    onFocusChange: enabled ? _handleFocusChange : null,
+                    onKeyEvent: enabled ? _handleKeyEvent : null,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: children,
                     ),
                   ),
                 ),
-                if (widget.type == AppKitDatePickerType.textualWithStepper) ...[
-                  const SizedBox(width: 4),
-                  AppKitStepper(
-                    value: 1.0,
-                    onChanged: enabled
-                        ? (value) =>
-                            _handleSegmentStep(_focusedIndex, value > 1.0)
-                        : null,
-                  )
-                ]
-              ],
-            ));
-      });
+              ),
+              if (widget.type == AppKitDatePickerType.textualWithStepper) ...[
+                const SizedBox(width: 4),
+                AppKitStepper(
+                  value: 1.0,
+                  onChanged: enabled
+                      ? (value) =>
+                          _handleSegmentStep(_focusedIndex, value > 1.0)
+                      : null,
+                )
+              ]
+            ],
+          ));
     });
   }
 }
@@ -540,16 +542,20 @@ class _TextualPickerElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final segmentWidth = charWidth * text.length;
+    final theme = AppKitTheme.of(context);
 
     final backgroundColor = isFocused && isMainWindow ? color : null;
     final Color textColor;
 
     if (backgroundColor != null) {
-      backgroundColor.computeLuminance() > 0.5
+      final blendedColor = Color.lerp(
+          theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+      blendedColor.computeLuminance() > 0.5
           ? textColor = AppKitColors.text.opaque.primary.color
           : textColor = AppKitColors.text.opaque.primary.darkColor;
     } else {
-      textColor = AppKitColors.text.opaque.primary.color;
+      textColor =
+          AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary);
     }
 
     return GestureDetector(

@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 
 class SelectorsPage extends StatefulWidget {
@@ -39,203 +40,199 @@ class _SelectorsPageState extends State<SelectorsPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Selectors'),
+      toolBar: AppKitToolBar(
+        title: const Text('Selectors'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(
           builder: (context, ScrollController scrollController) {
-            return Container(
-              color: const Color(0xFFf0efef),
-              child: SingleChildScrollView(
-                clipBehavior: Clip.none,
-                controller: scrollController,
-                padding: const EdgeInsets.all(20),
-                child: Builder(
-                  builder: (context) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const WidgetTitle(label: 'Date Time Picker'),
-                        const SizedBox(height: 20.0),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const AppKitLabel(
-                                    text: Text('Textual (start)')),
-                                const SizedBox(height: 8.0),
-                                SizedBox(
-                                  width: 190,
-                                  child: AppKitDatePicker(
-                                    canRequestFocus: true,
-                                    autofocus: false,
+            return SingleChildScrollView(
+              clipBehavior: Clip.none,
+              controller: scrollController,
+              padding: const EdgeInsets.all(20),
+              child: Builder(
+                builder: (context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const WidgetTitle(label: 'Date Time Picker'),
+                      const SizedBox(height: 20.0),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const AppKitLabel(text: Text('Textual (start)')),
+                              const SizedBox(height: 8.0),
+                              SizedBox(
+                                width: 190,
+                                child: AppKitDatePicker(
+                                  canRequestFocus: true,
+                                  autofocus: false,
+                                  date: left(_selectedDateRange.start),
+                                  minimumDate: _minimumDate,
+                                  maximumDate: _maximumDate,
+                                  dateElements: AppKitDateElements.monthDayYear,
+                                  timeElements:
+                                      AppKitTimeElements.hourMinuteSecond,
+                                  semanticLabel: 'Date Picker',
+                                  type: AppKitDatePickerType.textual,
+                                  onChanged:
+                                      (Either<DateTime, DateTimeRange> value) {
+                                    debugPrint('[1] Date Changed ($value)');
+                                    selectedDateRange = _selectedDateRange
+                                        .copyWith(start: value.left);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const AppKitLabel(
+                                  text: Text('Textual with Stepper (end)')),
+                              const SizedBox(height: 8.0),
+                              SizedBox(
+                                width: 190,
+                                child: AppKitDatePicker(
+                                  canRequestFocus: true,
+                                  autofocus: true,
+                                  date: left(_selectedDateRange.end),
+                                  minimumDate: _minimumDate,
+                                  maximumDate: _maximumDate,
+                                  dateElements: AppKitDateElements.monthDayYear,
+                                  timeElements:
+                                      AppKitTimeElements.hourMinuteSecond,
+                                  type: AppKitDatePickerType.textualWithStepper,
+                                  onChanged:
+                                      (Either<DateTime, DateTimeRange> value) {
+                                    debugPrint('[2] Date Changed ($value)');
+                                    selectedDateRange = _selectedDateRange
+                                        .copyWith(end: value.left);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const AppKitLabel(
+                                      text: Text('Graphical (start date)')),
+                                  const SizedBox(height: 8.0),
+                                  AppKitDatePicker(
+                                    autofocus: true,
+                                    dateElements:
+                                        AppKitDateElements.monthDayYear,
+                                    timeElements: AppKitTimeElements.none,
+                                    semanticLabel:
+                                        'Date Picker (single - graphical)',
                                     date: left(_selectedDateRange.start),
                                     minimumDate: _minimumDate,
                                     maximumDate: _maximumDate,
-                                    dateElements:
-                                        AppKitDateElements.monthDayYear,
-                                    timeElements:
-                                        AppKitTimeElements.hourMinuteSecond,
-                                    semanticLabel: 'Date Picker',
-                                    type: AppKitDatePickerType.textual,
-                                    onChanged: (Either<DateTime, DateTimeRange>
-                                        value) {
-                                      debugPrint('[1] Date Changed ($value)');
+                                    type: AppKitDatePickerType.graphical,
+                                    drawBackground: true,
+                                    drawBorder: true,
+                                    selectionType:
+                                        AppKitDatePickerSelectionType.single,
+                                    onChanged: (d) {
+                                      debugPrint('[3] Date Changed ($d)');
                                       selectedDateRange = _selectedDateRange
-                                          .copyWith(start: value.left);
+                                          .copyWith(start: d.left);
                                     },
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20.0),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const AppKitLabel(
-                                    text: Text('Textual with Stepper (end)')),
-                                const SizedBox(height: 8.0),
-                                SizedBox(
-                                  width: 190,
-                                  child: AppKitDatePicker(
-                                    canRequestFocus: true,
+                                ],
+                              ),
+                              const SizedBox(width: 20.0),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const AppKitLabel(
+                                      text: Text('Graphical (start time)')),
+                                  const SizedBox(height: 8.0),
+                                  AppKitDatePicker(
                                     autofocus: true,
-                                    date: left(_selectedDateRange.end),
+                                    dateElements: AppKitDateElements.none,
+                                    timeElements:
+                                        AppKitTimeElements.hourMinuteSecond,
+                                    semanticLabel:
+                                        'Time Picker (single - graphical)',
+                                    date: left(_selectedDateRange.start),
                                     minimumDate: _minimumDate,
                                     maximumDate: _maximumDate,
-                                    dateElements:
-                                        AppKitDateElements.monthDayYear,
-                                    timeElements:
-                                        AppKitTimeElements.hourMinuteSecond,
-                                    type:
-                                        AppKitDatePickerType.textualWithStepper,
-                                    onChanged: (Either<DateTime, DateTimeRange>
-                                        value) {
-                                      debugPrint('[2] Date Changed ($value)');
+                                    type: AppKitDatePickerType.graphical,
+                                    drawBackground: true,
+                                    drawBorder: true,
+                                    selectionType:
+                                        AppKitDatePickerSelectionType.single,
+                                    onChanged: (d) {
+                                      debugPrint('[3] Date Changed ($d)');
                                       selectedDateRange = _selectedDateRange
-                                          .copyWith(end: value.left);
+                                          .copyWith(start: d.left);
                                     },
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20.0),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const AppKitLabel(
-                                        text: Text('Graphical (start date)')),
-                                    const SizedBox(height: 8.0),
-                                    AppKitDatePicker(
-                                      autofocus: true,
-                                      dateElements:
-                                          AppKitDateElements.monthDayYear,
-                                      timeElements: AppKitTimeElements.none,
-                                      semanticLabel:
-                                          'Date Picker (single - graphical)',
-                                      date: left(_selectedDateRange.start),
-                                      minimumDate: _minimumDate,
-                                      maximumDate: _maximumDate,
-                                      type: AppKitDatePickerType.graphical,
-                                      drawBackground: true,
-                                      drawBorder: true,
-                                      selectionType:
-                                          AppKitDatePickerSelectionType.single,
-                                      onChanged: (d) {
-                                        debugPrint('[3] Date Changed ($d)');
-                                        selectedDateRange = _selectedDateRange
-                                            .copyWith(start: d.left);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 20.0),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const AppKitLabel(
-                                        text: Text('Graphical (start time)')),
-                                    const SizedBox(height: 8.0),
-                                    AppKitDatePicker(
-                                      autofocus: true,
-                                      dateElements: AppKitDateElements.none,
-                                      timeElements:
-                                          AppKitTimeElements.hourMinuteSecond,
-                                      semanticLabel:
-                                          'Time Picker (single - graphical)',
-                                      date: left(_selectedDateRange.start),
-                                      minimumDate: _minimumDate,
-                                      maximumDate: _maximumDate,
-                                      type: AppKitDatePickerType.graphical,
-                                      drawBackground: true,
-                                      drawBorder: true,
-                                      selectionType:
-                                          AppKitDatePickerSelectionType.single,
-                                      onChanged: (d) {
-                                        debugPrint('[3] Date Changed ($d)');
-                                        selectedDateRange = _selectedDateRange
-                                            .copyWith(start: d.left);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20.0),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const AppKitLabel(
-                                    text: Text('Graphical (date range)')),
-                                const SizedBox(height: 8.0),
-                                AppKitDatePicker(
-                                  autofocus: true,
-                                  dateElements: AppKitDateElements.monthDayYear,
-                                  timeElements: AppKitTimeElements.none,
-                                  minimumDate: _minimumDate,
-                                  maximumDate: _maximumDate,
-                                  type: AppKitDatePickerType.graphical,
-                                  drawBackground: true,
-                                  drawBorder: true,
-                                  selectionType:
-                                      AppKitDatePickerSelectionType.range,
-                                  date: right(_selectedDateRange),
-                                  onChanged: (d) {
-                                    debugPrint('[3] Date Changed ($d)');
-                                    final date = d.right;
-                                    selectedDateRange = date;
-                                    selectedDate = date.start;
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const AppKitLabel(
+                                  text: Text('Graphical (date range)')),
+                              const SizedBox(height: 8.0),
+                              AppKitDatePicker(
+                                autofocus: true,
+                                dateElements: AppKitDateElements.monthDayYear,
+                                timeElements: AppKitTimeElements.none,
+                                minimumDate: _minimumDate,
+                                maximumDate: _maximumDate,
+                                type: AppKitDatePickerType.graphical,
+                                drawBackground: true,
+                                drawBorder: true,
+                                selectionType:
+                                    AppKitDatePickerSelectionType.range,
+                                date: right(_selectedDateRange),
+                                onChanged: (d) {
+                                  debugPrint('[3] Date Changed ($d)');
+                                  final date = d.right;
+                                  selectedDateRange = date;
+                                  selectedDate = date.start;
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               ),
             );
           },
