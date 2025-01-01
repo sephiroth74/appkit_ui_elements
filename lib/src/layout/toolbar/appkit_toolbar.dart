@@ -92,8 +92,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   @override
   void didUpdateWidget(AppKitToolBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.actions != null &&
-        widget.actions!.length != oldWidget.actions!.length) {
+    if (widget.actions != oldWidget.actions) {
       overflowedActionsCount = 0;
     }
   }

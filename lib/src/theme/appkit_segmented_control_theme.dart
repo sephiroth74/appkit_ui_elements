@@ -27,10 +27,14 @@ class AppKitSegmentedControlTheme extends InheritedTheme {
 class AppKitSegmentedControlThemeData with Diagnosticable {
   final Color dividerColorMultipleSelection;
   final Color dividerColorSingleSelection;
+  final Color singleSelectionColor;
+  final Color? accentColor;
 
   AppKitSegmentedControlThemeData({
     required this.dividerColorMultipleSelection,
     required this.dividerColorSingleSelection,
+    required this.singleSelectionColor,
+    this.accentColor,
   });
 
   @override
@@ -40,17 +44,23 @@ class AppKitSegmentedControlThemeData with Diagnosticable {
         'dividerColorMultipleSelection', dividerColorMultipleSelection));
     properties.add(ColorProperty(
         'dividerColorSingleSelection', dividerColorSingleSelection));
+    properties.add(ColorProperty('singleSelectionColor', singleSelectionColor));
+    properties.add(ColorProperty('accentColor', accentColor));
   }
 
   AppKitSegmentedControlThemeData copyWith({
     Color? dividerColorMultipleSelection,
     Color? dividerColorSingleSelection,
+    Color? singleSelectionColor,
+    Color? accentColor,
   }) {
     return AppKitSegmentedControlThemeData(
       dividerColorMultipleSelection:
           dividerColorMultipleSelection ?? this.dividerColorMultipleSelection,
       dividerColorSingleSelection:
           dividerColorSingleSelection ?? this.dividerColorSingleSelection,
+      singleSelectionColor: singleSelectionColor ?? this.singleSelectionColor,
+      accentColor: accentColor ?? this.accentColor,
     );
   }
 
@@ -60,6 +70,8 @@ class AppKitSegmentedControlThemeData with Diagnosticable {
     return copyWith(
       dividerColorMultipleSelection: other.dividerColorMultipleSelection,
       dividerColorSingleSelection: other.dividerColorSingleSelection,
+      singleSelectionColor: other.singleSelectionColor,
+      accentColor: other.accentColor,
     );
   }
 
@@ -70,6 +82,9 @@ class AppKitSegmentedControlThemeData with Diagnosticable {
           a.dividerColorMultipleSelection, b.dividerColorMultipleSelection, t)!,
       dividerColorSingleSelection: Color.lerp(
           a.dividerColorSingleSelection, b.dividerColorSingleSelection, t)!,
+      singleSelectionColor:
+          Color.lerp(a.singleSelectionColor, b.singleSelectionColor, t)!,
+      accentColor: Color.lerp(a.accentColor, b.accentColor, t),
     );
   }
 }

@@ -322,10 +322,16 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      dividerColorMultipleSelection:
-          isDark ? AppKitColors.systemGray.darkColor : const Color(0xFFE8E8E8),
-      dividerColorSingleSelection:
-          isDark ? AppKitColors.systemGray.darkColor : const Color(0xFFCCCBCB),
+      accentColor: activeColor,
+      dividerColorMultipleSelection: isDark
+          ? AppKitColors.dividerColor.darkColor
+          : const Color(0xFFE8E8E8),
+      dividerColorSingleSelection: isDark
+          ? AppKitColors.dividerColor.darkColor
+          : const Color(0xFFCCCBCB),
+      singleSelectionColor: isDark
+          ? AppKitColors.materials.ultraThin.elevatedColor
+          : AppKitColors.controlColor.color,
     );
 
     switchTheme ??= AppKitSwitchThemeData(

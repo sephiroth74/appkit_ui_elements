@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +30,9 @@ class AppKitSegmentedControl extends StatefulWidget {
 class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
   bool get enabled => widget.onSelectionChanged != null;
 
-  bool get multipleSelection => !widget.controller.isSingle;
-
   bool get singleSelection => widget.controller.isSingle;
+
+  bool get multipleSelection => !singleSelection;
 
   bool get multiSelectionStyle => multipleSelection || widget.icons != null;
 
@@ -103,15 +102,16 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    final AppKitThemeData theme = AppKitTheme.of(context);
-    final segmentedControlTheme = AppKitSegmentedControlTheme.of(context);
-    return UiElementColorBuilder(
-      builder: (context, colorContainer) {
+    return MainWindowBuilder(
+      builder: (context, isMainWindow) {
+        final AppKitThemeData theme = AppKitTheme.of(context);
+        final segmentedControlTheme = AppKitSegmentedControlTheme.of(context);
         final accentColor = widget.color ??
-            theme.primaryColor ??
-            colorContainer.controlAccentColor;
+            segmentedControlTheme.accentColor ??
+            theme.primaryColor;
+        final isDark = theme.brightness == Brightness.dark;
         final backgroundColor = multiSelectionStyle
-            ? colorContainer.controlBackgroundColor
+            ? theme.controlColor
             : AppKitColors.fills.opaque.quinaryInverted;
         final borderRadius = widget.size.getborderRadius(singleSelectionStyle);
         final constraints = widget.size.constraints;
@@ -122,36 +122,65 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
           constraints: constraints,
           child: DecoratedBox(
             decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(borderRadius),
-                boxShadow: [
-                  if (multiSelectionStyle) ...[
-                    BoxShadow(
-                      color: colorContainer.shadowColor.withOpacity(0.35),
-                      blurStyle: BlurStyle.outer,
-                      blurRadius: 2,
-                      spreadRadius: -0.5,
-                      offset: const Offset(0, 0.5),
-                    ),
-                    BoxShadow(
-                      color: colorContainer.shadowColor.withOpacity(0.05),
-                      blurStyle: BlurStyle.outer,
-                      blurRadius: 0.0,
-                      spreadRadius: 0.5,
-                      offset: const Offset(0, 0),
-                    ),
-                  ] else ...[
-                    BoxShadow(
-                      color: colorContainer.shadowColor.withOpacity(0.125),
-                    ),
-                    BoxShadow(
-                      color: AppKitColors.fills.opaque.quinary.darkColor
-                          .withOpacity(0.475),
-                      spreadRadius: -1.0,
-                      blurRadius: 1.0,
-                    ),
-                  ],
-                ]),
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(borderRadius),
+              border: isDark && singleSelectionStyle
+                  ? GradientBoxBorder(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.tertiary)
+                              .multiplyOpacity(0.35),
+                          AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.primary)
+                              .multiplyOpacity(0.5),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: const [0.0, 0.5],
+                      ),
+                      width: 0.5,
+                    )
+                  : null,
+              boxShadow: [
+                if (multiSelectionStyle) ...[
+                  BoxShadow(
+                    color: AppKitColors.shadowColor.withOpacity(0.35),
+                    blurStyle: BlurStyle.outer,
+                    blurRadius: 2,
+                    spreadRadius: -0.5,
+                    offset: const Offset(0, 0.5),
+                  ),
+                  BoxShadow(
+                    color: AppKitColors.shadowColor.withOpacity(0.05),
+                    blurStyle: BlurStyle.outer,
+                    blurRadius: 0.0,
+                    spreadRadius: 0.5,
+                    offset: const Offset(0, 0),
+                  ),
+                ] else ...[
+                  BoxShadow(
+                    color: AppKitColors.shadowColor.withOpacity(0.125),
+                  ),
+                  BoxShadow(
+                    color: (isDark
+                            ? theme.controlColor.withLuminance(0.35)
+                            : AppKitColors.fills.opaque.quinary.darkColor)
+                        .withOpacity(0.475),
+                    spreadRadius: -0.5,
+                    blurRadius: 0.5,
+                    offset: const Offset(0, 0.15),
+                  ),
+                ],
+                BoxShadow(
+                  color: AppKitColors.shadowColor.color.withOpacity(0.15),
+                  blurRadius: 0.5,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 0.5),
+                  blurStyle: BlurStyle.outer,
+                ),
+              ],
+            ),
             child: SizedBox.expand(
                 child: LayoutBuilder(builder: (context, layoutConstraints) {
               assert(layoutConstraints.hasBoundedWidth);
@@ -168,7 +197,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                     final bool isSelected = _isTabSelected(index);
                     final bool isDown = _isTabDown(index);
 
-                    Widget child;
+                    Widget? child;
 
                     if (multiSelectionStyle) {
                       // multiple selection style
@@ -184,6 +213,8 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                           borderRadius: borderRadius,
                           accentColor: accentColor,
                           controller: widget.controller,
+                          isDark: isDark,
+                          isMainWindow: isMainWindow,
                           isTabSelected: _isTabSelected);
                     } else {
                       // single selection style
@@ -193,9 +224,12 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                         index: index,
                         constraints: constraints,
                         size: widget.size,
+                        theme: theme,
                         segmentedControlTheme: segmentedControlTheme,
                         borderRadius: borderRadius,
                         labels: widget.labels!,
+                        isDark: isDark,
+                        isMainWindow: isMainWindow,
                         isTabSelected: _isTabSelected,
                         isTabDown: _isTabDown,
                       );
@@ -239,6 +273,8 @@ class _MultipleSegmentedChild extends StatelessWidget {
   final List<IconData>? icons;
   final Color accentColor;
   final AppKitSegmentedController controller;
+  final bool isDark;
+  final bool isMainWindow;
   final bool Function(int index) isTabSelected;
 
   const _MultipleSegmentedChild({
@@ -252,6 +288,8 @@ class _MultipleSegmentedChild extends StatelessWidget {
     required this.accentColor,
     required this.controller,
     required this.isTabSelected,
+    this.isDark = false,
+    this.isMainWindow = true,
     this.labels,
     this.icons,
   });
@@ -288,17 +326,22 @@ class _MultipleSegmentedChild extends StatelessWidget {
               : const BoxDecoration(),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: isDown ? Colors.black.withOpacity(0.1) : null,
+              color: isDown
+                  ? isDark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.black.withOpacity(0.1)
+                  : null,
               gradient: isDown
                   ? null
-                  : isSelected
+                  : isSelected && isMainWindow
                       ? LinearGradient(
                           colors: [
-                              Colors.white.withOpacity(0.17),
-                              Colors.white.withOpacity(0.0),
-                            ],
+                            Colors.white.withOpacity(0.17),
+                            Colors.white.withOpacity(0.0),
+                          ],
                           begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter)
+                          end: Alignment.bottomCenter,
+                          stops: const [0.0, 0.5])
                       : null,
               borderRadius: (!isDown || !isSelected)
                   ? null
@@ -321,7 +364,9 @@ class _MultipleSegmentedChild extends StatelessWidget {
                             ? (accentColorLuminance > 0.5
                                 ? AppKitColors.text.opaque.primary.color
                                 : AppKitColors.text.opaque.primary.darkColor)
-                            : AppKitColors.text.opaque.primary,
+                            : isDark
+                                ? AppKitColors.text.opaque.primary.darkColor
+                                : AppKitColors.text.opaque.primary.color,
                       )
                     : Padding(
                         padding: size.getLabelPaddings(false),
@@ -336,7 +381,10 @@ class _MultipleSegmentedChild extends StatelessWidget {
                                       ? AppKitColors.text.opaque.primary.color
                                       : AppKitColors
                                           .text.opaque.primary.darkColor)
-                                  : AppKitColors.text.opaque.primary),
+                                  : isDark
+                                      ? AppKitColors
+                                          .text.opaque.primary.darkColor
+                                      : AppKitColors.text.opaque.primary.color),
                         ),
                       )),
           ),
@@ -352,9 +400,12 @@ class _SingleSegmentedChild extends StatelessWidget {
   final int index;
   final BoxConstraints constraints;
   final AppKitSegmentedControlSize size;
+  final AppKitThemeData theme;
   final AppKitSegmentedControlThemeData segmentedControlTheme;
   final double borderRadius;
   final List<String> labels;
+  final bool isDark;
+  final bool isMainWindow;
   final bool Function(int index) isTabSelected;
   final bool Function(int index) isTabDown;
 
@@ -364,9 +415,12 @@ class _SingleSegmentedChild extends StatelessWidget {
     required this.index,
     required this.constraints,
     required this.size,
+    required this.theme,
     required this.segmentedControlTheme,
     required this.borderRadius,
     required this.labels,
+    this.isDark = false,
+    this.isMainWindow = true,
     required this.isTabSelected,
     required this.isTabDown,
   });
@@ -391,29 +445,46 @@ class _SingleSegmentedChild extends StatelessWidget {
         ],
         SizedBox.expand(
           child: DecoratedBox(
-            decoration: isSelected || isDown
+            decoration: isSelected
                 ? BoxDecoration(
                     borderRadius: BorderRadius.circular(borderRadius),
                     border: GradientBoxBorder(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.black.withOpacity(0.225),
-                            Colors.black.withOpacity(0.35),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        width: 0.5),
-                    color: Colors.white,
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.primary)
+                                    .multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.quaternary)
+                                    .multiplyOpacity(0.0)
+                              ]
+                            : [
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.tertiary)
+                                    .multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(context,
+                                        AppKitColors.text.opaque.secondary)
+                                    .multiplyOpacity(0.5)
+                              ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+                      ),
+                      width: 0.5,
+                    ),
+                    color: isMainWindow
+                        ? segmentedControlTheme.singleSelectionColor
+                        : theme.controlColor,
                     boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
+                          color: AppKitColors.shadowColor.withOpacity(0.15),
                           blurRadius: 0.25,
                           spreadRadius: 0.0,
                           offset: const Offset(0, 0.25),
                         ),
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: AppKitColors.shadowColor.withOpacity(0.05),
                           blurRadius: 0.75,
                           spreadRadius: 0.0,
                           offset: const Offset(0, 0.5),
@@ -422,7 +493,11 @@ class _SingleSegmentedChild extends StatelessWidget {
                 : const BoxDecoration(),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: isDown ? Colors.black.withOpacity(0.035) : null,
+                color: isDown
+                    ? isDark
+                        ? Colors.white.withOpacity(0.07)
+                        : Colors.black.withOpacity(0.035)
+                    : null,
                 borderRadius: (!isDown || !isSelected)
                     ? null
                     : BorderRadius.circular(borderRadius),
@@ -436,7 +511,8 @@ class _SingleSegmentedChild extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: size.textSize,
-                        color: AppKitColors.text.opaque.primary),
+                        color: AppKitDynamicColor.resolve(
+                            context, AppKitColors.text.opaque.primary)),
                   ),
                 ),
               ),
