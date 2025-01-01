@@ -87,7 +87,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color controlBackgroundColor;
   final Color controlBackgroundPressedColor;
   final Color accentColorUnfocused;
-  final AppKitPushButtonThemeData pushButtonTheme;
   final AppKitButtonThemeData buttonTheme;
   final AppKitSliderThemeData sliderTheme;
   final AppKitCircularSliderThemeData circularSliderTheme;
@@ -112,7 +111,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? primaryColor,
     Color? activeColor,
     VisualDensity? visualDensity,
-    AppKitPushButtonThemeData? pushButtonTheme,
     AppKitButtonThemeData? buttonTheme,
     AppKitSliderThemeData? sliderTheme,
     AppKitCircularSliderThemeData? circularSliderTheme,
@@ -201,42 +199,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     dividerColor ??= isDark
         ? AppKitColors.dividerColor.darkColor
         : AppKitColors.dividerColor.color;
-
-    pushButtonTheme ??= const AppKitPushButtonThemeData(
-      buttonRadius: {
-        AppKitControlSize.mini: 2.0,
-        AppKitControlSize.small: 3.0,
-        AppKitControlSize.regular: 5.0,
-        AppKitControlSize.large: 5.0,
-      },
-      buttonPadding: {
-        AppKitControlSize.mini:
-            EdgeInsets.only(left: 6.0, right: 6.0, bottom: 0.5),
-        AppKitControlSize.small:
-            EdgeInsets.only(left: 7.0, right: 7.0, bottom: 1.0),
-        AppKitControlSize.regular:
-            EdgeInsets.only(left: 16.0, right: 16.0, top: 2.0, bottom: 3.0),
-        AppKitControlSize.large:
-            EdgeInsets.only(right: 20.0, left: 20.0, bottom: 1.0),
-      },
-      fontSize: {
-        AppKitControlSize.mini: 9.0,
-        AppKitControlSize.small: 10.0,
-        AppKitControlSize.regular: 13.0,
-        AppKitControlSize.large: 15.0,
-      },
-      buttonSize: {
-        AppKitControlSize.mini: Size(26.0, 12.0),
-        AppKitControlSize.small: Size(42.0, 14.0),
-        AppKitControlSize.regular: Size(48.0, 22.0),
-        AppKitControlSize.large: Size(54.0, 26.0),
-      },
-      destructiveTextColor: AppKitColors.systemRed,
-      overlayPressedColor: CupertinoDynamicColor.withBrightness(
-        color: Color.fromRGBO(0, 0, 0, 0.1),
-        darkColor: Color.fromRGBO(255, 255, 255, 0.15),
-      ),
-    );
 
     buttonTheme ??= AppKitButtonThemeData(
       inline: AppKitInlineButtonThemeData(
@@ -438,7 +400,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       backgroundColor: Colors.transparent,
       disabledColor: isDark ? const Color(0xff353535) : const Color(0xffE5E5E5),
       hoverColor: isDark
-          ? Colors.white.withOpacity(0.07)
+          ? Colors.white.withOpacity(0.06)
           : Colors.black.withOpacity(0.05),
       pressedColor: isDark
           ? Colors.white.withOpacity(0.2)
@@ -476,7 +438,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       popupButtonTheme: popupButtonTheme,
       primaryColor: primaryColor,
       progressTheme: progressTheme,
-      pushButtonTheme: pushButtonTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       scrollbarTheme: scrollbarTheme,
       segmentedControlTheme: segmentedControlTheme,
@@ -510,7 +471,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       popupButtonTheme: popupButtonTheme,
       primaryColor: primaryColor,
       progressTheme: progressTheme,
-      pushButtonTheme: pushButtonTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       scrollbarTheme: scrollbarTheme,
       segmentedControlTheme: segmentedControlTheme,
@@ -558,7 +518,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.isMainWindow,
     required this.visualDensity,
     required this.typography,
-    required this.pushButtonTheme,
     required this.buttonTheme,
     required this.sliderTheme,
     required this.segmentedControlTheme,
@@ -592,7 +551,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         visualDensity,
         canvasColor,
         typography,
-        pushButtonTheme,
         buttonTheme,
         sliderTheme,
         segmentedControlTheme,
@@ -634,7 +592,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlBackgroundColorDisabled,
     Color? controlBackgroundPressedColor,
     Color? accentColorUnfocused,
-    AppKitPushButtonThemeData? pushButtonTheme,
     AppKitButtonThemeData? buttonTheme,
     AppKitSliderThemeData? sliderTheme,
     AppKitSegmentedControlThemeData? segmentedControlTheme,
@@ -662,7 +619,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? this.isMainWindow,
       visualDensity: visualDensity ?? this.visualDensity,
       typography: typography ?? this.typography,
-      pushButtonTheme: pushButtonTheme ?? this.pushButtonTheme,
       buttonTheme: buttonTheme ?? this.buttonTheme,
       sliderTheme: sliderTheme ?? this.sliderTheme,
       segmentedControlTheme:
@@ -704,7 +660,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       visualDensity: other.visualDensity,
       typography: other.typography,
       canvasColor: other.canvasColor,
-      pushButtonTheme: other.pushButtonTheme,
       buttonTheme: other.buttonTheme,
       sliderTheme: other.sliderTheme,
       segmentedControlTheme: other.segmentedControlTheme,
@@ -740,8 +695,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
       typography: AppKitTypography.lerp(a.typography, b.typography, t),
-      pushButtonTheme: AppKitPushButtonThemeData.lerp(
-          a.pushButtonTheme, b.pushButtonTheme, t),
       buttonTheme: AppKitButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
       canvasColor: Color.lerp(a.canvasColor, b.canvasColor, t)!,
       sliderTheme: AppKitSliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
@@ -798,8 +751,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     properties.add(ColorProperty('canvasColor', canvasColor));
     properties
         .add(DiagnosticsProperty<AppKitTypography>('typography', typography));
-    properties.add(DiagnosticsProperty<AppKitPushButtonThemeData>(
-        'pushButtonTheme', pushButtonTheme));
     properties.add(
         DiagnosticsProperty<AppKitButtonThemeData>('buttonTheme', buttonTheme));
     properties.add(

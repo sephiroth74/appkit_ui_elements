@@ -19,7 +19,7 @@ class AppKitIconTheme extends InheritedTheme {
   }) {
     return AppKitIconTheme(
       data: AppKitIconThemeData(
-        size: showLabel ? 16.0 : 26.0,
+        size: showLabel ? 16.0 : 20.0,
       ),
       child: AppKitIconButton(
         icon: icon,

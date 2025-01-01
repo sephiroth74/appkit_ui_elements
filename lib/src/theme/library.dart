@@ -8,7 +8,6 @@ export 'appkit_icon_theme.dart';
 export 'appkit_level_indicators_theme.dart';
 export 'appkit_popup_button_theme.dart';
 export 'appkit_progress_theme.dart';
-export 'appkit_push_button_theme.dart';
 export 'appkit_rating_indicator_theme.dart';
 export 'appkit_scrollbar_theme.dart';
 export 'appkit_segmented_control_theme.dart';

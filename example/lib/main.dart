@@ -77,6 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return PlatformMenuBar(
       menus: const [],
       child: AppKitWindow(
+        endSidebar: AppKitSidebar(
+            shownByDefault: false,
+            builder: (context, scrollController) {
+              return Container();
+            },
+            minWidth: 150),
         sidebar: AppKitSidebar(
             // top: const AppKitSearchField(),
             builder: (context, scrollController) {

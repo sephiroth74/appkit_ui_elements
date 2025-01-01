@@ -29,20 +29,19 @@ class _ToolbarPageState extends State<ToolbarPage> {
             ),
             Text('Subtitle',
                 style: theme.typography.caption1.copyWith(
-                    color: AppKitColors.text.opaque.secondary
-                        .resolveFrom(context))),
+                    color: AppKitDynamicColor.resolve(
+                        context, AppKitColors.text.opaque.secondary))),
           ],
         ),
         titleWidth: 200,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: AppKitIconTheme.toolbar(
-            context,
-            icon: CupertinoIcons.sidebar_left,
-            onPressed: () {
-              AppKitWindowScope.of(context).toggleSidebar();
-            },
-          ),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppKitIconButton.toolbar(context,
+                icon: CupertinoIcons.chevron_back, onPressed: () {}),
+            AppKitIconButton.toolbar(context,
+                icon: CupertinoIcons.chevron_forward, onPressed: () {}),
+          ],
         ),
         actions: [
           AppKitToolBarIconButton(
@@ -50,15 +49,6 @@ class _ToolbarPageState extends State<ToolbarPage> {
             icon: CupertinoIcons.sidebar_left,
             onPressed: () => AppKitWindowScope.of(context).toggleSidebar(),
             showLabel: false,
-          ),
-          AppKitToolBarIconButton(
-            tooltipMessage: 'Add new item',
-            label: 'Add',
-            icon: CupertinoIcons.add,
-            showLabel: false,
-            onPressed: () {
-              debugPrint('onPressed: Add');
-            },
           ),
           AppKitToolBarPullDownButton(
             label: 'Actions',
@@ -94,14 +84,6 @@ class _ToolbarPageState extends State<ToolbarPage> {
           ),
           const AppKitToolBarDivider(),
           AppKitToolBarIconButton(
-            label: 'Print',
-            icon: CupertinoIcons.printer,
-            showLabel: true,
-            onPressed: () {
-              debugPrint('onPressed: Print');
-            },
-          ),
-          AppKitToolBarIconButton(
             label: 'Airplane',
             icon: CupertinoIcons.airplane,
             showLabel: true,
@@ -109,7 +91,6 @@ class _ToolbarPageState extends State<ToolbarPage> {
               debugPrint('onPressed: Airplane');
             },
           ),
-          const AppKitToolBarDivider(),
           AppKitToolBarIconButton(
             label: 'Share',
             icon: CupertinoIcons.share,
@@ -126,7 +107,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
             tooltipMessage: 'Toggle right sidebar',
             showLabel: false,
             onPressed: () {
-              debugPrint('onPressed: Right Sidebar');
+              AppKitWindowScope.of(context).toggleEndSidebar();
             },
           ),
         ],

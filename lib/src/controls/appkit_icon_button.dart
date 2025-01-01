@@ -67,6 +67,16 @@ class AppKitIconButton extends StatefulWidget {
 
   @override
   AppKitIconButtonState createState() => AppKitIconButtonState();
+
+  static AppKitIconTheme toolbar(
+    BuildContext context, {
+    required IconData icon,
+    bool showLabel = false,
+    VoidCallback? onPressed,
+  }) {
+    return AppKitIconTheme.toolbar(context,
+        icon: icon, showLabel: showLabel, onPressed: onPressed);
+  }
 }
 
 class AppKitIconButtonState extends State<AppKitIconButton> {

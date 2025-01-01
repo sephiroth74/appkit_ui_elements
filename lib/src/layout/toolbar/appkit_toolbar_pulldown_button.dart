@@ -52,7 +52,7 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
             inlineBorderRadius: 6.0,
             inlineBackgroundColor: Colors.transparent,
             inlineHoveredBackgroundColor: isDark
-                ? const Color(0xff333336)
+                ? Colors.white.withOpacity(0.06)
                 : Colors.black.withOpacity(0.05),
           ),
         }),

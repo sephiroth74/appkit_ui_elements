@@ -56,6 +56,7 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                       setState(() => floating = !floating);
                     },
                   ),
+                  const AppKitToolBarSpacer(spacerUnits: 0.25),
                   AppKitCustomToolbarItem(
                     inToolbarBuilder: (context) {
                       return AppKitTooltip.plain(

@@ -92,7 +92,13 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   @override
   void didUpdateWidget(AppKitToolBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.actions != oldWidget.actions) {
+    if (widget.actions == null && oldWidget.actions == null) {
+      overflowedActionsCount = 0;
+    } else if (widget.actions == null && oldWidget.actions != null) {
+      overflowedActionsCount = 0;
+    } else if (widget.actions != null && oldWidget.actions == null) {
+      overflowedActionsCount = 0;
+    } else if (widget.actions!.length != oldWidget.actions!.length) {
       overflowedActionsCount = 0;
     }
   }
@@ -221,15 +227,6 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
                             .map((action) => action.toContextMenuEntry(context))
                             .whereNotNull()
                             .toList());
-
-                    // return AppKitToolbarOverflowMenu(
-                    //   children: overflowedActions
-                    //       .map((action) => action.build(
-                    //             context,
-                    //             AppKitToolbarItemDisplayMode.overflowed,
-                    //           ))
-                    //       .toList(),
-                    // );
                   }),
               children: inToolbarActions
                   .map(
