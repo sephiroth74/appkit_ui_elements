@@ -21,7 +21,7 @@ dependencies:
   system_theme: ^3.1.2
   uuid: ^4.5.1
 
-  plugin_platform_interface: any
+  plugin_platform_interface: ^2.1.8
   collection: ^1.18.0
   indexed: ^0.0.8
   intl: ^0.20.1
