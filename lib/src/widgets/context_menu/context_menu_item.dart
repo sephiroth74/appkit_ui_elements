@@ -97,7 +97,6 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   Widget builder(BuildContext context, AppKitContextMenuState menuState,
       [FocusNode? focusNode]) {
     final theme = AppKitTheme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final selectedOrFocused =
         menuState.focusedEntry == this || menuState.selectedItem == this;
 
