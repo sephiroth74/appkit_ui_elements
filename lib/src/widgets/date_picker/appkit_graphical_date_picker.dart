@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:flutter/gestures.dart';
@@ -1091,7 +1090,7 @@ class _GrahpicalTimePickerState extends State<GrahpicalTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return UiElementColorBuilder(builder: (context, colorContainer) {
+    return Builder(builder: (context) {
       return SizedBox(
         width: _kGrahpicalTimePickerWidth,
         height: _kGrahpicalTimePickerWidth,
@@ -1100,7 +1099,6 @@ class _GrahpicalTimePickerState extends State<GrahpicalTimePicker> {
           children: [
             CustomPaint(
               painter: _GrahicalTimePickerBackgroundPainter(
-                colorContainer: colorContainer,
                 initialDateTime: time,
                 languageCode: widget.languageCode,
               ),
@@ -1290,14 +1288,12 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
 
   final String languageCode;
 
-  final UiElementColorContainer colorContainer;
-
   late String dayPeriod;
 
-  _GrahicalTimePickerBackgroundPainter(
-      {required this.colorContainer,
-      required this.initialDateTime,
-      required this.languageCode}) {
+  _GrahicalTimePickerBackgroundPainter({
+    required this.initialDateTime,
+    required this.languageCode,
+  }) {
     dayPeriod = DateFormat('a', languageCode).format(initialDateTime);
   }
 
@@ -1341,7 +1337,7 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
         BlurStyle.normal,
         blurRadius,
       )
-      ..color = colorContainer.shadowColor.withOpacity(0.9);
+      ..color = AppKitColors.shadowColor.withOpacity(0.9);
     final path = Path()
       ..fillType = PathFillType.evenOdd
       ..addRect(
@@ -1418,8 +1414,7 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate is _GrahicalTimePickerBackgroundPainter &&
-        (oldDelegate.colorContainer != colorContainer ||
-            oldDelegate.initialDateTime != initialDateTime ||
+        (oldDelegate.initialDateTime != initialDateTime ||
             oldDelegate.languageCode != languageCode);
   }
 }

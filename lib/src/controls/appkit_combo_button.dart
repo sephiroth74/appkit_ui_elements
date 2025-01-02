@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -140,8 +139,8 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
         final comboButtonThemeDataSize =
             comboButtonTheme.get(widget.controlSize);
 
-        return UiElementColorBuilder(
-          builder: (context, colorContainer) {
+        return Builder(
+          builder: (context) {
             return ConstrainedBox(
               constraints: BoxConstraints(
                   minWidth: comboButtonThemeDataSize.buttonSize.width,

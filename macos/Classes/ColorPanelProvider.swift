@@ -19,12 +19,13 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
     
     func openPanel(pickerMode: String, uuid: String? = nil, withAlpha: Bool = false, color: Dictionary<String, Any>? = nil) {
         print("openPanel(pickerMode: \(pickerMode), uuid: \(uuid ?? "nil"))")
-        let panelMode = NSColorPanel.Mode.from(from: pickerMode)
+        let panelMode = NSColorPanel.Mode.fromStringValue(from: pickerMode)
         print("resolved panelMode: \(panelMode)")
         
         NSColorPanel.setPickerMode(panelMode)
         
         let colorPanel = NSColorPanel()
+        print("colorPanel = \(colorPanel)")
         
         colorPanel.setTarget(self)
         colorPanel.setAction(#selector(startStream(colorPanel:)))
@@ -48,6 +49,7 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
     }
     
     func setPickerMode(panelMode: String) {
+        print("pickerModel: \(panelMode)")
         switch (panelMode.lowercased()) {
         case "gray":
             NSColorPanel.setPickerMode(NSColorPanel.Mode.gray)
@@ -71,6 +73,7 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
     }
     
     @objc public func startStream(colorPanel: NSColorPanel) {
+        print("startStream(colorPanel: \(colorPanel))")
         let colorPanelUuid = colorPanel.identifier?.rawValue
         let result = ColorResult(color: colorPanel.color, uuid: colorPanelUuid, action: "stream")
         eventSink?(result.toFlutter())
@@ -80,8 +83,13 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
     @MainActor func windowWillClose(_ notification: Notification) {
         print("windowWillClose(notification: \(notification))")
         if(notification.object is NSColorPanel) {
+            let colorPanel = notification.object as! NSColorPanel
             let colorPanelUuid = (notification.object as! NSColorPanel).identifier?.rawValue
             let result = ColorResult(color: nil, uuid: colorPanelUuid, action: "close")
+            
+            colorPanel.setAction(nil)
+            colorPanel.delegate = nil
+            
             eventSink?(result.toFlutter())
         }
     }
@@ -90,7 +98,7 @@ class ColorPanelProvider: NSObject, NSWindowDelegate, FlutterStreamHandler {
 
 extension NSColorPanel.Mode {
     
-    static func from(from stringValue: String?) -> NSColorPanel.Mode {
+    static func fromStringValue(from stringValue: String?) -> NSColorPanel.Mode {
         switch (stringValue?.lowercased()) {
         case "gray":
             return NSColorPanel.Mode.gray
@@ -121,7 +129,7 @@ extension NSColorSpace.Model {
         case model
     }
     
-    static func from(from rawValue: Int?) -> NSColorSpace.Model? {
+    static func fromRawValue(from rawValue: Int?) -> NSColorSpace.Model? {
         guard let mode = rawValue.map(NSColorSpace.Model.init(rawValue:)) else { return nil }
         return mode
     }
@@ -204,7 +212,7 @@ class RGBA: ToFlutterObject {
         self.green = green
         self.blue = blue
         self.alpha = alpha
-        self.mode = NSColorSpace.Model.from(from: from["mode"] as? Int) ?? .unknown
+        self.mode = NSColorSpace.Model.fromRawValue(from: from["mode"] as? Int) ?? .unknown
     }
     
     func toColor() -> NSColor? {

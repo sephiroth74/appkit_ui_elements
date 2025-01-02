@@ -60,9 +60,9 @@ class AppKitGroupBox extends StatelessWidget {
     switch (style) {
       default:
         return Border.all(
-          color: AppKitColors.separatorColor
-              .resolveFrom(context)
-              .multiplyOpacity(enabled ? 1.0 : 0.5),
+          color:
+              AppKitDynamicColor.resolve(context, AppKitColors.separatorColor)
+                  .multiplyOpacity(enabled ? 1.0 : 0.5),
           width: 1.0,
         );
     }
@@ -82,7 +82,8 @@ class AppKitGroupBox extends StatelessWidget {
   Color _getBackgroundColor(BuildContext context) {
     switch (style) {
       case AppKitGroupBoxStyle.defaultScrollBox:
-        return AppKitColors.fills.opaque.quaternary.resolveFrom(context);
+        return AppKitDynamicColor.resolve(
+            context, AppKitColors.fills.opaque.quaternary);
       case AppKitGroupBoxStyle.roundedScrollBox:
         return Colors.transparent;
       case AppKitGroupBoxStyle.standardScrollBox:

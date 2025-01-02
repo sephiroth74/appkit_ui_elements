@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements_platform_interface.dart';
-import 'package:appkit_ui_elements/src/controls/plain_button.dart';
+import 'package:appkit_ui_elements/src/controls/appkit_plain_button.dart';
 import 'package:appkit_ui_elements/src/vo/color_picker_result.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -377,7 +377,12 @@ class _ColorWellMinimalWidget extends StatelessWidget {
   }
 }
 
-class _ColorWellExpandedWidget extends StatelessWidget {
+enum _ColorWellExpandedWidgetType {
+  picker,
+  popover,
+}
+
+class _ColorWellExpandedWidget extends StatefulWidget {
   static const _kWidth = 58.0;
   static const _kHeight = 25.0;
 
@@ -390,8 +395,6 @@ class _ColorWellExpandedWidget extends StatelessWidget {
   final VoidCallback? onTapPopover;
   final VoidCallback? onTapDown;
   final VoidCallback? onTapCancel;
-  bool get enabled => onTapPicker != null && onTapPopover != null;
-
   const _ColorWellExpandedWidget({
     required this.theme,
     required this.colorTheme,
@@ -404,54 +407,92 @@ class _ColorWellExpandedWidget extends StatelessWidget {
     this.onTapCancel,
   });
 
+  @override
+  State<_ColorWellExpandedWidget> createState() =>
+      _ColorWellExpandedWidgetState();
+}
+
+class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
+  bool get enabled => widget.onTapPicker != null && widget.onTapPopover != null;
+
+  _ColorWellExpandedWidgetType? _state;
+
   void _handleTapDown() {
-    if (isDown) return;
-    onTapDown?.call();
+    if (widget.isDown) return;
+    widget.onTapDown?.call();
   }
 
   void _handleTapCancel() {
-    if (!isDown) return;
-    onTapCancel?.call();
+    if (!widget.isDown) return;
+    widget.onTapCancel?.call();
   }
 
   void _handleTapPopover() {
-    onTapPopover?.call();
+    widget.onTapPopover?.call();
   }
 
   void _handleTapPicker() {
-    onTapPicker?.call();
+    widget.onTapPicker?.call();
+  }
+
+  void _handleMouseEnter(_ColorWellExpandedWidgetType type) {
+    debugPrint('handleMouseEnter($type)');
+    setState(() {
+      _state = type;
+    });
+  }
+
+  void _handleMouseExit(_ColorWellExpandedWidgetType type) {
+    debugPrint('handleMouseExit($type)');
+    if (_state == type) {
+      setState(() {
+        _state = null;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final isDark = theme.brightness == Brightness.dark;
+      final isDark = widget.theme.brightness == Brightness.dark;
       final finalConstraints = constraints.isTight
           ? constraints
-              .copyWith(minWidth: _kWidth, minHeight: _kHeight)
+              .copyWith(
+                  minWidth: _ColorWellExpandedWidget._kWidth,
+                  minHeight: _ColorWellExpandedWidget._kHeight)
               .normalize()
           : const BoxConstraints(
-              maxWidth: _kWidth,
-              maxHeight: _kHeight,
-              minHeight: _kHeight,
-              minWidth: _kWidth);
+              maxWidth: _ColorWellExpandedWidget._kWidth,
+              maxHeight: _ColorWellExpandedWidget._kHeight,
+              minHeight: _ColorWellExpandedWidget._kHeight,
+              minWidth: _ColorWellExpandedWidget._kWidth);
 
       return GestureDetector(
         onTapDown: enabled ? (_) => _handleTapDown() : null,
         onTapCancel: enabled ? () => _handleTapCancel() : null,
+        onTap: enabled
+            ? () {
+                debugPrint('handleTap($_state)');
+                if (_state == _ColorWellExpandedWidgetType.popover) {
+                  _handleTapPopover();
+                } else if (_state == _ColorWellExpandedWidgetType.picker) {
+                  _handleTapPicker();
+                }
+              }
+            : null,
         child: ConstrainedBox(
           constraints: finalConstraints,
           child: Container(
-            foregroundDecoration: isDown
+            foregroundDecoration: widget.isDown
                 ? BoxDecoration(
                     color:
                         (isDark ? Colors.white : Colors.black).withOpacity(0.2),
-                    borderRadius:
-                        BorderRadius.circular(colorTheme.borderRadiusExpanded))
+                    borderRadius: BorderRadius.circular(
+                        widget.colorTheme.borderRadiusExpanded))
                 : null,
             decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(colorTheme.borderRadiusExpanded),
+                borderRadius: BorderRadius.circular(
+                    widget.colorTheme.borderRadiusExpanded),
                 color: (isDark ? Colors.white.withOpacity(0.7) : Colors.white),
                 border: GradientBoxBorder(
                   gradient: LinearGradient(
@@ -480,66 +521,86 @@ class _ColorWellExpandedWidget extends StatelessWidget {
             child: Row(mainAxisSize: MainAxisSize.max, children: [
               Flexible(
                 flex: 1,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTapUp: enabled ? (_) => _handleTapPopover() : null,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft:
-                            Radius.circular(colorTheme.borderRadiusExpanded),
-                        bottomLeft:
-                            Radius.circular(colorTheme.borderRadiusExpanded),
+                child: MouseRegion(
+                  onEnter: enabled
+                      ? (_) => _handleMouseEnter(
+                          _ColorWellExpandedWidgetType.popover)
+                      : null,
+                  onExit: enabled
+                      ? (_) =>
+                          _handleMouseExit(_ColorWellExpandedWidgetType.popover)
+                      : null,
+                  child: GestureDetector(
+                    // behavior: HitTestBehavior.opaque,
+                    // onTapUp: enabled ? (_) => _handleTapPopover() : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                              widget.colorTheme.borderRadiusExpanded),
+                          bottomLeft: Radius.circular(
+                              widget.colorTheme.borderRadiusExpanded),
+                        ),
+                        color: widget.selectedColor,
                       ),
-                      color: selectedColor,
-                    ),
-                    child: isHovered
-                        ? Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black.withOpacity(0.2),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(1.0),
-                                  child: RotatedBox(
-                                    quarterTurns: 1,
-                                    child: Icon(
-                                      Icons.chevron_right,
-                                      size: 12.0,
-                                      color: Colors.white,
+                      child: widget.isHovered
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black.withOpacity(0.2),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(1.0),
+                                    child: RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Icon(
+                                        Icons.chevron_right,
+                                        size: 12.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                        : null,
+                            )
+                          : null,
+                    ),
                   ),
                 ),
               ),
               Flexible(
                 flex: 0,
-                child: GestureDetector(
-                  onTapUp: enabled ? (_) => _handleTapPicker() : null,
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    width: 20.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight:
-                            Radius.circular(colorTheme.borderRadiusExpanded),
-                        bottomRight:
-                            Radius.circular(colorTheme.borderRadiusExpanded),
+                child: MouseRegion(
+                  onEnter: enabled
+                      ? (_) =>
+                          _handleMouseEnter(_ColorWellExpandedWidgetType.picker)
+                      : null,
+                  onExit: enabled
+                      ? (_) =>
+                          _handleMouseExit(_ColorWellExpandedWidgetType.picker)
+                      : null,
+                  child: GestureDetector(
+                    // onTapUp: enabled ? (_) => _handleTapPicker() : null,
+                    // behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: 20.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(
+                              widget.colorTheme.borderRadiusExpanded),
+                          bottomRight: Radius.circular(
+                              widget.colorTheme.borderRadiusExpanded),
+                        ),
+                        color: widget.theme.controlColor,
                       ),
-                      color: theme.controlColor,
+                      child: Center(
+                          child: Image.asset('assets/icons/color_well.png',
+                              package: 'appkit_ui_elements', width: 15.0)),
                     ),
-                    child: Center(
-                        child: Image.asset('assets/icons/color_well.png',
-                            package: 'appkit_ui_elements', width: 15.0)),
                   ),
                 ),
               ),

@@ -517,7 +517,8 @@ class ColorBox extends StatelessWidget {
           if (!isLast) ...[
             const SizedBox(height: 8.0),
             Divider(
-              color: AppKitColors.separatorColor.resolveFrom(context),
+              color: AppKitDynamicColor.resolve(
+                  context, AppKitColors.separatorColor),
               height: 0.5,
               thickness: 0.5,
               indent: 12,

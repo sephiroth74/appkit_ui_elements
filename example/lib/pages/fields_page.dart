@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,9 +69,12 @@ class _FieldsPageState extends State<FieldsPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Fields'),
+      toolBar: AppKitToolBar(
+        title: const Text('Fields'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(

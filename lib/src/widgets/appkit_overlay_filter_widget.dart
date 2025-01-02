@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/layout/appkit_wallpaper_tinting_override.dart';
 import 'package:flutter/material.dart';
 
@@ -34,18 +35,18 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppKitWallpaperTintingOverride(
       enabled: enableWallpaperTinting,
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
+      child: MainWindowBuilder(builder: (context, isMainWindow) {
         return Container(
           decoration: BoxDecoration(
             color: color,
             borderRadius: borderRadius,
             border: Border.all(
-              color: colorContainer.shadowColor.withOpacity(0.35),
+              color: AppKitColors.shadowColor.withOpacity(0.35),
               width: 0.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: colorContainer.shadowColor.withOpacity(0.25),
+                color: AppKitColors.shadowColor.withOpacity(0.25),
                 offset: const Offset(0, 3.5),
                 blurRadius: 11.0,
                 spreadRadius: 0.0,

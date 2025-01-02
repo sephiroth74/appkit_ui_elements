@@ -49,7 +49,7 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
 
     // final AppKitThemeData theme = AppKitTheme.of(context);
     Color backgroundColor = widget.backgroundColor ??
-        AppKitColors.windowBackgroundColor.resolveFrom(context);
+        AppKitDynamicColor.resolve(context, AppKitColors.windowBackgroundColor);
 
     return LayoutBuilder(
       builder: (context, constraints) {

@@ -1,4 +1,4 @@
-import 'package:appkit_ui_elements/src/controls/custom_painter_button.dart';
+import 'package:appkit_ui_elements/src/controls/appkit_custom_painter_button.dart';
 
 class AppKitArrowButton extends AppKitCustomPainterButton {
   const AppKitArrowButton({

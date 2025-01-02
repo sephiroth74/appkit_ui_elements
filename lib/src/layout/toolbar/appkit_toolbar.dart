@@ -136,7 +136,8 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
             child: AppKitIconButton(
               padding: const EdgeInsets.all(5),
               disabledColor: Colors.transparent,
-              color: AppKitColors.toolbarIconColor.resolveFrom(context),
+              color: AppKitDynamicColor.resolve(
+                  context, AppKitColors.toolbarIconColor),
               icon: CupertinoIcons.back,
               onPressed: () => Navigator.maybePop(context),
             ),

@@ -208,16 +208,16 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
                   Icon(
                     CupertinoIcons.search,
                     size: widget.controlSize.prefixIconSize,
-                    color: AppKitColors.labelColor
-                        .resolveFrom(context)
+                    color: AppKitDynamicColor.resolve(
+                            context, AppKitColors.labelColor)
                         .multiplyOpacity(enabled ? 1.0 : 0.5),
                   ),
                   if (widget.contextMenuBuilder != null) ...[
                     Icon(
                       CupertinoIcons.chevron_down,
                       size: widget.controlSize.prefixIconSize / 2,
-                      color: AppKitColors.labelColor
-                          .resolveFrom(context)
+                      color: AppKitDynamicColor.resolve(
+                              context, AppKitColors.labelColor)
                           .multiplyOpacity(enabled ? 1.0 : 0.5),
                     ),
                   ],
@@ -272,15 +272,13 @@ extension _ControlSizeX on AppKitControlSize {
   EdgeInsets get padding {
     switch (this) {
       case AppKitControlSize.mini:
-        return const EdgeInsets.symmetric(horizontal: 6.0, vertical: 1.0);
+        return const EdgeInsets.symmetric(horizontal: 6.0, vertical: 1.5);
       case AppKitControlSize.small:
-        return const EdgeInsets.symmetric(horizontal: 7.0, vertical: 1.5);
+        return const EdgeInsets.symmetric(horizontal: 7.0, vertical: 2.0);
       case AppKitControlSize.regular:
-        return const EdgeInsets.only(
-            left: 8.0, right: 8.0, top: 1.5, bottom: 3.5);
+        return const EdgeInsets.only(left: 8.0, right: 8.0, top: 5, bottom: 6);
       case AppKitControlSize.large:
-        return const EdgeInsets.only(
-            left: 8.0, right: 8.0, top: 3.5, bottom: 5.5);
+        return const EdgeInsets.only(left: 8.0, right: 8.0, top: 7, bottom: 8);
     }
   }
 
@@ -294,10 +292,10 @@ extension _ControlSizeX on AppKitControlSize {
             left: 4.0, right: 3.0, top: 1.0, bottom: 1.0);
       case AppKitControlSize.regular:
         return const EdgeInsets.only(
-            left: 4.0, right: 2.0, top: 1.0, bottom: 2.0);
+            left: 6.0, right: 2.0, top: 1.0, bottom: 2.0);
       case AppKitControlSize.large:
         return const EdgeInsets.only(
-            left: 4.0, right: 2.0, top: 1.0, bottom: 2.0);
+            left: 6.0, right: 2.0, top: 1.0, bottom: 2.0);
     }
   }
 

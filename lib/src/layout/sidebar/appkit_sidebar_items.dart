@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -112,14 +111,6 @@ class AppKitSidebarItems extends StatelessWidget {
   AppKitAccentColor _getAccentColor(BuildContext context) =>
       AppKitTheme.of(context).accentColor;
 
-  /// Returns the sidebar item’s selected color.
-  Color _getColor(BuildContext context,
-      {required bool isMainWindow,
-      required bool isDark,
-      required UiElementColorContainer colorContainer}) {
-    return colorContainer.controlAccentColor;
-  }
-
   List<AppKitSidebarItem> get _allItems {
     List<AppKitSidebarItem> result = [];
     for (var element in items) {
@@ -137,58 +128,54 @@ class AppKitSidebarItems extends StatelessWidget {
     if (items.isEmpty) return const SizedBox.shrink();
     assert(debugCheckHasAppKitTheme(context));
     assert(currentIndex < _allItems.length);
-    final theme = AppKitTheme.of(context);
-    return AppKitIconTheme.merge(
-      data: const AppKitIconThemeData(size: 20),
-      child: UiElementColorBuilder(
-        builder: (context, colorContainer) {
-          final bool isMainWindow =
-              MainWindowStateListener.instance.isMainWindow.value;
-          return _SidebarItemsConfiguration(
-            selectedColor: selectedColor ??
-                _getColor(context,
-                    isDark: theme.brightness.isDark,
-                    isMainWindow: isMainWindow,
-                    colorContainer: colorContainer),
-            unselectedColor: unselectedColor ?? Colors.transparent,
-            shape: shape ?? _defaultShape,
-            itemSize: itemSize,
-            textColor: textColor,
-            iconColor: iconColor,
-            selectedIconColor: selectedIconColor,
-            selectedTextColor: selectedTextColor,
-            child: ListView(
-              controller: scrollController,
-              physics: const ClampingScrollPhysics(),
-              padding: EdgeInsets.all(10.0 - theme.visualDensity.horizontal),
-              children: List.generate(items.length, (index) {
-                final item = items[index];
-                if (item.disclosureItems != null) {
+    return MainWindowBuilder(builder: (context, isMainWindow) {
+      return AppKitIconTheme.merge(
+        data: const AppKitIconThemeData(size: 20),
+        child: Builder(
+          builder: (context) {
+            final theme = AppKitTheme.of(context);
+            return _SidebarItemsConfiguration(
+              selectedColor: selectedColor ?? theme.activeColor,
+              unselectedColor: unselectedColor ?? Colors.transparent,
+              shape: shape ?? _defaultShape,
+              itemSize: itemSize,
+              textColor: textColor,
+              iconColor: iconColor,
+              selectedIconColor: selectedIconColor,
+              selectedTextColor: selectedTextColor,
+              child: ListView(
+                controller: scrollController,
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.all(10.0 - theme.visualDensity.horizontal),
+                children: List.generate(items.length, (index) {
+                  final item = items[index];
+                  if (item.disclosureItems != null) {
+                    return MouseRegion(
+                      cursor: cursor!,
+                      child: _DisclosureSidebarItem(
+                        item: item,
+                        selectedItem: _allItems[currentIndex],
+                        onChanged: (item) {
+                          onChanged(_allItems.indexOf(item));
+                        },
+                      ),
+                    );
+                  }
                   return MouseRegion(
                     cursor: cursor!,
-                    child: _DisclosureSidebarItem(
+                    child: _SidebarItem(
                       item: item,
-                      selectedItem: _allItems[currentIndex],
-                      onChanged: (item) {
-                        onChanged(_allItems.indexOf(item));
-                      },
+                      selected: _allItems[currentIndex] == item,
+                      onClick: () => onChanged(_allItems.indexOf(item)),
                     ),
                   );
-                }
-                return MouseRegion(
-                  cursor: cursor!,
-                  child: _SidebarItem(
-                    item: item,
-                    selected: _allItems[currentIndex] == item,
-                    onClick: () => onChanged(_allItems.indexOf(item)),
-                  ),
-                );
-              }),
-            ),
-          );
-        },
-      ),
-    );
+                }),
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 }
 

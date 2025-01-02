@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
 
@@ -135,7 +134,7 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
         label: widget.semanticLabel,
         slider: true,
         value: widget.value.toString(),
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
+        child: MainWindowBuilder(builder: (context, isMainWindow) {
           final placeholderOpacity = theme.placeholderOpacity;
           final fillColor = widget.imageColor ?? theme.imageColor;
           final placeholderColor = placeholderAlwaysVisible || _handleDown

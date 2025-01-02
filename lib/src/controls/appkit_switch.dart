@@ -349,10 +349,10 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                 : controlBackgroundColor.withOpacity(0.2);
 
             final containerBackgroundColor = enabled
-                ? AppKitColors.fills.opaque.secondary
-                    .resolveFrom(context)
-                    .withOpacity(AppKitColors.fills.opaque.secondary
-                            .resolveFrom(context)
+                ? AppKitDynamicColor.resolve(
+                        context, AppKitColors.fills.opaque.secondary)
+                    .withOpacity(AppKitDynamicColor.resolve(
+                                context, AppKitColors.fills.opaque.secondary)
                             .opacity *
                         (1.0 - animationValue))
                 : AppKitColors.fills.opaque.primary.color.withOpacity(0.04);

@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -106,6 +105,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitIconButtonThemeData iconButtonTheme;
   final AppKitDateTimePickerThemeData dateTimePickerTheme;
   final Color keyboardFocusIndicatorColor;
+  final Color selectedContentBackgroundColor;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
@@ -141,6 +141,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitTypography? typography,
     Color? dividerColor,
     Color? keyboardFocusIndicatorColor,
+    Color? selectedContentBackgroundColor,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
@@ -160,9 +161,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     activeColorUnfocused ??=
         _ColorProvider.getActiveColorUnfocused(isDark: isDark);
+
     keyboardFocusIndicatorColor ??=
         _ColorProvider.getKeyboardFocusIndicatorColor(
             isDark: isDark, accentColor: accentColor);
+
+    selectedContentBackgroundColor ??=
+        _ColorProvider.getSelectedContentBackgroundColor(
+            accentColor: accentColor, isDark: isDark);
 
     Color focusColor = primaryColor.withOpacity(0.749);
 
@@ -325,7 +331,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     tooltipTheme ??= AppKitTooltipThemeData(
         verticalOffset: 18.0,
-        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+        padding:
+            const EdgeInsets.only(left: 6.0, top: 3.0, right: 6.0, bottom: 5.0),
         margin: EdgeInsets.zero,
         preferBelow: true,
         waitDuration: const Duration(seconds: 1),
@@ -333,7 +340,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         minHeight: 24.0,
         textStyle: typography.callout.copyWith(
           fontSize: 13.0,
-          color: const Color(0xFF4D4D4D),
+          color: isDark
+              ? AppKitColors.text.opaque.secondary.darkColor
+              : const Color(0xFF4D4D4D),
         ),
         decoration: () {
           const radius = BorderRadius.all(Radius.circular(2.0));
@@ -342,10 +351,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
               offset: const Offset(0, 0),
               blurRadius: 0.0,
               spreadRadius: 0.5,
-              color: CupertinoColors.black.withOpacity(0.12),
+              color: AppKitColors.shadowColor.withOpacity(0.12),
             ),
             BoxShadow(
-              color: CupertinoColors.black.withOpacity(0.2),
+              color: AppKitColors.shadowColor.withOpacity(0.2),
               offset: const Offset(0, 2),
               spreadRadius: 0,
               blurRadius: 6,
@@ -353,11 +362,15 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           ];
           final border = Border.all(
             width: 0.5,
-            color: const Color(0xFF4D4D4D),
+            color: isDark
+                ? const Color.fromRGBO(144, 144, 144, 1.0)
+                : const Color(0xFF4D4D4D),
           );
 
           return BoxDecoration(
-            color: const Color(0xFFF6F6F6),
+            color: isDark
+                ? AppKitColors.unemphasizedSelectedTextBackgroundColor.darkColor
+                : const Color(0xFFF6F6F6),
             borderRadius: radius,
             boxShadow: shadow,
             border: border,
@@ -448,6 +461,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
       keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
+      selectedContentBackgroundColor: selectedContentBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme,
       primaryColor: primaryColor,
@@ -482,6 +496,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
       keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
+      selectedContentBackgroundColor: selectedContentBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme,
       primaryColor: primaryColor,
@@ -557,6 +572,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.iconButtonTheme,
     required this.dateTimePickerTheme,
     required this.keyboardFocusIndicatorColor,
+    required this.selectedContentBackgroundColor,
   });
 
   @override
@@ -592,6 +608,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         buttonTheme,
         dateTimePickerTheme,
         keyboardFocusIndicatorColor,
+        selectedContentBackgroundColor,
       ];
 
   AppKitThemeData copyWith({
@@ -628,6 +645,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitIconButtonThemeData? iconButtonTheme,
     AppKitDateTimePickerThemeData? dateTimePickerTheme,
     Color? keyboardFocusIndicatorColor,
+    Color? selectedContentBackgroundColor,
   }) {
     return AppKitThemeData.raw(
       brightness: brightness ?? this.brightness,
@@ -666,6 +684,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       dateTimePickerTheme: dateTimePickerTheme ?? this.dateTimePickerTheme,
       keyboardFocusIndicatorColor:
           keyboardFocusIndicatorColor ?? this.keyboardFocusIndicatorColor,
+      selectedContentBackgroundColor:
+          selectedContentBackgroundColor ?? this.selectedContentBackgroundColor,
     );
   }
 
@@ -703,6 +723,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       iconButtonTheme: other.iconButtonTheme,
       dateTimePickerTheme: other.dateTimePickerTheme,
       keyboardFocusIndicatorColor: other.keyboardFocusIndicatorColor,
+      selectedContentBackgroundColor: other.selectedContentBackgroundColor,
     );
   }
 
@@ -755,6 +776,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.iconButtonTheme, b.iconButtonTheme, t),
       keyboardFocusIndicatorColor: Color.lerp(
           a.keyboardFocusIndicatorColor, b.keyboardFocusIndicatorColor, t)!,
+      selectedContentBackgroundColor: Color.lerp(
+          a.selectedContentBackgroundColor,
+          b.selectedContentBackgroundColor,
+          t)!,
       dateTimePickerTheme: AppKitDateTimePickerThemeData.lerp(
           a.dateTimePickerTheme, b.dateTimePickerTheme, t),
     );
@@ -812,6 +837,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'iconButtonTheme', iconButtonTheme));
     properties.add(ColorProperty(
         'keyboardFocusIndicatorColor', keyboardFocusIndicatorColor));
+    properties.add(ColorProperty(
+        'selectedContentBackgroundColor', selectedContentBackgroundColor));
     properties.add(DiagnosticsProperty<AppKitDateTimePickerThemeData>(
         'dateTimePickerTheme', dateTimePickerTheme));
   }
@@ -895,6 +922,30 @@ class _ColorProvider {
     return isDark
         ? const Color.fromRGBO(76, 78, 65, 1.0)
         : const Color.fromRGBO(180, 180, 180, 1.0);
+  }
+
+  static Color getSelectedContentBackgroundColor({
+    required AppKitAccentColor accentColor,
+    required bool isDark,
+  }) {
+    switch (accentColor) {
+      case AppKitAccentColor.blue:
+        return isDark ? const Color(0xFF1A73E8) : const Color(0xFF1A73E8);
+      case AppKitAccentColor.purple:
+        return isDark ? const Color(0xFF803482) : const Color(0xFF8E44AD);
+      case AppKitAccentColor.pink:
+        return isDark ? const Color(0xFFE91E63) : const Color(0xFFE91E63);
+      case AppKitAccentColor.red:
+        return isDark ? const Color(0xFFD32F2F) : const Color(0xFFD32F2F);
+      case AppKitAccentColor.orange:
+        return isDark ? const Color(0xFFFB8C00) : const Color(0xFFFB8C00);
+      case AppKitAccentColor.yellow:
+        return isDark ? const Color(0xFFFBC02D) : const Color(0xFFFBC02D);
+      case AppKitAccentColor.green:
+        return isDark ? const Color(0xFF4CAF50) : const Color(0xFF4CAF50);
+      case AppKitAccentColor.graphite:
+        return isDark ? const Color(0xFF9E9E9E) : const Color(0xFF9E9E9E);
+    }
   }
 
   static Color getKeyboardFocusIndicatorColor(
@@ -989,21 +1040,3 @@ class _ColorProvider {
     }
   }
 }
-
-// @protected
-// extension UiElementColorBuilderX on UiElementColorContainer {
-//   BoxShadow get shadowPrimary => BoxShadow(
-//         color: shadowColor.withOpacity(0.4),
-//         blurRadius: 0.50,
-//         offset: const Offset(0.0, 1),
-//         blurStyle: BlurStyle.outer,
-//       );
-
-//   BoxShadow get shadowSecondary => BoxShadow(
-//         color: shadowColor.withOpacity(0.1),
-//         blurRadius: 0.0,
-//         spreadRadius: 0.5,
-//         blurStyle: BlurStyle.outer,
-//         offset: const Offset(0.0, 0.0),
-//       );
-// }

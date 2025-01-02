@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -246,7 +245,7 @@ class _AppKitTooltipState extends State<AppKitTooltip>
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
 
-    Widget result = UiElementColorBuilder(builder: (context, colorContainer) {
+    Widget result = MainWindowBuilder(builder: (context, isMainWindow) {
       return widget.child;
     });
 

@@ -1,4 +1,3 @@
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/foundation.dart';
@@ -57,16 +56,13 @@ class AppKitProgressCircle extends StatelessWidget {
     return Semantics(
       value: value?.toStringAsFixed(2),
       label: semanticsLabel,
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
+      child: MainWindowBuilder(builder: (context, isMainWindow) {
         final theme = AppKitTheme.of(context);
         final progressTheme = AppKitProgressTheme.of(context);
         final isMainWindow =
             MainWindowStateListener.instance.isMainWindow.value;
         final color = isMainWindow
-            ? (this.color ??
-                progressTheme.color ??
-                theme.primaryColor ??
-                colorContainer.controlAccentColor)
+            ? (this.color ?? progressTheme.color ?? theme.activeColor)
             : (progressTheme.accentColorUnfocused ?? const Color(0xFFbababa));
         final trackColor = this.trackColor ?? progressTheme.trackColor;
 

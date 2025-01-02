@@ -151,7 +151,7 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
       label: widget.semanticLabel,
       slider: true,
       value: widget.value.toStringAsFixed(2),
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
+      child: MainWindowBuilder(builder: (context, isMainWindow) {
         return LayoutBuilder(builder: (context, constraints) {
           final levelIndicatorsTheme = AppKitLevelIndicatorsTheme.of(context);
           final normalColor =
