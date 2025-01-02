@@ -56,17 +56,25 @@ class AppKitPopoverWidget extends StatelessWidget {
               child: Transform.scale(
                 scale: value,
                 alignment: Alignment.center,
-                child:
-                    UiElementColorBuilder(builder: (context, colorContainer) {
+                child: MainWindowBuilder(builder: (context, isMainWindow) {
+                  final theme = AppKitTheme.of(context);
+                  final isDark = theme.brightness == Brightness.dark;
                   return CustomPaint(
                       painter: _PopoverBackgroundPainter(
                         cornerRadius: kCornerRadius,
                         anchorHeight: kAnchorHeight,
                         anchorWidth: kAnchorWidth,
-                        color: colorContainer.windowBackgroundColor,
+                        // color: AppKitDynamicColor.resolve(context, AppKitColors.windowBackgroundColor),
+                        color: isDark
+                            ? AppKitDynamicColor.resolve(
+                                    context, AppKitColors.windowBackgroundColor)
+                                .multiplyLuminance(1.35)
+                            : AppKitDynamicColor.resolve(
+                                context, AppKitColors.windowBackgroundColor),
                         anchorOffset: state.anchorOffset,
                         anchorDirection:
                             state.showArrow ? state.direction : null,
+                        shadowColor: AppKitColors.shadowColor,
                       ),
                       child: Padding(
                         padding: state.paddings,
@@ -90,14 +98,17 @@ class _PopoverBackgroundPainter extends CustomPainter {
   final double cornerRadius;
   final double anchorHeight;
   final double anchorWidth;
+  final Color shadowColor;
 
-  _PopoverBackgroundPainter(
-      {required this.color,
-      required this.anchorOffset,
-      required this.anchorDirection,
-      required this.cornerRadius,
-      required this.anchorHeight,
-      required this.anchorWidth});
+  _PopoverBackgroundPainter({
+    required this.color,
+    required this.anchorOffset,
+    required this.anchorDirection,
+    required this.cornerRadius,
+    required this.anchorHeight,
+    required this.anchorWidth,
+    required this.shadowColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -195,7 +206,7 @@ class _PopoverBackgroundPainter extends CustomPainter {
         radius: Radius.circular(cornerRadius));
     path.close();
 
-    canvas.drawShadow(path, Colors.grey.shade700, 6.0, true);
+    canvas.drawShadow(path, shadowColor, 6.0, true);
     canvas.drawPath(path, paint);
 
     paint

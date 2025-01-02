@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +12,21 @@ class ColorsPage extends StatefulWidget {
 }
 
 class _ColorsPageState extends State<ColorsPage> {
-  Color color1 = AppKitColors.systemBlue;
-  Color color2 = AppKitColors.systemGreen;
-  Color color3 = AppKitColors.systemPurple;
+  Color color1 = AppKitColors.systemBlue.color;
+  Color color2 = AppKitColors.systemGreen.color;
+  Color color3 = AppKitColors.systemPurple.color;
 
   late bool isDark = AppKitTheme.of(context).brightness == Brightness.dark;
 
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Colors'),
+      toolBar: AppKitToolBar(
+        title: const Text('Colors'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(

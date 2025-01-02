@@ -53,11 +53,16 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
         onTapUp: enabled ? _handleTapUp : null,
         onTapCancel: enabled ? _handleTapCancel : null,
         onTap: enabled ? _handleTap : null,
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
+        child: MainWindowBuilder(builder: (context, isMainWindow) {
+          final theme = AppKitTheme.of(context);
+          final isDark = theme.brightness == Brightness.dark;
           final color = widget.color ??
-              AppKitColors.text.opaque.quaternary.resolveFrom(context);
+              AppKitDynamicColor.resolve(
+                  context, AppKitColors.text.opaque.quaternary);
+          final blendedColor =
+              Color.lerp(theme.canvasColor, color, color.opacity)!;
 
-          final lumination = color.computeLuminance();
+          final lumination = blendedColor.computeLuminance();
           final textColor = lumination > 0.5
               ? AppKitColors.text.opaque.primary.darkColor
               : AppKitColors.text.opaque.primary.color;
@@ -66,7 +71,8 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
             foregroundDecoration: isDown
                 ? BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
+                    color:
+                        (isDark ? Colors.white : Colors.black).withOpacity(0.1),
                   )
                 : null,
             decoration: BoxDecoration(
@@ -75,10 +81,7 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
             ),
             child: Center(
               child: DefaultTextStyle(
-                style: AppKitTheme.of(context)
-                    .typography
-                    .body
-                    .copyWith(color: textColor),
+                style: theme.typography.body.copyWith(color: textColor),
                 child: widget.child,
               ),
             ),

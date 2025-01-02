@@ -1,7 +1,9 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/scheduler.dart';
 
 extension PopoverX on BuildContext {
-  Future<dynamic> showPopover({
+  Future<dynamic> showPopover(
+    BuildContext context, {
     required Widget child,
     LayerLink? link,
     Rect? itemRect,
@@ -26,9 +28,11 @@ extension PopoverX on BuildContext {
         direction: direction,
         position: position,
         showArrow: showArrow);
+
+    final navigator = Navigator.of(this);
     return await Navigator.push<dynamic>(
       this,
-      PageRouteBuilder<dynamic>(
+      _AppKitPopOverPageRoute<dynamic>(
         pageBuilder: (context, animation, secondaryAnimation) {
           return Stack(
             children: [
@@ -39,6 +43,10 @@ extension PopoverX on BuildContext {
             ],
           );
         },
+        capturedThemes: InheritedTheme.capture(
+          from: context,
+          to: navigator.context,
+        ),
         settings: RouteSettings(name: "popover-menu", arguments: uuid),
         fullscreenDialog: true,
         barrierDismissible: true,
@@ -54,5 +62,77 @@ extension PopoverX on BuildContext {
   bool isPopoverVisible(String uuid) {
     return ModalRoute.of(this)!.settings.name == "popover-menu" &&
         ModalRoute.of(this)!.settings.arguments == uuid;
+  }
+}
+
+Widget _defaultTransitionsBuilder(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child) {
+  return child;
+}
+
+class _AppKitPopOverPageRoute<T> extends PageRoute<T> {
+  @override
+  final Color? barrierColor;
+
+  @override
+  final String? barrierLabel;
+
+  final RouteTransitionsBuilder? transitionsBuilder;
+
+  @override
+  final Duration transitionDuration;
+
+  @override
+  final Duration reverseTransitionDuration;
+
+  @override
+  final bool opaque;
+
+  @override
+  final bool maintainState;
+
+  final RoutePageBuilder pageBuilder;
+
+  final CapturedThemes capturedThemes;
+
+  _AppKitPopOverPageRoute({
+    super.settings,
+    super.fullscreenDialog,
+    super.allowSnapshotting = true,
+    super.barrierDismissible = false,
+    this.transitionsBuilder = _defaultTransitionsBuilder,
+    this.transitionDuration = const Duration(milliseconds: 300),
+    this.reverseTransitionDuration = const Duration(milliseconds: 300),
+    this.opaque = true,
+    this.maintainState = true,
+    required this.barrierColor,
+    required this.barrierLabel,
+    required this.pageBuilder,
+    required this.capturedThemes,
+  });
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      removeBottom: true,
+      removeLeft: true,
+      removeRight: true,
+      child: capturedThemes.wrap(LayoutBuilder(builder: (context, constraints) {
+        return MainWindowBuilder(builder: (context, isMainWindow) {
+          if (!isMainWindow) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              Navigator.removeRoute(context, this);
+            });
+          }
+          return pageBuilder(context, animation, secondaryAnimation);
+        });
+      })),
+    );
   }
 }

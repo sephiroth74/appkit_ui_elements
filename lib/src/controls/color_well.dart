@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/appkit_ui_elements_platform_interface.dart';
 import 'package:appkit_ui_elements/src/controls/plain_button.dart';
@@ -23,6 +22,9 @@ class AppKitColorWell extends StatefulWidget {
   final Color? color;
   final AppKitColorWellStyle style;
 
+  /// The label for the button that opens the color picker (inside the colors popover).
+  final String popoverColorsButtonLabel;
+
   AppKitColorWell({
     super.key,
     required this.onChanged,
@@ -31,6 +33,7 @@ class AppKitColorWell extends StatefulWidget {
     this.semanticLabel,
     this.color,
     this.style = AppKitColorWellStyle.regular,
+    this.popoverColorsButtonLabel = 'Show Colors...',
   }) : uuid = const Uuid().v4();
 
   @override
@@ -42,7 +45,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
 
   Color? _selectedColor;
 
-  bool isDown = false;
+  bool _isDown = false;
 
   bool isHovered = false;
 
@@ -56,6 +59,17 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     _onColorChanged ??=
         AppKitUiElementsPlatform.instance.listenForColorChange(widget.uuid);
     return _onColorChanged!;
+  }
+
+  bool get _isColorPickerOpened =>
+      _colorSubscription != null || context.isPopoverVisible(widget.uuid);
+
+  set isDown(bool value) {
+    if (_isDown != value) {
+      setState(() {
+        _isDown = value;
+      });
+    }
   }
 
   void _handleMouseEnter() {
@@ -78,29 +92,30 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     _showColorSwatchesPopover();
   }
 
-  bool get _isColorPickerOpened =>
-      _colorSubscription != null || context.isPopoverVisible(widget.uuid);
+  void _handleTapDown() {
+    if (!enabled || _isColorPickerOpened) return;
+    isDown = true;
+  }
+
+  void _handleTapCancel() {
+    if (!enabled || _isColorPickerOpened) return;
+    isDown = false;
+  }
 
   void _showColorPicker(
       {required AppKitColorPickerMode mode, required bool withAlpha}) async {
-    debugPrint('AppKitColorWell: _showColorPicker');
-    debugPrint('_isColorPickerOpened: $_isColorPickerOpened');
-
     if (!enabled || _isColorPickerOpened) {
       return;
     }
 
-    setState(() {
-      isDown = true;
-    });
+    isDown = true;
 
     _colorSubscription ??= onColorChanged.listen((Color? color) {
       if (color == null) {
-        setState(() {
-          isDown = false;
-        });
+        _onColorChanged = null;
         _colorSubscription?.cancel();
         _colorSubscription = null;
+        isDown = false;
         return;
       }
 
@@ -131,20 +146,22 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     }
 
     setState(() {
-      isDown = true;
+      _isDown = true;
     });
 
     final buttonRect = context.getWidgetBounds();
     final link = buttonRect == null ? _layerLink : null;
 
     final result = await context.showPopover(
+      context,
       transitionDuration: const Duration(milliseconds: 200),
       itemRect: buttonRect,
       link: link,
       targetAnchor: Alignment.bottomCenter,
       direction: AppKitMenuEdge.auto,
       showArrow: true,
-      child: const AppKitColorWellPopover(),
+      child: AppKitColorWellPopover(
+          popoverColorsButtonLabel: widget.popoverColorsButtonLabel),
       uuid: widget.uuid,
     );
 
@@ -153,12 +170,12 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     } else if (result is Color) {
       setState(() {
         _selectedColor = result;
-        isDown = false;
+        _isDown = false;
       });
       widget.onChanged?.call(result);
     } else {
       setState(() {
-        isDown = false;
+        _isDown = false;
       });
     }
   }
@@ -173,7 +190,6 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
   void dispose() {
     _colorSubscription?.cancel();
     if (_colorSubscription != null) {
-      debugPrint('AppKitColorWell: dispose color subscription ${widget.uuid}');
       _onColorChanged = null;
     }
     super.dispose();
@@ -192,8 +208,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     debugCheckHasAppKitTheme(context);
 
     final theme = AppKitTheme.of(context);
-    Color selectedColor =
-        _selectedColor ?? theme.primaryColor ?? AppKitColors.systemBlue;
+    Color selectedColor = _selectedColor ?? theme.primaryColor;
 
     if (!enabled) {
       selectedColor = selectedColor.withOpacity(selectedColor.opacity * 0.5);
@@ -202,7 +217,8 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     return Semantics(
       label: widget.semanticLabel,
       button: true,
-      child: UiElementColorBuilder(builder: (context, colorContainer) {
+      child: MainWindowBuilder(builder: (context, isMainWindow) {
+        final theme = AppKitTheme.of(context);
         final colorTheme = AppKitColorWellTheme.of(context);
         return MouseRegion(
           onEnter: enabled ? (_) => _handleMouseEnter() : null,
@@ -213,29 +229,35 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
               if (widget.style == AppKitColorWellStyle.regular) {
                 return _ColorWellRegularWidget(
                   onTap: enabled ? _handleTapColorPicker : null,
+                  onTapDown: enabled ? _handleTapDown : null,
+                  onTapCancel: enabled ? _handleTapCancel : null,
                   colorTheme: colorTheme,
+                  theme: theme,
                   selectedColor: selectedColor,
-                  colorContainer: colorContainer,
-                  isDown: isDown,
+                  isDown: _isDown,
                   isHovered: isHovered,
                 );
               } else if (widget.style == AppKitColorWellStyle.expanded) {
                 return _ColorWellExpandedWidget(
                   onTapPicker: enabled ? _handleTapColorPicker : null,
                   onTapPopover: enabled ? _handleTapColorSwatches : null,
-                  colorContainer: colorContainer,
+                  onTapDown: enabled ? _handleTapDown : null,
+                  onTapCancel: enabled ? _handleTapCancel : null,
                   colorTheme: colorTheme,
+                  theme: theme,
                   selectedColor: selectedColor,
-                  isDown: isDown,
+                  isDown: _isDown,
                   isHovered: isHovered,
                 );
               } else {
                 return _ColorWellMinimalWidget(
                   onTap: enabled ? _handleTapColorSwatches : null,
-                  colorContainer: colorContainer,
+                  onTapDown: enabled ? _handleTapDown : null,
+                  onTapCancel: enabled ? _handleTapCancel : null,
                   colorTheme: colorTheme,
+                  theme: theme,
                   selectedColor: selectedColor,
-                  isDown: isDown,
+                  isDown: _isDown,
                   isHovered: isHovered,
                 );
               }
@@ -262,27 +284,31 @@ class _ColorWellMinimalWidget extends StatelessWidget {
   static const _kWidth = 38.0;
   static const _kHeight = 24.0;
 
-  final UiElementColorContainer colorContainer;
+  final AppKitThemeData theme;
   final AppKitColorWellThemeData colorTheme;
   final Color selectedColor;
   final bool isDown;
   final bool isHovered;
   final VoidCallback? onTap;
+  final VoidCallback? onTapDown;
+  final VoidCallback? onTapCancel;
   bool get enabled => onTap != null;
 
   const _ColorWellMinimalWidget({
-    required this.colorContainer,
+    required this.theme,
     required this.colorTheme,
     required this.selectedColor,
     required this.isDown,
     required this.isHovered,
     this.onTap,
+    this.onTapDown,
+    this.onTapCancel,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppKitColorWellTheme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
+      final isDark = theme.brightness == Brightness.dark;
       final finalConstraints = constraints.isTight
           ? constraints
               .copyWith(minWidth: _kWidth, minHeight: _kHeight)
@@ -297,18 +323,27 @@ class _ColorWellMinimalWidget extends StatelessWidget {
         constraints: finalConstraints,
         child: GestureDetector(
           onTap: enabled ? () => onTap?.call() : null,
+          onTapDown: enabled ? (_) => onTapDown?.call() : null,
+          onTapCancel: enabled ? () => onTapCancel?.call() : null,
           child: Container(
             foregroundDecoration: isDown
                 ? BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
+                    color: (isDark
+                            ? AppKitColors.controlColor.darkColor
+                            : Colors.black)
+                        .withOpacity(0.1),
                     borderRadius:
-                        BorderRadius.circular(theme.borderRadiusMinimal))
+                        BorderRadius.circular(colorTheme.borderRadiusMinimal))
                 : null,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.borderRadiusMinimal),
+              borderRadius:
+                  BorderRadius.circular(colorTheme.borderRadiusMinimal),
               color: selectedColor,
-              border:
-                  Border.all(color: Colors.black.withOpacity(0.2), width: 0.5),
+              border: Border.all(
+                  color: (isDark
+                      ? Colors.white.withOpacity(0.75)
+                      : Colors.black.withOpacity(0.25)),
+                  width: 0.5),
             ),
             child: isHovered
                 ? Align(
@@ -346,29 +381,51 @@ class _ColorWellExpandedWidget extends StatelessWidget {
   static const _kWidth = 58.0;
   static const _kHeight = 25.0;
 
-  final UiElementColorContainer colorContainer;
+  final AppKitThemeData theme;
   final AppKitColorWellThemeData colorTheme;
   final Color selectedColor;
   final bool isDown;
   final bool isHovered;
   final VoidCallback? onTapPicker;
   final VoidCallback? onTapPopover;
+  final VoidCallback? onTapDown;
+  final VoidCallback? onTapCancel;
   bool get enabled => onTapPicker != null && onTapPopover != null;
 
   const _ColorWellExpandedWidget({
-    required this.colorContainer,
+    required this.theme,
     required this.colorTheme,
     required this.selectedColor,
     required this.isDown,
     required this.isHovered,
     this.onTapPicker,
     this.onTapPopover,
+    this.onTapDown,
+    this.onTapCancel,
   });
+
+  void _handleTapDown() {
+    if (isDown) return;
+    onTapDown?.call();
+  }
+
+  void _handleTapCancel() {
+    if (!isDown) return;
+    onTapCancel?.call();
+  }
+
+  void _handleTapPopover() {
+    onTapPopover?.call();
+  }
+
+  void _handleTapPicker() {
+    onTapPicker?.call();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppKitColorWellTheme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
+      final isDark = theme.brightness == Brightness.dark;
       final finalConstraints = constraints.isTight
           ? constraints
               .copyWith(minWidth: _kWidth, minHeight: _kHeight)
@@ -379,97 +436,115 @@ class _ColorWellExpandedWidget extends StatelessWidget {
               minHeight: _kHeight,
               minWidth: _kWidth);
 
-      return ConstrainedBox(
-        constraints: finalConstraints,
-        child: Container(
-          foregroundDecoration: isDown
-              ? BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius:
-                      BorderRadius.circular(theme.borderRadiusExpanded))
-              : null,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.borderRadiusExpanded),
-              color: Colors.white,
-              border: GradientBoxBorder(
-                gradient: LinearGradient(
-                  colors: [
-                    AppKitColors.text.opaque.tertiary.multiplyOpacity(0.55),
-                    AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                width: 0.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  offset: const Offset(0, 0.5),
-                  blurRadius: 0.25,
-                ),
-              ]),
-          child: Row(mainAxisSize: MainAxisSize.max, children: [
-            Flexible(
-              flex: 1,
-              child: GestureDetector(
-                onTap: enabled ? () => onTapPopover?.call() : null,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(theme.borderRadiusExpanded),
-                      bottomLeft: Radius.circular(theme.borderRadiusExpanded),
-                    ),
-                    color: selectedColor,
+      return GestureDetector(
+        onTapDown: enabled ? (_) => _handleTapDown() : null,
+        onTapCancel: enabled ? () => _handleTapCancel() : null,
+        child: ConstrainedBox(
+          constraints: finalConstraints,
+          child: Container(
+            foregroundDecoration: isDown
+                ? BoxDecoration(
+                    color:
+                        (isDark ? Colors.white : Colors.black).withOpacity(0.2),
+                    borderRadius:
+                        BorderRadius.circular(colorTheme.borderRadiusExpanded))
+                : null,
+            decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(colorTheme.borderRadiusExpanded),
+                color: (isDark ? Colors.white.withOpacity(0.7) : Colors.white),
+                border: GradientBoxBorder(
+                  gradient: LinearGradient(
+                    colors: [
+                      (isDark
+                              ? AppKitColors.text.opaque.secondary.darkColor
+                              : AppKitColors.text.opaque.tertiary)
+                          .multiplyOpacity(0.55),
+                      (isDark
+                              ? AppKitColors.text.opaque.tertiary.darkColor
+                              : AppKitColors.text.opaque.secondary)
+                          .multiplyOpacity(0.75)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                  child: isHovered
-                      ? Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 4.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black.withOpacity(0.2),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(1.0),
-                                child: RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Icon(
-                                    Icons.chevron_right,
-                                    size: 12.0,
-                                    color: Colors.white,
+                  width: 0.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppKitColors.shadowColor.withOpacity(0.2),
+                    offset: const Offset(0, 0.5),
+                    blurRadius: 0.25,
+                  ),
+                ]),
+            child: Row(mainAxisSize: MainAxisSize.max, children: [
+              Flexible(
+                flex: 1,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTapUp: enabled ? (_) => _handleTapPopover() : null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft:
+                            Radius.circular(colorTheme.borderRadiusExpanded),
+                        bottomLeft:
+                            Radius.circular(colorTheme.borderRadiusExpanded),
+                      ),
+                      color: selectedColor,
+                    ),
+                    child: isHovered
+                        ? Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black.withOpacity(0.2),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(1.0),
+                                  child: RotatedBox(
+                                    quarterTurns: 1,
+                                    child: Icon(
+                                      Icons.chevron_right,
+                                      size: 12.0,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      : null,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 0,
-              child: GestureDetector(
-                onTap: enabled ? () => onTapPicker?.call() : null,
-                child: Container(
-                  width: 20.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(theme.borderRadiusExpanded),
-                      bottomRight: Radius.circular(theme.borderRadiusExpanded),
-                    ),
-                    color: Colors.white,
+                          )
+                        : null,
                   ),
-                  child: Center(
-                      child: Image.asset('assets/icons/color_well.png',
-                          package: 'appkit_ui_elements', width: 15.0)),
                 ),
               ),
-            ),
-          ]),
+              Flexible(
+                flex: 0,
+                child: GestureDetector(
+                  onTapUp: enabled ? (_) => _handleTapPicker() : null,
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    width: 20.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight:
+                            Radius.circular(colorTheme.borderRadiusExpanded),
+                        bottomRight:
+                            Radius.circular(colorTheme.borderRadiusExpanded),
+                      ),
+                      color: theme.controlColor,
+                    ),
+                    child: Center(
+                        child: Image.asset('assets/icons/color_well.png',
+                            package: 'appkit_ui_elements', width: 15.0)),
+                  ),
+                ),
+              ),
+            ]),
+          ),
         ),
       );
     });
@@ -483,25 +558,29 @@ class _ColorWellRegularWidget extends StatelessWidget {
   const _ColorWellRegularWidget({
     required this.colorTheme,
     required this.selectedColor,
-    required this.colorContainer,
+    required this.theme,
     required this.isDown,
     required this.isHovered,
     required this.onTap,
+    required this.onTapDown,
+    required this.onTapCancel,
   });
 
-  final UiElementColorContainer colorContainer;
+  final AppKitThemeData theme;
   final AppKitColorWellThemeData colorTheme;
   final Color selectedColor;
   final bool isDown;
   final bool isHovered;
   final VoidCallback? onTap;
+  final VoidCallback? onTapDown;
+  final VoidCallback? onTapCancel;
 
   bool get enabled => onTap != null;
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppKitColorWellTheme.of(context);
     return LayoutBuilder(builder: (context, constraints) {
+      final isDark = theme.brightness == Brightness.dark;
       final finalConstraints = constraints.isTight
           ? constraints
               .copyWith(minWidth: _kWidth, minHeight: _kHeight)
@@ -515,22 +594,33 @@ class _ColorWellRegularWidget extends StatelessWidget {
       return ConstrainedBox(
         constraints: finalConstraints,
         child: GestureDetector(
+          onTapDown: enabled ? (_) => onTapDown?.call() : null,
+          onTapCancel: enabled ? () => onTapCancel?.call() : null,
           onTap: enabled ? () => onTap?.call() : null,
           child: Container(
             foregroundDecoration: isDown
                 ? BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
+                    color:
+                        (isDark ? Colors.white : Colors.black).withOpacity(0.2),
                     borderRadius:
-                        BorderRadius.circular(theme.borderRadiusRegular))
+                        BorderRadius.circular(colorTheme.borderRadiusRegular))
                 : null,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(theme.borderRadiusRegular),
-                color: Colors.white,
+                borderRadius:
+                    BorderRadius.circular(colorTheme.borderRadiusRegular),
+                color:
+                    isDark ? AppKitColors.controlColor.darkColor : Colors.white,
                 border: GradientBoxBorder(
                   gradient: LinearGradient(
                     colors: [
-                      AppKitColors.text.opaque.tertiary.multiplyOpacity(0.55),
-                      AppKitColors.text.opaque.secondary.multiplyOpacity(0.75)
+                      (isDark
+                              ? AppKitColors.text.opaque.quaternary
+                              : AppKitColors.text.opaque.tertiary)
+                          .multiplyOpacity(0.55),
+                      (isDark
+                              ? AppKitColors.text.opaque.tertiary
+                              : AppKitColors.text.opaque.secondary)
+                          .multiplyOpacity(0.75)
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -548,8 +638,8 @@ class _ColorWellRegularWidget extends StatelessWidget {
               padding: const EdgeInsets.all(3.0),
               child: DecoratedBox(
                   decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(theme.borderRadiusRegularInner),
+                      borderRadius: BorderRadius.circular(
+                          colorTheme.borderRadiusRegularInner),
                       border: Border.all(
                           color: Colors.black.withOpacity(0.2), width: 0.5),
                       color: selectedColor)),
@@ -587,6 +677,7 @@ extension AppKitColorPickerModeX on AppKitColorPickerMode {
 }
 
 class AppKitColorWellPopover extends StatefulWidget {
+  final String popoverColorsButtonLabel;
   static const swatchSize = Size(13.0, 13.0);
   static const swatchPadding = EdgeInsets.all(0.5);
   // ignore: constant_identifier_names
@@ -752,6 +843,7 @@ class AppKitColorWellPopover extends StatefulWidget {
 
   const AppKitColorWellPopover({
     super.key,
+    required this.popoverColorsButtonLabel,
   });
 
   @override
@@ -768,6 +860,7 @@ class _AppKitColorWellPopoverState extends State<AppKitColorWellPopover> {
 
     return Builder(
       builder: (context) {
+        final theme = AppKitTheme.of(context);
         final systemSwatches = Indexer(
             children:
                 AppKitColorWellPopover.systemColors.mapIndexed((index, color) {
@@ -852,9 +945,10 @@ class _AppKitColorWellPopoverState extends State<AppKitColorWellPopover> {
                     child: AppKitPlainButton(
                       onPressed: () => Navigator.of(context)
                           .pop(AppKitColorWellPopover.SHOW_COLORS),
-                      child: const Text(
-                        'Show Colors...',
-                        style: TextStyle(fontSize: 9),
+                      child: Text(
+                        widget.popoverColorsButtonLabel,
+                        style:
+                            theme.typography.caption1.copyWith(fontSize: 9.0),
                       ),
                     ),
                   ),

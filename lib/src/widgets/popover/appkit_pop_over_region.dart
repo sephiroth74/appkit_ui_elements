@@ -40,6 +40,7 @@ class AppKitPopoverRegion extends StatelessWidget {
     final buttonRect = context.getWidgetBounds() ?? Rect.zero;
 
     await context.showPopover(
+      context,
       transitionDuration: const Duration(milliseconds: 200),
       itemRect: buttonRect,
       targetAnchor: alignment,

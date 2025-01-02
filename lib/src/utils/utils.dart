@@ -215,7 +215,9 @@ extension ColorX on Color {
 
   Color multiplyLuminance(double factor) {
     final hslColor = HSLColor.fromColor(this);
-    return (hslColor.withLightness(hslColor.lightness * factor)).toColor();
+    return (hslColor
+            .withLightness((hslColor.lightness * factor).clamp(0.0, 1.0)))
+        .toColor();
   }
 
   Color withLuminance(double luminance) {
