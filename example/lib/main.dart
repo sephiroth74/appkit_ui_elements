@@ -84,7 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             minWidth: 150),
         sidebar: AppKitSidebar(
-            // top: const AppKitSearchField(),
             builder: (context, scrollController) {
               return AppKitSidebarItems(
                   scrollController: scrollController,

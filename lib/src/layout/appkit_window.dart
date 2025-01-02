@@ -5,16 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:macos_window_utils/widgets/transparent_macos_sidebar.dart';
 
-/// A basic frame layout.
-///
-/// Provides a body for main content, via [child], and a [sidebar] for
-/// secondary content (like navigation buttons). If no [sidebar] is specified,
-/// only the [child] will be shown.
 class AppKitWindow extends StatefulWidget {
-  /// Creates a macOS window layout with a sidebar on the left.
-  ///
-  /// The [child] widget is typically a [AppKitMacosScaffold] which fills the
-  /// rest of the screen.
   const AppKitWindow({
     super.key,
     this.child,
@@ -26,21 +17,10 @@ class AppKitWindow extends StatefulWidget {
     this.sidebarState = NSVisualEffectViewState.followsWindowActiveState,
   });
 
-  /// Specifies the background color for the Window.
-  ///
-  /// The default colors from the theme would be used if no color is specified.
   final Color? backgroundColor;
-
-  /// The child of the [AppKitWindow]
   final Widget? child;
-
-  /// An app bar to display at the top of the window.
   final AppKitTitleBar? titleBar;
-
-  /// A sidebar to display at the left of the window.
   final AppKitSidebar? sidebar;
-
-  /// A sidebar to display at the right of the window.
   final AppKitSidebar? endSidebar;
 
   /// Whether wallpaper tinting should be disabled.
@@ -65,16 +45,6 @@ class AppKitWindow extends StatefulWidget {
   /// this property may be used to disable wallpaper tinting outright.
   final bool disableWallpaperTinting;
 
-  /// The state of the sidebar's [NSVisualEffectView].
-  ///
-  /// Possible values are:
-  ///
-  /// - [NSVisualEffectViewState.active]: The sidebar is always active.
-  /// - [NSVisualEffectViewState.inactive]: The sidebar is always inactive.
-  /// - [NSVisualEffectViewState.followsWindowActiveState]: The sidebar's state
-  /// follows the window's active state.
-  ///
-  /// Defaults to [NSVisualEffectViewState.followsWindowActiveState].
   final NSVisualEffectViewState sidebarState;
 
   @override
@@ -266,11 +236,6 @@ class _AppKitWindowState extends State<AppKitWindow> {
                       ),
                       child: Column(
                         children: [
-                          // If an app is running on macOS, apply
-                          // sidebar.topOffset as needed in order to avoid
-                          // the traffic lights. Otherwise, position the
-                          // sidebar by the top of the application's bounds
-                          // based on the presence of sidebar.top.
                           if (sidebar.topOffset > 0) ...[
                             SizedBox(height: sidebar.topOffset),
                           ] else if (sidebar.top != null) ...[

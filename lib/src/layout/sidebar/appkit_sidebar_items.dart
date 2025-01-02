@@ -7,43 +7,22 @@ const ShapeBorder _defaultShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.all(Radius.circular(4.0)),
 );
 
-/// {@template sidebarItemSize}
-/// Enumerates the size specifications of [SidebarItem]s
-///
-/// Values were adapted from https://developer.apple.com/design/human-interface-guidelines/components/navigation-and-search/sidebars/#platform-considerations
-/// and were eyeballed against apps like App Store, Notes, and Mail.
-/// {@endtemplate}
 enum AppKitSidebarItemSize {
-  /// A small [SidebarItem]. Has a [height] of 24 and an [iconSize] of 12.
   small(24.0, 12.0),
-
-  /// A medium [SidebarItem]. Has a [height] of 28 and an [iconSize] of 16.
   medium(29.0, 16.0),
-
-  /// A large [SidebarItem]. Has a [height] of 32 and an [iconSize] of 20.0.
   large(36.0, 18.0);
 
-  /// {@macro sidebarItemSize}
   const AppKitSidebarItemSize(
     this.height,
     this.iconSize,
   );
 
-  /// The height of the [SidebarItem].
   final double height;
 
-  /// The maximum size of the [SidebarItem]'s leading icon.
   final double iconSize;
 }
 
-/// A scrollable widget that renders [SidebarItem]s.
-///
-/// See also:
-///
-///  * [SidebarItem], the items used by this sidebar
-///  * [Sidebar], a side bar used alongside [MacosScaffold]
 class AppKitSidebarItems extends StatelessWidget {
-  /// Creates a scrollable widget that renders [SidebarItem]s.
   const AppKitSidebarItems({
     super.key,
     required this.items,
@@ -61,53 +40,28 @@ class AppKitSidebarItems extends StatelessWidget {
     this.cursor = SystemMouseCursors.basic,
   }) : assert(currentIndex >= 0);
 
-  /// The [SidebarItem]s used by the sidebar. If no items are provided,
-  /// the sidebar is not rendered.
   final List<AppKitSidebarItem> items;
 
-  /// The current selected index. It must be in the range of 0 to
-  /// [items.length]
   final int currentIndex;
 
-  /// Called when the current selected index should be changed.
   final ValueChanged<int> onChanged;
 
-  /// The size specifications for all [items].
-  ///
-  /// Defaults to [AppKitSidebarItemSize.medium].
   final AppKitSidebarItemSize itemSize;
 
-  /// The scroll controller used by this sidebar. If null, a local scroll
-  /// controller is created.
   final ScrollController? scrollController;
 
-  /// The color to paint the item when it's selected.
-  ///
-  /// If null, the color is chosen automatically based on the user’s selected
-  /// system accent color and whether the sidebar is in the main window.
   final Color? selectedColor;
 
-  /// The color to paint the item when it's unselected.
-  ///
-  /// Defaults to transparent.
   final Color? unselectedColor;
-
   final Color? textColor;
   final Color? selectedTextColor;
   final Color? iconColor;
   final Color? selectedIconColor;
 
-  /// The [shape] property specifies the outline (border) of the
-  /// decoration. The shape must not be null. It's used alongside
-  /// [selectedColor].
   final ShapeBorder? shape;
 
-  /// Specifies the kind of cursor to use for all sidebar items.
-  ///
-  /// Defaults to [SystemMouseCursors.basic].
   final MouseCursor? cursor;
 
-  /// The user’s selected system accent color.
   AppKitAccentColor _getAccentColor(BuildContext context) =>
       AppKitTheme.of(context).accentColor;
 
@@ -214,7 +168,6 @@ class _SidebarItemsConfiguration extends InheritedWidget {
   }
 }
 
-/// A macOS style navigation-list item intended for use in a [Sidebar]
 class _SidebarItem extends StatelessWidget {
   /// Builds a [_SidebarItem].
   // ignore: use_super_parameters
@@ -225,17 +178,10 @@ class _SidebarItem extends StatelessWidget {
     required this.selected,
   }) : super(key: key);
 
-  /// The widget to lay out first.
-  ///
-  /// Typically an [Icon]
   final AppKitSidebarItem item;
 
-  /// Whether the item is selected or not
   final bool selected;
 
-  /// A function to perform when the widget is clicked or tapped.
-  ///
-  /// Typically a [Navigator] call
   final VoidCallback? onClick;
 
   void _handleActionTap() => onClick?.call();
@@ -381,9 +327,6 @@ class _DisclosureSidebarItem extends StatefulWidget {
 
   final AppKitSidebarItem? selectedItem;
 
-  /// A function to perform when the widget is clicked or tapped.
-  ///
-  /// Typically a [Navigator] call
   final ValueChanged<AppKitSidebarItem>? onChanged;
 
   @override
