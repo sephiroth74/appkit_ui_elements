@@ -118,8 +118,9 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
               AppKitDateTimePickerTheme.of(context);
 
           final bool isDark = theme.brightness == Brightness.dark;
-          final Color accentColor =
-              widget.color ?? theme.activeColor.multiplyLuminance(0.85);
+          final Color accentColor = widget.color ??
+              dateTimePickerTheme.accentColor ??
+              theme.activeColor.multiplyLuminance(0.85);
 
           return Container(
             constraints: const BoxConstraints(
