@@ -368,12 +368,16 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
   }) {
     BoxDecoration? decoration;
     final borderRadius = style.getBorderRadius(controlSize: controlSize);
+    final theme = AppKitTheme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     if (style == AppKitComboBoxStyle.plain) {
       decoration = BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
           color: isMainWindow && (isHovered || isFocused || isMenuOpened)
-              ? theme.controlBackgroundColor
+              ? isDark
+                  ? theme.controlColor.withOpacity(0.1)
+                  : theme.controlColor
               : Colors.transparent);
     }
 
@@ -602,7 +606,9 @@ class _PlainButtonStyleWidget extends StatelessWidget {
     } else {
       caretBackgroundColor = contextMenuOpened
           ? Colors.transparent
-          : AppKitColors.text.opaque.quaternary.multiplyOpacity(enabledFactor);
+          : AppKitDynamicColor.resolve(
+                  context, AppKitColors.text.opaque.quaternary)
+              .multiplyOpacity(enabledFactor);
     }
 
     return FocusScope(

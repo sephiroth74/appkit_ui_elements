@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -96,6 +97,8 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                       );
                     },
                   ),
+                  const AppKitToolBarSpacer(spacerUnits: 0.5),
+                  ThemeSwitcherToolbarItem.build(context),
                   const AppKitToolBarSpacer(spacerUnits: 0.5),
                 ],
               ),

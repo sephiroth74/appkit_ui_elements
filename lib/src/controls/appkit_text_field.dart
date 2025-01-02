@@ -512,7 +512,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       final placeholderStyle = theme.typography.body
           .copyWith(
               color: AppKitDynamicColor.resolve(
-                  context, AppKitColors.placeholderTextColor))
+                      context, AppKitColors.placeholderTextColor)
+                  .multiplyOpacity(enabled ? 1.0 : 0.5))
           .merge(resolvedPlaceholderStyle);
 
       final Color selectionColor = AppKitDynamicColor.resolve(
@@ -645,7 +646,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     final backgroundColor = widget.backgroundColor ??
         (enabled
             ? theme.controlColor.withOpacity(isDark ? 0.1 : 1.0)
-            : theme.controlColor.withOpacity(0.5));
+            : theme.controlColor.withOpacity(isDark ? 0.25 : 0.5));
     const borderWidth = 0.5;
 
     final borderRadius =

@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 
 class TabViewPage extends StatefulWidget {
   const TabViewPage({super.key});
@@ -13,9 +14,12 @@ class _TabViewPageState extends State<TabViewPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Selectors'),
+      toolBar: AppKitToolBar(
+        title: const Text('Tab View'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(

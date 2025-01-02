@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 
 const groupMessage =
@@ -15,9 +16,12 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
-      toolBar: const AppKitToolBar(
-        title: Text('Group Box'),
+      toolBar: AppKitToolBar(
+        title: const Text('Group Box'),
         titleWidth: 200,
+        actions: [
+          ThemeSwitcherToolbarItem.build(context),
+        ],
       ),
       children: [
         AppKitContentArea(
