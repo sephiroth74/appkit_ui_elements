@@ -83,12 +83,22 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
     super.dispose();
   }
 
+  void _handleChanged(Either<DateTime, DateTimeRange> date) {
+    if (widget.onChanged != null) {
+      setState(() {
+        _currentDateTime = date.fold((d) => DateTimeRange.single(d), (r) => r);
+        _initialDateTime = date.fold((d) => d, (r) => r.current);
+        widget.onChanged?.call(date);
+      });
+    }
+  }
+
   @override
   void didUpdateWidget(covariant GraphicalDatePicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.initialDateTime != widget.initialDateTime) {
+    if (_currentDateTime != widget.initialDateTime) {
       _currentDateTime = widget.initialDateTime;
-      _initialDateTime = widget.initialDateTime.start;
+      _initialDateTime = widget.initialDateTime.current;
     }
   }
 
@@ -199,7 +209,7 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
                         selectionType: widget.selectionType,
                         onUpdateCalendarView:
                             enabled ? _handleUpdateCalendarView : null,
-                        onChanged: widget.onChanged,
+                        onChanged: enabled ? _handleChanged : null,
                       ),
                     ),
                   )
@@ -454,22 +464,19 @@ class _GraphicalDatePickerMonthViewState
   bool get isRangeSelection =>
       widget.selectionType == AppKitDatePickerSelectionType.range;
 
-  DateTime get firstDayOfMonth => DateTime(
-      _initialDateTime.year,
-      _initialDateTime.month,
-      1,
-      _initialDateTime.hour,
-      _initialDateTime.minute,
-      _initialDateTime.second);
+  DateTime get firstDayOfMonth =>
+      DateTime(_initialDateTime.year, _initialDateTime.month, 1);
 
-  DateTime get firstDayOfWeek =>
-      firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1));
+  DateTime get firstDayOfWeek => firstDayOfMonth
+      .subtract(Duration(days: firstDayOfMonth.weekday - 1))
+      .copyWith(hour: 0, minute: 0, second: 0);
 
-  DateTime get lastDayOfMonth =>
-      DateTime(_initialDateTime.year, _initialDateTime.month + 1, 0);
+  DateTime get lastDayOfMonth => DateTime(
+      _initialDateTime.year, _initialDateTime.month + 1, 0, 23, 59, 59);
 
-  DateTime get lastDayOfWeek =>
-      firstDayOfWeek.add(const Duration(days: totalDays - 1));
+  DateTime get lastDayOfWeek => firstDayOfWeek
+      .add(const Duration(days: totalDays - 1))
+      .copyWith(hour: 23, minute: 59, second: 59);
 
   late DateTime today = DateTime.now();
 
@@ -591,9 +598,9 @@ class _GraphicalDatePickerMonthViewState
     if (!enabled || _hoveredDateTime == null) {
       return;
     }
-
     final day = _hoveredDateTime!;
-    final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth);
+    final isBeforeCurrentMonth =
+        day.isBefore(firstDayOfMonth.copyWith(hour: 0, minute: 0, second: 0));
     final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
     final isBeforeMinimumDate =
         widget.minimumDate != null && day.isBefore(widget.minimumDate!);
@@ -607,11 +614,26 @@ class _GraphicalDatePickerMonthViewState
       // do nothing
     } else if (isWithinValidRange) {
       // final bool isShiftPressed = isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
+      final isShiftPressed =
+          isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
 
       setState(() {
         _pointerDownDate = day;
         _isMousePressed = true;
-        _currentDateTime = DateTimeRange(start: day, end: day);
+
+        if (isRangeSelection) {
+          if (isShiftPressed) {
+            if (day.isBefore(_currentDateTime.end)) {
+              _currentDateTime = _currentDateTime.copyWith(start: day);
+            } else if (day.isAfter(_currentDateTime.start)) {
+              _currentDateTime = _currentDateTime.copyWith(end: day);
+            }
+          } else {
+            _currentDateTime = DateTimeRange(start: day, end: day);
+          }
+        } else {
+          _currentDateTime = DateTimeRange(start: day, end: day);
+        }
       });
     }
   }
@@ -624,8 +646,8 @@ class _GraphicalDatePickerMonthViewState
     }
 
     final day = _hoveredDateTime!;
-
-    final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth);
+    final isBeforeCurrentMonth =
+        day.isBefore(firstDayOfMonth.copyWith(hour: 0, minute: 0, second: 0));
     final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
     final isBeforeMinimumDate =
         widget.minimumDate != null && day.isBefore(widget.minimumDate!);
@@ -634,10 +656,8 @@ class _GraphicalDatePickerMonthViewState
     final isWithinValidRange = !isBeforeMinimumDate && !isAfterMaximumDate;
 
     if (isBeforeCurrentMonth) {
-      // widget.onPreviousMonthPressed?.call();
       return;
     } else if (isAfterCurrentMonth) {
-      // widget.onNextMonthPressed?.call();
       return;
     } else if (!isWithinValidRange) {
       return;
@@ -645,11 +665,13 @@ class _GraphicalDatePickerMonthViewState
 
     if (day.isBefore(_pointerDownDate!)) {
       setState(() {
-        _currentDateTime = DateTimeRange(start: day, end: _pointerDownDate!);
+        _currentDateTime =
+            DateTimeRange(start: day, end: _pointerDownDate!, direction: -1);
       });
     } else if (day.isAfter(_pointerDownDate!)) {
       setState(() {
-        _currentDateTime = DateTimeRange(start: _pointerDownDate!, end: day);
+        _currentDateTime =
+            DateTimeRange(start: _pointerDownDate!, end: day, direction: 1);
       });
     }
   }
@@ -685,7 +707,7 @@ class _GraphicalDatePickerMonthViewState
         widget.onUpdateCalendarView?.call(day);
       } else if (isWithinValidRange) {
         if (isRangeSelection) {
-          widget.onChanged?.call(right(DateTimeRange(start: day, end: day)));
+          widget.onChanged?.call(right(_currentDateTime));
         } else {
           widget.onChanged?.call(left(day));
         }

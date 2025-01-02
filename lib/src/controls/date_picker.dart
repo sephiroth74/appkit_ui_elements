@@ -78,6 +78,12 @@ class AppKitDatePicker extends StatefulWidget {
 }
 
 class _AppKitDatePickerState extends State<AppKitDatePicker> {
+  void _handleChanged(Either<DateTime, DateTimeRange> date) {
+    if (widget.onChanged != null) {
+      widget.onChanged?.call(date);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
@@ -121,7 +127,7 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
               color: widget.color,
               languageCode: languageCode,
               isMainWindow: isMainWindow,
-              onChanged: widget.onChanged,
+              onChanged: widget.onChanged != null ? _handleChanged : null,
               selectionType: widget.selectionType,
               autofocus: widget.autofocus,
               canRequestFocus: widget.canRequestFocus,

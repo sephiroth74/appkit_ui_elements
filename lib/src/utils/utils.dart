@@ -340,13 +340,22 @@ class DateTimeRange extends Equatable {
   final DateTime start;
   final DateTime end;
 
-  DateTimeRange({required DateTime start, required DateTime end})
+  @protected
+  final int direction;
+
+  DateTime get middle => start.add(end.difference(start) ~/ 2);
+
+  DateTime get current => direction == 1 ? end : start;
+
+  DateTimeRange(
+      {required DateTime start, required DateTime end, this.direction = 1})
       : start = start.isBefore(end) ? start : end,
         end = start.isBefore(end) ? end : start;
 
   const DateTimeRange.single(DateTime date)
       : start = date,
-        end = date;
+        end = date,
+        direction = 1;
 
   bool contains(DateTime date) {
     return date.isBetween(start, end, true);
@@ -370,10 +379,11 @@ class DateTimeRange extends Equatable {
 
   Duration get duration => end.difference(start);
 
-  DateTimeRange copyWith({DateTime? start, DateTime? end}) {
+  DateTimeRange copyWith({DateTime? start, DateTime? end, int? direction}) {
     return DateTimeRange(
       start: start ?? this.start,
       end: end ?? this.end,
+      direction: direction ?? this.direction,
     );
   }
 
