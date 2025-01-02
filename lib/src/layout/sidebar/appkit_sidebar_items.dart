@@ -240,7 +240,7 @@ class _SidebarItem extends StatelessWidget {
               ? CupertinoColors.black
               : CupertinoColors.white);
     } else {
-      iconColor = unselectedIconColor ?? theme.primaryColor;
+      iconColor = unselectedIconColor ?? theme.activeColor;
     }
 
     final Color? textColor = selected

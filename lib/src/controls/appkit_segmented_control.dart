@@ -108,7 +108,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
         final segmentedControlTheme = AppKitSegmentedControlTheme.of(context);
         final accentColor = widget.color ??
             segmentedControlTheme.accentColor ??
-            theme.primaryColor;
+            theme.activeColor;
         final isDark = theme.brightness == Brightness.dark;
         final backgroundColor = multiSelectionStyle
             ? theme.controlColor

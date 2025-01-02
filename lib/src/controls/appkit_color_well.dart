@@ -208,7 +208,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     debugCheckHasAppKitTheme(context);
 
     final theme = AppKitTheme.of(context);
-    Color selectedColor = _selectedColor ?? theme.primaryColor;
+    Color selectedColor = _selectedColor ?? theme.activeColor;
 
     if (!enabled) {
       selectedColor = selectedColor.withOpacity(selectedColor.opacity * 0.5);

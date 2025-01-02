@@ -73,48 +73,45 @@ class _InheritedAppKitTheme extends InheritedWidget {
 }
 
 class AppKitThemeData extends Equatable with Diagnosticable {
-  final Brightness brightness;
   final AppKitAccentColor accentColor;
-  final Color primaryColor;
-  final Color activeColor;
-  final Color focusColor;
-  final Color dividerColor;
+  final AppKitButtonThemeData buttonTheme;
+  final AppKitCircularSliderThemeData circularSliderTheme;
+  final AppKitColorWellThemeData colorWellTheme;
+  final AppKitComboButtonThemeData comboButtonTheme;
+  final AppKitContextMenuThemeData contextMenuTheme;
+  final AppKitDateTimePickerThemeData dateTimePickerTheme;
+  final AppKitIconButtonThemeData iconButtonTheme;
+  final AppKitIconThemeData iconTheme;
+  final AppKitLevelIndicatorsThemeData levelIndicatorsTheme;
+  final AppKitPopupButtonThemeData popupButtonTheme;
+  final AppKitProgressThemeData progressTheme;
+  final AppKitRatingIndicatorThemeData ratingIndicatorTheme;
+  final AppKitScrollbarThemeData scrollbarTheme;
+  final AppKitSegmentedControlThemeData segmentedControlTheme;
+  final AppKitSliderThemeData sliderTheme;
+  final AppKitSwitchThemeData switchTheme;
+  final AppKitTooltipThemeData tooltipTheme;
+  final AppKitTypography typography;
   final bool isMainWindow;
-  final VisualDensity visualDensity;
+  final Brightness brightness;
+  final Color activeColor;
+  final Color activeColorUnfocused;
   final Color canvasColor;
-  final Color controlColor;
   final Color controlBackgroundColor;
   final Color controlBackgroundPressedColor;
-  final Color accentColorUnfocused;
-  final AppKitButtonThemeData buttonTheme;
-  final AppKitSliderThemeData sliderTheme;
-  final AppKitCircularSliderThemeData circularSliderTheme;
-  final AppKitSegmentedControlThemeData segmentedControlTheme;
-  final AppKitSwitchThemeData switchTheme;
-  final AppKitProgressThemeData progressTheme;
-  final AppKitColorWellThemeData colorWellTheme;
-  final AppKitLevelIndicatorsThemeData levelIndicatorsTheme;
-  final AppKitRatingIndicatorThemeData ratingIndicatorTheme;
-  final AppKitTooltipThemeData tooltipTheme;
-  final AppKitPopupButtonThemeData popupButtonTheme;
-  final AppKitContextMenuThemeData contextMenuTheme;
-  final AppKitComboButtonThemeData comboButtonTheme;
-  final AppKitIconThemeData iconTheme;
-  final AppKitTypography typography;
-  final AppKitScrollbarThemeData scrollbarTheme;
-  final AppKitIconButtonThemeData iconButtonTheme;
-  final AppKitDateTimePickerThemeData dateTimePickerTheme;
+  final Color controlColor;
+  final Color dividerColor;
   final Color keyboardFocusIndicatorColor;
+  final VisualDensity visualDensity;
 
   /// The color to use for the background of selected and emphasized content.
   ///
   /// https://developer.apple.com/documentation/appkit/nscolor/selectedcontentbackgroundcolor
   final Color selectedContentBackgroundColor;
+  final Color selectedContentBackgroundColorUnfocused;
 
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
-    Color? primaryColor,
-    Color? activeColor,
     VisualDensity? visualDensity,
     AppKitButtonThemeData? buttonTheme,
     AppKitSliderThemeData? sliderTheme,
@@ -133,56 +130,47 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitScrollbarThemeData? scrollbarTheme,
     AppKitIconButtonThemeData? iconButtonTheme,
     AppKitDateTimePickerThemeData? dateTimePickerTheme,
-    Color? canvasColor,
     AppKitAccentColor? accentColor,
     bool? isMainWindow,
+    Color? canvasColor,
+    Color? activeColor,
+    Color? activeColorUnfocused,
     Color? controlBackgroundColor,
     Color? controlColor,
     Color? controlBackgroundPressedColor,
     Color? controlBackgroundColorDisabled,
-    Color? accentColorUnfocused,
-    Color? activeColorUnfocused,
     AppKitTypography? typography,
     Color? dividerColor,
     Color? keyboardFocusIndicatorColor,
     Color? selectedContentBackgroundColor,
+    Color? selectedContentBackgroundColorUnfocused,
   }) {
     final bool isDark = brightness == Brightness.dark;
 
     accentColor ??= AppKitAccentColor.blue;
 
-    primaryColor ??= _ColorProvider.getPrimaryColor(
+    activeColor ??= _ColorProvider.getPrimaryColor(
       accentColor: accentColor,
       isDark: isDark,
-      isMainWindow: isMainWindow ?? true,
+      isMainWindow: true,
     );
 
-    activeColor ??= _ColorProvider.getActiveColor(
+    activeColorUnfocused ??= _ColorProvider.getPrimaryColor(
       accentColor: accentColor,
       isDark: isDark,
-      isMainWindow: isMainWindow ?? true,
+      isMainWindow: false,
     );
-
-    activeColorUnfocused ??=
-        _ColorProvider.getActiveColorUnfocused(isDark: isDark);
 
     keyboardFocusIndicatorColor ??=
         _ColorProvider.getKeyboardFocusIndicatorColor(
             isDark: isDark, accentColor: accentColor);
 
-    final Color selectedContentBackgroundColorFocused =
+    selectedContentBackgroundColor ??=
         _ColorProvider.getSelectedContentBackgroundColor(
             accentColor: accentColor, isDark: isDark, isMainWindow: true);
-
-    final Color selectedColorBackgroundColorUnfocused =
+    selectedContentBackgroundColorUnfocused ??=
         _ColorProvider.getSelectedContentBackgroundColor(
             accentColor: accentColor, isDark: isDark, isMainWindow: false);
-
-    selectedContentBackgroundColor ??= (isMainWindow ?? true)
-        ? selectedContentBackgroundColorFocused
-        : selectedColorBackgroundColorUnfocused;
-
-    Color focusColor = primaryColor.withOpacity(0.749);
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
     isMainWindow ??= true;
@@ -212,9 +200,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     controlBackgroundPressedColor ??= isDark
         ? AppKitColors.controlBackgroundPressedColor.darkColor
         : AppKitColors.controlBackgroundPressedColor.color;
-
-    accentColorUnfocused ??=
-        isDark ? const Color(0xFFbababa) : const Color(0xFFbababa);
 
     dividerColor ??= isDark
         ? AppKitColors.dividerColor.darkColor
@@ -272,7 +257,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       tickWidth: 2.0,
       discreteThumbSize: const Size(8.0, 20.0),
       continuousThumbSize: 20.0,
-      accentColorUnfocused: accentColorUnfocused,
+      accentColorUnfocused: activeColorUnfocused,
     );
 
     levelIndicatorsTheme ??= AppKitLevelIndicatorsThemeData(
@@ -298,11 +283,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       thumbColor: isDark
           ? Colors.black.withOpacity(0.75)
           : Colors.black.withOpacity(0.5),
-      thumbColorUnfocused: accentColorUnfocused,
+      thumbColorUnfocused: activeColorUnfocused,
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      accentColor: selectedContentBackgroundColorFocused,
+      accentColor: selectedContentBackgroundColor,
       dividerColorMultipleSelection: isDark
           ? AppKitColors.dividerColor.darkColor
           : const Color(0xFFE8E8E8),
@@ -327,7 +312,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     progressTheme ??= AppKitProgressThemeData(
       trackColor: isDark ? const Color(0xFF262728) : const Color(0xFFe1e0de),
       color: activeColor,
-      accentColorUnfocused: accentColorUnfocused,
+      accentColorUnfocused: activeColorUnfocused,
     );
 
     colorWellTheme ??= AppKitColorWellThemeData(
@@ -388,7 +373,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     popupButtonTheme ??= AppKitPopupButtonThemeData.fallback(
       brightness: brightness,
       typography: typography,
-      elevatedButtonColor: primaryColor,
+      elevatedButtonColor: activeColor,
     );
 
     comboButtonTheme ??= AppKitComboButtonThemeData.fallback(
@@ -451,8 +436,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     final defaultData = AppKitThemeData.raw(
       accentColor: accentColor,
-      accentColorUnfocused: accentColorUnfocused,
       activeColor: activeColor,
+      activeColorUnfocused: activeColorUnfocused,
       brightness: brightness,
       buttonTheme: buttonTheme,
       canvasColor: canvasColor,
@@ -463,31 +448,32 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlBackgroundColor: controlBackgroundColor,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       controlColor: controlColor,
+      dateTimePickerTheme: dateTimePickerTheme,
       dividerColor: dividerColor,
-      focusColor: focusColor,
       iconButtonTheme: iconButtonTheme,
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
       keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
-      selectedContentBackgroundColor: selectedContentBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme,
-      primaryColor: primaryColor,
       progressTheme: progressTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       scrollbarTheme: scrollbarTheme,
       segmentedControlTheme: segmentedControlTheme,
+      selectedContentBackgroundColor: selectedContentBackgroundColor,
+      selectedContentBackgroundColorUnfocused:
+          selectedContentBackgroundColorUnfocused,
       sliderTheme: sliderTheme,
       switchTheme: switchTheme,
       tooltipTheme: tooltipTheme,
-      dateTimePickerTheme: dateTimePickerTheme,
       typography: typography,
       visualDensity: visualDensity,
     );
 
     final customData = defaultData.copyWith(
       accentColor: accentColor,
-      accentColorUnfocused: accentColorUnfocused,
+      activeColor: activeColor,
+      activeColorUnfocused: activeColorUnfocused,
       brightness: brightness,
       buttonTheme: buttonTheme,
       canvasColor: canvasColor,
@@ -498,24 +484,24 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       controlBackgroundColorDisabled: controlBackgroundColorDisabled,
       controlBackgroundPressedColor: controlBackgroundPressedColor,
       controlColor: controlColor,
+      dateTimePickerTheme: dateTimePickerTheme,
       dividerColor: dividerColor,
-      focusColor: focusColor,
       iconButtonTheme: iconButtonTheme,
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
       keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
-      selectedContentBackgroundColor: selectedContentBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme,
-      primaryColor: primaryColor,
       progressTheme: progressTheme,
       ratingIndicatorTheme: ratingIndicatorTheme,
       scrollbarTheme: scrollbarTheme,
       segmentedControlTheme: segmentedControlTheme,
+      selectedContentBackgroundColor: selectedContentBackgroundColor,
+      selectedContentBackgroundColorUnfocused:
+          selectedContentBackgroundColorUnfocused,
       sliderTheme: sliderTheme,
       switchTheme: switchTheme,
       tooltipTheme: tooltipTheme,
-      dateTimePickerTheme: dateTimePickerTheme,
       typography: typography,
       visualDensity: visualDensity,
     );
@@ -550,9 +536,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   const AppKitThemeData.raw({
     required this.brightness,
     required this.accentColor,
-    required this.primaryColor,
     required this.activeColor,
-    required this.focusColor,
+    required this.activeColorUnfocused,
     required this.dividerColor,
     required this.isMainWindow,
     required this.visualDensity,
@@ -568,7 +553,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.controlBackgroundPressedColor,
     required this.controlBackgroundColor,
     required this.controlColor,
-    required this.accentColorUnfocused,
     required this.levelIndicatorsTheme,
     required this.ratingIndicatorTheme,
     required this.tooltipTheme,
@@ -581,13 +565,14 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.dateTimePickerTheme,
     required this.keyboardFocusIndicatorColor,
     required this.selectedContentBackgroundColor,
+    required this.selectedContentBackgroundColorUnfocused,
   });
 
   @override
   List<Object?> get props => [
         brightness,
-        primaryColor,
-        focusColor,
+        activeColor,
+        activeColorUnfocused,
         isMainWindow,
         visualDensity,
         canvasColor,
@@ -601,7 +586,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         controlBackgroundColor,
         controlColor,
         controlBackgroundPressedColor,
-        accentColorUnfocused,
         circularSliderTheme,
         levelIndicatorsTheme,
         ratingIndicatorTheme,
@@ -617,121 +601,123 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         dateTimePickerTheme,
         keyboardFocusIndicatorColor,
         selectedContentBackgroundColor,
+        selectedContentBackgroundColorUnfocused,
       ];
 
   AppKitThemeData copyWith({
-    Brightness? brightness,
-    Color? primaryColor,
-    Color? activeColor,
     AppKitAccentColor? accentColor,
-    Color? focusColor,
-    Color? dividerColor,
-    bool? isMainWindow,
-    VisualDensity? visualDensity,
+    AppKitButtonThemeData? buttonTheme,
+    AppKitCircularSliderThemeData? circularSliderTheme,
+    AppKitColorWellThemeData? colorWellTheme,
+    AppKitComboButtonThemeData? comboButtonTheme,
+    AppKitContextMenuThemeData? contextMenuTheme,
+    AppKitDateTimePickerThemeData? dateTimePickerTheme,
+    AppKitIconButtonThemeData? iconButtonTheme,
+    AppKitIconThemeData? iconTheme,
+    AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
+    AppKitPopupButtonThemeData? popupButtonTheme,
+    AppKitProgressThemeData? progressTheme,
+    AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
+    AppKitScrollbarThemeData? scrollbarTheme,
+    AppKitSegmentedControlThemeData? segmentedControlTheme,
+    AppKitSliderThemeData? sliderTheme,
+    AppKitSwitchThemeData? switchTheme,
+    AppKitTooltipThemeData? tooltipTheme,
     AppKitTypography? typography,
+    bool? isMainWindow,
+    Brightness? brightness,
+    Color? activeColor,
+    Color? activeColorUnfocused,
     Color? canvasColor,
     Color? controlBackgroundColor,
-    Color? controlColor,
     Color? controlBackgroundColorDisabled,
     Color? controlBackgroundPressedColor,
-    Color? accentColorUnfocused,
-    AppKitButtonThemeData? buttonTheme,
-    AppKitSliderThemeData? sliderTheme,
-    AppKitSegmentedControlThemeData? segmentedControlTheme,
-    AppKitSwitchThemeData? switchTheme,
-    AppKitProgressThemeData? progressTheme,
-    AppKitColorWellThemeData? colorWellTheme,
-    AppKitCircularSliderThemeData? circularSliderTheme,
-    AppKitLevelIndicatorsThemeData? levelIndicatorsTheme,
-    AppKitRatingIndicatorThemeData? ratingIndicatorTheme,
-    AppKitTooltipThemeData? tooltipTheme,
-    AppKitPopupButtonThemeData? popupButtonTheme,
-    AppKitContextMenuThemeData? contextMenuTheme,
-    AppKitComboButtonThemeData? comboButtonTheme,
-    AppKitIconThemeData? iconTheme,
-    AppKitScrollbarThemeData? scrollbarTheme,
-    AppKitIconButtonThemeData? iconButtonTheme,
-    AppKitDateTimePickerThemeData? dateTimePickerTheme,
+    Color? controlColor,
+    Color? dividerColor,
     Color? keyboardFocusIndicatorColor,
     Color? selectedContentBackgroundColor,
+    Color? selectedContentBackgroundColorUnfocused,
+    VisualDensity? visualDensity,
   }) {
     return AppKitThemeData.raw(
-      brightness: brightness ?? this.brightness,
-      primaryColor: primaryColor ?? this.primaryColor,
-      activeColor: activeColor ?? this.activeColor,
       accentColor: accentColor ?? this.accentColor,
-      focusColor: focusColor ?? this.focusColor,
-      isMainWindow: isMainWindow ?? this.isMainWindow,
-      visualDensity: visualDensity ?? this.visualDensity,
-      typography: typography ?? this.typography,
+      activeColor: activeColor ?? this.activeColor,
+      activeColorUnfocused: activeColorUnfocused ?? this.activeColorUnfocused,
+      brightness: brightness ?? this.brightness,
       buttonTheme: buttonTheme ?? this.buttonTheme,
-      sliderTheme: sliderTheme ?? this.sliderTheme,
-      segmentedControlTheme:
-          segmentedControlTheme ?? this.segmentedControlTheme,
       canvasColor: canvasColor ?? this.canvasColor,
+      circularSliderTheme: circularSliderTheme ?? this.circularSliderTheme,
+      colorWellTheme: colorWellTheme ?? this.colorWellTheme,
+      comboButtonTheme: comboButtonTheme ?? this.comboButtonTheme,
+      contextMenuTheme: contextMenuTheme ?? this.contextMenuTheme,
       controlBackgroundColor:
           controlBackgroundColor ?? this.controlBackgroundColor,
-      controlColor: controlColor ?? this.controlColor,
       controlBackgroundPressedColor:
           controlBackgroundPressedColor ?? this.controlBackgroundPressedColor,
-      switchTheme: switchTheme ?? this.switchTheme,
-      progressTheme: progressTheme ?? this.progressTheme,
-      accentColorUnfocused: accentColorUnfocused ?? this.accentColorUnfocused,
-      colorWellTheme: colorWellTheme ?? this.colorWellTheme,
-      circularSliderTheme: circularSliderTheme ?? this.circularSliderTheme,
-      levelIndicatorsTheme: levelIndicatorsTheme ?? this.levelIndicatorsTheme,
-      ratingIndicatorTheme: ratingIndicatorTheme ?? this.ratingIndicatorTheme,
-      tooltipTheme: tooltipTheme ?? this.tooltipTheme,
-      popupButtonTheme: popupButtonTheme ?? this.popupButtonTheme,
-      contextMenuTheme: contextMenuTheme ?? this.contextMenuTheme,
-      comboButtonTheme: comboButtonTheme ?? this.comboButtonTheme,
-      iconTheme: iconTheme ?? this.iconTheme,
-      scrollbarTheme: scrollbarTheme ?? this.scrollbarTheme,
+      controlColor: controlColor ?? this.controlColor,
+      dateTimePickerTheme: dateTimePickerTheme ?? this.dateTimePickerTheme,
       dividerColor: dividerColor ?? this.dividerColor,
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
-      dateTimePickerTheme: dateTimePickerTheme ?? this.dateTimePickerTheme,
+      iconTheme: iconTheme ?? this.iconTheme,
+      isMainWindow: isMainWindow ?? this.isMainWindow,
       keyboardFocusIndicatorColor:
           keyboardFocusIndicatorColor ?? this.keyboardFocusIndicatorColor,
+      levelIndicatorsTheme: levelIndicatorsTheme ?? this.levelIndicatorsTheme,
+      popupButtonTheme: popupButtonTheme ?? this.popupButtonTheme,
+      progressTheme: progressTheme ?? this.progressTheme,
+      ratingIndicatorTheme: ratingIndicatorTheme ?? this.ratingIndicatorTheme,
+      scrollbarTheme: scrollbarTheme ?? this.scrollbarTheme,
+      segmentedControlTheme:
+          segmentedControlTheme ?? this.segmentedControlTheme,
       selectedContentBackgroundColor:
           selectedContentBackgroundColor ?? this.selectedContentBackgroundColor,
+      selectedContentBackgroundColorUnfocused:
+          selectedContentBackgroundColorUnfocused ??
+              this.selectedContentBackgroundColorUnfocused,
+      sliderTheme: sliderTheme ?? this.sliderTheme,
+      switchTheme: switchTheme ?? this.switchTheme,
+      tooltipTheme: tooltipTheme ?? this.tooltipTheme,
+      typography: typography ?? this.typography,
+      visualDensity: visualDensity ?? this.visualDensity,
     );
   }
 
   AppKitThemeData merge(AppKitThemeData? other) {
     if (other == null) return this;
     return copyWith(
-      brightness: other.brightness,
       accentColor: other.accentColor,
-      primaryColor: other.primaryColor,
-      focusColor: other.focusColor,
-      isMainWindow: other.isMainWindow,
-      visualDensity: other.visualDensity,
-      typography: other.typography,
-      canvasColor: other.canvasColor,
+      activeColor: other.activeColor,
+      activeColorUnfocused: other.activeColorUnfocused,
+      brightness: other.brightness,
       buttonTheme: other.buttonTheme,
-      sliderTheme: other.sliderTheme,
-      segmentedControlTheme: other.segmentedControlTheme,
-      controlBackgroundColor: other.controlBackgroundColor,
-      controlColor: other.controlColor,
-      controlBackgroundPressedColor: other.controlBackgroundPressedColor,
-      switchTheme: other.switchTheme,
-      progressTheme: other.progressTheme,
-      accentColorUnfocused: other.accentColorUnfocused,
-      colorWellTheme: other.colorWellTheme,
+      canvasColor: other.canvasColor,
       circularSliderTheme: other.circularSliderTheme,
-      levelIndicatorsTheme: other.levelIndicatorsTheme,
-      ratingIndicatorTheme: other.ratingIndicatorTheme,
-      tooltipTheme: other.tooltipTheme,
-      popupButtonTheme: other.popupButtonTheme,
-      contextMenuTheme: other.contextMenuTheme,
+      colorWellTheme: other.colorWellTheme,
       comboButtonTheme: other.comboButtonTheme,
-      iconTheme: other.iconTheme,
-      scrollbarTheme: other.scrollbarTheme,
+      contextMenuTheme: other.contextMenuTheme,
+      controlBackgroundColor: other.controlBackgroundColor,
+      controlBackgroundPressedColor: other.controlBackgroundPressedColor,
+      controlColor: other.controlColor,
+      dateTimePickerTheme: other.dateTimePickerTheme,
       dividerColor: other.dividerColor,
       iconButtonTheme: other.iconButtonTheme,
-      dateTimePickerTheme: other.dateTimePickerTheme,
+      iconTheme: other.iconTheme,
+      isMainWindow: other.isMainWindow,
       keyboardFocusIndicatorColor: other.keyboardFocusIndicatorColor,
+      levelIndicatorsTheme: other.levelIndicatorsTheme,
+      popupButtonTheme: other.popupButtonTheme,
+      progressTheme: other.progressTheme,
+      ratingIndicatorTheme: other.ratingIndicatorTheme,
+      scrollbarTheme: other.scrollbarTheme,
+      segmentedControlTheme: other.segmentedControlTheme,
       selectedContentBackgroundColor: other.selectedContentBackgroundColor,
+      selectedContentBackgroundColorUnfocused:
+          other.selectedContentBackgroundColorUnfocused,
+      sliderTheme: other.sliderTheme,
+      switchTheme: other.switchTheme,
+      tooltipTheme: other.tooltipTheme,
+      typography: other.typography,
+      visualDensity: other.visualDensity,
     );
   }
 
@@ -739,9 +725,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     return AppKitThemeData.raw(
       brightness: t < 0.5 ? a.brightness : b.brightness,
       accentColor: t < 0.5 ? a.accentColor : b.accentColor,
-      primaryColor: Color.lerp(a.primaryColor, b.primaryColor, t)!,
       activeColor: Color.lerp(a.activeColor, b.activeColor, t)!,
-      focusColor: Color.lerp(a.focusColor, b.focusColor, t)!,
+      activeColorUnfocused:
+          Color.lerp(a.activeColorUnfocused, b.activeColorUnfocused, t)!,
       isMainWindow: t < 0.5 ? a.isMainWindow : b.isMainWindow,
       visualDensity: VisualDensity.lerp(a.visualDensity, b.visualDensity, t),
       typography: AppKitTypography.lerp(a.typography, b.typography, t),
@@ -758,8 +744,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       switchTheme: AppKitSwitchThemeData.lerp(a.switchTheme, b.switchTheme, t),
       progressTheme:
           AppKitProgressThemeData.lerp(a.progressTheme, b.progressTheme, t),
-      accentColorUnfocused:
-          Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t)!,
       colorWellTheme:
           AppKitColorWellThemeData.lerp(a.colorWellTheme, b.colorWellTheme, t),
       circularSliderTheme: AppKitCircularSliderThemeData.lerp(
@@ -788,6 +772,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.selectedContentBackgroundColor,
           b.selectedContentBackgroundColor,
           t)!,
+      selectedContentBackgroundColorUnfocused: Color.lerp(
+          a.selectedContentBackgroundColorUnfocused,
+          b.selectedContentBackgroundColorUnfocused,
+          t)!,
       dateTimePickerTheme: AppKitDateTimePickerThemeData.lerp(
           a.dateTimePickerTheme, b.dateTimePickerTheme, t),
     );
@@ -797,9 +785,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<Brightness>('brightness', brightness));
-    properties.add(ColorProperty('accentColor', primaryColor));
-    properties.add(ColorProperty('primaryColor', primaryColor));
-    properties.add(ColorProperty('focusColor', focusColor));
+    properties.add(ColorProperty('activeColor', activeColor));
+    properties.add(ColorProperty('activeColorUnfocused', activeColorUnfocused));
     properties.add(FlagProperty('isMainWindow',
         value: isMainWindow, ifTrue: 'main window'));
     properties.add(
@@ -819,7 +806,6 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         DiagnosticsProperty<AppKitSwitchThemeData>('switchTheme', switchTheme));
     properties.add(DiagnosticsProperty<AppKitProgressThemeData>(
         'progressTheme', progressTheme));
-    properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
     properties.add(DiagnosticsProperty<AppKitColorWellThemeData>(
         'colorWellTheme', colorWellTheme));
     properties.add(DiagnosticsProperty<AppKitCircularSliderThemeData>(
@@ -847,6 +833,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'keyboardFocusIndicatorColor', keyboardFocusIndicatorColor));
     properties.add(ColorProperty(
         'selectedContentBackgroundColor', selectedContentBackgroundColor));
+    properties.add(ColorProperty('selectedContentBackgroundColorUnfocused',
+        selectedContentBackgroundColorUnfocused));
     properties.add(DiagnosticsProperty<AppKitDateTimePickerThemeData>(
         'dateTimePickerTheme', dateTimePickerTheme));
   }

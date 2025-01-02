@@ -244,7 +244,7 @@ class _AppKitSliderState extends State<AppKitSlider>
               final accentColor = isMainWindow
                   ? (sliderTheme.sliderColor ?? theme.activeColor)
                   : (sliderTheme.accentColorUnfocused ??
-                      theme.accentColorUnfocused);
+                      theme.activeColorUnfocused);
 
               return Center(
                 child: SizedBox(

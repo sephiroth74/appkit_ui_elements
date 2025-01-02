@@ -183,7 +183,7 @@ class _AppKitArcSliderState extends State<AppKitArcSlider> {
             ? (widget.progressColor ??
                 sliderTheme.sliderColor ??
                 theme.activeColor)
-            : (sliderTheme.accentColorUnfocused ?? theme.accentColorUnfocused);
+            : (sliderTheme.accentColorUnfocused ?? theme.activeColorUnfocused);
 
         final trackColor = widget.trackColor ?? sliderTheme.trackColor;
 

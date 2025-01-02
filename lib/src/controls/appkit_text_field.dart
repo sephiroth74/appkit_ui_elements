@@ -519,7 +519,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
           context, AppKitColors.selectedTextBackgroundColor);
 
       final Color cursorColor =
-          widget.cursorColor ?? theme.primaryColor.multiplyLuminance(1.1);
+          widget.cursorColor ?? theme.activeColor.multiplyLuminance(1.1);
 
       final Offset cursorOffset = widget.cursorOffset ??
           Offset(
