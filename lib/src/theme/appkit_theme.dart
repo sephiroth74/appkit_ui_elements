@@ -104,6 +104,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitTypography typography;
   final AppKitScrollbarThemeData scrollbarTheme;
   final AppKitIconButtonThemeData iconButtonTheme;
+  final AppKitDateTimePickerThemeData dateTimePickerTheme;
   final Color keyboardFocusIndicatorColor;
 
   factory AppKitThemeData({
@@ -127,6 +128,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitIconThemeData? iconTheme,
     AppKitScrollbarThemeData? scrollbarTheme,
     AppKitIconButtonThemeData? iconButtonTheme,
+    AppKitDateTimePickerThemeData? dateTimePickerTheme,
     Color? canvasColor,
     AppKitAccentColor? accentColor,
     bool? isMainWindow,
@@ -414,6 +416,18 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       ),
     );
 
+    dateTimePickerTheme ??= AppKitDateTimePickerThemeData(
+      graphicalDatePickerBackgroundColor: (isDark
+              ? AppKitColors.controlColor.darkColor
+              : AppKitColors.controlColor.color)
+          .multiplyOpacity(0.5),
+      textualDatePickerBackgroundColor: (isDark
+              ? AppKitColors.controlColor.darkColor
+              : AppKitColors.controlColor.color)
+          .multiplyOpacity(0.5),
+      accentColor: activeColor,
+    );
+
     final defaultData = AppKitThemeData.raw(
       accentColor: accentColor,
       accentColorUnfocused: accentColorUnfocused,
@@ -444,6 +458,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: sliderTheme,
       switchTheme: switchTheme,
       tooltipTheme: tooltipTheme,
+      dateTimePickerTheme: dateTimePickerTheme,
       typography: typography,
       visualDensity: visualDensity,
     );
@@ -477,6 +492,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       sliderTheme: sliderTheme,
       switchTheme: switchTheme,
       tooltipTheme: tooltipTheme,
+      dateTimePickerTheme: dateTimePickerTheme,
       typography: typography,
       visualDensity: visualDensity,
     );
@@ -539,6 +555,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.iconTheme,
     required this.scrollbarTheme,
     required this.iconButtonTheme,
+    required this.dateTimePickerTheme,
     required this.keyboardFocusIndicatorColor,
   });
 
@@ -573,6 +590,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         dividerColor,
         iconButtonTheme,
         buttonTheme,
+        dateTimePickerTheme,
         keyboardFocusIndicatorColor,
       ];
 
@@ -608,6 +626,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitIconThemeData? iconTheme,
     AppKitScrollbarThemeData? scrollbarTheme,
     AppKitIconButtonThemeData? iconButtonTheme,
+    AppKitDateTimePickerThemeData? dateTimePickerTheme,
     Color? keyboardFocusIndicatorColor,
   }) {
     return AppKitThemeData.raw(
@@ -644,6 +663,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       scrollbarTheme: scrollbarTheme ?? this.scrollbarTheme,
       dividerColor: dividerColor ?? this.dividerColor,
       iconButtonTheme: iconButtonTheme ?? this.iconButtonTheme,
+      dateTimePickerTheme: dateTimePickerTheme ?? this.dateTimePickerTheme,
       keyboardFocusIndicatorColor:
           keyboardFocusIndicatorColor ?? this.keyboardFocusIndicatorColor,
     );
@@ -681,6 +701,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       scrollbarTheme: other.scrollbarTheme,
       dividerColor: other.dividerColor,
       iconButtonTheme: other.iconButtonTheme,
+      dateTimePickerTheme: other.dateTimePickerTheme,
       keyboardFocusIndicatorColor: other.keyboardFocusIndicatorColor,
     );
   }
@@ -734,6 +755,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.iconButtonTheme, b.iconButtonTheme, t),
       keyboardFocusIndicatorColor: Color.lerp(
           a.keyboardFocusIndicatorColor, b.keyboardFocusIndicatorColor, t)!,
+      dateTimePickerTheme: AppKitDateTimePickerThemeData.lerp(
+          a.dateTimePickerTheme, b.dateTimePickerTheme, t),
     );
   }
 
@@ -789,6 +812,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'iconButtonTheme', iconButtonTheme));
     properties.add(ColorProperty(
         'keyboardFocusIndicatorColor', keyboardFocusIndicatorColor));
+    properties.add(DiagnosticsProperty<AppKitDateTimePickerThemeData>(
+        'dateTimePickerTheme', dateTimePickerTheme));
   }
 }
 

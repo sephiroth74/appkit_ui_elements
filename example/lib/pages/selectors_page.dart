@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
@@ -89,10 +91,22 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                   semanticLabel: 'Date Picker',
                                   type: AppKitDatePickerType.textual,
                                   onChanged:
-                                      (Either<DateTime, DateTimeRange> value) {
-                                    debugPrint('[1] Date Changed ($value)');
-                                    selectedDateRange = _selectedDateRange
-                                        .copyWith(start: value.left);
+                                      (Either<DateTime, DateTimeRange> d) {
+                                    debugPrint('[1] Date Changed ($d)');
+                                    final pickedDate = d.left;
+
+                                    if (pickedDate
+                                        .isAfter(_selectedDateRange.end)) {
+                                      selectedDateRange =
+                                          _selectedDateRange.copyWith(
+                                        start: pickedDate,
+                                        end: pickedDate
+                                            .add(const Duration(days: 1)),
+                                      );
+                                    } else {
+                                      selectedDateRange = _selectedDateRange
+                                          .copyWith(start: pickedDate);
+                                    }
                                   },
                                 ),
                               ),
@@ -120,10 +134,22 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                       AppKitTimeElements.hourMinuteSecond,
                                   type: AppKitDatePickerType.textualWithStepper,
                                   onChanged:
-                                      (Either<DateTime, DateTimeRange> value) {
-                                    debugPrint('[2] Date Changed ($value)');
-                                    selectedDateRange = _selectedDateRange
-                                        .copyWith(end: value.left);
+                                      (Either<DateTime, DateTimeRange> d) {
+                                    debugPrint('[2] Date Changed ($d)');
+                                    final pickedDate = d.left;
+
+                                    if (pickedDate
+                                        .isBefore(_selectedDateRange.start)) {
+                                      selectedDateRange =
+                                          _selectedDateRange.copyWith(
+                                        start: pickedDate,
+                                        end: pickedDate
+                                            .add(const Duration(days: 1)),
+                                      );
+                                    } else {
+                                      selectedDateRange = _selectedDateRange
+                                          .copyWith(end: pickedDate);
+                                    }
                                   },
                                 ),
                               ),
@@ -149,17 +175,29 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                     semanticLabel:
                                         'Date Picker (single - graphical)',
                                     date: left(_selectedDateRange.start),
-                                    minimumDate: _minimumDate,
-                                    maximumDate: _maximumDate,
                                     type: AppKitDatePickerType.graphical,
                                     drawBackground: true,
                                     drawBorder: true,
+                                    minimumDate: _minimumDate,
+                                    maximumDate: _maximumDate,
                                     selectionType:
                                         AppKitDatePickerSelectionType.single,
                                     onChanged: (d) {
                                       debugPrint('[3] Date Changed ($d)');
-                                      selectedDateRange = _selectedDateRange
-                                          .copyWith(start: d.left);
+                                      final pickedDate = d.left;
+
+                                      if (pickedDate
+                                          .isAfter(_selectedDateRange.end)) {
+                                        selectedDateRange =
+                                            _selectedDateRange.copyWith(
+                                          start: pickedDate,
+                                          end: pickedDate
+                                              .add(const Duration(days: 1)),
+                                        );
+                                      } else {
+                                        selectedDateRange = _selectedDateRange
+                                            .copyWith(start: pickedDate);
+                                      }
                                     },
                                   ),
                                 ],

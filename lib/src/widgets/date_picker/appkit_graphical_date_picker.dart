@@ -112,11 +112,14 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
         canRequestFocus: true,
         enabled: enabled,
         focusNode: _effectiveFocusNode,
-        child: UiElementColorBuilder(builder: (context, colorContainer) {
-          final theme = AppKitTheme.of(context);
-          final accentColor = widget.color ??
-              theme.primaryColor.multiplyLuminance(0.85) ??
-              colorContainer.controlAccentColor;
+        child: Builder(builder: (context) {
+          final AppKitThemeData theme = AppKitTheme.of(context);
+          final AppKitDateTimePickerThemeData dateTimePickerTheme =
+              AppKitDateTimePickerTheme.of(context);
+
+          final bool isDark = theme.brightness == Brightness.dark;
+          final Color accentColor =
+              widget.color ?? theme.activeColor.multiplyLuminance(0.85);
 
           return Container(
             constraints: const BoxConstraints(
@@ -127,24 +130,32 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
             ),
             decoration: BoxDecoration(
               color: widget.drawBackground
-                  ? colorContainer.controlBackgroundColor
+                  ? dateTimePickerTheme.graphicalDatePickerBackgroundColor ??
+                      theme.controlColor.multiplyOpacity(0.5)
                   : null,
               border: widget.drawBorder
                   ? Border(
                       top: BorderSide(
-                          color: AppKitColors.text.opaque.tertiary
+                          color: AppKitDynamicColor.resolve(
+                                  context,
+                                  isDark
+                                      ? AppKitColors.text.opaque.quaternary
+                                      : AppKitColors.text.opaque.tertiary)
                               .multiplyOpacity(0.65),
                           width: _kGraphicalDatePickerBorderWidth),
                       left: BorderSide(
-                          color: AppKitColors.text.opaque.tertiary
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.tertiary)
                               .multiplyOpacity(0.65),
                           width: _kGraphicalDatePickerBorderWidth),
                       right: BorderSide(
-                          color: AppKitColors.text.opaque.tertiary
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.tertiary)
                               .multiplyOpacity(0.65),
                           width: _kGraphicalDatePickerBorderWidth),
                       bottom: BorderSide(
-                          color: AppKitColors.text.opaque.secondary
+                          color: AppKitDynamicColor.resolve(
+                                  context, AppKitColors.text.opaque.secondary)
                               .multiplyOpacity(0.65),
                           width: _kGraphicalDatePickerBorderWidth),
                     )
@@ -160,10 +171,10 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
                     height: _kGraphicalDatePickerHeaderHeight,
                     child: _GraphicalDatePickerHeader(
                       currentDate: _initialDateTime,
-                      colorContainer: colorContainer,
                       isMainWindow: widget.isMainWindow,
                       languageCode: widget.languageCode,
                       onDateChanged: enabled ? _handleUpdateCalendarView : null,
+                      theme: theme,
                     ),
                   ),
                   const SizedBox(height: _kGraphicalDatePickerDividerHeight),
@@ -180,8 +191,8 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
                         currentDateTime: _currentDateTime,
                         minimumDate: widget.minimumDate,
                         maximumDate: widget.maximumDate,
-                        colorContainer: colorContainer,
                         accentColor: accentColor,
+                        theme: theme,
                         isMainWindow: widget.isMainWindow,
                         languageCode: widget.languageCode,
                         selectionType: widget.selectionType,
@@ -203,16 +214,16 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
 
 class _GraphicalDatePickerHeader extends StatelessWidget {
   final DateTime currentDate;
-  final UiElementColorContainer colorContainer;
   final bool isMainWindow;
   final String languageCode;
+  final AppKitThemeData theme;
   final ValueChanged<DateTime>? onDateChanged;
 
   const _GraphicalDatePickerHeader({
     required this.currentDate,
-    required this.colorContainer,
     required this.isMainWindow,
     required this.languageCode,
+    required this.theme,
     this.onDateChanged,
   });
 
@@ -222,7 +233,6 @@ class _GraphicalDatePickerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final DateFormat dateFormatter = DateFormat.yMMM(languageCode);
     final String dateString = dateFormatter.format(currentDate);
-    final theme = AppKitTheme.of(context);
 
     return Align(
       alignment: Alignment.topLeft,
@@ -273,11 +283,11 @@ class _GraphicalDatePickerContent extends StatelessWidget {
   final DateTimeRange currentDateTime;
   final DateTime? minimumDate;
   final DateTime? maximumDate;
-  final UiElementColorContainer colorContainer;
   final bool isMainWindow;
   final String languageCode;
   final Color accentColor;
   final AppKitDatePickerSelectionType selectionType;
+  final AppKitThemeData theme;
   final FocusNode? focusNode;
   final FocusNode childFocusNode;
   final OnDateChanged? onChanged;
@@ -286,7 +296,7 @@ class _GraphicalDatePickerContent extends StatelessWidget {
   const _GraphicalDatePickerContent({
     required this.initialDateTime,
     required this.currentDateTime,
-    required this.colorContainer,
+    required this.theme,
     required this.isMainWindow,
     required this.languageCode,
     required this.accentColor,
@@ -323,9 +333,9 @@ class _GraphicalDatePickerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
-    final weekDayTextColor = AppKitColors.text.opaque.secondary
-        .resolveFrom(context)
-        .multiplyOpacity(enabled ? 0.9 : 0.5);
+    final weekDayTextColor =
+        AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.secondary)
+            .multiplyOpacity(enabled ? 0.9 : 0.5);
 
     return LayoutBuilder(builder: (context, constrains) {
       return Container(
@@ -373,10 +383,10 @@ class _GraphicalDatePickerContent extends StatelessWidget {
                   currentDateTime: currentDateTime,
                   minimumDate: minimumDate,
                   maximumDate: maximumDate,
-                  colorContainer: colorContainer,
                   isMainWindow: isMainWindow,
                   languageCode: languageCode,
                   accentColor: accentColor,
+                  theme: theme,
                   selectionType: selectionType,
                   onUpdateCalendarView: onUpdateCalendarView,
                   onChanged: onChanged,
@@ -395,7 +405,7 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
   final DateTimeRange currentDateTime;
   final DateTime? minimumDate;
   final DateTime? maximumDate;
-  final UiElementColorContainer colorContainer;
+  final AppKitThemeData theme;
   final bool isMainWindow;
   final String languageCode;
   final Color accentColor;
@@ -408,7 +418,7 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
   const _GraphicalDatePickerMonthView({
     required this.initialDateTime,
     required this.currentDateTime,
-    required this.colorContainer,
+    required this.theme,
     required this.isMainWindow,
     required this.languageCode,
     required this.accentColor,
@@ -431,8 +441,6 @@ class _GraphicalDatePickerMonthViewState
   static const rowsCount = 7;
   static const columnsCount = 6;
   static const totalDays = rowsCount * columnsCount;
-
-  late final _logger = newLogger('_GraphicalDatePickerMonthView');
 
   bool _isMousePressed = false;
 
@@ -469,6 +477,7 @@ class _GraphicalDatePickerMonthViewState
   @override
   void didUpdateWidget(covariant _GraphicalDatePickerMonthView oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (oldWidget.currentDateTime != widget.currentDateTime) {
       _currentDateTime = widget.currentDateTime;
 

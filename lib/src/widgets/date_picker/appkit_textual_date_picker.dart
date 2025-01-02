@@ -379,6 +379,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
     return LayoutBuilder(builder: (context, constraints) {
       assert(constraints.hasBoundedWidth);
       final theme = AppKitTheme.of(context);
+      final dateTimePickerTheme = AppKitDateTimePickerTheme.of(context);
       final isDark = theme.brightness == Brightness.dark;
 
       final textStyle = theme.typography.body;
@@ -396,7 +397,9 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
           charWidth: charWidth,
           textStyle: textStyle,
           index: i,
-          color: widget.color ?? theme.primaryColor,
+          color: widget.color ??
+              dateTimePickerTheme.accentColor ??
+              theme.activeColor,
           isMainWindow: isMainWindow,
           isFocused: enabled &&
               _focusedIndex == i &&
@@ -429,7 +432,9 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
           charWidth: charWidth,
           textStyle: textStyle,
           index: i + dateFormatterSegments.length,
-          color: widget.color ?? theme.primaryColor,
+          color: widget.color ??
+              dateTimePickerTheme.accentColor ??
+              theme.activeColor,
           isMainWindow: isMainWindow,
           isFocused: _effectiveFocusNode.hasPrimaryFocus &&
               enabled &&
@@ -446,7 +451,9 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
       }
 
       final backgroundColor =
-          theme.controlBackgroundColor.multiplyOpacity(enabled ? 1.0 : 0.5);
+          (dateTimePickerTheme.textualDatePickerBackgroundColor ??
+                  theme.controlBackgroundColor)
+              .multiplyOpacity(enabled ? 1.0 : 0.5);
 
       return ConstrainedBox(
           constraints: constraints,
@@ -504,7 +511,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                 const SizedBox(width: 4),
                 AppKitStepper(
                   value: 1.0,
-                  onChanged: enabled
+                  onChanged: enabled && _focusNode?.hasFocus == true
                       ? (value) =>
                           _handleSegmentStep(_focusedIndex, value > 1.0)
                       : null,
