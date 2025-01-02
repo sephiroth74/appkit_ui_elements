@@ -130,11 +130,6 @@ class AppKitColors {
     darkColor: Color(0xFF705771),
   );
 
-  // static const CupertinoDynamicColor keyboardFocusIndicatorColor = CupertinoDynamicColor.withBrightness(
-  //   color: Color(0x7F842685),
-  //   darkColor: Color(0x7FDC78DE),
-  // );
-
   static const controlBackgroundPressedColor =
       CupertinoDynamicColor.withBrightness(
     color: Color.fromRGBO(0, 0, 0, 0.2),
@@ -312,7 +307,7 @@ class AppKitColors {
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemRed =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(255, 59, 48, 1),
+    color: Color(0xFFFF3B30),
     darkColor: Color(0xFFFF453A),
     highContrastColor: Color.fromRGBO(255, 49, 38, 1),
     darkHighContrastColor: Color.fromRGBO(255, 79, 68, 1),
@@ -320,7 +315,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemOrange =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(255, 149, 0, 1),
+    color: Color(0xFFFF9500),
     darkColor: Color(0xFFFF9F0A),
     highContrastColor: Color.fromRGBO(245, 139, 0, 1),
     darkHighContrastColor: Color.fromRGBO(255, 169, 20, 1),
@@ -328,7 +323,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemYellow =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(255, 204, 0, 1),
+    color: Color(0xFFFFCC00),
     darkColor: Color(0xFFFFD60A),
     highContrastColor: Color.fromRGBO(245, 194, 0, 1),
     darkHighContrastColor: Color.fromRGBO(255, 224, 20, 1),
@@ -336,7 +331,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemGreen =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(40, 205, 65, 1),
+    color: Color(0xFF28CD41),
     darkColor: Color(0xFF32D74B),
     highContrastColor: Color.fromRGBO(30, 195, 55, 1),
     darkHighContrastColor: Color.fromRGBO(60, 225, 85, 1),
@@ -352,7 +347,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemTeal =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(89, 173, 196, 1),
+    color: Color(0xFF59ADC4),
     darkColor: Color(0xFF6AC4DC),
     highContrastColor: Color.fromRGBO(46, 167, 189, 1),
     darkHighContrastColor: Color.fromRGBO(68, 212, 237, 1),
@@ -368,7 +363,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemBlue =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(0, 122, 255, 1),
+    color: Color(0xFF007AFF),
     darkColor: Color(0xFF0A84FF),
     highContrastColor: Color.fromRGBO(0, 122, 245, 1),
     darkHighContrastColor: Color.fromRGBO(20, 142, 255, 1),
@@ -376,7 +371,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemIndigo =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(88, 86, 214, 1),
+    color: Color(0xFF5856D6),
     darkColor: Color(0xFF5E5CE6),
     highContrastColor: Color.fromRGBO(84, 82, 204, 1),
     darkHighContrastColor: Color.fromRGBO(99, 97, 242, 1),
@@ -384,7 +379,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemPurple =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(175, 82, 222, 1),
+    color: Color(0xFFAF52DE),
     darkColor: Color(0xFFBF5AF2),
     highContrastColor: Color.fromRGBO(159, 75, 201, 1),
     darkHighContrastColor: Color.fromRGBO(204, 101, 255, 1),
@@ -392,7 +387,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemPink =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(255, 45, 85, 1),
+    color: Color(0xFFFF2D55),
     darkColor: Color(0xFFFF375F),
     highContrastColor: Color.fromRGBO(245, 35, 75, 1),
     darkHighContrastColor: Color.fromRGBO(255, 65, 105, 1),
@@ -400,7 +395,7 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemBrown =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(162, 132, 94, 1),
+    color: Color(0xFFA2845E),
     darkColor: Color(0xFFAC8E68),
     highContrastColor: Color.fromRGBO(152, 122, 84, 1),
     darkHighContrastColor: Color.fromRGBO(182, 152, 114, 1),
@@ -408,21 +403,21 @@ class AppKitColors {
 
   static const CupertinoDynamicColor systemGray =
       CupertinoDynamicColor.withBrightnessAndContrast(
-    color: Color.fromRGBO(142, 142, 147, 1),
+    color: Color(0xFF8E8E93),
     darkColor: Color(0xFF98989D),
     highContrastColor: Color.fromRGBO(132, 132, 137, 1),
     darkHighContrastColor: Color.fromRGBO(162, 162, 167, 1),
   );
 
-  static const appleBlue = Color(0xff0433ff);
-  static const appleBrown = Color(0xffaa7942);
-  static const appleCyan = Color(0xff00fdff);
-  static const appleGreen = Color(0xff00f900);
-  static const appleMagenta = Color(0xffff40ff);
-  static const appleOrange = Color(0xffff9300);
-  static const applePurple = Color(0xff094219);
-  static const appleRed = Color(0xffff2600);
-  static const appleYellow = Color(0xfffffb00);
+  static const appleBlue = Color(0xFF0000FF);
+  static const appleBrown = Color(0xFF996633);
+  static const appleCyan = Color(0xFF00FFFF);
+  static const appleGreen = Color(0xFF00FF00);
+  static const appleMagenta = Color(0xFFFF00FF);
+  static const appleOrange = Color(0xFFFF7F00);
+  static const applePurple = Color(0xFF7F007F);
+  static const appleRed = Color(0xFFFF0000);
+  static const appleYellow = Color(0xFFFFFF00);
 }
 
 class AppKitMaterial {

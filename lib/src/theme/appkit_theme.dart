@@ -105,6 +105,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final AppKitIconButtonThemeData iconButtonTheme;
   final AppKitDateTimePickerThemeData dateTimePickerTheme;
   final Color keyboardFocusIndicatorColor;
+
+  /// The color to use for the background of selected and emphasized content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/selectedcontentbackgroundcolor
   final Color selectedContentBackgroundColor;
 
   factory AppKitThemeData({
@@ -166,9 +170,17 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         _ColorProvider.getKeyboardFocusIndicatorColor(
             isDark: isDark, accentColor: accentColor);
 
-    selectedContentBackgroundColor ??=
+    final Color selectedContentBackgroundColorFocused =
         _ColorProvider.getSelectedContentBackgroundColor(
-            accentColor: accentColor, isDark: isDark);
+            accentColor: accentColor, isDark: isDark, isMainWindow: true);
+
+    final Color selectedColorBackgroundColorUnfocused =
+        _ColorProvider.getSelectedContentBackgroundColor(
+            accentColor: accentColor, isDark: isDark, isMainWindow: false);
+
+    selectedContentBackgroundColor ??= (isMainWindow ?? true)
+        ? selectedContentBackgroundColorFocused
+        : selectedColorBackgroundColorUnfocused;
 
     Color focusColor = primaryColor.withOpacity(0.749);
 
@@ -234,7 +246,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         destructiveColor: isDark
             ? AppKitColors.systemRed.darkColor
             : AppKitColors.systemRed.color,
-        accentColor: activeColor,
+        accentColor: selectedContentBackgroundColor,
         backgroundColorDisabled: isDark
             ? controlColor.multiplyOpacity(0.75)
             : controlColor.multiplyOpacity(0.75),
@@ -290,11 +302,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     segmentedControlTheme ??= AppKitSegmentedControlThemeData(
-      accentColor: _ColorProvider.getActiveColor(
-        accentColor: accentColor,
-        isDark: isDark,
-        isMainWindow: true,
-      ),
+      accentColor: selectedContentBackgroundColorFocused,
       dividerColorMultipleSelection: isDark
           ? AppKitColors.dividerColor.darkColor
           : const Color(0xFFE8E8E8),
@@ -861,60 +869,28 @@ class _ColorProvider {
 
     switch (accentColor) {
       case AppKitAccentColor.blue:
-        if (isDark) {
-          return AppKitColors.systemBlue.darkColor;
-        } else {
-          return AppKitColors.systemBlue.color;
-        }
+        return isDark ? const Color(0xFF007AFF) : const Color(0xFF007AFF);
 
       case AppKitAccentColor.purple:
-        if (isDark) {
-          return AppKitColors.systemPurple.darkColor;
-        } else {
-          return AppKitColors.systemPurple.color;
-        }
+        return isDark ? const Color(0xFFA550A7) : const Color(0xFF953D96);
 
       case AppKitAccentColor.pink:
-        if (isDark) {
-          return AppKitColors.systemPink.darkColor;
-        } else {
-          return AppKitColors.systemPink.color;
-        }
+        return isDark ? const Color(0xFFF74F9E) : const Color(0xFFF74F9E);
 
       case AppKitAccentColor.red:
-        if (isDark) {
-          return AppKitColors.systemRed.darkColor;
-        } else {
-          return AppKitColors.systemRed.color;
-        }
+        return isDark ? const Color(0xFFFF5257) : const Color(0xFFE0383E);
 
       case AppKitAccentColor.orange:
-        if (isDark) {
-          return AppKitColors.systemOrange.darkColor;
-        } else {
-          return AppKitColors.systemOrange.color;
-        }
+        return isDark ? const Color(0xFFF7821B) : const Color(0xFFF7821B);
 
       case AppKitAccentColor.yellow:
-        if (isDark) {
-          return AppKitColors.systemYellow.darkColor;
-        } else {
-          return AppKitColors.systemYellow.color;
-        }
+        return isDark ? const Color(0xFFFFC600) : const Color(0xFFFFC726);
 
       case AppKitAccentColor.green:
-        if (isDark) {
-          return AppKitColors.systemGreen.darkColor;
-        } else {
-          return AppKitColors.systemGreen.color;
-        }
+        return isDark ? const Color(0xFF62BA46) : const Color(0xFF62BA46);
 
       case AppKitAccentColor.graphite:
-        if (isDark) {
-          return AppKitColors.systemGray.darkColor;
-        } else {
-          return AppKitColors.systemGray.color;
-        }
+        return isDark ? const Color(0xFF8C8C8C) : const Color(0xFF989898);
     }
   }
 
@@ -924,27 +900,33 @@ class _ColorProvider {
         : const Color.fromRGBO(180, 180, 180, 1.0);
   }
 
+  /// The color to use for the background of selected and emphasized content.
   static Color getSelectedContentBackgroundColor({
     required AppKitAccentColor accentColor,
     required bool isDark,
+    required bool isMainWindow,
   }) {
+    if (!isMainWindow) {
+      return getActiveColorUnfocused(isDark: isDark);
+    }
+
     switch (accentColor) {
       case AppKitAccentColor.blue:
-        return isDark ? const Color(0xFF1A73E8) : const Color(0xFF1A73E8);
+        return isDark ? const Color(0xFF0059D1) : const Color(0xFF0064E1);
       case AppKitAccentColor.purple:
-        return isDark ? const Color(0xFF803482) : const Color(0xFF8E44AD);
+        return isDark ? const Color(0xFF803482) : const Color(0xFF7D2A7E);
       case AppKitAccentColor.pink:
-        return isDark ? const Color(0xFFE91E63) : const Color(0xFFE91E63);
+        return isDark ? const Color(0xFFC93379) : const Color(0xFFD93B86);
       case AppKitAccentColor.red:
-        return isDark ? const Color(0xFFD32F2F) : const Color(0xFFD32F2F);
+        return isDark ? const Color(0xFFD13539) : const Color(0xFFC4262B);
       case AppKitAccentColor.orange:
-        return isDark ? const Color(0xFFFB8C00) : const Color(0xFFFB8C00);
+        return isDark ? const Color(0xFFC96003) : const Color(0xFFD96B0A);
       case AppKitAccentColor.yellow:
-        return isDark ? const Color(0xFFFBC02D) : const Color(0xFFFBC02D);
+        return isDark ? const Color(0xFFD19E00) : const Color(0xFFE1AC15);
       case AppKitAccentColor.green:
-        return isDark ? const Color(0xFF4CAF50) : const Color(0xFF4CAF50);
+        return isDark ? const Color(0xFF43932A) : const Color(0xFF4DA033);
       case AppKitAccentColor.graphite:
-        return isDark ? const Color(0xFF9E9E9E) : const Color(0xFF9E9E9E);
+        return isDark ? const Color(0xFF696969) : const Color(0xFF808080);
     }
   }
 
@@ -952,23 +934,22 @@ class _ColorProvider {
       {required AppKitAccentColor accentColor, required bool isDark}) {
     switch (accentColor) {
       case AppKitAccentColor.blue:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7F1AA9FF) : const Color(0xFF99999E);
       case AppKitAccentColor.purple:
-        return isDark ? const Color(0x7FDC78DE) : const Color(0x7FDC78DE);
+        return isDark ? const Color(0x7FDC78DE) : const Color(0x7F842685);
       case AppKitAccentColor.pink:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7FFF77D4) : const Color(0x7FEC398D);
       case AppKitAccentColor.red:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7FFF7A80) : const Color(0x7FD32127);
       case AppKitAccentColor.orange:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7FFFB33A) : const Color(0x7FFFB33A);
       case AppKitAccentColor.yellow:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7FFFFF1A) : const Color(0x7FF4B90E);
       case AppKitAccentColor.green:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7F8DF56C) : const Color(0x7F4EAB30);
       case AppKitAccentColor.graphite:
-      // TODO: Handle this case.
+        return isDark ? const Color(0x7FBFBFBF) : const Color(0xFF99999E);
     }
-    return Colors.white;
   }
 
   /// Returns the active color based on the provided parameters.

@@ -96,7 +96,8 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
             final theme = AppKitTheme.of(context);
             final isDark = theme.brightness == Brightness.dark;
             final controlBackgroundColor = theme.controlColor;
-            final Color accentColor = widget.color ?? theme.activeColor;
+            final Color accentColor =
+                widget.color ?? theme.selectedContentBackgroundColor;
             return Container(
               width: widget.size,
               height: widget.size,

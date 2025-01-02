@@ -97,7 +97,8 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
           builder: (context, isMainWindow) {
             final isDark = theme.brightness == Brightness.dark;
             final controlBackgroundColor = theme.controlColor;
-            final Color accentColor = widget.color ?? theme.activeColor;
+            final Color accentColor =
+                widget.color ?? theme.selectedContentBackgroundColor;
 
             return Container(
               width: widget.size,

@@ -31,6 +31,7 @@ class _ColorsPageState extends State<ColorsPage> {
       children: [
         AppKitContentArea(
           builder: (context, ScrollController scrollController) {
+            final theme = AppKitTheme.of(context);
             return SingleChildScrollView(
               controller: scrollController,
               padding: const EdgeInsets.all(20),
@@ -207,6 +208,20 @@ class _ColorsPageState extends State<ColorsPage> {
                                 color: AppKitColors
                                     .alternateSelectedControlTextColor,
                                 colorName: 'Alternate Selected Control Text',
+                                isDark: isDark),
+                            ColorBox(
+                                color: CupertinoDynamicColor.withBrightness(
+                                    color: theme.selectedContentBackgroundColor,
+                                    darkColor:
+                                        theme.selectedContentBackgroundColor),
+                                colorName: 'Selected Content Background',
+                                isDark: isDark),
+                            ColorBox(
+                                color: CupertinoDynamicColor.withBrightness(
+                                    color: theme.keyboardFocusIndicatorColor,
+                                    darkColor:
+                                        theme.keyboardFocusIndicatorColor),
+                                colorName: 'Keyboard Focus Indicator',
                                 isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.controlBackgroundColor,
