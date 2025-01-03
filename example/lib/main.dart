@@ -20,9 +20,7 @@ import 'package:example/pages/tab_view_page.dart';
 import 'package:example/pages/toggle_button_page.dart';
 import 'package:example/pages/toolbar_page.dart';
 import 'package:example/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 Future<void> _configureMacosWindowUtils() async {
@@ -71,6 +69,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int pageIndex = 0;
+  late final searchFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -84,81 +83,103 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             minWidth: 150),
         sidebar: AppKitSidebar(
+            top: AppKitComboBox(
+              placeholder: 'Search...',
+              items: const [
+                'Push Button',
+                'Toggle Button',
+                'Combo Button',
+                'ComboBox Button',
+                'Popup/Pulldown Button',
+                'Controls',
+                'Indicators',
+                'Sliders',
+                'Dialogs',
+                'Segmented Controls',
+                'Tab View',
+                'Group Box',
+                'Resizable Panel',
+                'Toolbar',
+                'Sliver Toolbar',
+                'Selectors',
+                'Colors',
+                'Fields',
+              ],
+              onChanged: (value) {
+                if (value.isEmpty) return;
+                setState(() {
+                  final index = [
+                    'Push Button',
+                    'Toggle Button',
+                    'Combo Button',
+                    'ComboBox Button',
+                    'Popup/Pulldown Button',
+                    'Controls',
+                    'Indicators',
+                    'Sliders',
+                    'Dialogs',
+                    'Segmented Controls',
+                    'Tab View',
+                    'Group Box',
+                    'Resizable Panel',
+                    'Toolbar',
+                    'Sliver Toolbar',
+                    'Selectors',
+                    'Colors',
+                    'Fields',
+                  ].indexOf(value);
+
+                  if (index != -1) {
+                    pageIndex = index;
+                  }
+                });
+              },
+            ),
             builder: (context, scrollController) {
               return AppKitSidebarItems(
                   scrollController: scrollController,
                   itemSize: AppKitSidebarItemSize.large,
                   items: const [
-                    AppKitSidebarItem(label: Text('Buttons'), disclosureItems: [
-                      AppKitSidebarItem(label: Text('Push Button')),
-                      AppKitSidebarItem(label: Text('Toggle Button')),
-                      AppKitSidebarItem(label: Text('Combo Button')),
-                      AppKitSidebarItem(label: Text('ComboBox Button')),
-                      AppKitSidebarItem(label: Text('Popup/Pulldown Button')),
-                    ]),
                     AppKitSidebarItem(
-                        label: Text('Controls'),
-                        leading: AppKitIcon(
-                            icon: Icons.radio_button_checked, size: 13)),
+                        label: Text('Buttons'),
+                        expandDisclosureItems: true,
+                        disclosureItems: [
+                          AppKitSidebarItem(label: Text('Push Button')),
+                          AppKitSidebarItem(label: Text('Toggle Button')),
+                          AppKitSidebarItem(label: Text('Combo Button')),
+                          AppKitSidebarItem(label: Text('ComboBox Button')),
+                          AppKitSidebarItem(
+                              label: Text('Popup/Pulldown Button')),
+                        ]),
                     AppKitSidebarItem(
-                        label: Text('Indicators'),
-                        leading: AppKitIcon(
-                            icon: CupertinoIcons.circle_grid_hex, size: 13)),
+                      label: Text('Controls'),
+                    ),
                     AppKitSidebarItem(
-                        label: Text('Sliders'),
-                        leading: AppKitIcon(
-                            icon: CupertinoIcons.slider_horizontal_3,
-                            size: 13)),
+                      label: Text('Indicators'),
+                    ),
                     AppKitSidebarItem(
-                        label: Text('Dialogs'),
-                        leading:
-                            AppKitIcon(icon: Icons.window_outlined, size: 13)),
+                      label: Text('Sliders'),
+                    ),
+                    AppKitSidebarItem(
+                      label: Text('Dialogs'),
+                    ),
                     AppKitSidebarItem(label: Text('Layout'), disclosureItems: [
                       AppKitSidebarItem(
                         label: Text('Segmented Controls'),
-                        leading: AppKitIcon(
-                            icon: CupertinoIcons.rectangle_stack_badge_minus,
-                            size: 13),
                       ),
                       AppKitSidebarItem(
                         label: Text('Tab View'),
-                        leading: AppKitIcon(
-                            icon: CupertinoIcons.uiwindow_split_2x1, size: 13),
                       ),
                       AppKitSidebarItem(
                         label: Text('Group Box'),
-                        leading: AppKitIcon(
-                            icon: CupertinoIcons.rectangle_3_offgrid_fill,
-                            size: 13),
                       ),
-                      AppKitSidebarItem(
-                          leading: AppKitIcon(
-                              icon: CupertinoIcons.rectangle_split_3x1,
-                              size: 13),
-                          label: Text('Resizable Panel')),
-                      AppKitSidebarItem(
-                          leading: AppKitIcon(
-                              icon: CupertinoIcons.macwindow, size: 13),
-                          label: Text('Toolbar')),
-                      AppKitSidebarItem(
-                          leading: AppKitIcon(
-                              icon: CupertinoIcons.macwindow, size: 13),
-                          label: Text('Sliver Toolbar')),
+                      AppKitSidebarItem(label: Text('Resizable Panel')),
+                      AppKitSidebarItem(label: Text('Toolbar')),
+                      AppKitSidebarItem(label: Text('Sliver Toolbar')),
                     ]),
-                    AppKitSidebarItem(
-                        label: Text('Selectors'),
-                        leading: AppKitIcon(
-                            icon: Icons.date_range_outlined, size: 13)),
-                    AppKitSidebarItem(
-                        label: Text('Colors'),
-                        leading: AppKitIcon(
-                            icon: CupertinoIcons.paintbrush, size: 13)),
-                    AppKitSidebarItem(
-                        leading: AppKitIcon(
-                          icon: Icons.text_fields,
-                          size: 13,
-                        ),
-                        label: Text('Fields')),
+                    AppKitSidebarItem(label: Text('Selectors')),
+                    AppKitSidebarItem(label: Text('Colors')),
+                    AppKitSidebarItem(label: Text('Fields')),
                   ],
                   currentIndex: pageIndex,
                   onChanged: (index) {

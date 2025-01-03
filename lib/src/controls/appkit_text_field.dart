@@ -697,16 +697,15 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       case AppKitTextFieldBorderStyle.rounded:
         return BoxDecoration(
           color: backgroundColor,
-          // borderRadius: BorderRadius.circular(widget.borderRadius ?? (fontSize != null ? fontSize / 2 : borderRadius)),
           borderRadius: BorderRadius.circular(borderRadius),
-          boxShadow: [
-            BoxShadow(
-              color: AppKitColors.shadowColor.withOpacity(0.05),
-              blurRadius: 1.25,
-              offset: const Offset(0, 0.25),
-              blurStyle: BlurStyle.outer,
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: AppKitColors.shadowColor.withOpacity(0.05),
+          //     blurRadius: 1.25,
+          //     offset: const Offset(0, 0.25),
+          //     blurStyle: BlurStyle.outer,
+          //   ),
+          // ],
           border: isDark
               ? GradientBoxBorder(
                   gradient: LinearGradient(

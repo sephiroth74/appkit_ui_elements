@@ -135,13 +135,9 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     super.didUpdateWidget(oldWidget);
 
     if (widget.focusNode != oldWidget.focusNode) {
-      // (oldWidget.focusNode ?? _focusNode)?.removeListener(_handleFocusChanged);
-      // (widget.focusNode ?? _focusNode)?.addListener(_handleFocusChanged);
-
       _effectiveFocusNode.removeListener(_handleFocusChanged);
       if (enabled) _effectiveFocusNode.addListener(_handleFocusChanged);
     }
-    // _effectiveFocusNode.canRequestFocus = widget.canRequestFocus;
   }
 
   @override
@@ -158,9 +154,6 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
     final bool isMainWindow =
         MainWindowStateListener.instance.isMainWindow.value;
 
-    // _logger.d(
-    //     '[$hashCode] isFocused: $isFocused, isMainWindow: $isMainWindow, wasFocused: $_isFocused, wasMainWindow: $_isMainWindow');
-
     if (isFocused != _isFocused || isMainWindow != _isMainWindow) {
       final bool mainWindowChanged = isMainWindow != _isMainWindow;
 
@@ -170,7 +163,7 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
       _animationController.reset();
 
       _alphaTween.begin = isFocused ? 0.0 : 1.0;
-      _alphaTween.end = 1.0;
+      _alphaTween.end = isFocused ? 1.0 : 0.0;
 
       _sizeTween.begin =
           isFocused ? widget.focusRingSize + _kFocusRingSize : 0.0;
@@ -228,8 +221,13 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
         final focusRingColor = theme.keyboardFocusIndicatorColor
             .multiplyOpacity(_alphaAnimation.value);
 
+        // return Container(decoration: BoxDecoration(
+        //   borderRadius: widget.borderRadius,
+        //   border: Border.all(color: focusRingColor, width: 3),
+        // ), child: widget.child);
+
         return CustomPaint(
-            isComplex: true,
+            isComplex: false,
             painter: _FocusRingPainter(
               textDirection: Directionality.of(context),
               focused: _isFocused && _isMainWindow && enabled,
@@ -281,9 +279,11 @@ class _FocusRingPainter extends CustomPainter {
         RRect.fromRectAndRadius(rect, Radius.zero);
 
     final inflatedRect = rrect.inflate(delta);
-
     final saveCount = canvas.getSaveCount();
-    canvas.saveLayer(Rect.largest, Paint());
+
+    // TODO: verify this, if it's required in some ways
+    // canvas.saveLayer(rect.inflate(delta), Paint());
+
     canvas.drawRRect(inflatedRect, _paint);
     canvas.drawRRect(rrect, _clearPaint);
     canvas.restoreToCount(saveCount);
