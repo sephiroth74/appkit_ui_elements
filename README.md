@@ -1,15 +1,3 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
 
 Flutter widgets and themes implementing the current macOS design language. It has been inspired by the <a href='https://pub.dev/packages/macos_ui'>macos_ui</a> flutter package.
 
@@ -26,8 +14,7 @@ A complete set of components (including some not bundled with the macos_ui packa
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+See the full example inside the `/example` folder.
 
 ```dart
 
