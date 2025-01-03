@@ -151,7 +151,7 @@ class AppKitIconThemeData with Diagnosticable {
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
     return other is AppKitIconThemeData &&
-        other.color?.value == color?.value &&
+        other.color == color &&
         other.opacity == opacity &&
         other.size == size;
   }

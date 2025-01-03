@@ -211,8 +211,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     Color selectedColor = _selectedColor ?? theme.activeColor;
 
     if (!enabled) {
-      selectedColor =
-          selectedColor.withValues(alpha: selectedColor.opacity * 0.5);
+      selectedColor = selectedColor.withValues(alpha: selectedColor.a * 0.5);
     }
 
     return Semantics(
@@ -1079,7 +1078,7 @@ class AppKitColorWellSwatch extends StatefulWidget with IndexedInterface {
 }
 
 class _AppKitColorWellSwatchState extends State<AppKitColorWellSwatch> {
-  bool get enabled => widget.color.alpha > 0;
+  bool get enabled => widget.color.a > 0;
 
   void _handleMouseEnter() {
     widget.onMouseEnter?.call((widget.rowIndex, widget.color));
@@ -1168,13 +1167,13 @@ class _ColorPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color.alpha == 0 ? Colors.white : color
+      ..color = color.a == 0.0 ? Colors.white : color
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 
     canvas.drawRect(Offset.zero & size, paint);
 
-    if (color.alpha == 0) {
+    if (color.a == 0.0) {
       paint
         ..style = PaintingStyle.stroke
         ..color = Colors.red

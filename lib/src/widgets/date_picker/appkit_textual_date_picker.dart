@@ -554,8 +554,8 @@ class _TextualPickerElement extends StatelessWidget {
     final Color textColor;
 
     if (backgroundColor != null) {
-      final blendedColor = Color.lerp(
-          theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+      final blendedColor =
+          Color.lerp(theme.canvasColor, backgroundColor, backgroundColor.a)!;
       blendedColor.computeLuminance() > 0.5
           ? textColor = AppKitColors.text.opaque.primary.color
           : textColor = AppKitColors.text.opaque.primary.darkColor;

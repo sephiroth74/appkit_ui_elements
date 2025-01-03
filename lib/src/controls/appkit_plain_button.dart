@@ -58,8 +58,7 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
           final color = widget.color ??
               AppKitDynamicColor.resolve(
                   context, AppKitColors.text.opaque.quaternary);
-          final blendedColor =
-              Color.lerp(theme.canvasColor, color, color.opacity)!;
+          final blendedColor = Color.lerp(theme.canvasColor, color, color.a)!;
 
           final lumination = blendedColor.computeLuminance();
           final textColor = lumination > 0.5

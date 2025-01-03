@@ -113,14 +113,14 @@ class AppKitIconButtonThemeData with Diagnosticable {
       identical(this, other) ||
       other is AppKitIconButtonThemeData &&
           runtimeType == other.runtimeType &&
-          backgroundColor?.value == other.backgroundColor?.value &&
-          disabledColor?.value == other.disabledColor?.value &&
-          hoverColor?.value == other.hoverColor?.value &&
+          backgroundColor == other.backgroundColor &&
+          disabledColor == other.disabledColor &&
+          hoverColor == other.hoverColor &&
           shape == other.shape &&
           borderRadius == other.borderRadius &&
           boxConstraints == other.boxConstraints &&
           padding == other.padding &&
-          pressedColor?.value == other.pressedColor?.value;
+          pressedColor == other.pressedColor;
 
   @override
   int get hashCode =>

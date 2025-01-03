@@ -948,7 +948,7 @@ extension AppKitPopupButtonStyleX on AppKitPopupButtonStyle {
     final blendedBackgroundColor = Color.lerp(
       theme.canvasColor,
       backgroundColor,
-      backgroundColor.opacity,
+      backgroundColor.a,
     )!;
 
     final luminance = blendedBackgroundColor.computeLuminance();

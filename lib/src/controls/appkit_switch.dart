@@ -354,7 +354,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                     .withValues(
                         alpha: AppKitDynamicColor.resolve(context,
                                     AppKitColors.fills.opaque.secondary)
-                                .opacity *
+                                .a *
                             (1.0 - animationValue))
                 : AppKitColors.fills.opaque.primary.color
                     .withValues(alpha: 0.04);

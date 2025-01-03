@@ -62,10 +62,10 @@ class RGBAColor {
         mode = ColorSpaceMode.fromValue((json['mode'] as int?) ?? -1);
 
   RGBAColor.fromColor(Color color, {this.mode = ColorSpaceMode.unknown})
-      : red = color.red / 255,
-        green = color.green / 255,
-        blue = color.blue / 255,
-        alpha = color.opacity;
+      : red = color.r,
+        green = color.g,
+        blue = color.b,
+        alpha = color.a;
 
   @override
   String toString() {

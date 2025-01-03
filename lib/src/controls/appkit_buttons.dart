@@ -178,7 +178,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
           widget.buttonTheme.push.destructiveColor ?? AppKitColors.appleRed;
     } else {
       final blendedColor = Color.lerp(
-          widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+          widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
       if (blendedColor.computeLuminance() > 0.5) {
         textColor = AppKitColors.text.opaque.primary.color;
       } else {
@@ -306,7 +306,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
     }
 
     final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+        widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {
@@ -360,7 +360,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
           widget.buttonTheme.flat.destructiveColor ?? AppKitColors.systemRed;
     } else {
       final blendedColor = Color.lerp(
-          widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+          widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
       if (blendedColor.computeLuminance() > 0.5) {
         textColor = AppKitColors.textColor.color;
       } else {
@@ -417,7 +417,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
     }
 
     final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+        widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {
@@ -469,7 +469,7 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
           widget.buttonTheme.inline.destructiveColor ?? AppKitColors.systemRed;
     } else {
       final blendedColor = Color.lerp(
-          widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+          widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
       if (blendedColor.computeLuminance() > 0.5) {
         textColor = AppKitColors.textColor.color;
       } else {
@@ -525,7 +525,7 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
     }
 
     final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.opacity)!;
+        widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {

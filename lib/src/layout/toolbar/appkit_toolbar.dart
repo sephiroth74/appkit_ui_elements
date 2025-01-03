@@ -201,7 +201,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
         enableWallpaperTintedArea: !widget.enableBlur,
         isWidgetVisible: widget.allowWallpaperTintingOverrides,
         backgroundColor: theme.canvasColor,
-        widgetOpacity: widget.decoration?.color?.opacity,
+        widgetOpacity: widget.decoration?.color?.a,
         child: Container(
           alignment: widget.alignment,
           padding: widget.padding,
@@ -226,7 +226,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
                     return AppKitContextMenu(
                         entries: overflowedActions
                             .map((action) => action.toContextMenuEntry(context))
-                            .whereNotNull()
+                            .nonNulls
                             .toList());
                   }),
               children: inToolbarActions
