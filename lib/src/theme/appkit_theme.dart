@@ -385,7 +385,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       backgroundBlur: 2,
       borderRadius: 6.0,
       backgroundColor: isDark
-          ? AppKitColors.controlBackgroundColor.darkColor.withValues(alpha: 0.85)
+          ? AppKitColors.controlBackgroundColor.darkColor
+              .withValues(alpha: 0.85)
           : const Color(0xFFe7e7e7),
     );
 
