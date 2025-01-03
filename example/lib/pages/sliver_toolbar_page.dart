@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 const groupMessage =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';

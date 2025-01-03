@@ -214,8 +214,8 @@ class _AppKitArcSliderState extends State<AppKitArcSlider> {
                   height: size,
                   child: CustomPaint(
                     painter: _TrackPainter(
-                      color: trackColor
-                          .withOpacity(trackColor.opacity * enabledFactor),
+                      color: trackColor.withValues(
+                          alpha: trackColor.a * enabledFactor),
                       strokeWidth: widget.trackWidth ?? sliderTheme.trackHeight,
                       sweepAngle: sweepAngle,
                     ),

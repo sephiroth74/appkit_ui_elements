@@ -282,8 +282,8 @@ class AppKitColors {
 
   static CupertinoDynamicColor scrollbarColor =
       CupertinoDynamicColor.withBrightness(
-    color: AppKitColors.systemGray.color.withOpacity(0.8),
-    darkColor: AppKitColors.systemGray.darkColor.withOpacity(0.8),
+    color: AppKitColors.systemGray.color.withValues(alpha: 0.8),
+    darkColor: AppKitColors.systemGray.darkColor.withValues(alpha: 0.8),
   );
 
   static const toolbarIconColor = CupertinoDynamicColor.withBrightness(
@@ -571,71 +571,70 @@ extension AppKitDynamicColor on CupertinoDynamicColor {
         darkHighContrastColor != darkHighContrastElevatedColor;
   }
 
-  Color resolveWith(Brightness brightness) {
+  Color resolveWithBrightness(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     return isDark ? darkColor : color;
   }
 
+  Color resolveWithContext(BuildContext context) {
+    final Brightness brightness = isPlatformBrightnessDependent
+        ? AppKitTheme.maybeBrightnessOf(context) ?? Brightness.light
+        : Brightness.light;
+
+    final CupertinoUserInterfaceLevelData level = isInterfaceElevationDependent
+        ? CupertinoUserInterfaceLevel.maybeOf(context) ??
+            CupertinoUserInterfaceLevelData.base
+        : CupertinoUserInterfaceLevelData.base;
+
+    final bool highContrast = isHighContrastDependent &&
+        (MediaQuery.maybeHighContrastOf(context) ?? false);
+
+    final Color resolved = switch ((brightness, level, highContrast)) {
+      (Brightness.light, CupertinoUserInterfaceLevelData.base, false) => color,
+      (Brightness.light, CupertinoUserInterfaceLevelData.base, true) =>
+        highContrastColor,
+      (Brightness.light, CupertinoUserInterfaceLevelData.elevated, false) =>
+        elevatedColor,
+      (Brightness.light, CupertinoUserInterfaceLevelData.elevated, true) =>
+        highContrastElevatedColor,
+      (Brightness.dark, CupertinoUserInterfaceLevelData.base, false) =>
+        darkColor,
+      (Brightness.dark, CupertinoUserInterfaceLevelData.base, true) =>
+        darkHighContrastColor,
+      (Brightness.dark, CupertinoUserInterfaceLevelData.elevated, false) =>
+        darkElevatedColor,
+      (Brightness.dark, CupertinoUserInterfaceLevelData.elevated, true) =>
+        darkHighContrastElevatedColor,
+    };
+
+    Element? debugContext;
+    assert(() {
+      debugContext = context as Element;
+      return true;
+    }());
+    return AppKitResolvedDynamicColor._(
+      resolved,
+      darkColor,
+      highContrastColor,
+      darkHighContrastColor,
+      elevatedColor,
+      darkElevatedColor,
+      highContrastElevatedColor,
+      darkHighContrastElevatedColor,
+      debugContext,
+    );
+  }
+
   static Color resolve(BuildContext context, Color resolvable) {
-    if (resolvable is CupertinoDynamicColor) {
-      final Brightness brightness = resolvable.isPlatformBrightnessDependent
-          ? AppKitTheme.maybeBrightnessOf(context) ?? Brightness.light
-          : Brightness.light;
-
-      final CupertinoUserInterfaceLevelData level =
-          resolvable.isInterfaceElevationDependent
-              ? CupertinoUserInterfaceLevel.maybeOf(context) ??
-                  CupertinoUserInterfaceLevelData.base
-              : CupertinoUserInterfaceLevelData.base;
-
-      final bool highContrast = resolvable.isHighContrastDependent &&
-          (MediaQuery.maybeHighContrastOf(context) ?? false);
-
-      final Color resolved = switch ((brightness, level, highContrast)) {
-        (Brightness.light, CupertinoUserInterfaceLevelData.base, false) =>
-          resolvable.color,
-        (Brightness.light, CupertinoUserInterfaceLevelData.base, true) =>
-          resolvable.highContrastColor,
-        (Brightness.light, CupertinoUserInterfaceLevelData.elevated, false) =>
-          resolvable.elevatedColor,
-        (Brightness.light, CupertinoUserInterfaceLevelData.elevated, true) =>
-          resolvable.highContrastElevatedColor,
-        (Brightness.dark, CupertinoUserInterfaceLevelData.base, false) =>
-          resolvable.darkColor,
-        (Brightness.dark, CupertinoUserInterfaceLevelData.base, true) =>
-          resolvable.darkHighContrastColor,
-        (Brightness.dark, CupertinoUserInterfaceLevelData.elevated, false) =>
-          resolvable.darkElevatedColor,
-        (Brightness.dark, CupertinoUserInterfaceLevelData.elevated, true) =>
-          resolvable.darkHighContrastElevatedColor,
-      };
-
-      Element? debugContext;
-      assert(() {
-        debugContext = context as Element;
-        return true;
-      }());
-      return AppKitResolvedDynamicColor(
-        resolved,
-        resolvable.color,
-        resolvable.darkColor,
-        resolvable.highContrastColor,
-        resolvable.darkHighContrastColor,
-        resolvable.elevatedColor,
-        resolvable.darkElevatedColor,
-        resolvable.highContrastElevatedColor,
-        resolvable.darkHighContrastElevatedColor,
-        debugContext,
-      );
-    } else {
+    if (resolvable is! CupertinoDynamicColor) {
       return resolvable;
     }
+    return resolvable.resolveWithContext(context);
   }
 }
 
 class AppKitResolvedDynamicColor extends CupertinoDynamicColor {
-  const AppKitResolvedDynamicColor(
-    this.resolvedColor,
+  const AppKitResolvedDynamicColor._(
     Color color,
     Color darkColor,
     Color highContrastColor,
@@ -655,9 +654,4 @@ class AppKitResolvedDynamicColor extends CupertinoDynamicColor {
           highContrastElevatedColor: highContrastElevatedColor,
           darkHighContrastElevatedColor: darkHighContrastElevatedColor,
         );
-
-  final Color resolvedColor;
-
-  @override
-  int get value => resolvedColor.value;
 }

@@ -160,7 +160,9 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   void setSelectedItem(AppKitContextMenuItem<T>? value) {
     if (value == _selectedItem ||
-        (_futureSelectedEntry != null && _futureSelectedEntry != value)) return;
+        (_futureSelectedEntry != null && _futureSelectedEntry != value)) {
+      return;
+    }
     _selectedItem = value;
     _futureSelectedEntry = null;
     _selectionTimer?.cancel();

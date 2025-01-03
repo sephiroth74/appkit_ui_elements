@@ -104,9 +104,6 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                 case AppKitControlButtonIconStyle.bordered:
                   return buildBorderedContainer(
                       theme: theme, isMainWindow: isMainWindow);
-                default:
-                  throw UnimplementedError(
-                      'Unsupported icon style: ${widget.style}');
               }
             }),
           ),

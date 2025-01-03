@@ -173,7 +173,7 @@ class _DecoratedContainer extends StatelessWidget {
             : Colors.white
         : !isMainWindow && enabled
             ? Colors.white
-            : Colors.black.withOpacity(0.5);
+            : Colors.black.withValues(alpha: 0.5);
 
     return Container(
       foregroundDecoration: isDown
@@ -185,20 +185,22 @@ class _DecoratedContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color: !enabled
               ? isDark
-                  ? AppKitColors.controlBackgroundColor.color.withOpacity(0.2)
+                  ? AppKitColors.controlBackgroundColor.color
+                      .withValues(alpha: 0.2)
                   : AppKitColors.controlBackgroundColor.darkColor
-                      .withOpacity(0.1)
-              : value != false && isMainWindow
+                      .withValues(alpha: 0.1)
+              : value != false
                   ? color
-                  : controlBackgroundColor.withOpacity(0.5),
+                  : controlBackgroundColor.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(radius),
           boxShadow: [
             if (!isDark && enabled && (value == false || !isMainWindow)) ...[
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
+              const BoxShadow(
+                color: AppKitColors.shadowColor,
               ),
               BoxShadow(
-                color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.1),
+                color:
+                    controlBackgroundColor.withValues(alpha: enabled ? 1 : 0.1),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),
@@ -209,13 +211,13 @@ class _DecoratedContainer extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius),
-            border: enabled && isMainWindow || (!isDark && value == false)
+            border: enabled || (!isDark && value == false)
                 ? GradientBoxBorder(
                     gradient: LinearGradient(
                       colors: isDark
                           ? [
-                              AppKitDynamicColor.resolve(
-                                      context, AppKitColors.text.opaque.primary)
+                              AppKitDynamicColor.resolve(context,
+                                      AppKitColors.text.opaque.secondary)
                                   .multiplyOpacity(0.75),
                               AppKitDynamicColor.resolve(context,
                                       AppKitColors.text.opaque.quaternary)
@@ -239,8 +241,8 @@ class _DecoratedContainer extends StatelessWidget {
             gradient: value != false && isMainWindow && enabled
                 ? LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(isDark ? 0.05 : 0.17),
-                      Colors.white.withOpacity(0),
+                      Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
+                      Colors.white.withValues(alpha: 0),
                     ],
                     transform: const GradientRotation(pi / 2),
                   )
@@ -248,11 +250,11 @@ class _DecoratedContainer extends StatelessWidget {
                     ? LinearGradient(
                         colors: [
                           isDark
-                              ? Colors.black.withOpacity(0.5)
-                              : Colors.white.withOpacity(0.5),
+                              ? Colors.black.withValues(alpha: 0.5)
+                              : Colors.white.withValues(alpha: 0.5),
                           isDark
-                              ? Colors.black.withOpacity(0.0)
-                              : Colors.white.withOpacity(0.0),
+                              ? Colors.black.withValues(alpha: 0.0)
+                              : Colors.white.withValues(alpha: 0.0),
                         ],
                         transform: const GradientRotation(pi / 2),
                       )

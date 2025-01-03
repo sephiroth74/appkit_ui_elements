@@ -189,9 +189,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         : AppKitColors.controlColor.color;
 
     Color controlBackgroundColorDisabledDark =
-        AppKitColors.controlBackgroundColor.darkColor.withOpacity(0.35);
+        AppKitColors.controlBackgroundColor.darkColor.withValues(alpha: 0.35);
     Color controlBackgroundColorDisabledLight =
-        AppKitColors.controlBackgroundColor.color.withOpacity(0.35);
+        AppKitColors.controlBackgroundColor.color.withValues(alpha: 0.35);
 
     controlBackgroundColorDisabled ??= isDark
         ? controlBackgroundColorDisabledDark
@@ -281,8 +281,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           ? AppKitColors.controlColor.darkColor
           : AppKitColors.controlColor.color,
       thumbColor: isDark
-          ? Colors.black.withOpacity(0.75)
-          : Colors.black.withOpacity(0.5),
+          ? Colors.black.withValues(alpha: 0.75)
+          : Colors.black.withValues(alpha: 0.5),
       thumbColorUnfocused: activeColorUnfocused,
     );
 
@@ -408,11 +408,11 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       backgroundColor: Colors.transparent,
       disabledColor: isDark ? const Color(0xff353535) : const Color(0xffE5E5E5),
       hoverColor: isDark
-          ? Colors.white.withOpacity(0.06)
-          : Colors.black.withOpacity(0.05),
+          ? Colors.white.withValues(alpha: 0.06)
+          : Colors.black.withValues(alpha: 0.05),
       pressedColor: isDark
-          ? Colors.white.withOpacity(0.2)
-          : Colors.black.withOpacity(0.2),
+          ? Colors.white.withValues(alpha: 0.2)
+          : Colors.black.withValues(alpha: 0.2),
       shape: BoxShape.rectangle,
       boxConstraints: const BoxConstraints(
         minHeight: 22,

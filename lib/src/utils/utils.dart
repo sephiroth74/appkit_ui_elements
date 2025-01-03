@@ -202,13 +202,13 @@ Rect getScreenRect(BuildContext context) {
 
 extension ColorX on Color {
   Color multiplyOpacity(double factor) {
-    assert(opacity >= 0.0);
+    assert(a >= 0.0);
     if (factor == 1.0) {
       return this;
     } else if (factor == 0.0) {
       return withAlpha(0);
     }
-    final newOpacity = (opacity * factor).clamp(0, 1.0);
+    final newOpacity = (a * factor).clamp(0, 1.0);
     final alpha = (newOpacity * 255).round();
     return withAlpha(alpha);
   }
