@@ -12,7 +12,6 @@ export 'src/library.dart';
 
 class AppKitUiElements {
   static Future<void> ensureInitialized() async {
-    // Intl.defaultLocale = 'en_US';
     await findSystemLocale();
     await initializeDateFormatting();
     MainWindowStateListener.instance;

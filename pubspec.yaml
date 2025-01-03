@@ -1,6 +1,6 @@
 name: appkit_ui_elements
 description: "App Kit Ui Elements."
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/sephiroth74/appkit_ui_elements
 repository: https://github.com/sephiroth74/appkit_ui_elements
 
@@ -20,11 +20,10 @@ dependencies:
   rxdart: ^0.28.0
   system_theme: ^3.1.2
   uuid: ^4.5.1
-
   plugin_platform_interface: ^2.1.8
   collection: ^1.18.0
   indexed: ^0.0.8
-  intl: ^0.20.1
+  intl: ^0.19.0
   dartz: ^0.10.1
 dev_dependencies:
   flutter_test:
