@@ -922,7 +922,7 @@ class _ColorProvider {
       {required AppKitAccentColor accentColor, required bool isDark}) {
     switch (accentColor) {
       case AppKitAccentColor.blue:
-        return isDark ? const Color(0x7F1AA9FF) : const Color(0xFF99999E);
+        return isDark ? const Color(0x7F1AA9FF) : const Color(0x7F0067F4);
       case AppKitAccentColor.purple:
         return isDark ? const Color(0x7FDC78DE) : const Color(0x7F842685);
       case AppKitAccentColor.pink:
@@ -937,75 +937,6 @@ class _ColorProvider {
         return isDark ? const Color(0x7F8DF56C) : const Color(0x7F4EAB30);
       case AppKitAccentColor.graphite:
         return isDark ? const Color(0x7FBFBFBF) : const Color(0xFF99999E);
-    }
-  }
-
-  /// Returns the active color based on the provided parameters.
-  static Color getActiveColor({
-    required AppKitAccentColor accentColor,
-    required bool isDark,
-    required bool isMainWindow,
-  }) {
-    if (!isMainWindow) {
-      return getActiveColorUnfocused(isDark: isDark);
-    }
-
-    switch (accentColor) {
-      case AppKitAccentColor.blue:
-        if (isDark) {
-          return const Color.fromRGBO(0, 122, 255, 1.0);
-        } else {
-          return const Color.fromRGBO(10, 132, 255, 1.0);
-        }
-
-      case AppKitAccentColor.purple:
-        if (isDark) {
-          return const Color(0xFFbb3dc4);
-        } else {
-          return const Color(0xFF9b32a2);
-        }
-
-      case AppKitAccentColor.pink:
-        if (isDark) {
-          return const Color.fromRGBO(255, 45, 85, 1.0);
-        } else {
-          return const Color.fromRGBO(255, 55, 95, 1.0);
-        }
-
-      case AppKitAccentColor.red:
-        if (isDark) {
-          return const Color.fromRGBO(255, 59, 48, 1.0);
-        } else {
-          return const Color.fromRGBO(255, 69, 58, 1.0);
-        }
-
-      case AppKitAccentColor.orange:
-        if (isDark) {
-          return const Color.fromRGBO(255, 149, 0, 1.0);
-        } else {
-          return const Color.fromRGBO(255, 159, 10, 1.0);
-        }
-
-      case AppKitAccentColor.yellow:
-        if (isDark) {
-          return const Color.fromRGBO(255, 204, 0, 1.0);
-        } else {
-          return const Color.fromRGBO(255, 214, 10, 1.0);
-        }
-
-      case AppKitAccentColor.green:
-        if (isDark) {
-          return const Color.fromRGBO(76, 217, 100, 1.0);
-        } else {
-          return const Color.fromRGBO(76, 227, 110, 1.0);
-        }
-
-      case AppKitAccentColor.graphite:
-        if (isDark) {
-          return const Color.fromRGBO(142, 142, 142, 1.0);
-        } else {
-          return const Color.fromRGBO(142, 142, 142, 1.0);
-        }
     }
   }
 }

@@ -194,8 +194,8 @@ Future<T?> showAppKitDialog<T>({
       _AppKitDialogRoute<T>(
         settings: routeSettings,
         pageBuilder: (context, animation, secondaryAnimation) {
-          return MainWindowBuilder(
-            builder: (context, isMainWindow) {
+          return Builder(
+            builder: (context) {
               return builder(context);
             },
           );

@@ -110,9 +110,11 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
             segmentedControlTheme.accentColor ??
             theme.activeColor;
         final isDark = theme.brightness == Brightness.dark;
+
         final backgroundColor = multiSelectionStyle
             ? theme.controlColor
             : AppKitColors.fills.opaque.quinaryInverted;
+
         final borderRadius = widget.size.getborderRadius(singleSelectionStyle);
         final constraints = widget.size.constraints;
         return Container(
@@ -164,21 +166,24 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                   ),
                   BoxShadow(
                     color: (isDark
-                            ? theme.controlColor.withLuminance(0.35)
-                            : AppKitColors.fills.opaque.quinary.darkColor)
-                        .withOpacity(0.475),
+                        ? theme.controlColor
+                            .withLuminance(0.35)
+                            .withOpacity(0.475)
+                        : backgroundColor.withOpacity(0.5)),
                     spreadRadius: -0.5,
                     blurRadius: 0.5,
                     offset: const Offset(0, 0.15),
                   ),
                 ],
-                BoxShadow(
-                  color: AppKitColors.shadowColor.color.withOpacity(0.15),
-                  blurRadius: 0.5,
-                  spreadRadius: 0,
-                  offset: const Offset(0, 0.5),
-                  blurStyle: BlurStyle.outer,
-                ),
+                if (isDark) ...[
+                  BoxShadow(
+                    color: AppKitColors.shadowColor.withOpacity(0.15),
+                    blurRadius: 0.5,
+                    spreadRadius: 0,
+                    blurStyle: BlurStyle.outer,
+                    offset: const Offset(0, 0.0),
+                  ),
+                ],
               ],
             ),
             child: SizedBox.expand(
@@ -462,10 +467,10 @@ class _SingleSegmentedChild extends StatelessWidget {
                             : [
                                 AppKitDynamicColor.resolve(context,
                                         AppKitColors.text.opaque.tertiary)
-                                    .multiplyOpacity(0.5),
+                                    .multiplyOpacity(0.6),
                                 AppKitDynamicColor.resolve(context,
                                         AppKitColors.text.opaque.secondary)
-                                    .multiplyOpacity(0.5)
+                                    .multiplyOpacity(0.6)
                               ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -476,13 +481,13 @@ class _SingleSegmentedChild extends StatelessWidget {
                     color: segmentedControlTheme.singleSelectionColor,
                     boxShadow: [
                         BoxShadow(
-                          color: AppKitColors.shadowColor.withOpacity(0.15),
+                          color: AppKitColors.shadowColor.withOpacity(0.1),
                           blurRadius: 0.25,
                           spreadRadius: 0.0,
                           offset: const Offset(0, 0.25),
                         ),
                         BoxShadow(
-                          color: AppKitColors.shadowColor.withOpacity(0.05),
+                          color: AppKitColors.shadowColor.withOpacity(0.1),
                           blurRadius: 0.75,
                           spreadRadius: 0.0,
                           offset: const Offset(0, 0.5),
