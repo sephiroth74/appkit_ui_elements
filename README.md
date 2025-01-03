@@ -14,7 +14,7 @@ and the Flutter guide for
 Flutter widgets and themes implementing the current macOS design language. It has been inspired by the <a href='https://pub.dev/packages/macos_ui'>macos_ui</a> flutter package.
 
 
-[screenshot](./pages/images/screenshot-001.png)
+![screenshot](./pages/images/screenshot-001.png)
 
 ## Features
 
