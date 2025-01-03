@@ -382,10 +382,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     );
 
     contextMenuTheme ??= AppKitContextMenuThemeData(
-      backgroundBlur: 0.4,
+      backgroundBlur: 2,
       borderRadius: 6.0,
       backgroundColor: isDark
-          ? AppKitColors.controlBackgroundColor.darkColor
+          ? AppKitColors.controlBackgroundColor.darkColor.withValues(alpha: 0.85)
           : const Color(0xFFe7e7e7),
     );
 

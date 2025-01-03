@@ -26,16 +26,16 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
           maxWidth: 200,
+          maxHeight: 200,
           entries: [
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < 20; i++)
               if (i % 5 == 0 && i > 0)
                 const AppKitContextMenuDivider()
               else
                 AppKitContextMenuItem(
-                  title: i == 6 ? 'Very long item with value $i' : 'Item $i',
+                  title: 'Menu Item #$i',
                   enabled: i != 4,
                   value: '$i',
-                  image: i == 0 ? CupertinoIcons.alarm : null,
                   itemState: popupSelectedItem?.value == '$i'
                       ? AppKitItemState.on
                       : AppKitItemState.off,
@@ -155,7 +155,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                         .map((style) => [
                                               AppKitPopupButton(
                                                 canRequestFocus: true,
-                                                hint: 'Select an item',
+                                                hint: 'Select...',
                                                 controlSize: controlSize,
                                                 width: popupButtonWidth,
                                                 selectedItem: popupSelectedItem,

@@ -79,6 +79,8 @@ class AppKitColors {
         color: Color(0x5CF6F6F6), darkColor: Color(0x1A000000), blur: 30),
   );
 
+  static const windowFrameColor = Color(0xffddddde);
+
   static const CupertinoDynamicColor labelColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
