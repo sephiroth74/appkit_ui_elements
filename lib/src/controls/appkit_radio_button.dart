@@ -111,7 +111,7 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
                       widget.enabled &&
                       !isDark) ...[
                     BoxShadow(
-                      color: accentColor.withOpacity(0.12),
+                      color: accentColor.withValues(alpha: 0.12),
                       offset: const Offset(0, 0.5),
                       blurRadius: 0.5,
                       spreadRadius: 0.25,
@@ -119,7 +119,7 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
                   ] else if (isDark) ...[
                     BoxShadow(
                       color: AppKitColors.shadowColor.color
-                          .withOpacity(isDark ? 0.75 : 0.15),
+                          .withValues(alpha: isDark ? 0.75 : 0.15),
                       blurRadius: 0.25,
                       spreadRadius: 0,
                       offset: const Offset(0, 0.25),
@@ -183,7 +183,7 @@ class _DecoratedContainer extends StatelessWidget {
             : Colors.white
         : !isMainWindow && enabled
             ? Colors.white
-            : Colors.black.withOpacity(0.5);
+            : Colors.black.withValues(alpha: 0.5);
 
     return Container(
       foregroundDecoration: isDown
@@ -196,25 +196,27 @@ class _DecoratedContainer extends StatelessWidget {
           shape: BoxShape.circle,
           border: !isDark && enabled && (value == false)
               ? Border.all(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   width: size / _kBorderWidthRatio,
                 )
               : null,
           color: !enabled
               ? isDark
-                  ? AppKitColors.controlBackgroundColor.color.withOpacity(0.2)
+                  ? AppKitColors.controlBackgroundColor.color
+                      .withValues(alpha: 0.2)
                   : AppKitColors.controlBackgroundColor.darkColor
-                      .withOpacity(0.1)
+                      .withValues(alpha: 0.1)
               : value != false && isMainWindow
                   ? color
-                  : controlBackgroundColor.withOpacity(0.5),
+                  : controlBackgroundColor.withValues(alpha: 0.5),
           boxShadow: [
             if (!isDark && enabled && (value == false || !isMainWindow)) ...[
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
               ),
               BoxShadow(
-                color: controlBackgroundColor.withOpacity(enabled ? 1 : 0.1),
+                color:
+                    controlBackgroundColor.withValues(alpha: enabled ? 1 : 0.1),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),
@@ -255,8 +257,8 @@ class _DecoratedContainer extends StatelessWidget {
             gradient: value != false && isMainWindow && enabled
                 ? LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(isDark ? 0.05 : 0.17),
-                      Colors.white.withOpacity(0),
+                      Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
+                      Colors.white.withValues(alpha: 0),
                     ],
                     transform: const GradientRotation(pi / 2),
                   )
@@ -264,11 +266,11 @@ class _DecoratedContainer extends StatelessWidget {
                     ? LinearGradient(
                         colors: [
                           isDark
-                              ? Colors.black.withOpacity(0.5)
-                              : Colors.white.withOpacity(0.5),
+                              ? Colors.black.withValues(alpha: 0.5)
+                              : Colors.white.withValues(alpha: 0.5),
                           isDark
-                              ? Colors.black.withOpacity(0.0)
-                              : Colors.white.withOpacity(0.0),
+                              ? Colors.black.withValues(alpha: 0.0)
+                              : Colors.white.withValues(alpha: 0.0),
                         ],
                         transform: const GradientRotation(pi / 2),
                       )

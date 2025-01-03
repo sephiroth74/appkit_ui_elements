@@ -50,7 +50,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
     final plainButtonColor = (isDark
             ? AppKitColors.systemGray.darkColor
             : AppKitColors.systemGray.color)
-        .withOpacity(0.2);
+        .withValues(alpha: 0.2);
     const arrowsColor = AppKitColors.labelColor;
 
     final inlineTextStyle =

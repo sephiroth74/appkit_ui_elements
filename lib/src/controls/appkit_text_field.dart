@@ -373,7 +373,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
             .multiplyOpacity(enabled ? 1.0 : 0.5);
 
     if (!enabled) {
-      iconsColor = iconsColor.withOpacity(0.2);
+      iconsColor = iconsColor.withValues(alpha: 0.2);
     }
 
     // Otherwise, listen to the current state of the text entry.
@@ -644,8 +644,8 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     final isDark = theme.brightness == Brightness.dark;
     final backgroundColor = widget.backgroundColor ??
         (enabled
-            ? theme.controlColor.withOpacity(isDark ? 0.1 : 1.0)
-            : theme.controlColor.withOpacity(isDark ? 0.25 : 0.5));
+            ? theme.controlColor.withValues(alpha: isDark ? 0.1 : 1.0)
+            : theme.controlColor.withValues(alpha: isDark ? 0.25 : 0.5));
     const borderWidth = 0.5;
 
     final borderRadius =
@@ -666,7 +666,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
           border: Border.all(
             color: isDark
                 ? AppKitColors.controlColor.darkColor
-                : AppKitColors.shadowColor.withOpacity(0.3),
+                : AppKitColors.shadowColor.withValues(alpha: 0.3),
             width: borderWidth,
           ),
         );
@@ -700,7 +700,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
           borderRadius: BorderRadius.circular(borderRadius),
           // boxShadow: [
           //   BoxShadow(
-          //     color: AppKitColors.shadowColor.withOpacity(0.05),
+          //     color: AppKitColors.shadowColor.withValues(alpha: 0.05),
           //     blurRadius: 1.25,
           //     offset: const Offset(0, 0.25),
           //     blurStyle: BlurStyle.outer,

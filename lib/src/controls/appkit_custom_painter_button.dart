@@ -133,7 +133,7 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
             : (isDark
                     ? AppKitColors.labelColor.darkColor
                     : AppKitColors.labelColor.color)
-                .withOpacity(0.35)
+                .withValues(alpha: 0.35)
         : widget.enabled
             ? isDark
                 ? AppKitColors.labelColor.darkColor
@@ -141,11 +141,11 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
             : (isDark
                     ? AppKitColors.labelColor.color
                     : AppKitColors.labelColor.darkColor)
-                .withOpacity(0.35);
+                .withValues(alpha: 0.35);
 
     final foregroundColor = colorLuminance >= 0.5
-        ? AppKitColors.labelColor.color.withOpacity(0.1)
-        : AppKitColors.labelColor.darkColor.withOpacity(0.1);
+        ? AppKitColors.labelColor.color.withValues(alpha: 0.1)
+        : AppKitColors.labelColor.darkColor.withValues(alpha: 0.1);
 
     return Container(
       foregroundDecoration: BoxDecoration(
@@ -159,7 +159,7 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                   BorderRadius.circular(widget.size / _kBorderRadiusRatio),
               boxShadow: [
                 BoxShadow(
-                  color: AppKitColors.shadowColor.color.withOpacity(0.75),
+                  color: AppKitColors.shadowColor.color.withValues(alpha: 0.75),
                   blurRadius: 0.5,
                   spreadRadius: 0,
                   offset: const Offset(0, 0.5),
@@ -207,7 +207,7 @@ class IconButtonPainter extends CustomPainter {
     Path path = Path();
     final double halfSize = size.width / 2;
 
-    // canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), Paint()..color = Colors.amber.withOpacity(0.5));
+    // canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), Paint()..color = Colors.amber.withValues(alpha: 0.5));
 
     switch (icon) {
       case AppKitControlButtonIcon.arrows:

@@ -113,7 +113,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         ? AppKitDynamicColor.resolve(context, AppKitColors.labelColor)
         : AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     if (!enabled) {
-      textColor = textColor.withOpacity(0.3);
+      textColor = textColor.withValues(alpha: 0.3);
     }
 
     final Color iconColor =
@@ -176,7 +176,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         return DecoratedBox(
           decoration: BoxDecoration(
             color: selectedOrFocused && !isSelectionAnimating
-                ? accentColor.withOpacity(0.7)
+                ? accentColor.withValues(alpha: 0.7)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(5),
           ),

@@ -70,8 +70,8 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
             foregroundDecoration: isDown
                 ? BoxDecoration(
-                    color:
-                        (isDark ? Colors.white : Colors.black).withOpacity(0.1),
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.1),
                   )
                 : null,
             decoration: BoxDecoration(

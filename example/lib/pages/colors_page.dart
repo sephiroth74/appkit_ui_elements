@@ -559,7 +559,7 @@ class _ColorBox extends StatelessWidget {
       height: 20,
       width: 20,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withOpacity(0.1)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.1)),
         borderRadius: BorderRadius.circular(5.0),
         color: color,
       ),

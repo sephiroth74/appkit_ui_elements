@@ -121,7 +121,7 @@ class _FieldsPageState extends State<FieldsPage> {
                       Flexible(
                           child: AppKitTextField(
                         backgroundColor:
-                            AppKitColors.systemCyan.withOpacity(0.1),
+                            AppKitColors.systemCyan.withValues(alpha: 0.1),
                         controller: textFieldController,
                         padding: const EdgeInsets.all(8.0),
                         enabled: textFieldEnabled,

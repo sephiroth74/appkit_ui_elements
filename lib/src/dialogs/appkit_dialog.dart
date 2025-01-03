@@ -44,13 +44,13 @@ class AppKitDialog extends StatelessWidget {
     final brightness = AppKitTheme.brightnessOf(context);
 
     final outerBorderColor = brightness.resolve(
-      Colors.black.withOpacity(0.23),
-      Colors.black.withOpacity(0.76),
+      Colors.black.withValues(alpha: 0.23),
+      Colors.black.withValues(alpha: 0.76),
     );
 
     final innerBorderColor = brightness.resolve(
-      Colors.white.withOpacity(0.45),
-      Colors.white.withOpacity(0.15),
+      Colors.white.withValues(alpha: 0.45),
+      Colors.white.withValues(alpha: 0.15),
     );
 
     return MainWindowBuilder(builder: (context, isMainWindow) {

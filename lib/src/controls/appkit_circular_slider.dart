@@ -230,7 +230,7 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
               : sliderTheme.thumbColorUnfocused;
           var backgroundColor = enabled
               ? sliderTheme.backgroundColor
-              : controlBackgroundColor.withOpacity(0.5);
+              : controlBackgroundColor.withValues(alpha: 0.5);
           final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
 
           if (isMainWindow) {
@@ -276,7 +276,7 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
                 gradient: enabled && isDark
                     ? LinearGradient(
                         colors: [
-                          Colors.white.withOpacity(0.05),
+                          Colors.white.withValues(alpha: 0.05),
                           backgroundColor,
                         ],
                         begin: Alignment.topCenter,

@@ -60,8 +60,8 @@ class AppKitContextMenuWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color:
-                      AppKitColors.materials.ultraThin.color.withOpacity(0.35),
+                  color: AppKitColors.materials.ultraThin.color
+                      .withValues(alpha: 0.35),
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(theme.borderRadius),

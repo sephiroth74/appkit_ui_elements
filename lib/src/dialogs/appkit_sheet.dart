@@ -34,13 +34,13 @@ class AppKitSheet extends StatelessWidget {
       final brightness = AppKitTheme.brightnessOf(context);
 
       final outerBorderColor = brightness.resolve(
-        Colors.black.withOpacity(0.23),
-        Colors.black.withOpacity(0.76),
+        Colors.black.withValues(alpha: 0.23),
+        Colors.black.withValues(alpha: 0.76),
       );
 
       final innerBorderColor = brightness.resolve(
-        Colors.white.withOpacity(0.45),
-        Colors.white.withOpacity(0.15),
+        Colors.white.withValues(alpha: 0.45),
+        Colors.white.withValues(alpha: 0.15),
       );
       return AnimatedPadding(
         padding: effectivePadding,
@@ -56,7 +56,7 @@ class AppKitSheet extends StatelessWidget {
               borderRadius: _kSheetBorderRadius,
               boxShadow: [
                 BoxShadow(
-                  color: AppKitColors.shadowColor.withOpacity(0.55),
+                  color: AppKitColors.shadowColor.withValues(alpha: 0.55),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),

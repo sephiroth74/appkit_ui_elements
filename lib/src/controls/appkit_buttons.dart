@@ -202,8 +202,8 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
                 widget.isEnabled
             ? LinearGradient(
                 colors: [
-                  Colors.white.withOpacity(isDark ? 0.05 : 0.17),
-                  Colors.white.withOpacity(0.0),
+                  Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
+                  Colors.white.withValues(alpha: 0.0),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -251,7 +251,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
                 widget.isEnabled &&
                 !isDark) ...[
               BoxShadow(
-                color: backgroundColor.withOpacity(0.5),
+                color: backgroundColor.withValues(alpha: 0.5),
                 blurRadius: 0.5,
                 spreadRadius: 0,
                 offset: const Offset(0, 0.5),
@@ -259,7 +259,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
             ] else ...[
               BoxShadow(
                 color: AppKitColors.shadowColor.color
-                    .withOpacity(isDark ? 0.75 : 0.15),
+                    .withValues(alpha: isDark ? 0.75 : 0.15),
                 blurRadius: 0.5,
                 spreadRadius: 0,
                 offset: const Offset(0, 0.5),

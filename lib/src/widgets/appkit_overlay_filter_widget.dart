@@ -38,12 +38,12 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
             color: color,
             borderRadius: borderRadius,
             border: Border.all(
-              color: AppKitColors.shadowColor.withOpacity(0.35),
+              color: AppKitColors.shadowColor.withValues(alpha: 0.35),
               width: 0.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppKitColors.shadowColor.withOpacity(0.25),
+                color: AppKitColors.shadowColor.withValues(alpha: 0.25),
                 offset: const Offset(0, 3.5),
                 blurRadius: 11.0,
                 spreadRadius: 0.0,

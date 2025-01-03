@@ -147,14 +147,14 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
               boxShadow: [
                 if (multiSelectionStyle) ...[
                   BoxShadow(
-                    color: AppKitColors.shadowColor.withOpacity(0.35),
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.35),
                     blurStyle: BlurStyle.outer,
                     blurRadius: 2,
                     spreadRadius: -0.5,
                     offset: const Offset(0, 0.5),
                   ),
                   BoxShadow(
-                    color: AppKitColors.shadowColor.withOpacity(0.05),
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.05),
                     blurStyle: BlurStyle.outer,
                     blurRadius: 0.0,
                     spreadRadius: 0.5,
@@ -162,14 +162,14 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                   ),
                 ] else ...[
                   BoxShadow(
-                    color: AppKitColors.shadowColor.withOpacity(0.125),
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.125),
                   ),
                   BoxShadow(
                     color: (isDark
                         ? theme.controlColor
                             .withLuminance(0.35)
-                            .withOpacity(0.475)
-                        : backgroundColor.withOpacity(0.5)),
+                            .withValues(alpha: 0.475)
+                        : backgroundColor.withValues(alpha: 0.5)),
                     spreadRadius: -0.5,
                     blurRadius: 0.5,
                     offset: const Offset(0, 0.15),
@@ -177,7 +177,7 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                 ],
                 if (isDark) ...[
                   BoxShadow(
-                    color: AppKitColors.shadowColor.withOpacity(0.15),
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.15),
                     blurRadius: 0.5,
                     spreadRadius: 0,
                     blurStyle: BlurStyle.outer,
@@ -333,16 +333,16 @@ class _MultipleSegmentedChild extends StatelessWidget {
             decoration: BoxDecoration(
               color: isDown
                   ? isDark
-                      ? Colors.white.withOpacity(0.1)
-                      : Colors.black.withOpacity(0.1)
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.black.withValues(alpha: 0.1)
                   : null,
               gradient: isDown
                   ? null
                   : isSelected
                       ? LinearGradient(
                           colors: [
-                            Colors.white.withOpacity(0.17),
-                            Colors.white.withOpacity(0.0),
+                            Colors.white.withValues(alpha: 0.17),
+                            Colors.white.withValues(alpha: 0.0),
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
@@ -481,13 +481,15 @@ class _SingleSegmentedChild extends StatelessWidget {
                     color: segmentedControlTheme.singleSelectionColor,
                     boxShadow: [
                         BoxShadow(
-                          color: AppKitColors.shadowColor.withOpacity(0.1),
+                          color:
+                              AppKitColors.shadowColor.withValues(alpha: 0.1),
                           blurRadius: 0.25,
                           spreadRadius: 0.0,
                           offset: const Offset(0, 0.25),
                         ),
                         BoxShadow(
-                          color: AppKitColors.shadowColor.withOpacity(0.1),
+                          color:
+                              AppKitColors.shadowColor.withValues(alpha: 0.1),
                           blurRadius: 0.75,
                           spreadRadius: 0.0,
                           offset: const Offset(0, 0.5),
@@ -498,8 +500,8 @@ class _SingleSegmentedChild extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isDown
                     ? isDark
-                        ? Colors.white.withOpacity(0.07)
-                        : Colors.black.withOpacity(0.035)
+                        ? Colors.white.withValues(alpha: 0.07)
+                        : Colors.black.withValues(alpha: 0.035)
                     : null,
                 borderRadius: (!isDown || !isSelected)
                     ? null

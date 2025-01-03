@@ -346,31 +346,34 @@ class _AppKitSwitchState extends State<AppKitSwitch>
 
             final accentColor = enabled
                 ? Color.lerp(uncheckedColor, checkedColor, animationValue)!
-                : controlBackgroundColor.withOpacity(0.2);
+                : controlBackgroundColor.withValues(alpha: 0.2);
 
             final containerBackgroundColor = enabled
                 ? AppKitDynamicColor.resolve(
                         context, AppKitColors.fills.opaque.secondary)
-                    .withOpacity(AppKitDynamicColor.resolve(
-                                context, AppKitColors.fills.opaque.secondary)
-                            .opacity *
-                        (1.0 - animationValue))
-                : AppKitColors.fills.opaque.primary.color.withOpacity(0.04);
+                    .withValues(
+                        alpha: AppKitDynamicColor.resolve(context,
+                                    AppKitColors.fills.opaque.secondary)
+                                .opacity *
+                            (1.0 - animationValue))
+                : AppKitColors.fills.opaque.primary.color
+                    .withValues(alpha: 0.04);
 
             final Color borderColor = isDark
-                ? Colors.white.withOpacity(0.2)
-                : Colors.black.withOpacity(0.2);
+                ? Colors.white.withValues(alpha: 0.2)
+                : Colors.black.withValues(alpha: 0.2);
 
             final Color innerShadowColor;
             if (enabled) {
               final hsvColor = HSLColor.fromColor(accentColor);
               final checkedInnerShadowColor =
                   hsvColor.withLightness(hsvColor.lightness / 1.05).toColor();
-              final uncheckedInnerShadowColor = Colors.black.withOpacity(0.2);
+              final uncheckedInnerShadowColor =
+                  Colors.black.withValues(alpha: 0.2);
               innerShadowColor = Color.lerp(uncheckedInnerShadowColor,
                   checkedInnerShadowColor, animationValue)!;
             } else {
-              innerShadowColor = Colors.black.withOpacity(0.1);
+              innerShadowColor = Colors.black.withValues(alpha: 0.1);
             }
 
             return MouseRegion(
@@ -399,7 +402,7 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                         ? BoxDecoration(
                             color: Color.lerp(
                                 theme.controlBackgroundPressedColor
-                                    .withOpacity(0.0),
+                                    .withValues(alpha: 0.0),
                                 theme.controlBackgroundPressedColor,
                                 statusController.value),
                             borderRadius: BorderRadius.circular(_borderRadius))
@@ -458,8 +461,8 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                                   height: _handleSize,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.black
-                                          .withOpacity(0.08 * enableFactor),
+                                      color: Colors.black.withValues(
+                                          alpha: 0.08 * enableFactor),
                                       shape: BoxShape.circle,
                                     ),
                                     padding:
@@ -473,8 +476,8 @@ class _AppKitSwitchState extends State<AppKitSwitch>
                                           shape: BoxShape.circle,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(
-                                                  enabled ? 0.12 : 0.02),
+                                              color: Colors.black.withValues(
+                                                  alpha: enabled ? 0.12 : 0.02),
                                               blurStyle: BlurStyle.outer,
                                               spreadRadius: 0.0,
                                               blurRadius: 0.25,

@@ -264,7 +264,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       normalColor: AppKitColors.systemGreen,
       warningColor: AppKitColors.systemYellow,
       criticalColor: AppKitColors.systemRed,
-      strokeColor: AppKitColors.systemGray.withOpacity(0.5),
+      strokeColor: AppKitColors.systemGray.withValues(alpha: 0.5),
       backgroundColor: AppKitColors.fills.opaque.secondary,
       borderRadius: 2.5,
     );
@@ -344,10 +344,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
               offset: const Offset(0, 0),
               blurRadius: 0.0,
               spreadRadius: 0.5,
-              color: AppKitColors.shadowColor.withOpacity(0.12),
+              color: AppKitColors.shadowColor.withValues(alpha: 0.12),
             ),
             BoxShadow(
-              color: AppKitColors.shadowColor.withOpacity(0.2),
+              color: AppKitColors.shadowColor.withValues(alpha: 0.2),
               offset: const Offset(0, 2),
               spreadRadius: 0,
               blurRadius: 6,

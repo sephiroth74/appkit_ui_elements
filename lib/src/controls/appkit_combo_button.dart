@@ -180,7 +180,7 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
                     boxShadow: [
                       BoxShadow(
                         color: AppKitColors.shadowColor.color
-                            .withOpacity(isDark ? 0.75 : 0.15),
+                            .withValues(alpha: isDark ? 0.75 : 0.15),
                         blurRadius: 0.5,
                         spreadRadius: 0,
                         offset: const Offset(0, 0.5),
@@ -319,7 +319,7 @@ class _SplitButton extends StatelessWidget {
     Color? controlBackgroundColor;
     if (enabled && isDown) {
       controlBackgroundColor =
-          themeData.controlColor.multiplyLuminance(0.9).withOpacity(0.5);
+          themeData.controlColor.multiplyLuminance(0.9).withValues(alpha: 0.5);
     }
 
     return GestureDetector(
@@ -398,7 +398,7 @@ class _ButtonWidget extends StatelessWidget {
     Color? controlBackgroundColor;
     if (enabled && isDown) {
       controlBackgroundColor =
-          theme.controlColor.multiplyLuminance(0.9).withOpacity(0.5);
+          theme.controlColor.multiplyLuminance(0.9).withValues(alpha: 0.5);
     }
 
     return GestureDetector(

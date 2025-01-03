@@ -396,11 +396,11 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
       arrowsColor = isMainWindow && enabled
           ? carteBackgroundColorLiminance > 0.5
-              ? Colors.black.withOpacity(enabledFactor)
-              : Colors.white.withOpacity(enabledFactor)
+              ? Colors.black.withValues(alpha: enabledFactor)
+              : Colors.white.withValues(alpha: enabledFactor)
           : isDark
-              ? Colors.white.withOpacity(enabledFactor)
-              : Colors.black.withOpacity(enabledFactor);
+              ? Colors.white.withValues(alpha: enabledFactor)
+              : Colors.black.withValues(alpha: enabledFactor);
 
       if (contextMenuOpened) {
         final hslColor = HSLColor.fromColor(caretBackgroundColor);
@@ -529,7 +529,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                                 ? null
                                 : [
                                     BoxShadow(
-                                      color: theme.activeColor.withOpacity(0.5),
+                                      color: theme.activeColor
+                                          .withValues(alpha: 0.5),
                                       blurRadius: 0.5,
                                       spreadRadius: 0,
                                       offset: const Offset(0, 0.5),
@@ -546,8 +547,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                                 end: Alignment.bottomCenter,
                                 colors: [
                                   Colors.white
-                                      .withOpacity(isDark ? 0.05 : 0.17),
-                                  Colors.white.withOpacity(0.0),
+                                      .withValues(alpha: isDark ? 0.05 : 0.17),
+                                  Colors.white.withValues(alpha: 0.0),
                                 ],
                               ),
                             )
@@ -776,11 +777,11 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     if (isHovered) {
       controlBackgroundColor = popupButtonTheme
               .sizeData[controlSize]?.inlineHoveredBackgroundColor ??
-          Colors.black.withOpacity(0.2);
+          Colors.black.withValues(alpha: 0.2);
     } else {
       controlBackgroundColor =
           popupButtonTheme.sizeData[controlSize]?.inlineBackgroundColor ??
-              Colors.black.withOpacity(0.05);
+              Colors.black.withValues(alpha: 0.05);
     }
 
     return Container(

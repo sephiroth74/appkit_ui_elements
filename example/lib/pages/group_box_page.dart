@@ -28,8 +28,8 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
           builder: (context, ScrollController scrollController) {
             final theme = AppKitTheme.of(context);
             final textStyle = theme.typography.body;
-            final disabledTextStyle =
-                textStyle.copyWith(color: textStyle.color?.withOpacity(0.5));
+            final disabledTextStyle = textStyle.copyWith(
+                color: textStyle.color?.withValues(alpha: 0.5));
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

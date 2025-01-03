@@ -297,10 +297,11 @@ class _SliverToolBarDelegate extends SliverPersistentHeaderDelegate {
     BoxDecoration? effectiveDecoration;
     if (isScrolledUnder) {
       effectiveDecoration = decoration?.copyWith(
-            color: decoration?.color?.withOpacity(opacity),
+            color: decoration?.color?.withValues(alpha: opacity),
           ) ??
           BoxDecoration(
-            color: AppKitTheme.of(context).canvasColor.withOpacity(opacity),
+            color:
+                AppKitTheme.of(context).canvasColor.withValues(alpha: opacity),
           );
     }
 

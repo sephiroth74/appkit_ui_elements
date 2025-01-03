@@ -140,9 +140,9 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
           final placeholderColor = placeholderAlwaysVisible || _handleDown
               ? hasCustomPlaceholder
                   ? widget.imageColor
-                  : widget.imageColor?.withOpacity(placeholderOpacity) ??
+                  : widget.imageColor?.withValues(alpha: placeholderOpacity) ??
                       AppKitColors.secondaryLabelColor
-                          .withOpacity(placeholderOpacity)
+                          .withValues(alpha: placeholderOpacity)
               : Colors.transparent;
           final fillIcon = widget.icon ?? theme.icon ?? Icons.star_sharp;
           final placeholderIcon =

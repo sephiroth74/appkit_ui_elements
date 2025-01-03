@@ -248,8 +248,8 @@ class _SlidersPageState extends State<SlidersPage> {
                                   progressWidth: 4,
                                   thumbRadius: 7,
                                   trackWidth: 0.5,
-                                  trackColor:
-                                      AppKitColors.systemGray.withOpacity(0.3),
+                                  trackColor: AppKitColors.systemGray
+                                      .withValues(alpha: 0.3),
                                   progressColor: AppKitColors.appleGreen,
                                   value: slider1Value,
                                   onChanged: (value) =>

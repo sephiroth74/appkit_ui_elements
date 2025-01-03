@@ -194,7 +194,7 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
                         // TODO: Check this
                         // boxShadow: [
                         //   BoxShadow(
-                        //     color: AppKitDynamicColor.resolve(context, AppKitColors.shadowColor).withOpacity(0.5),
+                        //     color: AppKitDynamicColor.resolve(context, AppKitColors.shadowColor).withValues(alpha: 0.5),
                         //     spreadRadius: -widget.height / 6,
                         //     blurRadius: widget.height / 6,
                         //   ),
@@ -239,9 +239,9 @@ class _ProgressPainter extends CustomPainter {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        darkerColor.withOpacity(0.1),
-        darkerColor.withOpacity(0.0),
-        darkerColor.withOpacity(0.05),
+        darkerColor.withValues(alpha: 0.1),
+        darkerColor.withValues(alpha: 0.0),
+        darkerColor.withValues(alpha: 0.05),
       ],
     );
   }

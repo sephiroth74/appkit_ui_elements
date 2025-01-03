@@ -376,7 +376,7 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
           borderRadius: BorderRadius.circular(borderRadius),
           color: isMainWindow && (isHovered || isFocused || isMenuOpened)
               ? isDark
-                  ? theme.controlColor.withOpacity(0.1)
+                  ? theme.controlColor.withValues(alpha: 0.1)
                   : theme.controlColor
               : Colors.transparent);
     }
@@ -455,11 +455,11 @@ class _PushButtonStyleWidget extends StatelessWidget {
 
     arrowsColor = isMainWindow && enabled
         ? carteBackgroundColorLiminance > 0.5
-            ? Colors.black.withOpacity(enabledFactor)
-            : Colors.white.withOpacity(enabledFactor)
+            ? Colors.black.withValues(alpha: enabledFactor)
+            : Colors.white.withValues(alpha: enabledFactor)
         : isDark
-            ? Colors.white.withOpacity(enabledFactor)
-            : Colors.black.withOpacity(enabledFactor);
+            ? Colors.white.withValues(alpha: enabledFactor)
+            : Colors.black.withValues(alpha: enabledFactor);
 
     if (isMenuOpened) {
       caretBackgroundColor = caretBackgroundColor.multiplyLuminance(0.9);
@@ -523,7 +523,7 @@ class _PushButtonStyleWidget extends StatelessWidget {
                     boxShadow: [
                       if (isMainWindow && enabled) ...[
                         BoxShadow(
-                          color: theme.activeColor.withOpacity(0.5),
+                          color: theme.activeColor.withValues(alpha: 0.5),
                           blurRadius: 0.5,
                           spreadRadius: 0,
                           offset: const Offset(0, 0.5),
@@ -538,8 +538,9 @@ class _PushButtonStyleWidget extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.white.withOpacity(isDark ? 0.05 : 0.17),
-                              Colors.white.withOpacity(0.0),
+                              Colors.white
+                                  .withValues(alpha: isDark ? 0.05 : 0.17),
+                              Colors.white.withValues(alpha: 0.0),
                             ],
                           ),
                         )

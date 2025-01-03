@@ -288,7 +288,8 @@ class _AppKitSliderState extends State<AppKitSlider>
                             decoration: BoxDecoration(
                               color: enabled
                                   ? sliderTheme.trackColor
-                                  : sliderTheme.trackColor.withOpacity(0.5),
+                                  : sliderTheme.trackColor
+                                      .withValues(alpha: 0.5),
                               border: Border.all(
                                   color: AppKitColors.fills.opaque.tertiary,
                                   width: 0.5),
@@ -311,7 +312,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                             decoration: BoxDecoration(
                               color: enabled
                                   ? (accentColor)
-                                  : (accentColor).withOpacity(0.5),
+                                  : (accentColor).withValues(alpha: 0.5),
                               borderRadius: continous
                                   ? BorderRadius.all(Radius.circular(
                                       sliderTheme.continuousTrackCornerRadius))
@@ -336,7 +337,7 @@ class _AppKitSliderState extends State<AppKitSlider>
                                       sliderTheme.discreteTickCornerRadius,
                                   color: enabled
                                       ? accentColor
-                                      : accentColor.withOpacity(0.5),
+                                      : accentColor.withValues(alpha: 0.5),
                                   backgroundColor: sliderTheme.tickColor ??
                                       AppKitDynamicColor.resolve(context,
                                           AppKitColors.fills.opaque.primary),

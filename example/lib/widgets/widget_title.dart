@@ -12,7 +12,7 @@ class WidgetTitle extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppKitColors.systemGray.withOpacity(0.5),
+          color: AppKitColors.systemGray.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(4.0),
         ),
         child: Padding(

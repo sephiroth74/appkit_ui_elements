@@ -1337,7 +1337,7 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
         BlurStyle.normal,
         blurRadius,
       )
-      ..color = AppKitColors.shadowColor.withOpacity(0.9);
+      ..color = AppKitColors.shadowColor.withValues(alpha: 0.9);
     final path = Path()
       ..fillType = PathFillType.evenOdd
       ..addRect(

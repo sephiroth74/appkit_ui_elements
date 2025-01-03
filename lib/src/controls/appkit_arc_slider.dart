@@ -230,8 +230,8 @@ class _AppKitArcSliderState extends State<AppKitArcSlider> {
                   height: size,
                   child: CustomPaint(
                     painter: _ProgressPainter(
-                      color: accentColor
-                          .withOpacity(accentColor.opacity * enabledFactor),
+                      color: accentColor.withValues(
+                          alpha: accentColor.a * enabledFactor),
                       value: value,
                       strokeWidth:
                           widget.progressWidth ?? sliderTheme.trackHeight,

@@ -91,7 +91,7 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                 final color = widget.enabled
                     ? (widget.color ?? theme.controlColor)
                     : (widget.disabledColor ??
-                        theme.controlColor.withOpacity(0.25));
+                        theme.controlColor.withValues(alpha: 0.25));
 
                 final colorLuminance = color.computeLuminance();
                 final iconColor = colorLuminance >= 0.5
@@ -102,7 +102,7 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                         : (isDark
                                 ? AppKitColors.labelColor.darkColor
                                 : AppKitColors.labelColor.color)
-                            .withOpacity(0.35)
+                            .withValues(alpha: 0.35)
                     : widget.enabled
                         ? isDark
                             ? AppKitColors.labelColor.darkColor
@@ -110,11 +110,11 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                         : (isDark
                                 ? AppKitColors.labelColor.color
                                 : AppKitColors.labelColor.darkColor)
-                            .withOpacity(0.35);
+                            .withValues(alpha: 0.35);
 
                 final foregroundColor = colorLuminance > 0.5
-                    ? Colors.black.withOpacity(0.1)
-                    : Colors.white.withOpacity(0.2);
+                    ? Colors.black.withValues(alpha: 0.1)
+                    : Colors.white.withValues(alpha: 0.2);
 
                 return Container(
                   foregroundDecoration: buttonHeldDown
@@ -128,7 +128,7 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                         boxShadow: [
                           BoxShadow(
                             color: AppKitColors.shadowColor.color
-                                .withOpacity(0.75),
+                                .withValues(alpha: 0.75),
                             blurRadius: 0.5,
                             spreadRadius: 0,
                             offset: const Offset(0, 0.5),

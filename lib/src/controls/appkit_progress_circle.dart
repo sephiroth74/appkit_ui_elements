@@ -120,9 +120,9 @@ class _CircularProgressPainter extends CustomPainter {
       ..style = PaintingStyle.fill
       ..shader = RadialGradient(
         colors: [
-          darkerColor.withOpacity(0.05),
-          darkerColor.withOpacity(0.0),
-          darkerColor.withOpacity(0.05),
+          darkerColor.withValues(alpha: 0.05),
+          darkerColor.withValues(alpha: 0.0),
+          darkerColor.withValues(alpha: 0.05),
         ],
         stops: [1 - stopSize * 2, 1 - stopSize, 1],
       ).createShader(

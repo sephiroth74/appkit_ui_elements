@@ -211,7 +211,8 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     Color selectedColor = _selectedColor ?? theme.activeColor;
 
     if (!enabled) {
-      selectedColor = selectedColor.withOpacity(selectedColor.opacity * 0.5);
+      selectedColor =
+          selectedColor.withValues(alpha: selectedColor.opacity * 0.5);
     }
 
     return Semantics(
@@ -331,7 +332,7 @@ class _ColorWellMinimalWidget extends StatelessWidget {
                     color: (isDark
                             ? AppKitColors.controlColor.darkColor
                             : Colors.black)
-                        .withOpacity(0.1),
+                        .withValues(alpha: 0.1),
                     borderRadius:
                         BorderRadius.circular(colorTheme.borderRadiusMinimal))
                 : null,
@@ -341,8 +342,8 @@ class _ColorWellMinimalWidget extends StatelessWidget {
               color: selectedColor,
               border: Border.all(
                   color: (isDark
-                      ? Colors.white.withOpacity(0.75)
-                      : Colors.black.withOpacity(0.25)),
+                      ? Colors.white.withValues(alpha: 0.75)
+                      : Colors.black.withValues(alpha: 0.25)),
                   width: 0.5),
             ),
             child: isHovered
@@ -353,7 +354,7 @@ class _ColorWellMinimalWidget extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                         ),
                         child: const Padding(
                           padding: EdgeInsets.all(1.0),
@@ -485,15 +486,17 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
           child: Container(
             foregroundDecoration: widget.isDown
                 ? BoxDecoration(
-                    color:
-                        (isDark ? Colors.white : Colors.black).withOpacity(0.2),
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(
                         widget.colorTheme.borderRadiusExpanded))
                 : null,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                     widget.colorTheme.borderRadiusExpanded),
-                color: (isDark ? Colors.white.withOpacity(0.7) : Colors.white),
+                color: (isDark
+                    ? Colors.white.withValues(alpha: 0.7)
+                    : Colors.white),
                 border: GradientBoxBorder(
                   gradient: LinearGradient(
                     colors: [
@@ -513,7 +516,7 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppKitColors.shadowColor.withOpacity(0.2),
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.2),
                     offset: const Offset(0, 0.5),
                     blurRadius: 0.25,
                   ),
@@ -551,7 +554,7 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withValues(alpha: 0.2),
                                   ),
                                   child: const Padding(
                                     padding: EdgeInsets.all(1.0),
@@ -661,8 +664,8 @@ class _ColorWellRegularWidget extends StatelessWidget {
           child: Container(
             foregroundDecoration: isDown
                 ? BoxDecoration(
-                    color:
-                        (isDark ? Colors.white : Colors.black).withOpacity(0.2),
+                    color: (isDark ? Colors.white : Colors.black)
+                        .withValues(alpha: 0.2),
                     borderRadius:
                         BorderRadius.circular(colorTheme.borderRadiusRegular))
                 : null,
@@ -690,7 +693,7 @@ class _ColorWellRegularWidget extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                     offset: const Offset(0, 0.5),
                     blurRadius: 0.25,
                   ),
@@ -702,7 +705,8 @@ class _ColorWellRegularWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(
                           colorTheme.borderRadiusRegularInner),
                       border: Border.all(
-                          color: Colors.black.withOpacity(0.2), width: 0.5),
+                          color: Colors.black.withValues(alpha: 0.2),
+                          width: 0.5),
                       color: selectedColor)),
             ),
           ),
@@ -1093,7 +1097,7 @@ class _AppKitColorWellSwatchState extends State<AppKitColorWellSwatch> {
   Widget build(BuildContext context) {
     final borderColor = !enabled
         ? Colors.transparent
-        : AppKitColors.systemGray.withOpacity(0.5);
+        : AppKitColors.systemGray.withValues(alpha: 0.5);
     return Positioned(
       left: widget.left,
       top: widget.top,
@@ -1144,7 +1148,7 @@ class _ColorHoveredBorderPainter extends CustomPainter {
     canvas.drawRRect(roundedRect, paint);
 
     paint.style = PaintingStyle.stroke;
-    paint.color = Colors.black.withOpacity(0.5);
+    paint.color = Colors.black.withValues(alpha: 0.5);
 
     canvas.drawRRect(roundedRect, paint);
   }
