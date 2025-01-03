@@ -21,7 +21,7 @@ class AppKitDialog extends StatelessWidget {
     this.suppress,
   });
 
-  final IconData? icon;
+  final Widget? icon;
 
   final Widget title;
 
@@ -87,14 +87,24 @@ class AppKitDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 64,
-                    maxWidth: 64,
+                if (icon != null) ...[
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 64,
+                      maxWidth: 64,
+                    ),
+                    child: SizedBox(
+                      width: 64,
+                      height: 64,
+                      child: AppKitIconTheme(
+                          data: AppKitTheme.of(context)
+                              .iconTheme
+                              .copyWith(size: 64),
+                          child: icon!),
+                    ),
                   ),
-                  child: Icon(icon, size: 64),
-                ),
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
+                ],
                 DefaultTextStyle(
                   style: theme.typography.headline,
                   textAlign: TextAlign.center,

@@ -42,7 +42,6 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                 debugPrint('generate dialog widget');
                                 return AppKitDialog(
                                   suppress: const DoNotNotifyRow(),
-                                  icon: CupertinoIcons.news,
                                   title: const Text('Dialog'),
                                   message: const Text(dialogMessage),
                                   primaryButton: AppKitButton(
@@ -70,7 +69,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               builder: (context) {
                                 return AppKitDialog(
                                   suppress: const DoNotNotifyRow(),
-                                  icon: CupertinoIcons.news,
+                                  icon: const AppKitIcon(CupertinoIcons.news),
                                   title: const Text('Dialog'),
                                   message: const Text(dialogMessage),
                                   secondaryButton: AppKitButton(
@@ -103,7 +102,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               builder: (context) {
                                 return AppKitDialog(
                                   suppress: const DoNotNotifyRow(),
-                                  icon: CupertinoIcons.news,
+                                  icon: const AppKitIcon(CupertinoIcons.news),
                                   title: const Text('Dialog'),
                                   message: const Text(dialogMessage),
                                   horizontalActions: false,

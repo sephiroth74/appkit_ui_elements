@@ -78,7 +78,7 @@ class AppKitTextField extends StatefulWidget {
 
   const AppKitTextField({
     super.key,
-    required this.keyboardType,
+    this.keyboardType = TextInputType.text,
     SmartDashesType? smartDashesType,
     SmartQuotesType? smartQuotesType,
     this.autocorrect = false,

@@ -201,7 +201,8 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
           enableWallpaperTinting: false,
           opaque: false,
           selectedItem:
-              menu.entries.firstOrNull as AppKitContextMenuItem<String>?,
+              (menu.entries.firstOrNull as AppKitContextMenuItem<String>?)
+                  ?.value,
           menuEdge: AppKitMenuEdge.bottom);
 
       setState(() {

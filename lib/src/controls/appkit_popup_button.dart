@@ -10,7 +10,7 @@ typedef ContextMenuBuilder<T> = AppKitContextMenu<T> Function(
     BuildContext context);
 
 typedef SelectedItemBuilder<T> = Widget Function(
-    BuildContext context, AppKitContextMenuItem<T>? value);
+    BuildContext context, T? value);
 
 @protected
 List<BoxShadow> getElevatedShadow(BuildContext context) => [
@@ -25,8 +25,9 @@ List<BoxShadow> getElevatedShadow(BuildContext context) => [
 
 class AppKitPopupButton<T> extends StatefulWidget {
   final ContextMenuBuilder<T>? menuBuilder;
-  final AppKitContextMenuItem<T>? selectedItem;
-  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
+  final List<AppKitContextMenuEntry<T>>? items;
+  final T? selectedItem;
+  final ValueChanged<T?>? onItemSelected;
   final SelectedItemBuilder<T>? itemBuilder;
   final double width;
   final AppKitMenuEdge menuEdge;
@@ -43,6 +44,7 @@ class AppKitPopupButton<T> extends StatefulWidget {
     required this.width,
     this.onItemSelected,
     this.menuBuilder,
+    this.items,
     this.selectedItem,
     this.color,
     this.hint,
@@ -53,7 +55,12 @@ class AppKitPopupButton<T> extends StatefulWidget {
     this.style = AppKitPopupButtonStyle.push,
     this.controlSize = AppKitControlSize.regular,
     this.canRequestFocus = false,
-  });
+  }) : assert(menuBuilder != null ? items == null : true,
+            'Only one of menuBuilder or items can be provided');
+
+  AppKitContextMenu<T> _defaultMenuBuilder(BuildContext context) {
+    return menuBuilder?.call(context) ?? AppKitContextMenu<T>(entries: items!);
+  }
 
   @override
   State<AppKitPopupButton<T>> createState() => _AppKitPopupButtonState<T>();
@@ -62,7 +69,8 @@ class AppKitPopupButton<T> extends StatefulWidget {
 class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     with SingleTickerProviderStateMixin {
   bool get enabled =>
-      widget.onItemSelected != null && widget.menuBuilder != null;
+      widget.onItemSelected != null &&
+      (widget.menuBuilder != null || widget.items != null);
 
   TextStyle get textStyle => AppKitTheme.of(context).typography.body;
 
@@ -89,6 +97,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
     properties.add(DiagnosticsProperty('width', widget.width));
     properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
+    properties.add(DiagnosticsProperty('items', widget.items));
     properties
         .add(DiagnosticsProperty('onItemSelected', widget.onItemSelected));
     properties.add(DiagnosticsProperty('itemBuilder', widget.itemBuilder));
@@ -102,15 +111,14 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         .add(DiagnosticsProperty('canRequestFocus', widget.canRequestFocus));
   }
 
-  AppKitContextMenuItem<T>? get selectedItem => widget.selectedItem;
+  T? get selectedItem => widget.selectedItem;
 
   @override
   void initState() {
     super.initState();
-    _contextMenu = widget.menuBuilder!(context);
+    _contextMenu = widget._defaultMenuBuilder(context);
     if (widget.selectedItem != null) {
-      assert(_contextMenu.firstWhereOrNull((e) => e == widget.selectedItem) !=
-          null);
+      assert(_contextMenu.findItemByValue(selectedItem) != null);
     }
 
     _effectiveFocusNode.canRequestFocus = widget.canRequestFocus && enabled;
@@ -125,7 +133,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
   @override
   void didUpdateWidget(covariant AppKitPopupButton<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _contextMenu = widget.menuBuilder!(context);
+    _contextMenu = widget._defaultMenuBuilder(context);
   }
 
   @override
@@ -133,13 +141,13 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     super.didChangeDependencies();
   }
 
-  Widget _defaultItemBuilder(
-      {required BuildContext context, required double controlHeight}) {
+  Widget _defaultItemBuilder(BuildContext context, {required T? selectedItem}) {
     bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
     final popupThemeData = AppKitPopupButtonTheme.of(context);
+    final currentSelectedItem = _contextMenu.findItemByValue(selectedItem);
 
-    String title = selectedItem?.title ?? '';
-    final icon = selectedItem?.image;
+    String title = currentSelectedItem?.title ?? '';
+    final icon = currentSelectedItem?.image;
     final iconSize = style == AppKitPopupButtonStyle.inline
         ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
         : popupThemeData.sizeData[controlSize]!.iconSize;
@@ -217,7 +225,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
 
   void _handleTap() async {
     final itemRect = context.getWidgetBounds();
-    if (null != itemRect && widget.menuBuilder != null) {
+    if (null != itemRect &&
+        (widget.menuBuilder != null || widget.items != null)) {
       final menu = _contextMenu.copyWith(
           position: _contextMenu.position ??
               widget.menuEdge.getRectPosition(itemRect));
@@ -243,7 +252,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         _isMenuOpened = false;
       });
 
-      widget.onItemSelected?.call(value);
+      widget.onItemSelected?.call(value?.value);
     }
   }
 
@@ -270,7 +279,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
             focusNode: _effectiveFocusNode,
             child: Builder(builder: (context) {
               final child = itemBuilder?.call(context, widget.selectedItem) ??
-                  _defaultItemBuilder(context: context, controlHeight: height);
+                  _defaultItemBuilder(context,
+                      selectedItem: widget.selectedItem);
 
               if (style == AppKitPopupButtonStyle.push ||
                   style == AppKitPopupButtonStyle.bevel) {

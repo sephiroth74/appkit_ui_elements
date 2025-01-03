@@ -246,9 +246,9 @@ class _FieldsPageState extends State<FieldsPage> {
                             },
                             onItemSelected: (value) {
                               setState(() {
-                                if (null != value?.value) {
-                                  clearButtonMode = value?.value
-                                      as AppKitOverlayVisibilityMode;
+                                if (null != value) {
+                                  clearButtonMode =
+                                      value as AppKitOverlayVisibilityMode;
                                 }
                               });
                             },
@@ -293,9 +293,9 @@ class _FieldsPageState extends State<FieldsPage> {
                             },
                             onItemSelected: (value) {
                               setState(() {
-                                if (null != value?.value) {
-                                  textFieldBorderStyle = value?.value
-                                      as AppKitTextFieldBorderStyle;
+                                if (null != value) {
+                                  textFieldBorderStyle =
+                                      value as AppKitTextFieldBorderStyle;
                                 }
                               });
                             },
@@ -339,9 +339,8 @@ class _FieldsPageState extends State<FieldsPage> {
                             },
                             onItemSelected: (value) {
                               setState(() {
-                                if (null != value?.value) {
-                                  textFieldSize =
-                                      value?.value as AppKitControlSize;
+                                if (null != value) {
+                                  textFieldSize = value as AppKitControlSize;
                                 }
                               });
                             },

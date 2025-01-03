@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'package:collection/collection.dart';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/services.dart';
@@ -55,11 +56,11 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     required this.menu,
     this.parentItem,
     this.enableWallpaperTinting = true,
-    AppKitContextMenuItem<T>? focusedEntry,
+    T? focusedEntry,
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   })  : _parentItemRect = null,
         _isSubmenu = false,
-        _focusedEntry = focusedEntry,
+        _focusedEntry = menu.findItemByValue(focusedEntry),
         selfClose = null,
         _menuEdge = menuEdge;
 

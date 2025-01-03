@@ -188,7 +188,7 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
                     fit: BoxFit.scaleDown,
                     child: AppKitIconTheme(
                       data: iconTheme.copyWith(color: iconColor),
-                      child: AppKitIcon(icon: widget.icon),
+                      child: AppKitIcon(widget.icon),
                     ),
                   ),
                 ),

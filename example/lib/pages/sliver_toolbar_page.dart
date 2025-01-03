@@ -17,8 +17,7 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
   bool floating = false;
   double opacity = .9;
 
-  AppKitContextMenuItem<double> opacitySelectedItem =
-      const AppKitContextMenuItem(title: '90% (Default)', value: 0.9);
+  double opacitySelectedItem = 0.9;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +79,7 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                           },
                           onItemSelected: (item) {
                             if (null == item) return;
-                            final value = item.value;
+                            final value = item;
                             opacitySelectedItem = item;
                             if (value == 0.25) {
                               setState(() => opacity = 0.25);

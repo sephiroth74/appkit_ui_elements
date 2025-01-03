@@ -5,9 +5,9 @@ class AppKitIcon extends StatelessWidget {
   final double? size;
   final Color? color;
 
-  const AppKitIcon({
+  const AppKitIcon(
+    this.icon, {
     super.key,
-    required this.icon,
     this.size,
     this.color,
   });

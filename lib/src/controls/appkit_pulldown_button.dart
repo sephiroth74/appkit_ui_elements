@@ -5,7 +5,8 @@ import 'package:gradient_borders/gradient_borders.dart';
 
 class AppKitPulldownButton<T> extends StatefulWidget {
   final ContextMenuBuilder<T>? menuBuilder;
-  final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
+  final List<AppKitContextMenuEntry<T>>? items;
+  final ValueChanged<T?>? onItemSelected;
   final double minWidth;
   final double maxWidth;
   final AppKitMenuEdge menuEdge;
@@ -27,6 +28,7 @@ class AppKitPulldownButton<T> extends StatefulWidget {
     double? maxWidth,
     this.onItemSelected,
     this.menuBuilder,
+    this.items,
     this.color,
     this.title,
     this.icon,
@@ -40,7 +42,13 @@ class AppKitPulldownButton<T> extends StatefulWidget {
     this.textAlign = TextAlign.start,
     this.iconColor,
   })  : assert(title != null || icon != null),
-        maxWidth = maxWidth ?? minWidth;
+        maxWidth = maxWidth ?? minWidth,
+        assert(menuBuilder != null ? items == null : true,
+            'Only one of menuBuilder or items can be provided');
+
+  AppKitContextMenu<T> _defaultMenuBuilder(BuildContext context) {
+    return menuBuilder?.call(context) ?? AppKitContextMenu<T>(entries: items!);
+  }
 
   @override
   State<AppKitPulldownButton<T>> createState() =>
@@ -50,7 +58,8 @@ class AppKitPulldownButton<T> extends StatefulWidget {
 class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
     with SingleTickerProviderStateMixin {
   bool get enabled =>
-      widget.onItemSelected != null && widget.menuBuilder != null;
+      widget.onItemSelected != null &&
+      (widget.menuBuilder != null || widget.items != null);
 
   TextStyle get textStyle => AppKitTheme.of(context).typography.body;
 
@@ -92,12 +101,13 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
     properties.add(DiagnosticsProperty('style', style));
     properties.add(DiagnosticsProperty('textAlign', widget.textAlign));
     properties.add(DiagnosticsProperty('title', widget.title));
+    properties.add(DiagnosticsProperty('items', widget.items));
   }
 
   @override
   void initState() {
     super.initState();
-    _contextMenu = widget.menuBuilder!(context);
+    _contextMenu = widget._defaultMenuBuilder(context);
     _effectiveFocusNode.canRequestFocus = widget.canRequestFocus && enabled;
   }
 
@@ -110,7 +120,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
   @override
   void didUpdateWidget(covariant AppKitPulldownButton<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _contextMenu = widget.menuBuilder!(context);
+    _contextMenu = widget._defaultMenuBuilder(context);
   }
 
   @override
@@ -186,7 +196,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
 
     final iconWidget = widget.icon != null
         ? AppKitIcon(
-            icon: widget.icon!,
+            widget.icon!,
             size: iconSize,
             color: widget.iconColor ?? textColor,
           )
@@ -234,7 +244,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
   void _handleTap() async {
     if (!mounted) return;
     final itemRect = context.getWidgetBounds();
-    if (null != itemRect && widget.menuBuilder != null) {
+    if (null != itemRect &&
+        (widget.menuBuilder != null || widget.items != null)) {
       final menu = _contextMenu.copyWith(
           position: _contextMenu.position ??
               widget.menuEdge.getRectPosition(itemRect));
@@ -260,7 +271,7 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
         _isMenuOpened = false;
       });
 
-      widget.onItemSelected?.call(value);
+      widget.onItemSelected?.call(value?.value);
     }
   }
 

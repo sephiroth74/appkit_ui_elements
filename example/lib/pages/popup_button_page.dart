@@ -1,7 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PopupButtonPage extends StatefulWidget {
@@ -21,11 +20,11 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
   bool switchValue1 = true;
   double popupButtonWidth = 125.0;
 
-  AppKitContextMenuItem<String>? popupSelectedItem;
+  String? popupSelectedItem;
 
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
-          maxWidth: 200,
+          maxWidth: 150,
           maxHeight: 200,
           entries: [
             for (var i = 0; i < 20; i++)
@@ -36,7 +35,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                   title: 'Menu Item #$i',
                   enabled: i != 4,
                   value: '$i',
-                  itemState: popupSelectedItem?.value == '$i'
+                  itemState: popupSelectedItem == '$i'
                       ? AppKitItemState.on
                       : AppKitItemState.off,
                 ),
@@ -97,11 +96,11 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
         );
       };
 
-  void _onPopupItemSelected(AppKitContextMenuItem<String>? value) {
+  void _onPopupItemSelected(String? value) {
     setState(() {
       if (value != null) {
         popupSelectedItem =
-            popupMenuBuilder(context).findItemByValue(value.value);
+            popupMenuBuilder(context).findItemByValue(value)?.value;
       }
     });
   }
@@ -162,7 +161,26 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                                 onItemSelected: switchValue1
                                                     ? _onPopupItemSelected
                                                     : null,
-                                                menuBuilder: popupMenuBuilder,
+                                                // menuBuilder: popupMenuBuilder,
+                                                items: const [
+                                                  AppKitContextMenuItem(
+                                                      title: 'Menu Item 1',
+                                                      value: '1'),
+                                                  AppKitContextMenuItem(
+                                                      title: 'Menu Item 2',
+                                                      value: '2'),
+                                                  AppKitContextMenuItem(
+                                                      title: 'Item 3',
+                                                      value: '3'),
+                                                  AppKitContextMenuItem(
+                                                      title: 'Item 4',
+                                                      value: '4'),
+                                                  AppKitContextMenuDivider<
+                                                      String>(),
+                                                  AppKitContextMenuItem(
+                                                      title: 'Menu Item 5',
+                                                      value: '5'),
+                                                ],
                                                 style: style,
                                               ),
                                               const SizedBox(width: 8.0)

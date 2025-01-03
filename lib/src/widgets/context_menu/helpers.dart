@@ -15,7 +15,7 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
   RouteTransitionsBuilder? transitionsBuilder,
   bool allowSnapshotting = true,
   bool maintainState = false,
-  AppKitContextMenuItem<T>? selectedItem,
+  T? selectedItem,
   AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   bool enableWallpaperTinting = true,
 }) async {
