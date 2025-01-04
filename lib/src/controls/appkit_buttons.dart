@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
@@ -710,7 +709,7 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
   @override
   Widget build(BuildContext context) {
     final constraints = widget.size.getBoxConstraints(widget.style)
-      ..copyWith(maxWidth: widget.width);
+      ..copyWith(maxWidth: widget.width, minWidth: widget.width);
 
     return SizedBox(
       width: widget.width,
