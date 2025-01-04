@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:collection';
-import 'package:collection/collection.dart';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/services.dart';
