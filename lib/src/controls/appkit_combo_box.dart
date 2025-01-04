@@ -249,7 +249,8 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
       minWidth: itemRect?.width ?? 50,
       maxWidth: itemRect?.width ?? 150,
       entries: widget.items
-              ?.map((e) => AppKitContextMenuItem<String>(value: e, title: e))
+              ?.map((e) =>
+                  AppKitContextMenuItem<String>(value: e, child: Text(e)))
               .toList() ??
           [],
     );

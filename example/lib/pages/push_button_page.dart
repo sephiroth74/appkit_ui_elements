@@ -43,7 +43,12 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Inline button (primary)',
                                   child: AppKitButton(
-                                      onPressed: () {},
+                                      onLongPress: () {
+                                        debugPrint('Long Pressed');
+                                      },
+                                      onLongPressEnd: (details) {
+                                        debugPrint('Long Press End');
+                                      },
                                       style: AppKitButtonStyle.inline,
                                       type: AppKitButtonType.primary,
                                       size: controlSize,
@@ -52,7 +57,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Inline button (secondary)',
                                   child: AppKitButton(
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.inline,
                                       type: AppKitButtonType.secondary,
                                       size: controlSize,
@@ -61,7 +66,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Inline button (destructive)',
                                   child: AppKitButton(
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.inline,
                                       type: AppKitButtonType.destructive,
                                       size: controlSize,
@@ -84,7 +89,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                   child: AppKitButton(
                                       accentColor: AppKitDynamicColor.resolve(
                                           context, AppKitColors.systemMint),
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.inline,
                                       size: controlSize,
                                       child: const Text('Get'))),
@@ -113,7 +118,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Flat button (primary)',
                                   child: AppKitButton(
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.flat,
                                       type: AppKitButtonType.primary,
                                       size: controlSize,
@@ -122,7 +127,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Flat button (secondary)',
                                   child: AppKitButton(
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.flat,
                                       type: AppKitButtonType.secondary,
                                       size: controlSize,
@@ -133,7 +138,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Flat button (destructive)',
                                   child: AppKitButton(
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.flat,
                                       type: AppKitButtonType.destructive,
                                       size: controlSize,
@@ -156,7 +161,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                   child: AppKitButton(
                                       accentColor: AppKitDynamicColor.resolve(
                                           context, AppKitColors.systemMint),
-                                      onPressed: () {},
+                                      onTap: () {},
                                       style: AppKitButtonStyle.flat,
                                       size: controlSize,
                                       child: const Text('Get'))),
@@ -187,7 +192,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                 style: AppKitButtonStyle.push,
                                 type: AppKitButtonType.primary,
                                 child: const Text('Push'),
-                                onPressed: () {},
+                                onTap: () {},
                               ),
                               const SizedBox(width: 16.0),
                               AppKitButton(
@@ -195,7 +200,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                 style: AppKitButtonStyle.push,
                                 type: AppKitButtonType.secondary,
                                 child: const Text('Push'),
-                                onPressed: () {},
+                                onTap: () {},
                               ),
                               const SizedBox(width: 16.0),
                               AppKitButton(
@@ -203,7 +208,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                 style: AppKitButtonStyle.push,
                                 type: AppKitButtonType.destructive,
                                 child: const Text('Push'),
-                                onPressed: () {},
+                                onTap: () {},
                               ),
                               const SizedBox(width: 16.0),
                               AppKitButton(

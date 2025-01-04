@@ -34,7 +34,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                     SizedBox(
                       width: 200,
                       child: AppKitButton(
-                          onPressed: () {
+                          onTap: () {
                             showAppKitDialog(
                               barrierDismissible: false,
                               context: context,
@@ -45,7 +45,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                   title: const Text('Dialog'),
                                   message: const Text(dialogMessage),
                                   primaryButton: AppKitButton(
-                                      onPressed: () {
+                                      onTap: () {
                                         Navigator.of(context).pop();
                                       },
                                       type: AppKitButtonType.primary,
@@ -62,7 +62,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                     SizedBox(
                       width: 200,
                       child: AppKitButton(
-                          onPressed: () {
+                          onTap: () {
                             showAppKitDialog(
                               barrierDismissible: false,
                               context: context,
@@ -73,13 +73,13 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                   title: const Text('Dialog'),
                                   message: const Text(dialogMessage),
                                   secondaryButton: AppKitButton(
-                                      onPressed: () {
+                                      onTap: () {
                                         Navigator.of(context).pop();
                                       },
                                       type: AppKitButtonType.secondary,
                                       child: const Text('Cancel')),
                                   primaryButton: AppKitButton(
-                                      onPressed: () {
+                                      onTap: () {
                                         Navigator.of(context).pop();
                                       },
                                       type: AppKitButtonType.primary,
@@ -95,7 +95,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                     SizedBox(
                       width: 200,
                       child: AppKitButton(
-                          onPressed: () {
+                          onTap: () {
                             showAppKitDialog(
                               barrierDismissible: false,
                               context: context,
@@ -107,13 +107,13 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                   message: const Text(dialogMessage),
                                   horizontalActions: false,
                                   secondaryButton: AppKitButton(
-                                      onPressed: () {
+                                      onTap: () {
                                         Navigator.of(context).pop();
                                       },
                                       type: AppKitButtonType.destructive,
                                       child: const Text('Cancel')),
                                   primaryButton: AppKitButton(
-                                      onPressed: () {
+                                      onTap: () {
                                         Navigator.of(context).pop();
                                       },
                                       type: AppKitButtonType.primary,
@@ -131,7 +131,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                       child: AppKitButton(
                         type: AppKitButtonType.primary,
                         child: const Text('Show sheet'),
-                        onPressed: () {
+                        onTap: () {
                           showAppKitSheet(
                             context: context,
                             barrierDismissible: false,
@@ -220,7 +220,7 @@ class DemoSheet extends StatelessWidget {
                 style: AppKitButtonStyle.flat,
                 size: AppKitControlSize.large,
                 child: const Text('Get started'),
-                onPressed: () => Navigator.of(context).pop(),
+                onTap: () => Navigator.of(context).pop(),
               ),
               const SizedBox(height: 50),
             ],

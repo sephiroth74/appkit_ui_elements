@@ -67,14 +67,11 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                           selectedItem: opacitySelectedItem,
                           menuBuilder: (context) {
                             return AppKitContextMenu(entries: [
-                              const AppKitContextMenuItem(
-                                  title: '25%', value: 0.25),
-                              const AppKitContextMenuItem(
-                                  title: '50%', value: 0.5),
-                              const AppKitContextMenuItem(
-                                  title: '75%', value: 0.75),
-                              const AppKitContextMenuItem(
-                                  title: '90% (Default)', value: 0.9),
+                              AppKitContextMenuItem.plain('25%', value: 0.25),
+                              AppKitContextMenuItem.plain('50%', value: 0.5),
+                              AppKitContextMenuItem.plain('75%', value: 0.75),
+                              AppKitContextMenuItem.plain('90% (Default)',
+                                  value: 0.9),
                             ]);
                           },
                           onItemSelected: (item) {

@@ -79,6 +79,13 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   List<AppKitContextMenuEntry<T>> get entries => menu.entries;
 
+  bool get statusIconRequired => menu.entries
+      .where((e) =>
+          e is AppKitContextMenuItem &&
+          (e as AppKitContextMenuItem).itemState != null)
+      .any(
+          (e) => (e as AppKitContextMenuItem).itemState != AppKitItemState.off);
+
   Offset get position => menu.position ?? Offset.zero;
 
   Size? get size => menu.size;

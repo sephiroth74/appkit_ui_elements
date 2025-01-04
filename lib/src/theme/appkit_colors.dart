@@ -81,6 +81,10 @@ class AppKitColors {
 
   static const windowFrameColor = Color(0xffddddde);
 
+  static const white = Color(0xFFFFFFFF);
+
+  static const black = Color(0xFF000000);
+
   static const CupertinoDynamicColor labelColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
@@ -573,10 +577,15 @@ extension AppKitDynamicColor on CupertinoDynamicColor {
         darkHighContrastColor != darkHighContrastElevatedColor;
   }
 
+  Color resolveFromBrightness(Brightness brightness) =>
+      resolveWithBrightness(brightness);
+
   Color resolveWithBrightness(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     return isDark ? darkColor : color;
   }
+
+  Color resolveFromContext(BuildContext context) => resolveWithContext(context);
 
   Color resolveWithContext(BuildContext context) {
     final Brightness brightness = isPlatformBrightnessDependent

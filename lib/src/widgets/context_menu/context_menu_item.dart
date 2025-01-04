@@ -3,61 +3,61 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
-  final String title;
-  final IconData? image;
+  final Widget child;
   final IconData? onImage;
   final IconData? offImage;
   final IconData? mixedImage;
   final T? value;
   final AppKitItemState? itemState;
-  final AppKitMenuImageAlignment imageAlignment;
-  final TextAlign textAlign;
-  final ValueChanged<AppKitContextMenuItem<T>>? onPressed;
+  final VoidCallback? onTap;
 
   final List<AppKitContextMenuEntry<T>>? items;
 
   const AppKitContextMenuItem({
     this.value,
-    required this.title,
-    this.image,
+    required this.child,
     this.onImage,
     this.offImage,
     this.mixedImage,
     this.items,
     this.itemState,
-    this.imageAlignment = AppKitMenuImageAlignment.start,
-    this.textAlign = TextAlign.start,
-    this.onPressed,
+    this.onTap,
     super.enabled = true,
   });
 
+  AppKitContextMenuItem.plain(
+    String label, {
+    this.value,
+    this.onImage,
+    this.offImage,
+    this.mixedImage,
+    this.items,
+    this.itemState,
+    this.onTap,
+    super.enabled = true,
+  }) : child = Text(label);
+
   @override
   @override
-  String toString() => 'ContextMenuItem(title: $title, value: $value)';
+  String toString() => 'ContextMenuItem(title: $child, value: $value)';
 
   @override
   List<Object?> get props =>
       super.props +
       [
         value,
-        title,
-        image,
+        child,
         onImage,
         offImage,
         mixedImage,
-        imageAlignment,
-        textAlign,
-        onPressed,
+        onTap,
       ];
 
   const AppKitContextMenuItem.submenu({
-    required this.title,
-    this.image,
+    required this.child,
     required this.items,
     super.enabled = true,
-    this.imageAlignment = AppKitMenuImageAlignment.start,
-    this.textAlign = TextAlign.start,
-    this.onPressed,
+    this.onTap,
   })  : value = null,
         itemState = AppKitItemState.off,
         mixedImage = null,
@@ -78,7 +78,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         if (Navigator.canPop(context)) {
           Navigator.pop(context, this);
         }
-        onPressed?.call(this);
+        onTap?.call();
         menuState.setSelectedItem(this);
       });
     }
@@ -100,11 +100,11 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     final selectedOrFocused =
         menuState.focusedEntry == this || menuState.selectedItem == this;
 
-    final IconData icon;
+    final IconData? icon;
     if (itemState == AppKitItemState.on) {
       icon = onImage ?? CupertinoIcons.check_mark;
     } else if (itemState == AppKitItemState.off) {
-      icon = offImage ?? CupertinoIcons.check_mark;
+      icon = offImage;
     } else {
       icon = mixedImage ?? CupertinoIcons.minus;
     }
@@ -128,29 +128,21 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
             menuState.focusedEntry == this &&
             menuState.selectionTicks % 2 == 0;
 
-        final statusIconWidget = itemState != null
-            ? Padding(
-                padding: const EdgeInsets.only(top: 3.0, right: 4.0),
-                child: Icon(
-                  icon,
-                  size: 12,
-                  color: iconColor,
-                ),
-              )
-            : const SizedBox(width: 6.0);
+        debugPrint(
+            'menuState.statusIconRequired: ${menuState.statusIconRequired}');
 
-        final imageWidget = Padding(
-          padding: EdgeInsets.only(
-              top: 3.0,
-              right:
-                  imageAlignment == AppKitMenuImageAlignment.start ? 4.0 : 0.0,
-              left: imageAlignment == AppKitMenuImageAlignment.end ? 4.0 : 0.0),
-          child: Icon(
-            image,
-            size: 12,
-            color: textColor,
-          ),
-        );
+        final statusIconWidget = !menuState.statusIconRequired
+            ? const SizedBox.shrink()
+            : itemState != null
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 3.0, right: 4.0),
+                    child: Icon(
+                      icon,
+                      size: 12,
+                      color: iconColor,
+                    ),
+                  )
+                : const SizedBox(width: 6.0);
 
         final subMenuIconWidget = Padding(
           padding: const EdgeInsets.only(top: 3.0, left: 6.0),
@@ -161,16 +153,17 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           ),
         );
 
-        final textWidget = Text(
-          textAlign: textAlign,
+        final textWidget = DefaultTextStyle(
           softWrap: true,
-          title,
           maxLines: 1,
           style: theme.typography.body.copyWith(
             fontSize: 13,
             color: textColor,
           ),
           overflow: TextOverflow.ellipsis,
+          child: AppKitIconTheme(
+              data: AppKitIconTheme.of(context).copyWith(color: textColor),
+              child: child),
         );
 
         return DecoratedBox(
@@ -189,17 +182,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
               children: [
                 // Left to right
                 statusIconWidget,
-                if (textAlign == TextAlign.right || textAlign == TextAlign.end)
-                  const Spacer(),
-                if (image != null &&
-                    imageAlignment == AppKitMenuImageAlignment.start) ...[
-                  imageWidget,
-                ],
                 Flexible(child: textWidget),
-                if (image != null &&
-                    imageAlignment == AppKitMenuImageAlignment.end) ...[
-                  imageWidget,
-                ],
                 if (hasSubmenu) ...[const Spacer(), subMenuIconWidget],
                 const SizedBox(width: 12),
               ],

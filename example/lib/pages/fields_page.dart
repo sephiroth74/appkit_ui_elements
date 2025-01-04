@@ -48,16 +48,16 @@ class _FieldsPageState extends State<FieldsPage> {
           entries: [
             for (final item in _searchResults)
               AppKitContextMenuItem(
-                title: item,
+                child: Text(item),
                 value: item,
                 enabled: true,
               ),
             const AppKitContextMenuDivider(),
             AppKitContextMenuItem(
-              title: 'Clear',
+              child: const Text('Clear'),
               value: null,
               enabled: true,
-              onPressed: (value) {
+              onTap: () {
                 _searchResults.clear();
                 textFieldController.clear();
               },
@@ -221,12 +221,8 @@ class _FieldsPageState extends State<FieldsPage> {
                                   ),
                                   text: Text('Clear Button Mode'))),
                           const SizedBox(width: 16.0),
-                          AppKitPopupButton(
-                            selectedItem: AppKitContextMenuItem(
-                              title: clearButtonMode.name,
-                              value: clearButtonMode,
-                              enabled: true,
-                            ),
+                          AppKitPopupButton<AppKitOverlayVisibilityMode>(
+                            selectedItem: clearButtonMode,
                             width: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
@@ -235,11 +231,11 @@ class _FieldsPageState extends State<FieldsPage> {
                                       AppKitOverlayVisibilityMode>(
                                   minWidth: 150,
                                   entries: [
-                                    for (final size
+                                    for (final mode
                                         in AppKitOverlayVisibilityMode.values)
-                                      AppKitContextMenuItem(
-                                        title: size.name,
-                                        value: size,
+                                      AppKitContextMenuItem.plain(
+                                        mode.name,
+                                        value: mode,
                                         enabled: true,
                                       ),
                                   ]);
@@ -247,8 +243,7 @@ class _FieldsPageState extends State<FieldsPage> {
                             onItemSelected: (value) {
                               setState(() {
                                 if (null != value) {
-                                  clearButtonMode =
-                                      value as AppKitOverlayVisibilityMode;
+                                  clearButtonMode = value;
                                 }
                               });
                             },
@@ -268,12 +263,8 @@ class _FieldsPageState extends State<FieldsPage> {
                                   ),
                                   text: Text('Border Style'))),
                           const SizedBox(width: 16.0),
-                          AppKitPopupButton(
-                            selectedItem: AppKitContextMenuItem(
-                              title: textFieldBorderStyle.name,
-                              value: textFieldBorderStyle,
-                              enabled: true,
-                            ),
+                          AppKitPopupButton<AppKitTextFieldBorderStyle>(
+                            selectedItem: textFieldBorderStyle,
                             width: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
@@ -284,8 +275,8 @@ class _FieldsPageState extends State<FieldsPage> {
                                   entries: [
                                     for (final size
                                         in AppKitTextFieldBorderStyle.values)
-                                      AppKitContextMenuItem(
-                                        title: size.name,
+                                      AppKitContextMenuItem.plain(
+                                        size.name,
                                         value: size,
                                         enabled: true,
                                       ),
@@ -294,8 +285,7 @@ class _FieldsPageState extends State<FieldsPage> {
                             onItemSelected: (value) {
                               setState(() {
                                 if (null != value) {
-                                  textFieldBorderStyle =
-                                      value as AppKitTextFieldBorderStyle;
+                                  textFieldBorderStyle = value;
                                 }
                               });
                             },
@@ -316,12 +306,8 @@ class _FieldsPageState extends State<FieldsPage> {
                                 text: Text('Search Field Size')),
                           ),
                           const SizedBox(width: 16.0),
-                          AppKitPopupButton(
-                            selectedItem: AppKitContextMenuItem(
-                              title: textFieldSize.name,
-                              value: textFieldSize,
-                              enabled: true,
-                            ),
+                          AppKitPopupButton<AppKitControlSize>(
+                            selectedItem: textFieldSize,
                             width: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
@@ -330,8 +316,8 @@ class _FieldsPageState extends State<FieldsPage> {
                                   minWidth: 150,
                                   entries: [
                                     for (final size in AppKitControlSize.values)
-                                      AppKitContextMenuItem(
-                                        title: size.name,
+                                      AppKitContextMenuItem.plain(
+                                        size.name,
                                         value: size,
                                         enabled: true,
                                       ),
@@ -340,7 +326,7 @@ class _FieldsPageState extends State<FieldsPage> {
                             onItemSelected: (value) {
                               setState(() {
                                 if (null != value) {
-                                  textFieldSize = value as AppKitControlSize;
+                                  textFieldSize = value;
                                 }
                               });
                             },

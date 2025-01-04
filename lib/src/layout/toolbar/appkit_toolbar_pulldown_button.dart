@@ -86,7 +86,7 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
   @override
   AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
     return AppKitContextMenuItem(
-      title: label,
+      child: Text(label),
       items: items.map((e) => e).toList(),
     );
   }

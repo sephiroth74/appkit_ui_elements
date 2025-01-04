@@ -55,10 +55,15 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
   @override
   AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
     return AppKitContextMenuItem(
-      title: label,
+      child: Row(
+        children: [
+          AppKitIcon(icon),
+          const SizedBox(width: 8.0),
+          Text(label),
+        ],
+      ),
       value: label,
-      image: icon,
-      onPressed: (value) => onPressed?.call(),
+      onTap: () => onPressed?.call(),
     );
   }
 }

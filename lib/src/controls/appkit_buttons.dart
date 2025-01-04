@@ -1,16 +1,22 @@
+import 'dart:async';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 100);
+const _longPressTick = Duration(milliseconds: 150);
 
 class AppKitButton extends StatefulWidget {
   final AppKitButtonStyle style;
   final AppKitButtonType type;
   final AppKitControlSize size;
   final Widget child;
-  final VoidCallback? onPressed;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final GestureLongPressEndCallback? onLongPressEnd;
   final Color? accentColor;
   final EdgeInsetsGeometry? padding;
   final String? semanticLabel;
@@ -21,7 +27,9 @@ class AppKitButton extends StatefulWidget {
   const AppKitButton({
     super.key,
     required this.child,
-    this.onPressed,
+    this.onTap,
+    this.onLongPress,
+    this.onLongPressEnd,
     this.accentColor,
     this.padding,
     this.semanticLabel,
@@ -43,8 +51,11 @@ class AppKitButton extends StatefulWidget {
     properties.add(EnumProperty<AppKitButtonType>('type', type));
     properties.add(EnumProperty<AppKitControlSize>('size', size));
     properties.add(DiagnosticsProperty<Widget>('child', child));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onTap', onTap));
     properties
-        .add(ObjectFlagProperty<VoidCallback>.has('onPressed', onPressed));
+        .add(ObjectFlagProperty<VoidCallback>.has('onLongPress', onLongPress));
+    properties.add(ObjectFlagProperty<GestureLongPressEndCallback>.has(
+        'onLongPressEnd', onLongPressEnd));
     properties.add(ColorProperty('accentColor', accentColor));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
     properties.add(StringProperty('semanticLabel', semanticLabel));
@@ -56,7 +67,10 @@ class AppKitButton extends StatefulWidget {
 }
 
 class _AppKitButtonState extends State<AppKitButton> {
-  bool get enabled => widget.onPressed != null;
+  bool get enabled =>
+      widget.onTap != null ||
+      widget.onLongPress != null ||
+      widget.onLongPressEnd != null;
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +94,11 @@ class _AppKitButtonState extends State<AppKitButton> {
               buttonTheme: buttonTheme,
               isMainWindow: isMainWindow,
               size: widget.size,
-              onPressed: widget.onPressed,
+              onTap: widget.onTap,
+              onLongPress: widget.onLongPress,
+              onLongPressEnd: widget.onLongPressEnd,
               accentColor: widget.accentColor,
               padding: widget.padding,
-              isEnabled: enabled,
               textStyle: widget.textStyle,
               width: widget.width,
               child: widget.child,
@@ -95,10 +110,11 @@ class _AppKitButtonState extends State<AppKitButton> {
               buttonTheme: buttonTheme,
               isMainWindow: isMainWindow,
               size: widget.size,
-              onPressed: widget.onPressed,
+              onTap: widget.onTap,
+              onLongPress: widget.onLongPress,
+              onLongPressEnd: widget.onLongPressEnd,
               accentColor: widget.accentColor,
               padding: widget.padding,
-              isEnabled: enabled,
               textStyle: widget.textStyle,
               width: widget.width,
               child: widget.child,
@@ -110,10 +126,11 @@ class _AppKitButtonState extends State<AppKitButton> {
               buttonTheme: buttonTheme,
               isMainWindow: isMainWindow,
               size: widget.size,
-              onPressed: widget.onPressed,
+              onTap: widget.onTap,
+              onLongPress: widget.onLongPress,
+              onLongPressEnd: widget.onLongPressEnd,
               accentColor: widget.accentColor,
               padding: widget.padding,
-              isEnabled: enabled,
               textStyle: widget.textStyle,
               width: widget.width,
               child: widget.child,
@@ -136,11 +153,12 @@ class _PushButton extends _ButtonBase {
     required super.size,
     required super.child,
     required super.isMainWindow,
-    required super.isEnabled,
     required super.theme,
     required super.buttonTheme,
     required super.type,
-    super.onPressed,
+    super.onTap,
+    super.onLongPress,
+    super.onLongPressEnd,
     super.padding,
     super.accentColor,
     super.textStyle,
@@ -188,7 +206,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
 
     final textStyle = widget.theme.typography.body
         .copyWith(
-          color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
+          color: textColor.multiplyOpacity(widget.enabled ? 1.0 : 0.3),
           fontSize: fontSize,
           fontWeight: fontWeight,
         )
@@ -199,7 +217,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
         borderRadius: BorderRadius.circular(borderRadius),
         gradient: widget.type == AppKitButtonType.primary &&
                 widget.isMainWindow &&
-                widget.isEnabled
+                widget.enabled
             ? LinearGradient(
                 colors: [
                   Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
@@ -216,7 +234,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
           borderRadius: BorderRadius.circular(borderRadius),
           border: widget.type != AppKitButtonType.primary ||
                   !widget.isMainWindow ||
-                  !widget.isEnabled ||
+                  !widget.enabled ||
                   isDark
               ? GradientBoxBorder(
                   gradient: LinearGradient(
@@ -248,7 +266,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
           boxShadow: [
             if (widget.type == AppKitButtonType.primary &&
                 widget.isMainWindow &&
-                widget.isEnabled &&
+                widget.enabled &&
                 !isDark) ...[
               BoxShadow(
                 color: backgroundColor.withValues(alpha: 0.5),
@@ -291,7 +309,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
   @override
   void computeColors() {
     final themeData = widget.buttonTheme.push;
-    if (!widget.isEnabled) {
+    if (!widget.enabled) {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
@@ -328,11 +346,12 @@ class _FlatButton extends _ButtonBase {
     required super.size,
     required super.child,
     required super.isMainWindow,
-    required super.isEnabled,
     required super.theme,
     required super.buttonTheme,
     required super.type,
-    super.onPressed,
+    super.onTap,
+    super.onLongPress,
+    super.onLongPressEnd,
     super.padding,
     super.accentColor,
     super.textStyle,
@@ -369,7 +388,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
     }
 
     final textStyle = widget.theme.typography.body.copyWith(
-      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
+      color: textColor.multiplyOpacity(widget.enabled ? 1.0 : 0.3),
       fontSize: widget.size.getFontSize(widget.style),
       fontWeight: widget.size.getFontWeight(widget.style),
     );
@@ -402,7 +421,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
   @override
   void computeColors() {
     final themeData = widget.buttonTheme.flat;
-    if (!widget.isEnabled) {
+    if (!widget.enabled) {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
@@ -436,11 +455,12 @@ class _InlineButton extends _ButtonBase {
     required super.size,
     required super.child,
     required super.isMainWindow,
-    required super.isEnabled,
     required super.theme,
     required super.buttonTheme,
     required super.type,
-    super.onPressed,
+    super.onTap,
+    super.onLongPress,
+    super.onLongPressEnd,
     super.padding,
     super.accentColor,
     super.textStyle,
@@ -478,7 +498,7 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
     }
 
     final textStyle = widget.theme.typography.body.copyWith(
-      color: textColor.multiplyOpacity(widget.isEnabled ? 1.0 : 0.3),
+      color: textColor.multiplyOpacity(widget.enabled ? 1.0 : 0.3),
       fontSize: widget.size.getFontSize(widget.style),
       fontWeight: widget.size.getFontWeight(widget.style),
     );
@@ -510,7 +530,7 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
   @override
   void computeColors() {
     final themeData = widget.buttonTheme.inline;
-    if (!widget.isEnabled) {
+    if (!widget.enabled) {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
@@ -542,11 +562,12 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
 abstract class _ButtonBase extends StatefulWidget {
   final AppKitControlSize size;
   final Widget child;
-  final VoidCallback? onPressed;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final GestureLongPressEndCallback? onLongPressEnd;
   final Color? accentColor;
   final EdgeInsetsGeometry? padding;
   final bool isMainWindow;
-  final bool isEnabled;
   final AppKitThemeData theme;
   final AppKitButtonThemeData buttonTheme;
   final AppKitButtonType type;
@@ -559,16 +580,24 @@ abstract class _ButtonBase extends StatefulWidget {
     required this.size,
     required this.child,
     required this.isMainWindow,
-    required this.isEnabled,
     required this.theme,
     required this.buttonTheme,
     required this.type,
-    this.onPressed,
+    this.onTap,
+    this.onLongPress,
+    this.onLongPressEnd,
     this.accentColor,
     this.padding,
     this.textStyle,
     this.width,
   });
+
+  bool get enabled =>
+      onTap != null || onLongPress != null || onLongPressEnd != null;
+
+  bool get tapEnabled => onTap != null;
+
+  bool get longPressEnabled => onLongPress != null || onLongPressEnd != null;
 }
 
 abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
@@ -587,7 +616,7 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
   void didUpdateWidget(T oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.isEnabled != widget.isEnabled ||
+    if (oldWidget.enabled != widget.enabled ||
         oldWidget.accentColor != widget.accentColor ||
         oldWidget.theme != widget.theme ||
         oldWidget.buttonTheme != widget.buttonTheme ||
@@ -632,13 +661,46 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
     setState(() {
       controller.reverse();
     });
-    widget.onPressed?.call();
+    widget.onTap?.call();
   }
 
   void _handleTapCancel() {
+    if (widget.longPressEnabled) {
+      return;
+    }
+
     setState(() {
       controller.reverse();
     });
+  }
+
+  void _handleLongPressStart(LongPressStartDetails details) {
+    setState(() {
+      controller.forward();
+    });
+  }
+
+  void _handleLongPressDown(LongPressDownDetails details) {
+    setState(() {
+      controller.forward();
+    });
+  }
+
+  void _handleLongPressCancel() {
+    setState(() {
+      controller.reverse();
+    });
+  }
+
+  void _handleLongPress() {
+    widget.onLongPress?.call();
+  }
+
+  void _handleLongPressEnd(LongPressEndDetails details) {
+    setState(() {
+      controller.reverse();
+    });
+    widget.onLongPressEnd?.call(details);
   }
 
   void computeColors();
@@ -655,9 +717,20 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
       child: ConstrainedBox(
         constraints: constraints,
         child: GestureDetector(
-          onTapDown: widget.isEnabled ? _handleTapDown : null,
-          onTapUp: widget.isEnabled ? _handleTapUp : null,
-          onTapCancel: widget.isEnabled ? _handleTapCancel : null,
+          onLongPressStart:
+              widget.longPressEnabled ? _handleLongPressStart : null,
+          onLongPressDown: !widget.tapEnabled && widget.longPressEnabled
+              ? _handleLongPressDown
+              : null,
+          onLongPressCancel: !widget.tapEnabled && widget.longPressEnabled
+              ? _handleLongPressCancel
+              : null,
+          onLongPress: widget.onLongPress != null ? _handleLongPress : null,
+          onLongPressEnd:
+              widget.onLongPressEnd != null ? _handleLongPressEnd : null,
+          onTapDown: widget.tapEnabled ? _handleTapDown : null,
+          onTapUp: widget.tapEnabled ? _handleTapUp : null,
+          onTapCancel: widget.tapEnabled ? _handleTapCancel : null,
           child: LayoutBuilder(builder: (context, constraints) {
             return buildButton(context, constraints);
           }),

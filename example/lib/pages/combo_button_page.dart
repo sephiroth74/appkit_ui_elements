@@ -14,9 +14,9 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
   final _comboButtonContextMenu = AppKitContextMenu<String>(
     minWidth: 150.0,
     entries: [
-      const AppKitContextMenuItem(title: 'Item 1', value: '1'),
-      const AppKitContextMenuItem(title: 'Item 2', value: '2'),
-      const AppKitContextMenuItem(title: 'Item 3', value: '3'),
+      const AppKitContextMenuItem(child: Text('Item 1'), value: '1'),
+      const AppKitContextMenuItem(child: Text('Item 2'), value: '2'),
+      const AppKitContextMenuItem(child: Text('Item 3'), value: '3'),
     ],
   );
 

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 class AppKitSearchField extends StatefulWidget {
   final ContextMenuBuilder<String>? contextMenuBuilder;
+  final List<String>? suggestions;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final EdgeInsets? padding;
@@ -34,6 +35,7 @@ class AppKitSearchField extends StatefulWidget {
   const AppKitSearchField({
     super.key,
     this.contextMenuBuilder,
+    this.suggestions,
     this.controller,
     this.focusNode,
     this.padding,
@@ -57,7 +59,24 @@ class AppKitSearchField extends StatefulWidget {
     this.controlSize = AppKitControlSize.regular,
     this.clearButtonMode = AppKitOverlayVisibilityMode.editing,
     this.behavior = AppKitTextFieldBehavior.editable,
-  });
+  }) : assert(contextMenuBuilder != null ? suggestions == null : true,
+            'Suggestions must be null when contextMenuBuilder is provided');
+
+  bool get hasSuggestions =>
+      (suggestions != null && suggestions!.isNotEmpty) ||
+      contextMenuBuilder != null;
+
+  AppKitContextMenu<String>? _defaultMenuBuilder(BuildContext context) {
+    return contextMenuBuilder != null
+        ? contextMenuBuilder?.call(context)
+        : suggestions != null
+            ? AppKitContextMenu<String>(
+                entries: suggestions!
+                    .map(
+                        (e) => AppKitContextMenuItem<String>.plain(e, value: e))
+                    .toList())
+            : null;
+  }
 
   @override
   State<AppKitSearchField> createState() => _AppKitSearchFieldState();
@@ -108,9 +127,9 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
   void _handlePrefixTap() async {
     final itemRect = context.getWidgetBounds();
 
-    if (null != itemRect && widget.contextMenuBuilder != null) {
-      final menu = widget.contextMenuBuilder!
-          .call(context)
+    if (null != itemRect && widget.hasSuggestions) {
+      final menu = widget
+          ._defaultMenuBuilder(context)!
           .copyWith(position: AppKitMenuEdge.auto.getRectPosition(itemRect));
 
       setState(() {
@@ -132,7 +151,7 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
 
       if (value?.value != null) {
         setState(() {
-          _controller!.text = value!.title;
+          _controller!.text = value!.value!;
           _controller!.selectAll();
           FocusScope.of(context).requestFocus(_focusNode);
 
@@ -192,13 +211,11 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
       style: widget.controlSize.textStyle,
       textAlign: widget.textAlign,
       prefix: IgnorePointer(
-        ignoring: !enabled || widget.contextMenuBuilder == null,
+        ignoring: !enabled || !widget.hasSuggestions,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           excludeFromSemantics: true,
-          onTap: enabled && widget.contextMenuBuilder != null
-              ? _handlePrefixTap
-              : null,
+          onTap: enabled && widget.hasSuggestions ? _handlePrefixTap : null,
           child: LayoutBuilder(builder: (context, constraints) {
             return Padding(
               padding: const EdgeInsets.symmetric(),
@@ -212,7 +229,7 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
                             context, AppKitColors.labelColor)
                         .multiplyOpacity(enabled ? 1.0 : 0.5),
                   ),
-                  if (widget.contextMenuBuilder != null) ...[
+                  if (widget.hasSuggestions) ...[
                     Icon(
                       CupertinoIcons.chevron_down,
                       size: widget.controlSize.prefixIconSize / 2,

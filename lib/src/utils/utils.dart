@@ -392,3 +392,9 @@ class DateTimeRange extends Equatable {
   @override
   List<Object?> get props => [start, end];
 }
+
+Color textLuminance(Color backgroundColor) {
+  return backgroundColor.computeLuminance() >= 0.5
+      ? CupertinoColors.black
+      : CupertinoColors.white;
+}

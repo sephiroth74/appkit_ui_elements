@@ -146,19 +146,12 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     final popupThemeData = AppKitPopupButtonTheme.of(context);
     final currentSelectedItem = _contextMenu.findItemByValue(selectedItem);
 
-    String title = currentSelectedItem?.title ?? '';
-    final icon = currentSelectedItem?.image;
-    final iconSize = style == AppKitPopupButtonStyle.inline
-        ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
-        : popupThemeData.sizeData[controlSize]!.iconSize;
-
+    Widget title = currentSelectedItem?.child ?? Text(widget.hint ?? '');
     EdgeInsets textPadding = EdgeInsets.only(
         left: popupThemeData.sizeData[controlSize]!.textPadding);
 
     if (selectedItem == null) {
-      if (widget.hint != null) {
-        title = widget.hint!;
-      } else {
+      if (widget.hint == null) {
         return const SizedBox();
       }
     }
@@ -189,20 +182,14 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (icon != null)
-            Icon(
-              icon,
-              size: iconSize,
-              color: textColor,
-            ),
           Flexible(
             child: Padding(
               padding: textPadding,
-              child: Text(
-                title,
+              child: DefaultTextStyle(
                 style: textStyle.copyWith(color: textColor),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                child: title,
               ),
             ),
           ),
@@ -210,6 +197,75 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
       );
     });
   }
+  // Widget _defaultItemBuilder(BuildContext context, {required T? selectedItem}) {
+  //   bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+  //   final popupThemeData = AppKitPopupButtonTheme.of(context);
+  //   final currentSelectedItem = _contextMenu.findItemByValue(selectedItem);
+
+  //   String title = currentSelectedItem?.title ?? '';
+  //   final icon = currentSelectedItem?.image;
+  //   final iconSize = style == AppKitPopupButtonStyle.inline
+  //       ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
+  //       : popupThemeData.sizeData[controlSize]!.iconSize;
+
+  //   EdgeInsets textPadding = EdgeInsets.only(
+  //       left: popupThemeData.sizeData[controlSize]!.textPadding);
+
+  //   if (selectedItem == null) {
+  //     if (widget.hint != null) {
+  //       title = widget.hint!;
+  //     } else {
+  //       return const SizedBox();
+  //     }
+  //   }
+
+  //   final TextStyle textStyle =
+  //       style.getTextStyle(theme: popupThemeData, controlSize: controlSize);
+  //   Color textColor;
+
+  //   if (style == AppKitPopupButtonStyle.inline) {
+  //     textColor = (textStyle.color ??
+  //             AppKitDynamicColor.resolve(context, AppKitColors.labelColor))
+  //         .multiplyOpacity(0.7);
+  //     if (!isMainWindow) {
+  //       textColor = textColor.multiplyOpacity(0.5);
+  //     }
+  //   } else {
+  //     textColor = textStyle.color ??
+  //         AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
+  //   }
+
+  //   if (!enabled) {
+  //     textColor = textColor.multiplyOpacity(0.5);
+  //   }
+
+  //   return LayoutBuilder(builder: (context, constraints) {
+  //     return Row(
+  //       mainAxisSize: MainAxisSize.max,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         if (icon != null)
+  //           Icon(
+  //             icon,
+  //             size: iconSize,
+  //             color: textColor,
+  //           ),
+  //         Flexible(
+  //           child: Padding(
+  //             padding: textPadding,
+  //             child: Text(
+  //               title,
+  //               style: textStyle.copyWith(color: textColor),
+  //               maxLines: 1,
+  //               overflow: TextOverflow.ellipsis,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   });
+  // }
 
   void _handleMouseEnter(_) {
     setState(() {

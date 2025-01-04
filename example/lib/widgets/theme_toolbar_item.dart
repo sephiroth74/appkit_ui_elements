@@ -1,3 +1,4 @@
+import 'package:example/pages/controls_page.dart';
 import 'package:provider/provider.dart';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
@@ -14,30 +15,25 @@ class ThemeSwitcherToolbarItem {
       showLabel: true,
       items: [
         AppKitContextMenuItem(
-            onPressed: (value) =>
-                context.read<AppTheme>().mode = ThemeMode.light,
-            title: 'Light theme',
+            onTap: () => context.read<AppTheme>().mode = ThemeMode.light,
+            child: titleWithIconMenuItem('Light theme', Icons.light_mode),
             value: 'light',
-            image: Icons.light_mode,
             itemState: context.watch<AppTheme>().mode == ThemeMode.light
                 ? AppKitItemState.on
                 : AppKitItemState.off),
         AppKitContextMenuItem(
-            onPressed: (value) =>
-                context.read<AppTheme>().mode = ThemeMode.dark,
-            title: 'Dark theme',
+            onTap: () => context.read<AppTheme>().mode = ThemeMode.dark,
+            child: titleWithIconMenuItem('Dark theme', Icons.dark_mode),
             value: 'dark',
-            image: Icons.dark_mode,
             itemState: context.watch<AppTheme>().mode == ThemeMode.dark
                 ? AppKitItemState.on
                 : AppKitItemState.off),
         const AppKitContextMenuDivider(),
         AppKitContextMenuItem(
-            onPressed: (value) =>
-                context.read<AppTheme>().mode = ThemeMode.system,
-            title: 'System theme',
+            onTap: () => context.read<AppTheme>().mode = ThemeMode.system,
+            child:
+                titleWithIconMenuItem('System theme', Icons.mode_night_rounded),
             value: 'system',
-            image: Icons.mode_night_rounded,
             itemState: context.watch<AppTheme>().mode == ThemeMode.system
                 ? AppKitItemState.on
                 : AppKitItemState.off),

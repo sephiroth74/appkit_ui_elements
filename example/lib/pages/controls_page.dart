@@ -13,6 +13,17 @@ class ControlsPage extends StatefulWidget {
   State<ControlsPage> createState() => _ControlsPageState();
 }
 
+Widget titleWithIconMenuItem(String label, IconData icon) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      AppKitIcon(icon, size: 12),
+      const SizedBox(width: 8.0),
+      Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
+    ],
+  );
+}
+
 class _ControlsPageState extends State<ControlsPage> {
   bool? checkboxValue1 = true;
   bool radioButtonValue2 = true;
@@ -33,10 +44,18 @@ class _ControlsPageState extends State<ControlsPage> {
                 const AppKitContextMenuDivider()
               else
                 AppKitContextMenuItem(
-                  title: i == 6 ? 'Very long item with value $i' : 'Item $i',
+                  child: i == 0
+                      ? const Row(
+                          children: [
+                            AppKitIcon(CupertinoIcons.alarm),
+                            SizedBox(width: 8.0),
+                            Text('Alarm'),
+                          ],
+                        )
+                      : Text(
+                          i == 6 ? 'Very long item with value $i' : 'Item $i'),
                   enabled: i != 4,
                   value: '$i',
-                  image: i == 0 ? CupertinoIcons.alarm : null,
                   itemState: popupSelectedItem?.value == '$i'
                       ? AppKitItemState.on
                       : AppKitItemState.off,
@@ -49,30 +68,36 @@ class _ControlsPageState extends State<ControlsPage> {
         return AppKitContextMenu<int>(
           maxWidth: 200,
           entries: [
-            const AppKitContextMenuItem(
-                title: 'Cut', value: 0, enabled: true, image: Icons.cut),
-            const AppKitContextMenuItem(
-                title: 'Copy', value: 1, enabled: true, image: Icons.copy),
-            const AppKitContextMenuItem(
-                title: 'Paste', value: 2, enabled: true, image: Icons.paste),
+            AppKitContextMenuItem(
+                child: titleWithIconMenuItem('Cut', Icons.cut),
+                value: 0,
+                enabled: true),
+            AppKitContextMenuItem(
+                child: titleWithIconMenuItem('Copy', Icons.copy),
+                value: 1,
+                enabled: true),
+            AppKitContextMenuItem(
+                child: titleWithIconMenuItem('Paste', Icons.paste),
+                value: 2,
+                enabled: true),
             const AppKitContextMenuDivider(),
             const AppKitContextMenuItem(
-                title: 'Select All', value: 3, enabled: true),
+                child: Text('Select All'), value: 3, enabled: true),
             const AppKitContextMenuItem(
-                title: 'Select None', value: 3, enabled: true),
+                child: Text('Select None'), value: 3, enabled: true),
             const AppKitContextMenuDivider(),
-            const AppKitContextMenuItem(
-                title: 'Other...',
+            AppKitContextMenuItem(
+                child: const Text('Other...'),
                 value: 6,
                 enabled: true,
                 items: [
-                  AppKitContextMenuItem(
-                      title: 'Submenu Item 1', value: 7, enabled: true),
-                  AppKitContextMenuItem(
-                      title: 'Submenu Item 2', value: 8, enabled: true),
-                  AppKitContextMenuDivider(),
-                  AppKitContextMenuItem(
-                      title: 'Submenu Item 3', value: 9, enabled: false),
+                  const AppKitContextMenuItem(
+                      child: Text('Submenu Item 1'), value: 7, enabled: true),
+                  const AppKitContextMenuItem(
+                      child: Text('Submenu Item 2'), value: 8, enabled: true),
+                  const AppKitContextMenuDivider(),
+                  AppKitContextMenuItem.plain('Submenu Item 3',
+                      value: 9, enabled: false),
                 ]),
           ],
         );

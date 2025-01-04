@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:example/pages/controls_page.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:example/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
   bool disclosureValue = false;
   double sliderValue1 = 0.5;
   bool switchValue1 = true;
-  double popupButtonWidth = 125.0;
+  double popupButtonWidth = 135.0;
 
   String? popupSelectedItem;
 
@@ -32,7 +33,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                 const AppKitContextMenuDivider()
               else
                 AppKitContextMenuItem(
-                  title: 'Menu Item #$i',
+                  child: titleWithIconMenuItem('Item #$i', Icons.ac_unit),
                   enabled: i != 4,
                   value: '$i',
                   itemState: popupSelectedItem == '$i'
@@ -47,50 +48,53 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
         return AppKitContextMenu<int>(
           maxWidth: 200,
           entries: [
-            const AppKitContextMenuItem(
-                title: 'Cut', value: 0, enabled: true, image: Icons.cut),
-            const AppKitContextMenuItem(
-                title: 'Copy', value: 1, enabled: true, image: Icons.copy),
-            const AppKitContextMenuItem(
-                title: 'Paste', value: 2, enabled: true, image: Icons.paste),
-            const AppKitContextMenuDivider(),
-            const AppKitContextMenuItem(
-                title: 'Select All', value: 3, enabled: true),
-            const AppKitContextMenuItem(
-                title: 'Select None', value: 3, enabled: true),
-            const AppKitContextMenuDivider(),
             AppKitContextMenuItem(
-                title: 'Other...',
+                child: titleWithIconMenuItem('Cut', Icons.cut),
+                value: 0,
+                enabled: true),
+            AppKitContextMenuItem(
+                child: titleWithIconMenuItem('Copy', Icons.copy),
+                value: 1,
+                enabled: true),
+            AppKitContextMenuItem(
+                child: titleWithIconMenuItem('Paste', Icons.paste),
+                value: 2,
+                enabled: true),
+            const AppKitContextMenuDivider(),
+            AppKitContextMenuItem.plain('Select All', value: 3, enabled: true),
+            AppKitContextMenuItem.plain('Select None', value: 3, enabled: true),
+            const AppKitContextMenuDivider(),
+            AppKitContextMenuItem.plain('Other...',
                 value: 6,
                 enabled: true,
                 items: [
-                  AppKitContextMenuItem(
-                    title: 'Submenu Item 1',
+                  AppKitContextMenuItem.plain(
+                    'Submenu Item 1',
                     value: 7,
                     enabled: true,
-                    onPressed: (value) {
-                      debugPrint('Selected: ${value.title}');
+                    onTap: () {
+                      debugPrint('Selected: Submenu Item 1');
                     },
                   ),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 2', value: 12, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 3', value: 13, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 4', value: 14, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 5', value: 15, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 6', value: 16, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 7', value: 17, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 8', value: 18, enabled: true),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 9', value: 19, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 2',
+                      value: 12, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 3',
+                      value: 13, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 4',
+                      value: 14, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 5',
+                      value: 15, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 6',
+                      value: 16, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 7',
+                      value: 17, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 8',
+                      value: 18, enabled: true),
+                  AppKitContextMenuItem.plain('Submenu Item 9',
+                      value: 19, enabled: true),
                   const AppKitContextMenuDivider(),
-                  const AppKitContextMenuItem(
-                      title: 'Submenu Item 10', value: 20, enabled: false),
+                  AppKitContextMenuItem.plain('Submenu Item 10',
+                      value: 20, enabled: false),
                 ]),
           ],
         );
@@ -161,26 +165,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                                 onItemSelected: switchValue1
                                                     ? _onPopupItemSelected
                                                     : null,
-                                                // menuBuilder: popupMenuBuilder,
-                                                items: const [
-                                                  AppKitContextMenuItem(
-                                                      title: 'Menu Item 1',
-                                                      value: '1'),
-                                                  AppKitContextMenuItem(
-                                                      title: 'Menu Item 2',
-                                                      value: '2'),
-                                                  AppKitContextMenuItem(
-                                                      title: 'Item 3',
-                                                      value: '3'),
-                                                  AppKitContextMenuItem(
-                                                      title: 'Item 4',
-                                                      value: '4'),
-                                                  AppKitContextMenuDivider<
-                                                      String>(),
-                                                  AppKitContextMenuItem(
-                                                      title: 'Menu Item 5',
-                                                      value: '5'),
-                                                ],
+                                                menuBuilder: popupMenuBuilder,
                                                 style: style,
                                               ),
                                               const SizedBox(width: 8.0)

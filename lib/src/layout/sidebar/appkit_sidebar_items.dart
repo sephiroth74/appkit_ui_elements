@@ -244,7 +244,7 @@ class _SidebarItem extends StatelessWidget {
     }
 
     final Color? textColor = selected
-        ? selectedTextColor ?? _textLuminance(selectedColor)
+        ? selectedTextColor ?? textLuminance(selectedColor)
         : unselectedTextColor;
 
     return Semantics(
@@ -495,10 +495,4 @@ class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem>
       child: closed ? null : result,
     );
   }
-}
-
-Color _textLuminance(Color backgroundColor) {
-  return backgroundColor.computeLuminance() >= 0.5
-      ? CupertinoColors.black
-      : CupertinoColors.white;
 }

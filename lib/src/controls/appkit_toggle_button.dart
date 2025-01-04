@@ -77,7 +77,7 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
         child: AppKitButton(
           accentColor: widget.color,
           mouseCursor: widget.mouseCursor,
-          onPressed: enabled ? _handleOnPressed : null,
+          onTap: enabled ? _handleOnPressed : null,
           padding: widget.padding,
           semanticLabel: widget.semanticLabel,
           size: widget.size,

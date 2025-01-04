@@ -126,7 +126,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                             AppKitButton(
                               type: AppKitButtonType.secondary,
                               size: AppKitControlSize.large,
-                              onPressed: () {
+                              onTap: () {
                                 setState(() {
                                   button1Value = true;
                                   button2Value = true;
@@ -140,7 +140,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                             AppKitButton(
                               type: AppKitButtonType.secondary,
                               size: AppKitControlSize.large,
-                              onPressed: () {
+                              onTap: () {
                                 setState(() {
                                   button1Value = false;
                                   button2Value = false;
