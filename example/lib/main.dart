@@ -24,8 +24,14 @@ import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
 Future<void> _configureMacosWindowUtils() async {
-  const config2 = AppKitWindowUtilsConfig();
-  config2.apply();
+  const config = AppKitWindowUtilsConfig(
+      makeTitlebarTransparent: true,
+      toolbarStyle: NSWindowToolbarStyle.automatic,
+      autoHideToolbarAndMenuBarInFullScreenMode: false,
+      enableFullSizeContentView: true,
+      hideTitle: true,
+      removeMenubarInFullScreenMode: true);
+  config.apply();
 }
 
 void main() async {
@@ -73,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('build');
+
     return PlatformMenuBar(
       menus: const [],
       child: AppKitWindow(

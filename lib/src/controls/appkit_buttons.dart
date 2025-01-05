@@ -1,4 +1,3 @@
-
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -897,7 +896,7 @@ extension _AppKitControlSizeX on AppKitControlSize {
             return const EdgeInsets.only(left: 20, right: 20, bottom: 5.5);
           case AppKitButtonStyle.flat:
           case AppKitButtonStyle.push:
-            return const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0);
+            return const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 5.0);
         }
       case AppKitControlSize.large:
         switch (style) {

@@ -29,7 +29,6 @@ class AppKitPopupButton<T> extends StatefulWidget {
   final T? selectedItem;
   final ValueChanged<T?>? onItemSelected;
   final SelectedItemBuilder<T>? itemBuilder;
-  final double width;
   final AppKitMenuEdge menuEdge;
   final AppKitPopupButtonStyle style;
   final Color? color;
@@ -38,10 +37,14 @@ class AppKitPopupButton<T> extends StatefulWidget {
   final String? semanticLabel;
   final FocusNode? focusNode;
   final bool canRequestFocus;
+  final bool forceMenuWidth;
+  final double? minWidth;
+  final double? maxWidth;
 
   const AppKitPopupButton({
     super.key,
-    required this.width,
+    this.minWidth,
+    this.maxWidth,
     this.onItemSelected,
     this.menuBuilder,
     this.items,
@@ -55,12 +58,17 @@ class AppKitPopupButton<T> extends StatefulWidget {
     this.style = AppKitPopupButtonStyle.push,
     this.controlSize = AppKitControlSize.regular,
     this.canRequestFocus = false,
-  }) : assert(menuBuilder != null ? items == null : true,
-            'Only one of menuBuilder or items can be provided');
+    this.forceMenuWidth = false,
+  })  : assert(menuBuilder != null ? items == null : true,
+            'Only one of menuBuilder or items can be provided'),
+        assert(minWidth == null || maxWidth == null || minWidth <= maxWidth,
+            'minWidth must be less than or equal to maxWidth');
 
   AppKitContextMenu<T> _defaultMenuBuilder(BuildContext context) {
     return menuBuilder?.call(context) ?? AppKitContextMenu<T>(entries: items!);
   }
+
+  bool get _hasWidth => minWidth != null || maxWidth != null;
 
   @override
   State<AppKitPopupButton<T>> createState() => _AppKitPopupButtonState<T>();
@@ -95,7 +103,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     properties.add(DiagnosticsProperty('enabled', enabled));
     properties.add(DiagnosticsProperty('style', style));
     properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
-    properties.add(DiagnosticsProperty('width', widget.width));
+    properties.add(DiagnosticsProperty('minWidth', widget.minWidth));
+    properties.add(DiagnosticsProperty('maxWidth', widget.maxWidth));
     properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
     properties.add(DiagnosticsProperty('items', widget.items));
     properties
@@ -176,96 +185,16 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
       textColor = textColor.multiplyOpacity(0.5);
     }
 
-    return LayoutBuilder(builder: (context, constraints) {
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Padding(
-              padding: textPadding,
-              child: DefaultTextStyle(
-                style: textStyle.copyWith(color: textColor),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                child: title,
-              ),
-            ),
-          ),
-        ],
-      );
-    });
+    return Padding(
+      padding: textPadding,
+      child: DefaultTextStyle(
+        style: textStyle.copyWith(color: textColor),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        child: title,
+      ),
+    );
   }
-  // Widget _defaultItemBuilder(BuildContext context, {required T? selectedItem}) {
-  //   bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
-  //   final popupThemeData = AppKitPopupButtonTheme.of(context);
-  //   final currentSelectedItem = _contextMenu.findItemByValue(selectedItem);
-
-  //   String title = currentSelectedItem?.title ?? '';
-  //   final icon = currentSelectedItem?.image;
-  //   final iconSize = style == AppKitPopupButtonStyle.inline
-  //       ? popupThemeData.sizeData[controlSize]!.inlineIconsSize
-  //       : popupThemeData.sizeData[controlSize]!.iconSize;
-
-  //   EdgeInsets textPadding = EdgeInsets.only(
-  //       left: popupThemeData.sizeData[controlSize]!.textPadding);
-
-  //   if (selectedItem == null) {
-  //     if (widget.hint != null) {
-  //       title = widget.hint!;
-  //     } else {
-  //       return const SizedBox();
-  //     }
-  //   }
-
-  //   final TextStyle textStyle =
-  //       style.getTextStyle(theme: popupThemeData, controlSize: controlSize);
-  //   Color textColor;
-
-  //   if (style == AppKitPopupButtonStyle.inline) {
-  //     textColor = (textStyle.color ??
-  //             AppKitDynamicColor.resolve(context, AppKitColors.labelColor))
-  //         .multiplyOpacity(0.7);
-  //     if (!isMainWindow) {
-  //       textColor = textColor.multiplyOpacity(0.5);
-  //     }
-  //   } else {
-  //     textColor = textStyle.color ??
-  //         AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
-  //   }
-
-  //   if (!enabled) {
-  //     textColor = textColor.multiplyOpacity(0.5);
-  //   }
-
-  //   return LayoutBuilder(builder: (context, constraints) {
-  //     return Row(
-  //       mainAxisSize: MainAxisSize.max,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       mainAxisAlignment: MainAxisAlignment.start,
-  //       children: [
-  //         if (icon != null)
-  //           Icon(
-  //             icon,
-  //             size: iconSize,
-  //             color: textColor,
-  //           ),
-  //         Flexible(
-  //           child: Padding(
-  //             padding: textPadding,
-  //             child: Text(
-  //               title,
-  //               style: textStyle.copyWith(color: textColor),
-  //               maxLines: 1,
-  //               overflow: TextOverflow.ellipsis,
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   });
-  // }
 
   void _handleMouseEnter(_) {
     setState(() {
@@ -283,7 +212,9 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     final itemRect = context.getWidgetBounds();
     if (null != itemRect &&
         (widget.menuBuilder != null || widget.items != null)) {
-      final menu = _contextMenu.copyWith(
+      final menu = widget._defaultMenuBuilder(context).copyWith(
+          minWidth: widget.forceMenuWidth ? itemRect.width : null,
+          maxWidth: widget.forceMenuWidth ? itemRect.width : null,
           position: _contextMenu.position ??
               widget.menuEdge.getRectPosition(itemRect));
       setState(() {
@@ -327,7 +258,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
           final popupButtonTheme = AppKitPopupButtonTheme.of(context);
           final height = style.getHeight(
               theme: popupButtonTheme, controlSize: controlSize);
-          final width = widget.width;
           final menuEdge = widget.menuEdge;
           final itemBuilder = widget.itemBuilder;
 
@@ -341,7 +271,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
               if (style == AppKitPopupButtonStyle.push ||
                   style == AppKitPopupButtonStyle.bevel) {
                 return _PushButtonStyleWidget<T>(
-                  width: width,
+                  minWidth: widget.minWidth,
+                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -354,7 +285,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                 );
               } else if (style == AppKitPopupButtonStyle.plain) {
                 return _PlainButtonStyleWidget<T>(
-                  width: width,
+                  minWidth: widget.minWidth,
+                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -366,7 +298,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                 );
               } else if (style == AppKitPopupButtonStyle.inline) {
                 return _InlineButtonStyleWidget<T>(
-                  width: width,
+                  minWidth: widget.minWidth,
+                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -430,7 +363,8 @@ class _UpDownCaretsPainter2 extends CustomPainter {
 }
 
 class _PushButtonStyleWidget<T> extends StatelessWidget {
-  final double width;
+  final double? minWidth;
+  final double? maxWidth;
   final double height;
   final AppKitMenuEdge menuEdge;
   final bool enabled;
@@ -443,7 +377,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
   const _PushButtonStyleWidget({
     super.key,
-    required this.width,
+    this.minWidth,
+    this.maxWidth,
     required this.height,
     required this.menuEdge,
     required this.enabled,
@@ -505,9 +440,20 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       }
     }
 
+    final constraints = BoxConstraints(
+      minWidth: minWidth ?? 0,
+      maxWidth: maxWidth ?? double.infinity,
+      minHeight: height,
+      maxHeight: height,
+    );
+
+    final childPadding = style.getChildPadding(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final containerPadding = style.getContainerPadding(
+        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
+
     return Container(
-      height: height,
-      width: width,
+      constraints: constraints,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: style.getPressedBackgroundColor(
@@ -547,27 +493,38 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
           boxShadow: getElevatedShadow(context),
         ),
         child: Padding(
-          padding: style.getContainerPadding(
-              theme: popupButtonTheme,
-              menuEdge: menuEdge,
-              controlSize: controlSize),
-          child: LayoutBuilder(builder: (context, parentConstraints) {
+          padding: containerPadding,
+          child: LayoutBuilder(builder: (context, constraints2) {
             return Row(
-              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  flex: 1,
+                  flex: 0,
                   child: Padding(
-                    padding: style.getChildPadding(
-                        theme: popupButtonTheme, controlSize: controlSize),
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return SizedBox(
-                          width: constraints.maxWidth,
-                          height: parentConstraints.maxHeight,
-                          child: child);
-                    }),
+                    padding: childPadding,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minHeight: constraints2.minHeight,
+                        maxHeight: constraints2.maxHeight,
+                        minWidth: constraints2.minWidth,
+                        maxWidth: constraints2.maxWidth.isFinite
+                            ? constraints2.maxWidth -
+                                childPadding.horizontal -
+                                6 -
+                                caretButtonSize
+                            : constraints2.maxWidth,
+                      ),
+                      child: Align(
+                        widthFactor: 1,
+                        heightFactor: 1,
+                        alignment: Alignment.centerLeft,
+                        child: child,
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(width: 6.0),
                 SizedBox(
                   width: caretButtonSize,
                   height: caretButtonSize,
@@ -669,7 +626,8 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 }
 
 class _PlainButtonStyleWidget<T> extends StatelessWidget {
-  final double width;
+  final double? minWidth;
+  final double? maxWidth;
   final double height;
   final AppKitMenuEdge menuEdge;
   final bool enabled;
@@ -682,7 +640,8 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 
   const _PlainButtonStyleWidget({
     super.key,
-    required this.width,
+    this.minWidth,
+    this.maxWidth,
     required this.height,
     required this.menuEdge,
     required this.enabled,
@@ -722,9 +681,21 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
       controlBackgroundColor = Colors.transparent;
     }
 
+    final constraints = BoxConstraints(
+      minWidth: minWidth ?? 0,
+      maxWidth: maxWidth ?? double.infinity,
+      minHeight: height,
+      maxHeight: height,
+    );
+
+    final containerPadding = style.getContainerPadding(
+        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
+
+    final childPadding = style.getChildPadding(
+        theme: popupButtonTheme, controlSize: controlSize);
+
     return Container(
-      height: height,
-      width: width,
+      constraints: constraints,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: style.getPressedBackgroundColor(
@@ -766,27 +737,38 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
           boxShadow: isHovered ? getElevatedShadow(context) : null,
         ),
         child: Padding(
-          padding: style.getContainerPadding(
-              theme: popupButtonTheme,
-              menuEdge: menuEdge,
-              controlSize: controlSize),
-          child: LayoutBuilder(builder: (context, parentConstraints) {
+          padding: containerPadding,
+          child: LayoutBuilder(builder: (context, constraints2) {
             return Row(
-              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  flex: 1,
+                  flex: 0,
                   child: Padding(
-                    padding: style.getChildPadding(
-                        theme: popupButtonTheme, controlSize: controlSize),
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return SizedBox(
-                          width: constraints.maxWidth,
-                          height: parentConstraints.maxHeight,
-                          child: child);
-                    }),
+                    padding: childPadding,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minHeight: constraints2.minHeight,
+                        maxHeight: constraints2.maxHeight,
+                        minWidth: constraints2.minWidth,
+                        maxWidth: constraints2.maxWidth.isFinite
+                            ? constraints2.maxWidth -
+                                childPadding.horizontal -
+                                6 -
+                                caretButtonSize
+                            : constraints2.maxWidth,
+                      ),
+                      child: Align(
+                        widthFactor: 1,
+                        heightFactor: 1,
+                        alignment: Alignment.centerLeft,
+                        child: child,
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(width: 6.0),
                 SizedBox(
                   width: caretButtonSize,
                   height: caretButtonSize,
@@ -821,7 +803,8 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 }
 
 class _InlineButtonStyleWidget<T> extends StatelessWidget {
-  final double width;
+  final double? minWidth;
+  final double? maxWidth;
   final double height;
   final AppKitMenuEdge menuEdge;
   final bool enabled;
@@ -834,7 +817,8 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
 
   const _InlineButtonStyleWidget({
     super.key,
-    required this.width,
+    this.minWidth,
+    this.maxWidth,
     required this.height,
     required this.menuEdge,
     required this.enabled,
@@ -868,9 +852,20 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
       controlBackgroundColor = Colors.black.withValues(alpha: 0.05);
     }
 
+    final constraints = BoxConstraints(
+      minWidth: minWidth ?? 0,
+      maxWidth: maxWidth ?? double.infinity,
+      minHeight: height,
+      maxHeight: height,
+    );
+
+    final containerPadding = style.getContainerPadding(
+        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
+    final childPadding = style.getChildPadding(
+        theme: popupButtonTheme, controlSize: controlSize);
+
     return Container(
-      height: height,
-      width: width,
+      constraints: constraints,
       foregroundDecoration: contextMenuOpened
           ? BoxDecoration(
               color: style.getPressedBackgroundColor(
@@ -882,25 +877,35 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
           color: controlBackgroundColor,
           borderRadius: BorderRadius.circular(borderRadius)),
       child: Padding(
-        padding: style.getContainerPadding(
-            theme: popupButtonTheme,
-            menuEdge: menuEdge,
-            controlSize: controlSize),
-        child: LayoutBuilder(builder: (context, parentConstraints) {
+        padding: containerPadding,
+        child: LayoutBuilder(builder: (context, constraints2) {
           return Row(
-            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
-                flex: 1,
+                flex: 0,
                 child: Padding(
-                  padding: style.getChildPadding(
-                      theme: popupButtonTheme, controlSize: controlSize),
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return SizedBox(
-                        width: parentConstraints.maxWidth,
-                        height: parentConstraints.maxHeight,
-                        child: child);
-                  }),
+                  padding: childPadding,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      minHeight: constraints2.minHeight,
+                      maxHeight: constraints2.maxHeight,
+                      minWidth: constraints2.minWidth,
+                      maxWidth: constraints2.maxWidth.isFinite
+                          ? constraints2.maxWidth -
+                              childPadding.horizontal -
+                              4 -
+                              caretButtonSize
+                          : constraints2.maxWidth,
+                    ),
+                    child: Align(
+                      widthFactor: 1,
+                      heightFactor: 1,
+                      alignment: Alignment.centerLeft,
+                      child: child,
+                    ),
+                  ),
                 ),
               ),
               Padding(

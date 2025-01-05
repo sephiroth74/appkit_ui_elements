@@ -223,7 +223,8 @@ class _FieldsPageState extends State<FieldsPage> {
                           const SizedBox(width: 16.0),
                           AppKitPopupButton<AppKitOverlayVisibilityMode>(
                             selectedItem: clearButtonMode,
-                            width: _kLabelSize,
+                            minWidth: _kLabelSize,
+                            maxWidth: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
@@ -265,7 +266,8 @@ class _FieldsPageState extends State<FieldsPage> {
                           const SizedBox(width: 16.0),
                           AppKitPopupButton<AppKitTextFieldBorderStyle>(
                             selectedItem: textFieldBorderStyle,
-                            width: _kLabelSize,
+                            minWidth: _kLabelSize,
+                            maxWidth: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
@@ -308,7 +310,8 @@ class _FieldsPageState extends State<FieldsPage> {
                           const SizedBox(width: 16.0),
                           AppKitPopupButton<AppKitControlSize>(
                             selectedItem: textFieldSize,
-                            width: _kLabelSize,
+                            minWidth: _kLabelSize,
+                            maxWidth: _kLabelSize,
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {

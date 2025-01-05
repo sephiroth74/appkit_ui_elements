@@ -168,9 +168,7 @@ class _AppKitTabViewState extends State<AppKitTabView> {
                         icons: widget.icons,
                         labels: widget.labels,
                         size: widget.size,
-                        onSelectionChanged: widget.onTabChanged != null
-                            ? _handleSelectionChanged
-                            : null,
+                        onSelectionChanged: _handleSelectionChanged,
                         controller: widget.controller,
                       ),
                     ),

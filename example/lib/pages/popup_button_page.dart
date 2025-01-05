@@ -18,7 +18,6 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
   double stepperValue = 50;
   bool disclosureValue = false;
   double sliderValue1 = 0.5;
-  bool switchValue1 = true;
   double popupButtonWidth = 135.0;
 
   String? popupSelectedItem;
@@ -33,7 +32,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                 const AppKitContextMenuDivider()
               else
                 AppKitContextMenuItem(
-                  child: titleWithIconMenuItem('Item #$i', Icons.ac_unit),
+                  child: Text(i < 5 ? 'Item $i' : 'Another item $i'),
                   enabled: i != 4,
                   value: '$i',
                   itemState: popupSelectedItem == '$i'
@@ -157,14 +156,15 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                     ]
                                         .map((style) => [
                                               AppKitPopupButton(
+                                                minWidth: 100,
+                                                maxWidth: 150,
+                                                forceMenuWidth: true,
                                                 canRequestFocus: true,
                                                 hint: 'Select...',
                                                 controlSize: controlSize,
-                                                width: popupButtonWidth,
                                                 selectedItem: popupSelectedItem,
-                                                onItemSelected: switchValue1
-                                                    ? _onPopupItemSelected
-                                                    : null,
+                                                onItemSelected:
+                                                    _onPopupItemSelected,
                                                 menuBuilder: popupMenuBuilder,
                                                 style: style,
                                               ),

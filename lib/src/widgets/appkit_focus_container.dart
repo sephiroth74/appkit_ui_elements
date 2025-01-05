@@ -250,7 +250,6 @@ class _FocusRingPainter extends CustomPainter {
   final Paint _paint;
   final BorderRadiusGeometry? borderRadius;
   final TextDirection textDirection;
-  final Paint _clearPaint = Paint()..blendMode = BlendMode.clear;
 
   @override
   bool? hitTest(Offset position) {
@@ -281,11 +280,7 @@ class _FocusRingPainter extends CustomPainter {
     final inflatedRect = rrect.inflate(delta);
     final saveCount = canvas.getSaveCount();
 
-    // TODO: verify this, if it's required in some ways
-    // canvas.saveLayer(rect.inflate(delta), Paint());
-
-    canvas.drawRRect(inflatedRect, _paint);
-    canvas.drawRRect(rrect, _clearPaint);
+    canvas.drawDRRect(inflatedRect, rrect, _paint);
     canvas.restoreToCount(saveCount);
   }
 

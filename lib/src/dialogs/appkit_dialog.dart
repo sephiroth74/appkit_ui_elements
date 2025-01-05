@@ -19,6 +19,7 @@ class AppKitDialog extends StatelessWidget {
     this.secondaryButton,
     this.horizontalActions = true,
     this.suppress,
+    this.constraints,
   });
 
   final Widget? icon;
@@ -34,6 +35,8 @@ class AppKitDialog extends StatelessWidget {
   final bool? horizontalActions;
 
   final Widget? suppress;
+
+  final BoxConstraints? constraints;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +86,7 @@ class AppKitDialog extends StatelessWidget {
             borderRadius: _kDialogBorderRadius,
           ),
           child: ConstrainedBox(
-            constraints: _kDefaultDialogConstraints,
+            constraints: constraints ?? _kDefaultDialogConstraints,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

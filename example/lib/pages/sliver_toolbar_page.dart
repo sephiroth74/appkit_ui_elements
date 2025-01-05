@@ -61,7 +61,7 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                       return AppKitTooltip.plain(
                         message: 'Toolbar opacity',
                         child: AppKitPopupButton<double>(
-                          width: 75,
+                          maxWidth: 75,
                           controlSize: AppKitControlSize.regular,
                           style: AppKitPopupButtonStyle.bevel,
                           selectedItem: opacitySelectedItem,
