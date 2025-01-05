@@ -64,8 +64,12 @@ class AppKitPopupButton<T> extends StatefulWidget {
         assert(minWidth == null || maxWidth == null || minWidth <= maxWidth,
             'minWidth must be less than or equal to maxWidth');
 
-  AppKitContextMenu<T> _defaultMenuBuilder(BuildContext context) {
-    return menuBuilder?.call(context) ?? AppKitContextMenu<T>(entries: items!);
+  AppKitContextMenu<T>? _defaultMenuBuilder(BuildContext context) {
+    return menuBuilder != null
+        ? menuBuilder!.call(context)
+        : items != null
+            ? AppKitContextMenu<T>(entries: items!)
+            : null;
   }
 
   bool get _hasWidth => minWidth != null || maxWidth != null;
@@ -90,7 +94,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
 
   bool _isHovered = false;
 
-  late AppKitContextMenu<T> _contextMenu;
+  late AppKitContextMenu<T>? _contextMenu;
 
   FocusNode? _focusNode;
 
@@ -127,7 +131,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     super.initState();
     _contextMenu = widget._defaultMenuBuilder(context);
     if (widget.selectedItem != null) {
-      assert(_contextMenu.findItemByValue(selectedItem) != null);
+      assert(_contextMenu != null, 'Menu is not initialized');
+      assert(_contextMenu!.findItemByValue(selectedItem) != null);
     }
 
     _effectiveFocusNode.canRequestFocus = widget.canRequestFocus && enabled;
@@ -153,7 +158,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
   Widget _defaultItemBuilder(BuildContext context, {required T? selectedItem}) {
     bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
     final popupThemeData = AppKitPopupButtonTheme.of(context);
-    final currentSelectedItem = _contextMenu.findItemByValue(selectedItem);
+    final currentSelectedItem = _contextMenu?.findItemByValue(selectedItem);
 
     Widget title = currentSelectedItem?.child ?? Text(widget.hint ?? '');
     EdgeInsets textPadding = EdgeInsets.only(
@@ -212,11 +217,12 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     final itemRect = context.getWidgetBounds();
     if (null != itemRect &&
         (widget.menuBuilder != null || widget.items != null)) {
-      final menu = widget._defaultMenuBuilder(context).copyWith(
+      AppKitContextMenu<T> menu = widget._defaultMenuBuilder(context)!;
+      menu = menu.copyWith(
           minWidth: widget.forceMenuWidth ? itemRect.width : null,
           maxWidth: widget.forceMenuWidth ? itemRect.width : null,
-          position: _contextMenu.position ??
-              widget.menuEdge.getRectPosition(itemRect));
+          position: menu.position ?? widget.menuEdge.getRectPosition(itemRect));
+
       setState(() {
         if (_effectiveFocusNode.canRequestFocus) {
           FocusScope.of(context).requestFocus(_effectiveFocusNode);
@@ -445,7 +451,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       maxWidth: maxWidth ?? double.infinity,
       minHeight: height,
       maxHeight: height,
-    );
+    )..normalize();
 
     final childPadding = style.getChildPadding(
         theme: popupButtonTheme, controlSize: controlSize);
@@ -495,6 +501,21 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
         child: Padding(
           padding: containerPadding,
           child: LayoutBuilder(builder: (context, constraints2) {
+            final childConstraints = BoxConstraints(
+              minHeight: constraints2.minHeight,
+              maxHeight: constraints2.maxHeight,
+              minWidth: (constraints2.minWidth -
+                      childPadding.horizontal -
+                      6 -
+                      caretButtonSize)
+                  .clamp(0, double.infinity),
+              maxWidth: constraints2.maxWidth.isFinite
+                  ? constraints2.maxWidth -
+                      childPadding.horizontal -
+                      6 -
+                      caretButtonSize
+                  : constraints2.maxWidth,
+            )..normalize();
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -504,17 +525,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
                   child: Padding(
                     padding: childPadding,
                     child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: constraints2.minHeight,
-                        maxHeight: constraints2.maxHeight,
-                        minWidth: constraints2.minWidth,
-                        maxWidth: constraints2.maxWidth.isFinite
-                            ? constraints2.maxWidth -
-                                childPadding.horizontal -
-                                6 -
-                                caretButtonSize
-                            : constraints2.maxWidth,
-                      ),
+                      constraints: childConstraints,
                       child: Align(
                         widthFactor: 1,
                         heightFactor: 1,
