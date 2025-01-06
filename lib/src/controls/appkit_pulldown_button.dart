@@ -246,9 +246,10 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
     final itemRect = context.getWidgetBounds();
     if (null != itemRect &&
         (widget.menuBuilder != null || widget.items != null)) {
-      final menu = _contextMenu.copyWith(
-          position: _contextMenu.position ??
-              widget.menuEdge.getRectPosition(itemRect));
+      AppKitContextMenu<T> menu = widget._defaultMenuBuilder(context);
+      menu = menu.copyWith(
+          position: menu.position ?? widget.menuEdge.getRectPosition(itemRect));
+
       setState(() {
         if (_effectiveFocusNode.canRequestFocus) {
           FocusScope.of(context).requestFocus(_effectiveFocusNode);
