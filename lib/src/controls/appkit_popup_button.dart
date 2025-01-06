@@ -219,8 +219,8 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         (widget.menuBuilder != null || widget.items != null)) {
       AppKitContextMenu<T> menu = widget._defaultMenuBuilder(context)!;
       menu = menu.copyWith(
-          minWidth: widget.forceMenuWidth ? itemRect.width : null,
-          maxWidth: widget.forceMenuWidth ? itemRect.width : null,
+          minWidth: widget.forceMenuWidth ? itemRect.width : menu.minWidth,
+          maxWidth: widget.forceMenuWidth ? itemRect.width : menu.maxWidth,
           position: menu.position ?? widget.menuEdge.getRectPosition(itemRect));
 
       setState(() {
@@ -245,7 +245,9 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
         _isMenuOpened = false;
       });
 
-      widget.onItemSelected?.call(value?.value);
+      if (value != null) {
+        widget.onItemSelected?.call(value.value);
+      }
     }
   }
 
@@ -458,6 +460,16 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     final containerPadding = style.getContainerPadding(
         theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
 
+    final constraints2 = BoxConstraints(
+      minWidth: (constraints.minWidth - containerPadding.horizontal)
+          .clamp(0, double.infinity),
+      maxWidth: constraints.maxWidth.isFinite
+          ? constraints.maxWidth - containerPadding.horizontal
+          : constraints.maxWidth,
+      minHeight: constraints.minHeight - containerPadding.vertical,
+      maxHeight: constraints.maxHeight - containerPadding.vertical,
+    )..normalize();
+
     return Container(
       constraints: constraints,
       foregroundDecoration: contextMenuOpened
@@ -500,7 +512,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
         ),
         child: Padding(
           padding: containerPadding,
-          child: LayoutBuilder(builder: (context, constraints2) {
+          child: Builder(builder: (context) {
             final childConstraints = BoxConstraints(
               minHeight: constraints2.minHeight,
               maxHeight: constraints2.maxHeight,
@@ -705,6 +717,16 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
     final childPadding = style.getChildPadding(
         theme: popupButtonTheme, controlSize: controlSize);
 
+    final constraints2 = BoxConstraints(
+      minWidth: (constraints.minWidth - containerPadding.horizontal)
+          .clamp(0, double.infinity),
+      maxWidth: constraints.maxWidth.isFinite
+          ? constraints.maxWidth - containerPadding.horizontal
+          : constraints.maxWidth,
+      minHeight: constraints.minHeight - containerPadding.vertical,
+      maxHeight: constraints.maxHeight - containerPadding.vertical,
+    )..normalize();
+
     return Container(
       constraints: constraints,
       foregroundDecoration: contextMenuOpened
@@ -749,7 +771,23 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
         ),
         child: Padding(
           padding: containerPadding,
-          child: LayoutBuilder(builder: (context, constraints2) {
+          child: Builder(builder: (context) {
+            final childConstraints = BoxConstraints(
+              minHeight: constraints2.minHeight,
+              maxHeight: constraints2.maxHeight,
+              minWidth: (constraints2.minWidth -
+                      childPadding.horizontal -
+                      6 -
+                      caretButtonSize)
+                  .clamp(0, double.infinity),
+              maxWidth: constraints2.maxWidth.isFinite
+                  ? constraints2.maxWidth -
+                      childPadding.horizontal -
+                      6 -
+                      caretButtonSize
+                  : constraints2.maxWidth,
+            )..normalize();
+
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -759,17 +797,7 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
                   child: Padding(
                     padding: childPadding,
                     child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: constraints2.minHeight,
-                        maxHeight: constraints2.maxHeight,
-                        minWidth: constraints2.minWidth,
-                        maxWidth: constraints2.maxWidth.isFinite
-                            ? constraints2.maxWidth -
-                                childPadding.horizontal -
-                                6 -
-                                caretButtonSize
-                            : constraints2.maxWidth,
-                      ),
+                      constraints: childConstraints,
                       child: Align(
                         widthFactor: 1,
                         heightFactor: 1,
@@ -875,6 +903,16 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
     final childPadding = style.getChildPadding(
         theme: popupButtonTheme, controlSize: controlSize);
 
+    final constraints2 = BoxConstraints(
+      minWidth: (constraints.minWidth - containerPadding.horizontal)
+          .clamp(0, double.infinity),
+      maxWidth: constraints.maxWidth.isFinite
+          ? constraints.maxWidth - containerPadding.horizontal
+          : constraints.maxWidth,
+      minHeight: constraints.minHeight - containerPadding.vertical,
+      maxHeight: constraints.maxHeight - containerPadding.vertical,
+    )..normalize();
+
     return Container(
       constraints: constraints,
       foregroundDecoration: contextMenuOpened
@@ -889,7 +927,22 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius)),
       child: Padding(
         padding: containerPadding,
-        child: LayoutBuilder(builder: (context, constraints2) {
+        child: Builder(builder: (context) {
+          final childConstraints = BoxConstraints(
+            minHeight: constraints2.minHeight,
+            maxHeight: constraints2.maxHeight,
+            minWidth: (constraints2.minWidth -
+                    childPadding.horizontal -
+                    4 -
+                    caretButtonSize)
+                .clamp(0, double.infinity),
+            maxWidth: constraints2.maxWidth.isFinite
+                ? constraints2.maxWidth -
+                    childPadding.horizontal -
+                    4 -
+                    caretButtonSize
+                : constraints2.maxWidth,
+          )..normalize();
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -899,17 +952,7 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
                 child: Padding(
                   padding: childPadding,
                   child: Container(
-                    constraints: BoxConstraints(
-                      minHeight: constraints2.minHeight,
-                      maxHeight: constraints2.maxHeight,
-                      minWidth: constraints2.minWidth,
-                      maxWidth: constraints2.maxWidth.isFinite
-                          ? constraints2.maxWidth -
-                              childPadding.horizontal -
-                              4 -
-                              caretButtonSize
-                          : constraints2.maxWidth,
-                    ),
+                    constraints: childConstraints,
                     child: Align(
                       widthFactor: 1,
                       heightFactor: 1,

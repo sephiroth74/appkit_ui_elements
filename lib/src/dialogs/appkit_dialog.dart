@@ -28,9 +28,9 @@ class AppKitDialog extends StatelessWidget {
 
   final Widget message;
 
-  final AppKitButton primaryButton;
+  final Widget primaryButton;
 
-  final AppKitButton? secondaryButton;
+  final Widget? secondaryButton;
 
   final bool? horizontalActions;
 

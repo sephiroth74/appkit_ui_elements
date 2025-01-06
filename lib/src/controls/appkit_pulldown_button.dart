@@ -271,7 +271,9 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
         _isMenuOpened = false;
       });
 
-      widget.onItemSelected?.call(value?.value);
+      if (value != null) {
+        widget.onItemSelected?.call(value.value);
+      }
     }
   }
 

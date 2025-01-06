@@ -24,7 +24,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
 
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
-          maxWidth: 150,
+          minWidth: 150,
           maxHeight: 200,
           entries: [
             for (var i = 0; i < 20; i++)
@@ -157,8 +157,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                         .map((style) => [
                                               AppKitPopupButton(
                                                 minWidth: 100,
-                                                maxWidth: 150,
-                                                forceMenuWidth: true,
+                                                forceMenuWidth: false,
                                                 canRequestFocus: true,
                                                 hint: 'Select...',
                                                 controlSize: controlSize,
@@ -200,7 +199,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                       imageAlignment:
                                           AppKitMenuImageAlignment.leading,
                                       icon: Icons.open_in_new,
-                                      minWidth: popupButtonWidth,
+                                      minWidth: 100,
                                       onItemSelected: (value) {
                                         debugPrint('onItemSelected: $value');
                                       },
