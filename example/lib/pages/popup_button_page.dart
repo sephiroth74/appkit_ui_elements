@@ -147,7 +147,9 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                       Column(
                         children: [AppKitControlSize.regular]
                             .map((controlSize) => [
-                                  Row(
+                                  Wrap(
+                                    spacing: 16.0,
+                                    runSpacing: 16.0,
                                     children: [
                                       AppKitPopupButtonStyle.push,
                                       AppKitPopupButtonStyle.bevel,
@@ -157,6 +159,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                                         .map((style) => [
                                               AppKitPopupButton(
                                                 minWidth: 100,
+                                                maxWidth: 150,
                                                 forceMenuWidth: false,
                                                 canRequestFocus: true,
                                                 hint: 'Select...',
@@ -184,7 +187,9 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                       const WidgetTitle(label: 'Pull Down Button'),
                       const SizedBox(height: 20.0),
                       Column(children: [
-                        Row(
+                        Wrap(
+                          spacing: 16.0,
+                          runSpacing: 16.0,
                           children: [
                             AppKitPulldownButtonStyle.push,
                             AppKitPulldownButtonStyle.bevel,

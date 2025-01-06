@@ -285,6 +285,7 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                   menuEdge: menuEdge,
                   enabled: enabled,
                   contextMenuOpened: _isMenuOpened,
+                  isHovered: _isHovered,
                   isMainWindow: isMainWindow,
                   style: style,
                   controlSize: controlSize,
@@ -370,7 +371,7 @@ class _UpDownCaretsPainter2 extends CustomPainter {
   bool shouldRebuildSemantics(_UpDownCaretsPainter2 oldDelegate) => false;
 }
 
-class _PushButtonStyleWidget<T> extends StatelessWidget {
+abstract class _BaseButtonStyleWidget<T> extends StatelessWidget {
   final double? minWidth;
   final double? maxWidth;
   final double height;
@@ -379,11 +380,12 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
   final bool contextMenuOpened;
   final bool isMainWindow;
   final Widget child;
-  final AppKitPopupButtonStyle style;
   final AppKitControlSize controlSize;
-  final Color? color;
+  final bool isHovered;
 
-  const _PushButtonStyleWidget({
+  abstract final AppKitPopupButtonStyle style;
+
+  const _BaseButtonStyleWidget({
     super.key,
     this.minWidth,
     this.maxWidth,
@@ -394,28 +396,196 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
     required this.isMainWindow,
     required this.controlSize,
     required this.child,
-    required this.style,
-    this.color,
+    this.isHovered = false,
   });
+
+  BoxDecoration? getForegroundDecoration(BuildContext context,
+      {required AppKitThemeData theme});
+
+  BoxDecoration getBackgroundDecoration(BuildContext contextm,
+      {required AppKitThemeData theme});
+
+  Widget buildCaretWidget(BuildContext context,
+      {required AppKitThemeData theme});
 
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
     final popupButtonTheme = AppKitPopupButtonTheme.of(context);
-    final enabledFactor = enabled ? 1.0 : 0.5;
-    final bool isBevel = style == AppKitPopupButtonStyle.bevel;
-    final isDark = theme.brightness == Brightness.dark;
-
-    Color caretBackgroundColor;
-    Color arrowsColor;
     double caretButtonSize = style.getCaretButtonSize(
         theme: popupButtonTheme, controlSize: controlSize);
-    final caretSize =
-        style.getCaretSize(theme: popupButtonTheme, controlSize: controlSize);
+
+    final constraints = BoxConstraints(
+      minWidth: minWidth ?? 0,
+      maxWidth: maxWidth ?? double.infinity,
+      minHeight: height,
+      maxHeight: height,
+    )..normalize();
+
+    final childPadding = style.getChildPadding(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final containerPadding = style.getContainerPadding(
+        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
+
+    final constraints2 = BoxConstraints(
+      minWidth: (constraints.minWidth - containerPadding.horizontal)
+          .clamp(0, double.infinity),
+      maxWidth: constraints.maxWidth.isFinite
+          ? constraints.maxWidth - containerPadding.horizontal
+          : constraints.maxWidth,
+      minHeight: constraints.minHeight - containerPadding.vertical,
+      maxHeight: constraints.maxHeight - containerPadding.vertical,
+    )..normalize();
+
+    return Container(
+      constraints: constraints,
+      foregroundDecoration: getForegroundDecoration(context, theme: theme),
+      child: DecoratedBox(
+        decoration: getBackgroundDecoration(context, theme: theme),
+        child: Padding(
+          padding: containerPadding,
+          child: Builder(builder: (context) {
+            final childConstraints = BoxConstraints(
+              minHeight: constraints2.minHeight,
+              maxHeight: constraints2.maxHeight,
+              minWidth: (constraints2.minWidth -
+                      childPadding.horizontal -
+                      6 -
+                      caretButtonSize)
+                  .clamp(0, double.infinity),
+              maxWidth: constraints2.maxWidth.isFinite
+                  ? constraints2.maxWidth -
+                      childPadding.horizontal -
+                      6 -
+                      caretButtonSize
+                  : constraints2.maxWidth,
+            )..normalize();
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  flex: 0,
+                  child: Padding(
+                    padding: childPadding,
+                    child: Container(
+                      constraints: childConstraints,
+                      child: Align(
+                        widthFactor: 1,
+                        heightFactor: 1,
+                        alignment: Alignment.centerLeft,
+                        child: child,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6.0),
+                buildCaretWidget(context, theme: theme),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class _PushButtonStyleWidget<T> extends _BaseButtonStyleWidget<T> {
+  final Color? color;
+
+  @override
+  final AppKitPopupButtonStyle style;
+
+  const _PushButtonStyleWidget({
+    super.key,
+    super.minWidth,
+    super.maxWidth,
+    super.isHovered,
+    required super.height,
+    required super.menuEdge,
+    required super.enabled,
+    required super.contextMenuOpened,
+    required super.isMainWindow,
+    required super.controlSize,
+    required super.child,
+    required this.style,
+    this.color,
+  });
+
+  @override
+  BoxDecoration? getForegroundDecoration(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
     final controlBackgroundColor =
         enabled ? theme.controlColor : theme.controlColor.multiplyOpacity(0.5);
     final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
+    return contextMenuOpened
+        ? BoxDecoration(
+            color: style.getPressedBackgroundColor(
+                theme: theme, backgroundColor: controlBackgroundColor),
+            borderRadius: BorderRadius.circular(borderRadius),
+          )
+        : const BoxDecoration();
+  }
+
+  @override
+  BoxDecoration getBackgroundDecoration(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final controlBackgroundColor =
+        enabled ? theme.controlColor : theme.controlColor.multiplyOpacity(0.5);
+    final isDark = theme.brightness == Brightness.dark;
+    return BoxDecoration(
+      color: controlBackgroundColor,
+      borderRadius: BorderRadius.circular(borderRadius),
+      border: GradientBoxBorder(
+        gradient: LinearGradient(
+          colors: isDark
+              ? [
+                  AppKitDynamicColor.resolve(
+                          context, AppKitColors.text.opaque.primary)
+                      .multiplyOpacity(0.5),
+                  AppKitDynamicColor.resolve(
+                          context, AppKitColors.text.opaque.quaternary)
+                      .multiplyOpacity(0.0)
+                ]
+              : [
+                  AppKitDynamicColor.resolve(
+                          context, AppKitColors.text.opaque.tertiary)
+                      .multiplyOpacity(0.5),
+                  AppKitDynamicColor.resolve(
+                          context, AppKitColors.text.opaque.secondary)
+                      .multiplyOpacity(0.5)
+                ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+        ),
+        width: 0.5,
+      ),
+      boxShadow: getElevatedShadow(context),
+    );
+  }
+
+  @override
+  Widget buildCaretWidget(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final isBevel = style == AppKitPopupButtonStyle.bevel;
+    final isDark = theme.brightness == Brightness.dark;
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    double caretButtonSize = style.getCaretButtonSize(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final enabledFactor = enabled ? 1.0 : 0.5;
+
+    Color caretBackgroundColor;
+    Color arrowsColor;
+    final caretSize =
+        style.getCaretSize(theme: popupButtonTheme, controlSize: controlSize);
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
@@ -448,241 +618,176 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
       }
     }
 
-    final constraints = BoxConstraints(
-      minWidth: minWidth ?? 0,
-      maxWidth: maxWidth ?? double.infinity,
-      minHeight: height,
-      maxHeight: height,
-    )..normalize();
-
-    final childPadding = style.getChildPadding(
-        theme: popupButtonTheme, controlSize: controlSize);
-    final containerPadding = style.getContainerPadding(
-        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
-
-    final constraints2 = BoxConstraints(
-      minWidth: (constraints.minWidth - containerPadding.horizontal)
-          .clamp(0, double.infinity),
-      maxWidth: constraints.maxWidth.isFinite
-          ? constraints.maxWidth - containerPadding.horizontal
-          : constraints.maxWidth,
-      minHeight: constraints.minHeight - containerPadding.vertical,
-      maxHeight: constraints.maxHeight - containerPadding.vertical,
-    )..normalize();
-
-    return Container(
-      constraints: constraints,
-      foregroundDecoration: contextMenuOpened
-          ? BoxDecoration(
-              color: style.getPressedBackgroundColor(
-                  theme: theme, backgroundColor: controlBackgroundColor),
-              borderRadius: BorderRadius.circular(borderRadius),
-            )
-          : const BoxDecoration(),
+    return SizedBox(
+      width: caretButtonSize,
+      height: caretButtonSize,
       child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
-          border: GradientBoxBorder(
-            gradient: LinearGradient(
-              colors: isDark
-                  ? [
-                      AppKitDynamicColor.resolve(
-                              context, AppKitColors.text.opaque.primary)
-                          .multiplyOpacity(0.5),
-                      AppKitDynamicColor.resolve(
-                              context, AppKitColors.text.opaque.quaternary)
-                          .multiplyOpacity(0.0)
-                    ]
-                  : [
-                      AppKitDynamicColor.resolve(
-                              context, AppKitColors.text.opaque.tertiary)
-                          .multiplyOpacity(0.5),
-                      AppKitDynamicColor.resolve(
-                              context, AppKitColors.text.opaque.secondary)
-                          .multiplyOpacity(0.5)
-                    ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
-            ),
-            width: 0.5,
-          ),
-          boxShadow: getElevatedShadow(context),
-        ),
-        child: Padding(
-          padding: containerPadding,
-          child: Builder(builder: (context) {
-            final childConstraints = BoxConstraints(
-              minHeight: constraints2.minHeight,
-              maxHeight: constraints2.maxHeight,
-              minWidth: (constraints2.minWidth -
-                      childPadding.horizontal -
-                      6 -
-                      caretButtonSize)
-                  .clamp(0, double.infinity),
-              maxWidth: constraints2.maxWidth.isFinite
-                  ? constraints2.maxWidth -
-                      childPadding.horizontal -
-                      6 -
-                      caretButtonSize
-                  : constraints2.maxWidth,
-            )..normalize();
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  flex: 0,
-                  child: Padding(
-                    padding: childPadding,
-                    child: Container(
-                      constraints: childConstraints,
-                      child: Align(
-                        widthFactor: 1,
-                        heightFactor: 1,
-                        alignment: Alignment.centerLeft,
-                        child: child,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 6.0),
-                SizedBox(
-                  width: caretButtonSize,
-                  height: caretButtonSize,
-                  child: DecoratedBox(
-                    decoration: isMainWindow && enabled
-                        ? BoxDecoration(
-                            color: caretBackgroundColor,
-                            borderRadius:
-                                BorderRadius.circular(borderRadius - 2),
-                            border: !isBevel
-                                ? GradientBoxBorder(
-                                    gradient: LinearGradient(
-                                      colors: isDark
-                                          ? [
-                                              AppKitDynamicColor.resolve(
-                                                      context,
-                                                      AppKitColors
-                                                          .text.opaque.primary)
-                                                  .multiplyOpacity(0.5),
-                                              AppKitDynamicColor.resolve(
-                                                      context,
-                                                      AppKitColors.text.opaque
-                                                          .quaternary)
-                                                  .multiplyOpacity(0.0)
-                                            ]
-                                          : [
-                                              AppKitDynamicColor.resolve(
-                                                      context,
-                                                      AppKitColors
-                                                          .text.opaque.tertiary)
-                                                  .multiplyOpacity(0.5),
-                                              AppKitDynamicColor.resolve(
-                                                      context,
-                                                      AppKitColors.text.opaque
-                                                          .secondary)
-                                                  .multiplyOpacity(0.5)
-                                            ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      stops: isDark
-                                          ? const [0.0, 0.5]
-                                          : const [0.0, 1.0],
-                                    ),
-                                    width: 0.5,
-                                  )
-                                : null,
-                            boxShadow: isBevel
-                                ? null
-                                : [
-                                    BoxShadow(
-                                      color: theme.activeColor
-                                          .withValues(alpha: 0.5),
-                                      blurRadius: 0.5,
-                                      spreadRadius: 0,
-                                      offset: const Offset(0, 0.5),
-                                    ),
-                                  ])
-                        : const BoxDecoration(),
-                    child: DecoratedBox(
-                      decoration: isMainWindow && !isBevel
-                          ? BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(borderRadius - 1),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.white
-                                      .withValues(alpha: isDark ? 0.05 : 0.17),
-                                  Colors.white.withValues(alpha: 0.0),
+        decoration: isMainWindow && enabled
+            ? BoxDecoration(
+                color: caretBackgroundColor,
+                borderRadius: BorderRadius.circular(borderRadius - 2),
+                border: !isBevel
+                    ? GradientBoxBorder(
+                        gradient: LinearGradient(
+                          colors: isDark
+                              ? [
+                                  AppKitDynamicColor.resolve(context,
+                                          AppKitColors.text.opaque.primary)
+                                      .multiplyOpacity(0.5),
+                                  AppKitDynamicColor.resolve(context,
+                                          AppKitColors.text.opaque.quaternary)
+                                      .multiplyOpacity(0.0)
+                                ]
+                              : [
+                                  AppKitDynamicColor.resolve(context,
+                                          AppKitColors.text.opaque.tertiary)
+                                      .multiplyOpacity(0.5),
+                                  AppKitDynamicColor.resolve(context,
+                                          AppKitColors.text.opaque.secondary)
+                                      .multiplyOpacity(0.5)
                                 ],
-                              ),
-                            )
-                          : const BoxDecoration(),
-                      child: Center(
-                        child: SizedBox(
-                          width: caretSize.width,
-                          height: caretSize.height,
-                          child: CustomPaint(
-                            painter: _UpDownCaretsPainter2(
-                              color: arrowsColor,
-                              strokeWidth: style.getCaretStrokeWidth(
-                                  theme: popupButtonTheme,
-                                  controlSize: controlSize),
-                            ),
-                          ),
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
                         ),
-                      ),
-                    ),
+                        width: 0.5,
+                      )
+                    : null,
+                boxShadow: isBevel
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: theme.activeColor.withValues(alpha: 0.5),
+                          blurRadius: 0.5,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 0.5),
+                        ),
+                      ])
+            : const BoxDecoration(),
+        child: DecoratedBox(
+          decoration: isMainWindow && !isBevel
+              ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(borderRadius - 1),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
+                      Colors.white.withValues(alpha: 0.0),
+                    ],
                   ),
                 )
-              ],
-            );
-          }),
+              : const BoxDecoration(),
+          child: Center(
+            child: SizedBox(
+              width: caretSize.width,
+              height: caretSize.height,
+              child: CustomPaint(
+                painter: _UpDownCaretsPainter2(
+                  color: arrowsColor,
+                  strokeWidth: style.getCaretStrokeWidth(
+                      theme: popupButtonTheme, controlSize: controlSize),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class _PlainButtonStyleWidget<T> extends StatelessWidget {
-  final double? minWidth;
-  final double? maxWidth;
-  final double height;
-  final AppKitMenuEdge menuEdge;
-  final bool enabled;
-  final bool contextMenuOpened;
-  final bool isMainWindow;
-  final Widget child;
-  final bool isHovered;
-  final AppKitPopupButtonStyle style = AppKitPopupButtonStyle.plain;
-  final AppKitControlSize controlSize;
-
+class _PlainButtonStyleWidget<T> extends _BaseButtonStyleWidget<T> {
   const _PlainButtonStyleWidget({
     super.key,
-    this.minWidth,
-    this.maxWidth,
-    required this.height,
-    required this.menuEdge,
-    required this.enabled,
-    required this.contextMenuOpened,
-    required this.isMainWindow,
-    required this.controlSize,
-    required this.child,
-    this.isHovered = false,
+    super.minWidth,
+    super.maxWidth,
+    required super.height,
+    required super.menuEdge,
+    required super.enabled,
+    required super.contextMenuOpened,
+    required super.isMainWindow,
+    required super.controlSize,
+    required super.child,
+    super.isHovered,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final theme = AppKitTheme.of(context);
+  AppKitPopupButtonStyle get style => AppKitPopupButtonStyle.plain;
+
+  @override
+  BoxDecoration? getForegroundDecoration(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
+    return contextMenuOpened
+        ? BoxDecoration(
+            color: style.getPressedBackgroundColor(
+                theme: theme, backgroundColor: theme.controlColor),
+            borderRadius: BorderRadius.circular(borderRadius),
+          )
+        : const BoxDecoration();
+  }
+
+  @override
+  BoxDecoration getBackgroundDecoration(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final enabledFactor = enabled ? 1.0 : 0.5;
+    final Color controlBackgroundColor;
+    final borderRadius = style.getBorderRadius(
+        theme: popupButtonTheme, controlSize: controlSize);
+
+    if (isHovered) {
+      controlBackgroundColor = theme.controlColor;
+    } else {
+      contextMenuOpened
+          ? Colors.transparent
+          : popupButtonTheme.plainButtonColor.multiplyOpacity(enabledFactor);
+      controlBackgroundColor = Colors.transparent;
+    }
+
+    return BoxDecoration(
+      color: controlBackgroundColor,
+      borderRadius: BorderRadius.circular(borderRadius),
+      border: isHovered
+          ? GradientBoxBorder(
+              gradient: LinearGradient(
+                colors: isDark
+                    ? [
+                        AppKitDynamicColor.resolve(
+                                context, AppKitColors.text.opaque.primary)
+                            .multiplyOpacity(0.5),
+                        AppKitDynamicColor.resolve(
+                                context, AppKitColors.text.opaque.quaternary)
+                            .multiplyOpacity(0.0)
+                      ]
+                    : [
+                        AppKitDynamicColor.resolve(
+                                context, AppKitColors.text.opaque.tertiary)
+                            .multiplyOpacity(0.5),
+                        AppKitDynamicColor.resolve(
+                                context, AppKitColors.text.opaque.secondary)
+                            .multiplyOpacity(0.5)
+                      ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+              ),
+              width: 0.5,
+            )
+          : null,
+      boxShadow: isHovered ? getElevatedShadow(context) : null,
+    );
+  }
+
+  @override
+  Widget buildCaretWidget(BuildContext context,
+      {required AppKitThemeData theme}) {
     final popupButtonTheme = AppKitPopupButtonTheme.of(context);
     final enabledFactor = enabled ? 1.0 : 0.5;
-    final bool isDark = theme.brightness == Brightness.dark;
-
-    final Color controlBackgroundColor;
     final Color caretBackgroundColor;
     final caretButtonSize = style.getCaretButtonSize(
         theme: popupButtonTheme, controlSize: controlSize);
@@ -696,192 +801,61 @@ class _PlainButtonStyleWidget<T> extends StatelessWidget {
 
     if (isHovered) {
       caretBackgroundColor = Colors.transparent;
-      controlBackgroundColor = theme.controlColor;
     } else {
       caretBackgroundColor = contextMenuOpened
           ? Colors.transparent
           : popupButtonTheme.plainButtonColor.multiplyOpacity(enabledFactor);
-      controlBackgroundColor = Colors.transparent;
     }
 
-    final constraints = BoxConstraints(
-      minWidth: minWidth ?? 0,
-      maxWidth: maxWidth ?? double.infinity,
-      minHeight: height,
-      maxHeight: height,
-    );
-
-    final containerPadding = style.getContainerPadding(
-        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
-
-    final childPadding = style.getChildPadding(
-        theme: popupButtonTheme, controlSize: controlSize);
-
-    final constraints2 = BoxConstraints(
-      minWidth: (constraints.minWidth - containerPadding.horizontal)
-          .clamp(0, double.infinity),
-      maxWidth: constraints.maxWidth.isFinite
-          ? constraints.maxWidth - containerPadding.horizontal
-          : constraints.maxWidth,
-      minHeight: constraints.minHeight - containerPadding.vertical,
-      maxHeight: constraints.maxHeight - containerPadding.vertical,
-    )..normalize();
-
-    return Container(
-      constraints: constraints,
-      foregroundDecoration: contextMenuOpened
-          ? BoxDecoration(
-              color: style.getPressedBackgroundColor(
-                  theme: theme, backgroundColor: theme.controlColor),
-              borderRadius: BorderRadius.circular(borderRadius),
-            )
-          : const BoxDecoration(),
+    return SizedBox(
+      width: caretButtonSize,
+      height: caretButtonSize,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
-          border: isHovered
-              ? GradientBoxBorder(
-                  gradient: LinearGradient(
-                    colors: isDark
-                        ? [
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.primary)
-                                .multiplyOpacity(0.5),
-                            AppKitDynamicColor.resolve(context,
-                                    AppKitColors.text.opaque.quaternary)
-                                .multiplyOpacity(0.0)
-                          ]
-                        : [
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.tertiary)
-                                .multiplyOpacity(0.5),
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.secondary)
-                                .multiplyOpacity(0.5)
-                          ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
-                  ),
-                  width: 0.5,
-                )
-              : null,
-          boxShadow: isHovered ? getElevatedShadow(context) : null,
+          color: caretBackgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius - 1),
         ),
-        child: Padding(
-          padding: containerPadding,
-          child: Builder(builder: (context) {
-            final childConstraints = BoxConstraints(
-              minHeight: constraints2.minHeight,
-              maxHeight: constraints2.maxHeight,
-              minWidth: (constraints2.minWidth -
-                      childPadding.horizontal -
-                      6 -
-                      caretButtonSize)
-                  .clamp(0, double.infinity),
-              maxWidth: constraints2.maxWidth.isFinite
-                  ? constraints2.maxWidth -
-                      childPadding.horizontal -
-                      6 -
-                      caretButtonSize
-                  : constraints2.maxWidth,
-            )..normalize();
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  flex: 0,
-                  child: Padding(
-                    padding: childPadding,
-                    child: Container(
-                      constraints: childConstraints,
-                      child: Align(
-                        widthFactor: 1,
-                        heightFactor: 1,
-                        alignment: Alignment.centerLeft,
-                        child: child,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 6.0),
-                SizedBox(
-                  width: caretButtonSize,
-                  height: caretButtonSize,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: caretBackgroundColor,
-                      borderRadius: BorderRadius.circular(borderRadius - 1),
-                    ),
-                    child: Center(
-                      child: SizedBox(
-                        width: caretSize.width,
-                        height: caretSize.height,
-                        child: CustomPaint(
-                          painter: _UpDownCaretsPainter2(
-                            color: arrowsColor,
-                            strokeWidth: style.getCaretStrokeWidth(
-                                theme: popupButtonTheme,
-                                controlSize: controlSize),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            );
-          }),
+        child: Center(
+          child: SizedBox(
+            width: caretSize.width,
+            height: caretSize.height,
+            child: CustomPaint(
+              painter: _UpDownCaretsPainter2(
+                color: arrowsColor,
+                strokeWidth: style.getCaretStrokeWidth(
+                    theme: popupButtonTheme, controlSize: controlSize),
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class _InlineButtonStyleWidget<T> extends StatelessWidget {
-  final double? minWidth;
-  final double? maxWidth;
-  final double height;
-  final AppKitMenuEdge menuEdge;
-  final bool enabled;
-  final bool contextMenuOpened;
-  final bool isMainWindow;
-  final Widget child;
-  final bool isHovered;
-  final AppKitPopupButtonStyle style = AppKitPopupButtonStyle.inline;
-  final AppKitControlSize controlSize;
-
+class _InlineButtonStyleWidget<T> extends _BaseButtonStyleWidget<T> {
   const _InlineButtonStyleWidget({
     super.key,
-    this.minWidth,
-    this.maxWidth,
-    required this.height,
-    required this.menuEdge,
-    required this.enabled,
-    required this.contextMenuOpened,
-    required this.isMainWindow,
-    required this.controlSize,
-    required this.child,
-    this.isHovered = false,
+    super.minWidth,
+    super.maxWidth,
+    super.isHovered,
+    required super.height,
+    required super.menuEdge,
+    required super.enabled,
+    required super.contextMenuOpened,
+    required super.isMainWindow,
+    required super.controlSize,
+    required super.child,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final enabledFactor = enabled ? 0.5 : 0.35;
-    final theme = AppKitTheme.of(context);
-    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+  AppKitPopupButtonStyle get style => AppKitPopupButtonStyle.inline;
 
+  @override
+  BoxDecoration? getForegroundDecoration(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
     final Color controlBackgroundColor;
-    final caretSize =
-        style.getCaretSize(theme: popupButtonTheme, controlSize: controlSize);
-    final caretButtonSize = style.getCaretButtonSize(
-        theme: popupButtonTheme, controlSize: controlSize);
-    final arrowsColor =
-        AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
-            .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
     final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
 
@@ -891,101 +865,62 @@ class _InlineButtonStyleWidget<T> extends StatelessWidget {
       controlBackgroundColor = Colors.black.withValues(alpha: 0.05);
     }
 
-    final constraints = BoxConstraints(
-      minWidth: minWidth ?? 0,
-      maxWidth: maxWidth ?? double.infinity,
-      minHeight: height,
-      maxHeight: height,
-    );
+    return contextMenuOpened
+        ? BoxDecoration(
+            color: style.getPressedBackgroundColor(
+                theme: theme, backgroundColor: controlBackgroundColor),
+            borderRadius: BorderRadius.circular(borderRadius),
+          )
+        : const BoxDecoration();
+  }
 
-    final containerPadding = style.getContainerPadding(
-        theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
-    final childPadding = style.getChildPadding(
+  @override
+  BoxDecoration getBackgroundDecoration(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    final Color controlBackgroundColor;
+    final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
 
-    final constraints2 = BoxConstraints(
-      minWidth: (constraints.minWidth - containerPadding.horizontal)
-          .clamp(0, double.infinity),
-      maxWidth: constraints.maxWidth.isFinite
-          ? constraints.maxWidth - containerPadding.horizontal
-          : constraints.maxWidth,
-      minHeight: constraints.minHeight - containerPadding.vertical,
-      maxHeight: constraints.maxHeight - containerPadding.vertical,
-    )..normalize();
+    if (isHovered) {
+      controlBackgroundColor = Colors.black.withValues(alpha: 0.2);
+    } else {
+      controlBackgroundColor = Colors.black.withValues(alpha: 0.05);
+    }
+    return BoxDecoration(
+        color: controlBackgroundColor,
+        borderRadius: BorderRadius.circular(borderRadius));
+  }
 
-    return Container(
-      constraints: constraints,
-      foregroundDecoration: contextMenuOpened
-          ? BoxDecoration(
-              color: style.getPressedBackgroundColor(
-                  theme: theme, backgroundColor: controlBackgroundColor),
-              borderRadius: BorderRadius.circular(borderRadius),
-            )
-          : const BoxDecoration(),
-      decoration: BoxDecoration(
-          color: controlBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius)),
-      child: Padding(
-        padding: containerPadding,
-        child: Builder(builder: (context) {
-          final childConstraints = BoxConstraints(
-            minHeight: constraints2.minHeight,
-            maxHeight: constraints2.maxHeight,
-            minWidth: (constraints2.minWidth -
-                    childPadding.horizontal -
-                    4 -
-                    caretButtonSize)
-                .clamp(0, double.infinity),
-            maxWidth: constraints2.maxWidth.isFinite
-                ? constraints2.maxWidth -
-                    childPadding.horizontal -
-                    4 -
-                    caretButtonSize
-                : constraints2.maxWidth,
-          )..normalize();
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                flex: 0,
-                child: Padding(
-                  padding: childPadding,
-                  child: Container(
-                    constraints: childConstraints,
-                    child: Align(
-                      widthFactor: 1,
-                      heightFactor: 1,
-                      alignment: Alignment.centerLeft,
-                      child: child,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: SizedBox(
-                  width: caretButtonSize,
-                  height: caretButtonSize,
-                  child: Center(
-                    child: SizedBox(
-                      width: caretSize.width,
-                      height: caretSize.height,
-                      child: CustomPaint(
-                        painter: _UpDownCaretsPainter2(
-                          color: arrowsColor,
-                          strokeWidth: style.getCaretStrokeWidth(
-                              theme: popupButtonTheme,
-                              controlSize: controlSize),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          );
-        }),
+  @override
+  Widget buildCaretWidget(BuildContext context,
+      {required AppKitThemeData theme}) {
+    final popupButtonTheme = AppKitPopupButtonTheme.of(context);
+    final enabledFactor = enabled ? 0.5 : 0.35;
+
+    final caretSize =
+        style.getCaretSize(theme: popupButtonTheme, controlSize: controlSize);
+    final caretButtonSize = style.getCaretButtonSize(
+        theme: popupButtonTheme, controlSize: controlSize);
+    final arrowsColor =
+        AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
+            .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
+
+    return SizedBox(
+      width: caretButtonSize,
+      height: caretButtonSize,
+      child: Center(
+        child: SizedBox(
+          width: caretSize.width,
+          height: caretSize.height,
+          child: CustomPaint(
+            painter: _UpDownCaretsPainter2(
+              color: arrowsColor,
+              strokeWidth: style.getCaretStrokeWidth(
+                  theme: popupButtonTheme, controlSize: controlSize),
+            ),
+          ),
+        ),
       ),
     );
   }
