@@ -144,42 +144,33 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                     children: [
                       const WidgetTitle(label: 'Popup Button'),
                       const SizedBox(height: 20.0),
-                      Column(
-                        children: [AppKitControlSize.regular]
-                            .map((controlSize) => [
-                                  Wrap(
-                                    spacing: 16.0,
-                                    runSpacing: 16.0,
-                                    children: [
-                                      AppKitPopupButtonStyle.push,
-                                      AppKitPopupButtonStyle.bevel,
-                                      AppKitPopupButtonStyle.plain,
-                                      AppKitPopupButtonStyle.inline,
-                                    ]
-                                        .map((style) => [
-                                              AppKitPopupButton(
-                                                minWidth: 100,
-                                                maxWidth: 150,
-                                                forceMenuWidth: false,
-                                                canRequestFocus: true,
-                                                hint: 'Select...',
-                                                controlSize: controlSize,
-                                                selectedItem: popupSelectedItem,
-                                                onItemSelected:
-                                                    _onPopupItemSelected,
-                                                menuBuilder: popupMenuBuilder,
-                                                style: style,
-                                              ),
-                                              const SizedBox(width: 8.0)
-                                            ])
-                                        .expand((element) => element)
-                                        .toList(),
-                                  ),
-                                  const SizedBox(height: 16.0)
-                                ])
-                            .expand((element) => element)
-                            .toList(),
-                      ),
+                      for (AppKitPopupButtonStyle style
+                          in AppKitPopupButtonStyle.values) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              SizedBox(
+                                  width: 75,
+                                  child: AppKitLabel(text: Text(style.name))),
+                              const SizedBox(width: 16.0),
+                              Container(
+                                  constraints: const BoxConstraints(
+                                      minWidth: 125, maxWidth: 200),
+                                  child: AppKitPopupButton(
+                                    canRequestFocus: true,
+                                    hint: 'Select...',
+                                    controlSize: AppKitControlSize.regular,
+                                    selectedItem: popupSelectedItem,
+                                    onItemSelected: _onPopupItemSelected,
+                                    menuBuilder: popupMenuBuilder,
+                                    style: style,
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ],
                       const SizedBox(width: 16.0, height: 16.0),
                       const Divider(
                         thickness: 0.5,

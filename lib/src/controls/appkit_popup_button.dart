@@ -38,13 +38,9 @@ class AppKitPopupButton<T> extends StatefulWidget {
   final FocusNode? focusNode;
   final bool canRequestFocus;
   final bool forceMenuWidth;
-  final double? minWidth;
-  final double? maxWidth;
 
   const AppKitPopupButton({
     super.key,
-    this.minWidth,
-    this.maxWidth,
     this.onItemSelected,
     this.menuBuilder,
     this.items,
@@ -59,10 +55,8 @@ class AppKitPopupButton<T> extends StatefulWidget {
     this.controlSize = AppKitControlSize.regular,
     this.canRequestFocus = false,
     this.forceMenuWidth = false,
-  })  : assert(menuBuilder != null ? items == null : true,
-            'Only one of menuBuilder or items can be provided'),
-        assert(minWidth == null || maxWidth == null || minWidth <= maxWidth,
-            'minWidth must be less than or equal to maxWidth');
+  }) : assert(menuBuilder != null ? items == null : true,
+            'Only one of menuBuilder or items can be provided');
 
   AppKitContextMenu<T>? _defaultMenuBuilder(BuildContext context) {
     return menuBuilder != null
@@ -71,8 +65,6 @@ class AppKitPopupButton<T> extends StatefulWidget {
             ? AppKitContextMenu<T>(entries: items!)
             : null;
   }
-
-  bool get _hasWidth => minWidth != null || maxWidth != null;
 
   @override
   State<AppKitPopupButton<T>> createState() => _AppKitPopupButtonState<T>();
@@ -107,8 +99,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
     properties.add(DiagnosticsProperty('enabled', enabled));
     properties.add(DiagnosticsProperty('style', style));
     properties.add(DiagnosticsProperty('menuEdge', widget.menuEdge));
-    properties.add(DiagnosticsProperty('minWidth', widget.minWidth));
-    properties.add(DiagnosticsProperty('maxWidth', widget.maxWidth));
     properties.add(DiagnosticsProperty('menuBuilder', widget.menuBuilder));
     properties.add(DiagnosticsProperty('items', widget.items));
     properties
@@ -279,8 +269,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
               if (style == AppKitPopupButtonStyle.push ||
                   style == AppKitPopupButtonStyle.bevel) {
                 return _PushButtonStyleWidget<T>(
-                  minWidth: widget.minWidth,
-                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -294,8 +282,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                 );
               } else if (style == AppKitPopupButtonStyle.plain) {
                 return _PlainButtonStyleWidget<T>(
-                  minWidth: widget.minWidth,
-                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -307,8 +293,6 @@ class _AppKitPopupButtonState<T> extends State<AppKitPopupButton<T>>
                 );
               } else if (style == AppKitPopupButtonStyle.inline) {
                 return _InlineButtonStyleWidget<T>(
-                  minWidth: widget.minWidth,
-                  maxWidth: widget.maxWidth,
                   height: height,
                   menuEdge: menuEdge,
                   enabled: enabled,
@@ -415,78 +399,76 @@ abstract class _BaseButtonStyleWidget<T> extends StatelessWidget {
     double caretButtonSize = style.getCaretButtonSize(
         theme: popupButtonTheme, controlSize: controlSize);
 
-    final constraints = BoxConstraints(
-      minWidth: minWidth ?? 0,
-      maxWidth: maxWidth ?? double.infinity,
-      minHeight: height,
-      maxHeight: height,
-    )..normalize();
-
     final childPadding = style.getChildPadding(
         theme: popupButtonTheme, controlSize: controlSize);
     final containerPadding = style.getContainerPadding(
         theme: popupButtonTheme, menuEdge: menuEdge, controlSize: controlSize);
 
-    final constraints2 = BoxConstraints(
-      minWidth: (constraints.minWidth - containerPadding.horizontal)
-          .clamp(0, double.infinity),
-      maxWidth: constraints.maxWidth.isFinite
-          ? constraints.maxWidth - containerPadding.horizontal
-          : constraints.maxWidth,
-      minHeight: constraints.minHeight - containerPadding.vertical,
-      maxHeight: constraints.maxHeight - containerPadding.vertical,
-    )..normalize();
+    return LayoutBuilder(builder: (context, parentConstraints) {
+      final constraints =
+          parentConstraints.copyWith(minHeight: height, maxHeight: height);
 
-    return Container(
-      constraints: constraints,
-      foregroundDecoration: getForegroundDecoration(context, theme: theme),
-      child: DecoratedBox(
-        decoration: getBackgroundDecoration(context, theme: theme),
-        child: Padding(
-          padding: containerPadding,
-          child: Builder(builder: (context) {
-            final childConstraints = BoxConstraints(
-              minHeight: constraints2.minHeight,
-              maxHeight: constraints2.maxHeight,
-              minWidth: (constraints2.minWidth -
-                      childPadding.horizontal -
-                      6 -
-                      caretButtonSize)
-                  .clamp(0, double.infinity),
-              maxWidth: constraints2.maxWidth.isFinite
-                  ? constraints2.maxWidth -
-                      childPadding.horizontal -
-                      6 -
-                      caretButtonSize
-                  : constraints2.maxWidth,
-            )..normalize();
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  flex: 0,
-                  child: Padding(
-                    padding: childPadding,
-                    child: Container(
-                      constraints: childConstraints,
-                      child: Align(
-                        widthFactor: 1,
-                        heightFactor: 1,
-                        alignment: Alignment.centerLeft,
-                        child: child,
+      final constraints2 = BoxConstraints(
+        minWidth: (constraints.minWidth - containerPadding.horizontal)
+            .clamp(0, double.infinity),
+        maxWidth: constraints.maxWidth.isFinite
+            ? constraints.maxWidth - containerPadding.horizontal
+            : constraints.maxWidth,
+        minHeight: constraints.minHeight - containerPadding.vertical,
+        maxHeight: constraints.maxHeight - containerPadding.vertical,
+      )..normalize();
+
+      return Container(
+        constraints: constraints,
+        foregroundDecoration: getForegroundDecoration(context, theme: theme),
+        child: DecoratedBox(
+          decoration: getBackgroundDecoration(context, theme: theme),
+          child: Padding(
+            padding: containerPadding,
+            child: Builder(builder: (context) {
+              final childConstraints = BoxConstraints(
+                minHeight: constraints2.minHeight,
+                maxHeight: constraints2.maxHeight,
+                minWidth: (constraints2.minWidth -
+                        childPadding.horizontal -
+                        6 -
+                        caretButtonSize)
+                    .clamp(0, double.infinity),
+                maxWidth: constraints2.maxWidth.isFinite
+                    ? constraints2.maxWidth -
+                        childPadding.horizontal -
+                        6 -
+                        caretButtonSize
+                    : constraints2.maxWidth,
+              )..normalize();
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    flex: 0,
+                    child: Padding(
+                      padding: childPadding,
+                      child: Container(
+                        constraints: childConstraints,
+                        child: Align(
+                          widthFactor: 1,
+                          heightFactor: 1,
+                          alignment: Alignment.centerLeft,
+                          child: child,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 6.0),
-                buildCaretWidget(context, theme: theme),
-              ],
-            );
-          }),
+                  const SizedBox(width: 6.0),
+                  buildCaretWidget(context, theme: theme),
+                ],
+              );
+            }),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
