@@ -60,34 +60,36 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                     inToolbarBuilder: (context) {
                       return AppKitTooltip.plain(
                         message: 'Toolbar opacity',
-                        child: AppKitPopupButton<double>(
-                          maxWidth: 75,
-                          controlSize: AppKitControlSize.regular,
-                          style: AppKitPopupButtonStyle.bevel,
-                          selectedItem: opacitySelectedItem,
-                          menuBuilder: (context) {
-                            return AppKitContextMenu(entries: [
-                              AppKitContextMenuItem.plain('25%', value: 0.25),
-                              AppKitContextMenuItem.plain('50%', value: 0.5),
-                              AppKitContextMenuItem.plain('75%', value: 0.75),
-                              AppKitContextMenuItem.plain('90% (Default)',
-                                  value: 0.9),
-                            ]);
-                          },
-                          onItemSelected: (item) {
-                            if (null == item) return;
-                            final value = item;
-                            opacitySelectedItem = item;
-                            if (value == 0.25) {
-                              setState(() => opacity = 0.25);
-                            } else if (value == 0.5) {
-                              setState(() => opacity = 0.5);
-                            } else if (value == 0.75) {
-                              setState(() => opacity = 0.75);
-                            } else if (value == 0.9) {
-                              setState(() => opacity = 0.9);
-                            }
-                          },
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 75),
+                          child: AppKitPopupButton<double>(
+                            controlSize: AppKitControlSize.regular,
+                            style: AppKitPopupButtonStyle.bevel,
+                            selectedItem: opacitySelectedItem,
+                            menuBuilder: (context) {
+                              return AppKitContextMenu(entries: [
+                                AppKitContextMenuItem.plain('25%', value: 0.25),
+                                AppKitContextMenuItem.plain('50%', value: 0.5),
+                                AppKitContextMenuItem.plain('75%', value: 0.75),
+                                AppKitContextMenuItem.plain('90% (Default)',
+                                    value: 0.9),
+                              ]);
+                            },
+                            onItemSelected: (item) {
+                              if (null == item) return;
+                              final value = item;
+                              opacitySelectedItem = item;
+                              if (value == 0.25) {
+                                setState(() => opacity = 0.25);
+                              } else if (value == 0.5) {
+                                setState(() => opacity = 0.5);
+                              } else if (value == 0.75) {
+                                setState(() => opacity = 0.75);
+                              } else if (value == 0.9) {
+                                setState(() => opacity = 0.9);
+                              }
+                            },
+                          ),
                         ),
                       );
                     },

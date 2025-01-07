@@ -68,6 +68,8 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               context: context,
                               builder: (context) {
                                 return AppKitDialog(
+                                  constraints: const BoxConstraints(
+                                      minWidth: 350, maxWidth: 350),
                                   suppress: const DoNotNotifyRow(),
                                   icon: const AppKitIcon(CupertinoIcons.news),
                                   title: const Text('Dialog'),
@@ -106,12 +108,12 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                   title: const Text('Dialog'),
                                   message: const Text(dialogMessage),
                                   horizontalActions: false,
-                                  secondaryButton: AppKitButton(
+                                  tertiaryButton: AppKitButton(
                                       onTap: () {
                                         Navigator.of(context).pop();
                                       },
                                       type: AppKitButtonType.destructive,
-                                      child: const Text('Cancel')),
+                                      child: const Text('Close')),
                                   primaryButton: AppKitButton(
                                       onTap: () {
                                         Navigator.of(context).pop();

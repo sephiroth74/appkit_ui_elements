@@ -17,6 +17,7 @@ class AppKitDialog extends StatelessWidget {
     required this.primaryButton,
     this.icon,
     this.secondaryButton,
+    this.tertiaryButton,
     this.horizontalActions = true,
     this.suppress,
     this.constraints,
@@ -32,7 +33,9 @@ class AppKitDialog extends StatelessWidget {
 
   final Widget? secondaryButton;
 
-  final bool? horizontalActions;
+  final Widget? tertiaryButton;
+
+  final bool horizontalActions;
 
   final Widget? suppress;
 
@@ -41,9 +44,6 @@ class AppKitDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    if (secondaryButton != null) {
-      assert(secondaryButton is AppKitButton);
-    }
     final brightness = AppKitTheme.brightnessOf(context);
 
     final outerBorderColor = brightness.resolve(
@@ -120,47 +120,60 @@ class AppKitDialog extends StatelessWidget {
                   child: message,
                 ),
                 const SizedBox(height: 16),
-                if (secondaryButton == null) ...[
+                if (horizontalActions) ...[
                   Row(
                     children: [
-                      Expanded(child: primaryButton),
+                      if (tertiaryButton != null) ...[
+                        Expanded(flex: 4, child: tertiaryButton!),
+                        const SizedBox(width: 16.0),
+                        const Spacer(
+                          flex: 1,
+                        )
+                      ],
+                      if (secondaryButton != null) ...[
+                        Expanded(
+                          flex: 4,
+                          child: secondaryButton!,
+                        ),
+                        const SizedBox(width: 8.0),
+                      ],
+                      Expanded(
+                        flex: 4,
+                        child: primaryButton,
+                      ),
                     ],
                   ),
                 ] else ...[
-                  if (horizontalActions!) ...[
-                    Row(
-                      children: [
-                        if (secondaryButton != null) ...[
-                          Expanded(child: secondaryButton!),
-                          const SizedBox(width: 8.0),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: primaryButton),
                         ],
-                        Expanded(
-                          child: primaryButton,
-                        ),
-                      ],
-                    ),
-                  ] else ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                      ),
+                      if (secondaryButton != null) ...[
+                        const SizedBox(height: 8.0),
                         Row(
                           children: [
-                            Expanded(child: primaryButton),
+                            Expanded(
+                              child: secondaryButton!,
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 8.0),
-                        if (secondaryButton != null) ...[
-                          Row(
-                            children: [
-                              Expanded(
-                                child: secondaryButton!,
-                              ),
-                            ],
-                          ),
-                        ],
                       ],
-                    ),
-                  ],
+                      if (tertiaryButton != null) ...[
+                        const SizedBox(height: 8.0),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: tertiaryButton!,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
                 ],
                 if (suppress != null) ...[
                   const SizedBox(height: 16),
