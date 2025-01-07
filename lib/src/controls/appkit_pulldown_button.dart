@@ -71,8 +71,6 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
 
   bool _isHovered = false;
 
-  late AppKitContextMenu<T> _contextMenu;
-
   FocusNode? _focusNode;
 
   FocusNode get _effectiveFocusNode =>
@@ -107,7 +105,6 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
   @override
   void initState() {
     super.initState();
-    _contextMenu = widget._defaultMenuBuilder(context);
     _effectiveFocusNode.canRequestFocus = widget.canRequestFocus && enabled;
   }
 
@@ -120,7 +117,6 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
   @override
   void didUpdateWidget(covariant AppKitPulldownButton<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _contextMenu = widget._defaultMenuBuilder(context);
   }
 
   @override

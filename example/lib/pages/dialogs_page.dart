@@ -41,9 +41,12 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               builder: (context) {
                                 debugPrint('generate dialog widget');
                                 return AppKitDialog(
+                                  constraints: const BoxConstraints(
+                                      maxWidth: 400, maxHeight: 300),
                                   suppress: const DoNotNotifyRow(),
                                   title: const Text('Dialog'),
-                                  message: const Text(dialogMessage),
+                                  message: (context) =>
+                                      const Text(dialogMessage),
                                   primaryButton: AppKitButton(
                                       onTap: () {
                                         Navigator.of(context).pop();
@@ -73,7 +76,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                   suppress: const DoNotNotifyRow(),
                                   icon: const AppKitIcon(CupertinoIcons.news),
                                   title: const Text('Dialog'),
-                                  message: const Text(dialogMessage),
+                                  message: (_) => const Text(dialogMessage),
                                   secondaryButton: AppKitButton(
                                       onTap: () {
                                         Navigator.of(context).pop();
@@ -106,7 +109,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                                   suppress: const DoNotNotifyRow(),
                                   icon: const AppKitIcon(CupertinoIcons.news),
                                   title: const Text('Dialog'),
-                                  message: const Text(dialogMessage),
+                                  message: (_) => const Text(dialogMessage),
                                   horizontalActions: false,
                                   tertiaryButton: AppKitButton(
                                       onTap: () {
