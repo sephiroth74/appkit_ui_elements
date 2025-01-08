@@ -31,39 +31,47 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
       };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, {required Brightness brightness}) {
     final theme = AppKitTheme.of(context);
-    final brightness = theme.brightness;
     final isDark = brightness == Brightness.dark;
+
+    final Color textColor;
+    final Color iconColor;
+    final Color inlineHoveredBackgroundColor;
+    final Color arrowsColor;
+
+    textColor = AppKitColors.textColor.resolveFromBrightness(brightness);
+    iconColor = AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
+    inlineHoveredBackgroundColor = isDark
+        ? Colors.white.withValues(alpha: 0.06)
+        : Colors.black.withValues(alpha: 0.05);
+    arrowsColor = AppKitColors.labelColor.resolveFromBrightness(brightness);
 
     Widget pulldownButton = Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: AppKitPopupButtonTheme(
-        data: AppKitPopupButtonTheme.of(context).copyWith(sizeData: {
+        data: AppKitPopupButtonTheme.of(context)
+            .copyWith(arrowsColor: arrowsColor, sizeData: {
           AppKitControlSize.regular: AppKitPopupThemeSizeData(
             arrowsButtonSize: 19,
             inlineIconsSize: 16,
-            textStyle: theme.typography.body,
-            inlineTextStyle: theme.typography.body,
+            textStyle: theme.typography.body.copyWith(color: textColor),
+            inlineTextStyle: theme.typography.body.copyWith(color: textColor),
             inlineChildPadding: const EdgeInsets.only(bottom: 0.0, right: 0.0),
             inlineContainerPadding:
                 const EdgeInsets.only(left: 3.0, top: 0, right: 1, bottom: 0),
             inlineHeight: 28.0,
             inlineBorderRadius: 6.0,
             inlineBackgroundColor: Colors.transparent,
-            inlineHoveredBackgroundColor: isDark
-                ? Colors.white.withValues(alpha: 0.06)
-                : Colors.black.withValues(alpha: 0.05),
+            inlineHoveredBackgroundColor: inlineHoveredBackgroundColor,
           ),
         }),
         child: AppKitPulldownButton(
-          iconColor: AppKitDynamicColor.resolve(
-              context, AppKitColors.toolbarIconColor),
+          iconColor: iconColor,
           canRequestFocus: false,
           controlSize: AppKitControlSize.regular,
           minWidth: width,
-          color: AppKitDynamicColor.resolve(
-              context, AppKitColors.toolbarIconColor),
+          color: iconColor,
           menuEdge: AppKitMenuEdge.bottom,
           icon: icon,
           style: AppKitPulldownButtonStyle.inline,

@@ -1,5 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppKitContextMenuWidget extends StatelessWidget {
   final AppKitContextMenuState menuState;
@@ -62,12 +62,12 @@ class AppKitContextMenuWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppKitColors.materials.ultraThin.color,
-                  width: 1,
+                  color: isDark ? Colors.white54 : Colors.white,
+                  width: 0.5,
                 ),
                 borderRadius: BorderRadius.circular(theme.borderRadius),
               ),
-              padding: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(4),
               constraints: BoxConstraints(
                   maxWidth: state.maxWidth,
                   minWidth: state.minWidth,

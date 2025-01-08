@@ -571,9 +571,7 @@ class _PushButtonStyleWidget<T> extends _BaseButtonStyleWidget<T> {
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
-      arrowsColor =
-          AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
-              .multiplyOpacity(enabledFactor);
+      arrowsColor = popupButtonTheme.arrowsColor.multiplyOpacity(enabledFactor);
     } else {
       caretBackgroundColor =
           color ?? popupButtonTheme.elevatedButtonColor ?? theme.activeColor;
@@ -778,8 +776,7 @@ class _PlainButtonStyleWidget<T> extends _BaseButtonStyleWidget<T> {
     final borderRadius = style.getBorderRadius(
         theme: popupButtonTheme, controlSize: controlSize);
     final arrowsColor =
-        AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
-            .multiplyOpacity(enabledFactor);
+        popupButtonTheme.arrowsColor.multiplyOpacity(enabledFactor);
 
     if (isHovered) {
       caretBackgroundColor = Colors.transparent;
@@ -884,9 +881,8 @@ class _InlineButtonStyleWidget<T> extends _BaseButtonStyleWidget<T> {
         style.getCaretSize(theme: popupButtonTheme, controlSize: controlSize);
     final caretButtonSize = style.getCaretButtonSize(
         theme: popupButtonTheme, controlSize: controlSize);
-    final arrowsColor =
-        AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
-            .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
+    final arrowsColor = popupButtonTheme.arrowsColor
+        .multiplyOpacity(isMainWindow ? enabledFactor : 0.35);
 
     return SizedBox(
       width: caretButtonSize,

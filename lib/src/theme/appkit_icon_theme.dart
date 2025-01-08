@@ -14,37 +14,73 @@ class AppKitIconTheme extends InheritedTheme {
   factory AppKitIconTheme.toolbar(
     BuildContext context, {
     required IconData icon,
+    required Brightness brightness,
     bool showLabel = false,
     VoidCallback? onPressed,
+    Color? color,
   }) {
+    final iconButton = AppKitIconButtonTheme(
+        data: AppKitIconButtonTheme.fallback(brightness),
+        child: AppKitIconButton(
+          icon: icon,
+          padding: showLabel
+              ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
+              : const EdgeInsets.all(5),
+          disabledColor: Colors.transparent,
+          color: color ??
+              AppKitColors.toolbarIconColor.resolveFromBrightness(brightness),
+          onPressed: onPressed,
+          boxConstraints: showLabel
+              ? const BoxConstraints(
+                  minHeight: 19,
+                  minWidth: 35,
+                  maxWidth: 35,
+                  maxHeight: 22,
+                )
+              : const BoxConstraints(
+                  minHeight: 28,
+                  maxHeight: 28,
+                  minWidth: 33,
+                  maxWidth: 33,
+                ),
+        ));
+
     return AppKitIconTheme(
       data: AppKitIconThemeData(
         size: showLabel ? 16.0 : 20.0,
       ),
-      child: AppKitIconButton(
-        icon: icon,
-        padding: showLabel
-            ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
-            : const EdgeInsets.all(5),
-        disabledColor: Colors.transparent,
-        color:
-            AppKitDynamicColor.resolve(context, AppKitColors.toolbarIconColor),
-        onPressed: onPressed,
-        boxConstraints: showLabel
-            ? const BoxConstraints(
-                minHeight: 19,
-                minWidth: 35,
-                maxWidth: 35,
-                maxHeight: 22,
-              )
-            : const BoxConstraints(
-                minHeight: 28,
-                maxHeight: 28,
-                minWidth: 33,
-                maxWidth: 33,
-              ),
-      ),
+      child: iconButton,
     );
+  }
+
+  factory AppKitIconTheme.lightOpaqueToolbar(
+    BuildContext context, {
+    required IconData icon,
+    bool showLabel = false,
+    VoidCallback? onPressed,
+    Color? color,
+  }) {
+    return AppKitIconTheme.toolbar(context,
+        icon: icon,
+        brightness: Brightness.light,
+        showLabel: showLabel,
+        onPressed: onPressed,
+        color: color);
+  }
+
+  factory AppKitIconTheme.darkOpaqueToolbar(
+    BuildContext context, {
+    required IconData icon,
+    bool showLabel = false,
+    VoidCallback? onPressed,
+    Color? color,
+  }) {
+    return AppKitIconTheme.toolbar(context,
+        icon: icon,
+        brightness: Brightness.dark,
+        showLabel: showLabel,
+        onPressed: onPressed,
+        color: color);
   }
 
   static Widget merge({

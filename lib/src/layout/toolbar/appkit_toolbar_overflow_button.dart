@@ -5,10 +5,13 @@ class AppKitToolbarOverflowButton extends StatefulWidget {
   const AppKitToolbarOverflowButton({
     super.key,
     required this.overflowContentBuilder,
+    required this.brightness,
     this.isDense = false,
   });
 
   final ContextMenuBuilder<String> overflowContentBuilder;
+
+  final Brightness brightness;
 
   final bool isDense;
 
@@ -50,6 +53,6 @@ class _AppKitToolbarOverflowButtonState
       icon: CupertinoIcons.chevron_right_2,
       showLabel: widget.isDense,
       onPressed: _showOverflowMenu,
-    ).build(context);
+    ).build(context, brightness: widget.brightness);
   }
 }

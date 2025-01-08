@@ -405,23 +405,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       thumbVisibility: false,
     );
 
-    iconButtonTheme ??= AppKitIconButtonThemeData(
-      backgroundColor: Colors.transparent,
-      disabledColor: isDark ? const Color(0xff353535) : const Color(0xffE5E5E5),
-      hoverColor: isDark
-          ? Colors.white.withValues(alpha: 0.06)
-          : Colors.black.withValues(alpha: 0.05),
-      pressedColor: isDark
-          ? Colors.white.withValues(alpha: 0.2)
-          : Colors.black.withValues(alpha: 0.2),
-      shape: BoxShape.rectangle,
-      boxConstraints: const BoxConstraints(
-        minHeight: 22,
-        minWidth: 22,
-        maxWidth: 30,
-        maxHeight: 30,
-      ),
-    );
+    iconButtonTheme ??= AppKitIconButtonTheme.fallback(brightness);
 
     dateTimePickerTheme ??= AppKitDateTimePickerThemeData(
       graphicalDatePickerBackgroundColor: (isDark

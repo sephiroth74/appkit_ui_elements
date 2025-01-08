@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 const groupMessage =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
@@ -16,8 +17,14 @@ class _ToolbarPageState extends State<ToolbarPage> {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return AppKitScaffold(
       toolBar: AppKitToolBar(
+        isDark: !isDark,
+        decoration: BoxDecoration(
+            color: isDark
+                ? AppKitColors.systemMint.darkColor
+                : AppKitColors.systemIndigo.color),
         title: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,9 +35,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
               height: 2.0,
             ),
             Text('Subtitle',
-                style: theme.typography.caption1.copyWith(
-                    color: AppKitDynamicColor.resolve(
-                        context, AppKitColors.text.opaque.secondary))),
+                style: TextStyle(fontSize: theme.typography.caption1.fontSize)),
           ],
         ),
         titleWidth: 200,
@@ -38,9 +43,13 @@ class _ToolbarPageState extends State<ToolbarPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppKitIconButton.toolbar(context,
-                icon: CupertinoIcons.chevron_back, onPressed: () {}),
+                brightness: isDark ? Brightness.light : Brightness.dark,
+                icon: CupertinoIcons.chevron_back,
+                onPressed: () {}),
             AppKitIconButton.toolbar(context,
-                icon: CupertinoIcons.chevron_forward, onPressed: () {}),
+                brightness: isDark ? Brightness.light : Brightness.dark,
+                icon: CupertinoIcons.chevron_forward,
+                onPressed: () {}),
           ],
         ),
         actions: [
@@ -76,7 +85,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
                   onTap: () => debugPrint('onPressed: Tags...')),
             ],
           ),
-          const AppKitToolBarDivider(),
+          const AppKitToolBarDivider(color: Colors.white24),
           AppKitToolBarIconButton(
             label: 'Airplane',
             icon: CupertinoIcons.airplane,

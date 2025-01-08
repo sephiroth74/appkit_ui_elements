@@ -49,9 +49,8 @@ class AppKitListTile extends StatelessWidget {
                           .typography
                           .subheadline
                           .copyWith(
-                            color: AppKitTheme.brightnessOf(context).isDark
-                                ? AppKitColors.systemGray
-                                : AppKitColors.text.opaque.secondary.color,
+                            color: AppKitColors.text.opaque.secondary
+                                .resolveFromContext(context),
                           ),
                       child: subtitle!,
                     ),

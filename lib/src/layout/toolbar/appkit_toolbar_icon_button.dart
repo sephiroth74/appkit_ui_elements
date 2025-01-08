@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppKitToolBarIconButton extends AppKitToolbarItem {
   const AppKitToolBarIconButton({
@@ -17,9 +18,20 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
   final String? tooltipMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, {required Brightness brightness}) {
+    final Color textColor;
+    final Color iconColor;
+
+    textColor =
+        AppKitColors.text.opaque.secondary.resolveFromBrightness(brightness);
+    iconColor = AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
+
     Widget iconButton = AppKitIconTheme.toolbar(context,
-        showLabel: showLabel, icon: icon, onPressed: onPressed);
+        brightness: brightness,
+        showLabel: showLabel,
+        icon: icon,
+        onPressed: onPressed,
+        color: iconColor);
 
     if (showLabel) {
       iconButton = Padding(
@@ -33,8 +45,7 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
                 label,
                 style: TextStyle(
                   fontSize: 10.0,
-                  color: AppKitDynamicColor.resolve(
-                      context, AppKitColors.text.opaque.secondary),
+                  color: textColor,
                 ),
               ),
             ),

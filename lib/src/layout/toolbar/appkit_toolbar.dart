@@ -3,12 +3,11 @@ import 'dart:ui';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
 const _kToolbarHeight = 52.0;
 
-const _kLeadingWidth = 20.0;
+const _kLeadingWidth = 33.0;
 
 const _kTitleWidth = 150.0;
 
@@ -28,7 +27,10 @@ class AppKitToolBar extends StatefulWidget with Diagnosticable {
     this.dividerColor,
     this.allowWallpaperTintingOverrides = true,
     this.enableBlur = false,
-  });
+    bool? isDark,
+  }) : _isDark = isDark;
+
+  final bool? _isDark;
 
   final double height;
 
@@ -55,6 +57,14 @@ class AppKitToolBar extends StatefulWidget with Diagnosticable {
   final bool allowWallpaperTintingOverrides;
 
   final bool enableBlur;
+
+  bool isDark(BuildContext context) {
+    return _isDark ?? AppKitTheme.of(context).brightness == Brightness.dark;
+  }
+
+  Brightness brightness(BuildContext context) {
+    return isDark(context) ? Brightness.dark : Brightness.light;
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -104,44 +114,28 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // debugPrint('[$this] initialized');
-  }
-
-  @override
-  void dispose() {
-    // debugPrint('[$this] disposed');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final scope = AppKitWindowScope.maybeOf(context);
     final AppKitThemeData theme = AppKitTheme.of(context);
-    Color dividerColor = widget.dividerColor ?? theme.dividerColor;
+    final isDark = widget.isDark(context);
+    final Brightness brightness = widget.brightness(context);
+    Color dividerColor = widget.dividerColor ??
+        (isDark
+            ? AppKitColors.dividerColor.darkColor
+            : AppKitColors.dividerColor.color);
     final route = ModalRoute.of(context);
     double overflowBreakpoint = 0.0;
 
     Widget? leading = widget.leading;
-    if (leading == null && widget.automaticallyImplyLeading) {
-      if (route?.canPop ?? false) {
+    if ((leading == null && widget.automaticallyImplyLeading)) {
+      if ((route?.canPop ?? false)) {
         leading = Container(
           width: _kLeadingWidth,
           alignment: Alignment.centerLeft,
-          child: AppKitIconTheme(
-            data: const AppKitIconThemeData(
-              size: 20.0,
-            ),
-            child: AppKitIconButton(
-              padding: const EdgeInsets.all(5),
-              disabledColor: Colors.transparent,
-              color: AppKitDynamicColor.resolve(
-                  context, AppKitColors.toolbarIconColor),
-              icon: CupertinoIcons.back,
-              onPressed: () => Navigator.maybePop(context),
-            ),
-          ),
+          child: AppKitIconButton.toolbar(context,
+              brightness: brightness,
+              icon: CupertinoIcons.chevron_back,
+              onPressed: () => Navigator.maybePop(context)),
         );
       }
     }
@@ -150,12 +144,16 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
       overflowBreakpoint += _kLeadingWidth;
     }
 
+    final textColor = AppKitColors.labelColor
+        .resolveFromBrightness(widget.brightness(context));
+
     Widget? title = widget.title;
     if (title != null) {
       title = SizedBox(
         width: widget.titleWidth,
         child: DefaultTextStyle(
           style: theme.typography.title3.copyWith(
+            color: textColor,
             fontSize: 15,
             fontWeight: AppKitFontWeight.w590,
           ),
@@ -221,6 +219,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
             trailing: AppKitOverflowHandler(
               overflowBreakpoint: overflowBreakpoint,
               overflowWidget: AppKitToolbarOverflowButton(
+                  brightness: brightness,
                   isDense: doAllItemsShowLabel,
                   overflowContentBuilder: (context) {
                     return AppKitContextMenu(
@@ -231,7 +230,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
                   }),
               children: inToolbarActions
                   .map(
-                    (e) => e.build(context),
+                    (e) => e.build(context, brightness: brightness),
                   )
                   .toList(),
               overflowChangedCallback: (hiddenItems) {
@@ -258,7 +257,7 @@ abstract class AppKitToolbarItem with Diagnosticable {
 
   final Key? key;
 
-  Widget build(BuildContext context);
+  Widget build(BuildContext context, {required Brightness brightness});
 
   AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context);
 }

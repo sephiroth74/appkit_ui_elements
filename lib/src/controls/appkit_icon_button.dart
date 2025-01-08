@@ -70,12 +70,20 @@ class AppKitIconButton extends StatefulWidget {
 
   static AppKitIconTheme toolbar(
     BuildContext context, {
+    required Brightness brightness,
     required IconData icon,
     bool showLabel = false,
     VoidCallback? onPressed,
+    Color? color,
   }) {
-    return AppKitIconTheme.toolbar(context,
-        icon: icon, showLabel: showLabel, onPressed: onPressed);
+    return AppKitIconTheme.toolbar(
+      context,
+      brightness: brightness,
+      icon: icon,
+      showLabel: showLabel,
+      onPressed: onPressed,
+      color: color,
+    );
   }
 }
 

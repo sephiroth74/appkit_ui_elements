@@ -34,7 +34,7 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                       child: Row(children: [
                         AppKitIcon(
                           Icons.cut,
-                          size: 14,
+                          size: 12,
                         ),
                         SizedBox(width: 6),
                         Text('Cut'),
@@ -42,7 +42,7 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                   const AppKitContextMenuItem(
                       value: 'copy',
                       child: Row(children: [
-                        AppKitIcon(Icons.copy, size: 14),
+                        AppKitIcon(Icons.copy, size: 12),
                         SizedBox(width: 6),
                         Text('Copy'),
                       ])),
@@ -50,7 +50,7 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                     value: 'paste',
                     child: Row(
                       children: [
-                        AppKitIcon(Icons.paste, size: 14),
+                        AppKitIcon(Icons.paste, size: 12),
                         SizedBox(width: 6),
                         Text('Paste'),
                       ],

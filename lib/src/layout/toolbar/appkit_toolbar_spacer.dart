@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/cupertino.dart';
 
 const _kToolbarItemWidth = 32.0;
 
@@ -11,7 +12,7 @@ class AppKitToolBarSpacer extends AppKitToolbarItem {
   final double spacerUnits;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, {required Brightness brightness}) {
     return SizedBox(
       width: spacerUnits * _kToolbarItemWidth,
     );

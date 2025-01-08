@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppKitCustomToolbarItem extends AppKitToolbarItem {
   const AppKitCustomToolbarItem({
@@ -15,7 +16,7 @@ class AppKitCustomToolbarItem extends AppKitToolbarItem {
   final String? tooltipMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, {required Brightness brightness}) {
     Widget widget = inToolbarBuilder(context);
     if (tooltipMessage != null) {
       widget = AppKitTooltip.plain(

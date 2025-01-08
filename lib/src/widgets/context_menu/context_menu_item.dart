@@ -107,7 +107,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
     final accentColor = theme.activeColor;
     final decorationColor = selectedOrFocused && !isSelectionAnimating
-        ? accentColor.withValues(alpha: 0.7)
+        ? accentColor
         : Colors.transparent;
 
     final decorationColorBlended = Color.lerp(
@@ -127,12 +127,8 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
     Color textColor = selectedOrFocused && enabled
         ? decorationColorBlended.computeLuminance() > 0.5
-            ? isDark
-                ? AppKitColors.labelColor.darkColor
-                : AppKitColors.labelColor
-            : isDark
-                ? AppKitColors.labelColor.darkColor
-                : AppKitColors.labelColor.darkColor
+            ? Colors.black
+            : Colors.white
         : AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     if (!enabled) {
       textColor = textColor.withValues(alpha: 0.3);
@@ -148,8 +144,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
             ? const SizedBox.shrink()
             : itemState != null
                 ? Padding(
-                    padding:
-                        const EdgeInsets.only(left: 3.0, top: 3.0, right: 4.0),
+                    padding: const EdgeInsets.only(right: 4.0),
                     child: Icon(
                       icon,
                       size: 12,
@@ -159,7 +154,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
                 : const SizedBox(width: 6.0);
 
         final subMenuIconWidget = Padding(
-          padding: const EdgeInsets.only(top: 3.0, left: 6.0),
+          padding: const EdgeInsets.only(right: 6.0),
           child: Icon(
             CupertinoIcons.right_chevron,
             size: 12,
@@ -167,20 +162,17 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           ),
         );
 
-        final textWidget = Padding(
-          padding: const EdgeInsets.only(left: 3.0, top: 1.0, bottom: 1.0),
-          child: DefaultTextStyle(
-            softWrap: true,
-            maxLines: 1,
-            style: theme.typography.body.copyWith(
-              fontSize: 13,
-              color: textColor,
-            ),
-            overflow: TextOverflow.ellipsis,
-            child: AppKitIconTheme(
-                data: AppKitIconTheme.of(context).copyWith(color: textColor),
-                child: child),
+        final textWidget = DefaultTextStyle(
+          softWrap: true,
+          maxLines: 1,
+          style: theme.typography.body.copyWith(
+            fontSize: 13,
+            color: textColor,
           ),
+          overflow: TextOverflow.ellipsis,
+          child: AppKitIconTheme(
+              data: AppKitIconTheme.of(context).copyWith(color: textColor),
+              child: child),
         );
 
         return DecoratedBox(
@@ -190,7 +182,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           ),
           child: Padding(
             padding: const EdgeInsets.only(
-                left: 3.0, top: 3.5, right: 3.0, bottom: 3.5),
+                left: 6.0, top: 3.5, right: 3.0, bottom: 3.5),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               textDirection: Directionality.of(context),

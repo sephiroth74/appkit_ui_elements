@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class AppKitIconButtonTheme extends InheritedTheme {
   const AppKitIconButtonTheme({
@@ -14,6 +15,42 @@ class AppKitIconButtonTheme extends InheritedTheme {
     final AppKitIconButtonTheme? buttonTheme =
         context.dependOnInheritedWidgetOfExactType<AppKitIconButtonTheme>();
     return buttonTheme?.data ?? AppKitTheme.of(context).iconButtonTheme;
+  }
+
+  static AppKitIconButtonThemeData lightOpaque() {
+    return AppKitIconButtonThemeData(
+      backgroundColor: Colors.transparent,
+      disabledColor: const Color(0xffE5E5E5),
+      hoverColor: Colors.black.withValues(alpha: 0.05),
+      pressedColor: Colors.black.withValues(alpha: 0.2),
+      shape: BoxShape.rectangle,
+      boxConstraints: const BoxConstraints(
+        minHeight: 22,
+        minWidth: 22,
+        maxWidth: 30,
+        maxHeight: 30,
+      ),
+    );
+  }
+
+  static AppKitIconButtonThemeData darkOpaque() {
+    return AppKitIconButtonThemeData(
+      backgroundColor: Colors.transparent,
+      disabledColor: const Color(0xff353535),
+      hoverColor: Colors.white.withValues(alpha: 0.06),
+      pressedColor: Colors.white.withValues(alpha: 0.2),
+      shape: BoxShape.rectangle,
+      boxConstraints: const BoxConstraints(
+        minHeight: 22,
+        minWidth: 22,
+        maxWidth: 30,
+        maxHeight: 30,
+      ),
+    );
+  }
+
+  static AppKitIconButtonThemeData fallback(Brightness brightness) {
+    return brightness == Brightness.light ? lightOpaque() : darkOpaque();
   }
 
   @override

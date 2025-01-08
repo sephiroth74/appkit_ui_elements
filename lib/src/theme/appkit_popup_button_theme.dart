@@ -30,7 +30,7 @@ class AppKitPopupButtonTheme extends InheritedTheme {
 class AppKitPopupButtonThemeData with Diagnosticable {
   final Color? elevatedButtonColor;
   final Color plainButtonColor;
-  final CupertinoDynamicColor arrowsColor;
+  final Color arrowsColor;
   final Map<AppKitControlSize, AppKitPopupThemeSizeData> sizeData;
 
   AppKitPopupButtonThemeData({
@@ -51,7 +51,9 @@ class AppKitPopupButtonThemeData with Diagnosticable {
             ? AppKitColors.systemGray.darkColor
             : AppKitColors.systemGray.color)
         .withValues(alpha: 0.2);
-    const arrowsColor = AppKitColors.labelColor;
+    final arrowsColor = isDark
+        ? AppKitColors.labelColor.darkColor
+        : AppKitColors.labelColor.color;
 
     final inlineTextStyle =
         typography.subheadline.copyWith(fontWeight: FontWeight.w500);
@@ -150,7 +152,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
   AppKitPopupButtonThemeData copyWith({
     Color? elevatedButtonColor,
     Color? plainButtonColor,
-    CupertinoDynamicColor? arrowsColor,
+    Color? arrowsColor,
     Map<AppKitControlSize, AppKitPopupThemeSizeData>? sizeData,
   }) {
     return AppKitPopupButtonThemeData(
@@ -186,11 +188,7 @@ class AppKitPopupButtonThemeData with Diagnosticable {
       elevatedButtonColor:
           Color.lerp(a.elevatedButtonColor, b.elevatedButtonColor, t),
       plainButtonColor: Color.lerp(a.plainButtonColor, b.plainButtonColor, t)!,
-      arrowsColor: CupertinoDynamicColor.withBrightness(
-        color: Color.lerp(a.arrowsColor.color, b.arrowsColor.color, t)!,
-        darkColor:
-            Color.lerp(a.arrowsColor.darkColor, b.arrowsColor.darkColor, t)!,
-      ),
+      arrowsColor: Color.lerp(a.arrowsColor, b.arrowsColor, t)!,
       sizeData: Map.fromEntries(
         a.sizeData.entries.map(
           (entry) {

@@ -394,9 +394,7 @@ class _PushButtonStyleWidget<T> extends StatelessWidget {
 
     if (isBevel) {
       caretBackgroundColor = Colors.transparent;
-      arrowsColor =
-          AppKitDynamicColor.resolve(context, popupButtonTheme.arrowsColor)
-              .multiplyOpacity(enabledFactor);
+      arrowsColor = popupButtonTheme.arrowsColor.multiplyOpacity(enabledFactor);
     } else {
       caretBackgroundColor =
           color ?? popupButtonTheme.elevatedButtonColor ?? theme.activeColor;

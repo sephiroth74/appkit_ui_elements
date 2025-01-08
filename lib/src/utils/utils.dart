@@ -225,6 +225,11 @@ extension ColorX on Color {
     return (hslColor.withLightness(luminance)).toColor();
   }
 
+  double computeLightness() {
+    final hslColor = HSLColor.fromColor(this);
+    return hslColor.lightness;
+  }
+
   String toHexString() {
     final alphaInt = (a * 255).round();
     final redInt = (r * 255).round();

@@ -105,6 +105,7 @@ class AppKitTypography extends Equatable with Diagnosticable {
       color: color,
     );
     return AppKitTypography.raw(
+      color: color,
       largeTitle: largeTitle,
       title1: title1,
       title2: title2,
@@ -121,6 +122,7 @@ class AppKitTypography extends Equatable with Diagnosticable {
   }
 
   const AppKitTypography.raw({
+    required this.color,
     required this.largeTitle,
     required this.title1,
     required this.title2,
@@ -139,6 +141,8 @@ class AppKitTypography extends Equatable with Diagnosticable {
       AppKitTypography(color: AppKitColors.labelColor.color);
   factory AppKitTypography.lightOpaque() =>
       AppKitTypography(color: AppKitColors.labelColor.darkColor);
+
+  final Color color;
 
   /// Style used for body text.
   final TextStyle body;
@@ -178,6 +182,7 @@ class AppKitTypography extends Equatable with Diagnosticable {
   AppKitTypography merge(AppKitTypography? other) {
     if (other == null) return this;
     return AppKitTypography.raw(
+      color: other.color,
       largeTitle: largeTitle.merge(other.largeTitle),
       title1: title1.merge(other.title1),
       title2: title2.merge(other.title2),
@@ -197,6 +202,7 @@ class AppKitTypography extends Equatable with Diagnosticable {
   static AppKitTypography lerp(
       AppKitTypography a, AppKitTypography b, double t) {
     return AppKitTypography.raw(
+      color: Color.lerp(a.color, b.color, t)!,
       largeTitle: TextStyle.lerp(a.largeTitle, b.largeTitle, t)!,
       title1: TextStyle.lerp(a.title1, b.title1, t)!,
       title2: TextStyle.lerp(a.title2, b.title2, t)!,
@@ -281,10 +287,13 @@ class AppKitTypography extends Equatable with Diagnosticable {
       caption2,
       defaultValue: defaultStyle.caption2,
     ));
+    properties
+        .add(ColorProperty('color', color, defaultValue: defaultStyle.color));
   }
 
   @override
   List<Object?> get props => [
+        color,
         body,
         callout,
         tooltip,
