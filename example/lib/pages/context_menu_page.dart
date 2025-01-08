@@ -1,6 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/widgets/theme_toolbar_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ContextMenuPage extends StatefulWidget {
@@ -64,8 +63,8 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                 maxHeight: 300,
                 minWidth: 200,
               ),
-              child: SizedBox.expand(
-                child: const Center(
+              child: const SizedBox.expand(
+                child: Center(
                     child: AppKitLabel(
                         text: Text(
                             'Rich click anywhere to open the context menu'))),
