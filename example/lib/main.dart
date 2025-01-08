@@ -4,6 +4,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:example/pages/colors_page.dart';
 import 'package:example/pages/combo_box_button_page.dart';
 import 'package:example/pages/combo_button_page.dart';
+import 'package:example/pages/context_menu_page.dart';
 import 'package:example/pages/controls_page.dart';
 import 'package:example/pages/dialogs_page.dart';
 import 'package:example/pages/fields_page.dart';
@@ -103,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 'Indicators',
                 'Sliders',
                 'Dialogs',
+                'Context Menu',
                 'Segmented Controls',
                 'Tab View',
                 'Group Box',
@@ -126,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     'Indicators',
                     'Sliders',
                     'Dialogs',
+                    'Context Menu',
                     'Segmented Controls',
                     'Tab View',
                     'Group Box',
@@ -171,6 +174,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     AppKitSidebarItem(
                       label: Text('Dialogs'),
                     ),
+                    AppKitSidebarItem(
+                      label: Text('Context Menu'),
+                    ),
                     AppKitSidebarItem(label: Text('Layout'), disclosureItems: [
                       AppKitSidebarItem(
                         label: Text('Segmented Controls'),
@@ -207,6 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const IndicatorsPage(),
           const SlidersPage(),
           const DialogsViewPage(),
+          const ContextMenuPage(),
           const SegmentedControlsPage(),
           const TabViewPage(),
           const GroupedBoxPage(),

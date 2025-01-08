@@ -224,6 +224,15 @@ extension ColorX on Color {
     final hslColor = HSLColor.fromColor(this);
     return (hslColor.withLightness(luminance)).toColor();
   }
+
+  String toHexString() {
+    final alphaInt = (a * 255).round();
+    final redInt = (r * 255).round();
+    final greenInt = (g * 255).round();
+    final blueInt = (b * 255).round();
+    return '#${alphaInt.toRadixString(16)}${redInt.toRadixString(16)}'
+        '${greenInt.toRadixString(16)}${blueInt.toRadixString(16)}';
+  }
 }
 
 extension RectX on Rect {

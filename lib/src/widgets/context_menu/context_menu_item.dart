@@ -97,8 +97,24 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   Widget builder(BuildContext context, AppKitContextMenuState menuState,
       [FocusNode? focusNode]) {
     final theme = AppKitTheme.of(context);
+    final contextMenuTheme = AppKitContextMenuTheme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final selectedOrFocused =
         menuState.focusedEntry == this || menuState.selectedItem == this;
+    final isSelectionAnimating = menuState.isSelectionAnimating &&
+        menuState.focusedEntry == this &&
+        menuState.selectionTicks % 2 == 0;
+
+    final accentColor = theme.activeColor;
+    final decorationColor = selectedOrFocused && !isSelectionAnimating
+        ? accentColor.withValues(alpha: 0.7)
+        : Colors.transparent;
+
+    final decorationColorBlended = Color.lerp(
+        contextMenuTheme.backgroundColor ??
+            AppKitDynamicColor.resolve(context, AppKitColors.materials.medium),
+        decorationColor,
+        decorationColor.a)!;
 
     final IconData? icon;
     if (itemState == AppKitItemState.on) {
@@ -110,7 +126,13 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     }
 
     Color textColor = selectedOrFocused && enabled
-        ? AppKitDynamicColor.resolve(context, AppKitColors.labelColor)
+        ? decorationColorBlended.computeLuminance() > 0.5
+            ? isDark
+                ? AppKitColors.labelColor.darkColor
+                : AppKitColors.labelColor
+            : isDark
+                ? AppKitColors.labelColor.darkColor
+                : AppKitColors.labelColor.darkColor
         : AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     if (!enabled) {
       textColor = textColor.withValues(alpha: 0.3);
@@ -122,20 +144,12 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     return GestureDetector(
       onTap: () => enabled ? handleItemSelection(context) : null,
       child: Builder(builder: (context) {
-        final accentColor = theme.activeColor;
-
-        final isSelectionAnimating = menuState.isSelectionAnimating &&
-            menuState.focusedEntry == this &&
-            menuState.selectionTicks % 2 == 0;
-
-        debugPrint(
-            'menuState.statusIconRequired: ${menuState.statusIconRequired}');
-
         final statusIconWidget = !menuState.statusIconRequired
             ? const SizedBox.shrink()
             : itemState != null
                 ? Padding(
-                    padding: const EdgeInsets.only(top: 3.0, right: 4.0),
+                    padding:
+                        const EdgeInsets.only(left: 3.0, top: 3.0, right: 4.0),
                     child: Icon(
                       icon,
                       size: 12,
@@ -153,29 +167,30 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           ),
         );
 
-        final textWidget = DefaultTextStyle(
-          softWrap: true,
-          maxLines: 1,
-          style: theme.typography.body.copyWith(
-            fontSize: 13,
-            color: textColor,
+        final textWidget = Padding(
+          padding: const EdgeInsets.only(left: 3.0, top: 1.0, bottom: 1.0),
+          child: DefaultTextStyle(
+            softWrap: true,
+            maxLines: 1,
+            style: theme.typography.body.copyWith(
+              fontSize: 13,
+              color: textColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+            child: AppKitIconTheme(
+                data: AppKitIconTheme.of(context).copyWith(color: textColor),
+                child: child),
           ),
-          overflow: TextOverflow.ellipsis,
-          child: AppKitIconTheme(
-              data: AppKitIconTheme.of(context).copyWith(color: textColor),
-              child: child),
         );
 
         return DecoratedBox(
           decoration: BoxDecoration(
-            color: selectedOrFocused && !isSelectionAnimating
-                ? accentColor.withValues(alpha: 0.7)
-                : Colors.transparent,
+            color: decorationColor,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Padding(
             padding: const EdgeInsets.only(
-                left: 3.0, top: 3.0, right: 3.0, bottom: 3.0),
+                left: 3.0, top: 3.5, right: 3.0, bottom: 3.5),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               textDirection: Directionality.of(context),

@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppKitContextMenuWidget extends StatelessWidget {
   final AppKitContextMenuState menuState;
@@ -47,6 +48,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
       duration: transitionDuration,
       builder: (context, value, child) {
         final theme = AppKitContextMenuTheme.of(context);
+        final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
 
         return AppKitOverlayFilterWidget(
           enableWallpaperTinting: menuState.enableWallpaperTinting,
@@ -60,8 +62,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: AppKitColors.materials.ultraThin.color
-                      .withValues(alpha: 0.35),
+                  color: AppKitColors.materials.ultraThin.color,
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(theme.borderRadius),

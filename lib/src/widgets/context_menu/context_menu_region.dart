@@ -1,43 +1,46 @@
-import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu.dart';
-import 'package:appkit_ui_elements/src/widgets/context_menu/helpers.dart';
-import 'package:flutter/material.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 
-class AppKitContextMenuRegion extends StatelessWidget {
-  final AppKitContextMenu contextMenu;
+class AppKitContextMenuRegion<T> extends StatelessWidget {
+  final ContextMenuBuilder<T>? menuBuilder;
   final Widget child;
-  final ValueChanged<dynamic>? onItemSelected;
+  final ValueChanged<T?>? onItemSelected;
 
   const AppKitContextMenuRegion({
     super.key,
-    required this.contextMenu,
+    required this.menuBuilder,
     required this.child,
     this.onItemSelected,
   });
 
   @override
   Widget build(BuildContext context) {
-    Offset mousePosition = Offset.zero;
+    if (menuBuilder == null) {
+      return child;
+    }
 
-    return Listener(
-      onPointerDown: (event) {
-        mousePosition = event.position;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onSecondaryTapDown: (details) {
+        _showMenu(context, details.globalPosition);
       },
-      child: GestureDetector(
-        onLongPress: () => _showMenu(context, mousePosition),
-        onSecondaryTap: () => _showMenu(context, mousePosition),
-        child: child,
-      ),
+      onLongPressStart: (details) {
+        _showMenu(context, details.globalPosition);
+      },
+      child: child,
     );
   }
 
   void _showMenu(BuildContext context, Offset mousePosition) async {
-    final menu =
-        contextMenu.copyWith(position: contextMenu.position ?? mousePosition);
-    final value = await showContextMenu(
+    var menu = menuBuilder!.call(context);
+    menu = menu.copyWith(position: menu.position ?? mousePosition);
+    final value = await showContextMenu<T>(
       context,
       contextMenu: menu,
       enableWallpaperTinting: true,
     );
-    onItemSelected?.call(value);
+
+    if (value != null) {
+      onItemSelected?.call(value.value);
+    }
   }
 }
