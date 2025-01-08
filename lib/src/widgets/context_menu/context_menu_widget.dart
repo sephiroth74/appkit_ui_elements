@@ -60,33 +60,37 @@ class AppKitContextMenuWidget extends StatelessWidget {
           child: Opacity(
             opacity: value,
             child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isDark ? Colors.white54 : Colors.white,
-                  width: 0.5,
-                ),
-                borderRadius: BorderRadius.circular(theme.borderRadius),
-              ),
-              padding: const EdgeInsets.all(4),
               constraints: BoxConstraints(
                   maxWidth: state.maxWidth,
                   minWidth: state.minWidth,
                   maxHeight: state.size?.height.abs() ?? double.infinity),
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: SingleChildScrollView(
-                  clipBehavior: Clip.antiAlias,
-                  primary: true,
-                  child: IntrinsicWidth(
-                    child: Column(
-                      children: [
-                        for (final item in state.entries)
-                          AppKitMenuEntryWidget(
-                              enabled: menuState.isVerified,
-                              entry: item,
-                              focused: menuState.focusedEntry == item),
-                      ],
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: isDark ? Colors.white54 : Colors.white,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(theme.borderRadius),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context)
+                        .copyWith(scrollbars: false),
+                    child: SingleChildScrollView(
+                      clipBehavior: Clip.antiAlias,
+                      primary: true,
+                      child: IntrinsicWidth(
+                        child: Column(
+                          children: [
+                            for (final item in state.entries)
+                              AppKitMenuEntryWidget(
+                                  enabled: menuState.isVerified,
+                                  entry: item,
+                                  focused: menuState.focusedEntry == item),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

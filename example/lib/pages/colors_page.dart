@@ -296,7 +296,10 @@ class _ColorsPageState extends State<ColorsPage> {
                                 colorName: 'Selected Menu Item Text',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.selectedTextBackgroundColor,
+                                color: CupertinoDynamicColor.withBrightness(
+                                    color: theme.selectedTextBackgroundColor,
+                                    darkColor:
+                                        theme.selectedTextBackgroundColor),
                                 colorName: 'Selected Text Background',
                                 isDark: isDark),
                             ColorBox(

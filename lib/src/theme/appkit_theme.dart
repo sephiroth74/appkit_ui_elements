@@ -102,6 +102,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color controlColor;
   final Color dividerColor;
   final Color keyboardFocusIndicatorColor;
+  final Color selectedTextBackgroundColor;
   final VisualDensity visualDensity;
 
   /// The color to use for the background of selected and emphasized content.
@@ -142,6 +143,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     AppKitTypography? typography,
     Color? dividerColor,
     Color? keyboardFocusIndicatorColor,
+    Color? selectedTextBackgroundColor,
     Color? selectedContentBackgroundColor,
     Color? selectedContentBackgroundColorUnfocused,
   }) {
@@ -163,6 +165,10 @@ class AppKitThemeData extends Equatable with Diagnosticable {
 
     keyboardFocusIndicatorColor ??=
         _ColorProvider.getKeyboardFocusIndicatorColor(
+            isDark: isDark, accentColor: accentColor);
+
+    selectedTextBackgroundColor ??=
+        _ColorProvider.getSelectedTextBackgroundColor(
             isDark: isDark, accentColor: accentColor);
 
     selectedContentBackgroundColor ??=
@@ -439,6 +445,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
       keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
+      selectedTextBackgroundColor: selectedTextBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme,
       progressTheme: progressTheme,
@@ -475,6 +482,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       iconTheme: iconTheme,
       isMainWindow: isMainWindow,
       keyboardFocusIndicatorColor: keyboardFocusIndicatorColor,
+      selectedTextBackgroundColor: selectedTextBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme,
       progressTheme: progressTheme,
@@ -549,6 +557,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     required this.iconButtonTheme,
     required this.dateTimePickerTheme,
     required this.keyboardFocusIndicatorColor,
+    required this.selectedTextBackgroundColor,
     required this.selectedContentBackgroundColor,
     required this.selectedContentBackgroundColorUnfocused,
   });
@@ -585,6 +594,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         buttonTheme,
         dateTimePickerTheme,
         keyboardFocusIndicatorColor,
+        selectedTextBackgroundColor,
         selectedContentBackgroundColor,
         selectedContentBackgroundColorUnfocused,
       ];
@@ -620,6 +630,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
     Color? controlColor,
     Color? dividerColor,
     Color? keyboardFocusIndicatorColor,
+    Color? selectedTextBackgroundColor,
     Color? selectedContentBackgroundColor,
     Color? selectedContentBackgroundColorUnfocused,
     VisualDensity? visualDensity,
@@ -647,6 +658,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       isMainWindow: isMainWindow ?? this.isMainWindow,
       keyboardFocusIndicatorColor:
           keyboardFocusIndicatorColor ?? this.keyboardFocusIndicatorColor,
+      selectedTextBackgroundColor:
+          selectedTextBackgroundColor ?? this.selectedTextBackgroundColor,
       levelIndicatorsTheme: levelIndicatorsTheme ?? this.levelIndicatorsTheme,
       popupButtonTheme: popupButtonTheme ?? this.popupButtonTheme,
       progressTheme: progressTheme ?? this.progressTheme,
@@ -689,6 +702,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
       iconTheme: other.iconTheme,
       isMainWindow: other.isMainWindow,
       keyboardFocusIndicatorColor: other.keyboardFocusIndicatorColor,
+      selectedTextBackgroundColor: other.selectedTextBackgroundColor,
       levelIndicatorsTheme: other.levelIndicatorsTheme,
       popupButtonTheme: other.popupButtonTheme,
       progressTheme: other.progressTheme,
@@ -753,6 +767,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
           a.iconButtonTheme, b.iconButtonTheme, t),
       keyboardFocusIndicatorColor: Color.lerp(
           a.keyboardFocusIndicatorColor, b.keyboardFocusIndicatorColor, t)!,
+      selectedTextBackgroundColor: Color.lerp(
+          a.selectedTextBackgroundColor, b.selectedTextBackgroundColor, t)!,
       selectedContentBackgroundColor: Color.lerp(
           a.selectedContentBackgroundColor,
           b.selectedContentBackgroundColor,
@@ -816,6 +832,8 @@ class AppKitThemeData extends Equatable with Diagnosticable {
         'iconButtonTheme', iconButtonTheme));
     properties.add(ColorProperty(
         'keyboardFocusIndicatorColor', keyboardFocusIndicatorColor));
+    properties.add(ColorProperty(
+        'selectedTextBackgroundColor', selectedTextBackgroundColor));
     properties.add(ColorProperty(
         'selectedContentBackgroundColor', selectedContentBackgroundColor));
     properties.add(ColorProperty('selectedContentBackgroundColorUnfocused',
@@ -922,6 +940,28 @@ class _ColorProvider {
         return isDark ? const Color(0x7F8DF56C) : const Color(0x7F4EAB30);
       case AppKitAccentColor.graphite:
         return isDark ? const Color(0x7FBFBFBF) : const Color(0xFF99999E);
+    }
+  }
+
+  static Color getSelectedTextBackgroundColor(
+      {required AppKitAccentColor accentColor, required bool isDark}) {
+    switch (accentColor) {
+      case AppKitAccentColor.blue:
+        return isDark ? const Color(0xFFB3D7FF) : const Color(0xFF3F638B);
+      case AppKitAccentColor.purple:
+        return isDark ? const Color(0xFFDFC5E0) : const Color(0xFF705771);
+      case AppKitAccentColor.pink:
+        return isDark ? const Color(0xFFFDCBE2) : const Color(0xFF89576E);
+      case AppKitAccentColor.red:
+        return isDark ? const Color(0xFFF6C4C5) : const Color(0xFF8B5759);
+      case AppKitAccentColor.orange:
+        return isDark ? const Color(0xFFFDDABB) : const Color(0xFF896647);
+      case AppKitAccentColor.yellow:
+        return isDark ? const Color(0xFFFFEEBE) : const Color(0xFF8B7A3F);
+      case AppKitAccentColor.green:
+        return isDark ? const Color(0xFFD0EAC8) : const Color(0xFF5C7654);
+      case AppKitAccentColor.graphite:
+        return isDark ? const Color(0xFFE0E0E0) : const Color(0x3FFFFFFF);
     }
   }
 }

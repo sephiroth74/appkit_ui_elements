@@ -515,8 +515,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
                   .multiplyOpacity(enabled ? 1.0 : 0.5))
           .merge(resolvedPlaceholderStyle);
 
-      final Color selectionColor = AppKitDynamicColor.resolve(
-          context, AppKitColors.selectedTextBackgroundColor);
+      final Color selectionColor = theme.selectedTextBackgroundColor;
 
       final Color cursorColor =
           widget.cursorColor ?? theme.activeColor.multiplyLuminance(1.1);

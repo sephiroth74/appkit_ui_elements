@@ -98,7 +98,6 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
       [FocusNode? focusNode]) {
     final theme = AppKitTheme.of(context);
     final contextMenuTheme = AppKitContextMenuTheme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final selectedOrFocused =
         menuState.focusedEntry == this || menuState.selectedItem == this;
     final isSelectionAnimating = menuState.isSelectionAnimating &&
