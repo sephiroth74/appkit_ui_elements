@@ -65,6 +65,20 @@ class AppKitButton extends StatefulWidget {
 }
 
 class _AppKitButtonState extends State<AppKitButton> {
+  bool _isHovered = false;
+
+  void _onMouseEnter() {
+    setState(() {
+      _isHovered = true;
+    });
+  }
+
+  void _onMouseExit() {
+    setState(() {
+      _isHovered = false;
+    });
+  }
+
   bool get enabled =>
       widget.onTap != null ||
       widget.onLongPress != null ||
@@ -78,6 +92,8 @@ class _AppKitButtonState extends State<AppKitButton> {
       button: true,
       enabled: enabled,
       child: MouseRegion(
+        onEnter: enabled ? (_) => _onMouseEnter() : null,
+        onExit: enabled ? (_) => _onMouseExit() : null,
         cursor: enabled
             ? widget.mouseCursor ?? SystemMouseCursors.basic
             : SystemMouseCursors.basic,
@@ -87,6 +103,7 @@ class _AppKitButtonState extends State<AppKitButton> {
           final buttonTheme = AppKitButtonTheme.of(context);
           if (widget.style == AppKitButtonStyle.inline) {
             return _InlineButton(
+              hovered: _isHovered,
               type: widget.type,
               theme: theme,
               buttonTheme: buttonTheme,
@@ -103,6 +120,7 @@ class _AppKitButtonState extends State<AppKitButton> {
             );
           } else if (widget.style == AppKitButtonStyle.flat) {
             return _FlatButton(
+              hovered: _isHovered,
               type: widget.type,
               theme: theme,
               buttonTheme: buttonTheme,
@@ -119,6 +137,7 @@ class _AppKitButtonState extends State<AppKitButton> {
             );
           } else if (widget.style == AppKitButtonStyle.push) {
             return _PushButton(
+              hovered: _isHovered,
               type: widget.type,
               theme: theme,
               buttonTheme: buttonTheme,
@@ -161,6 +180,7 @@ class _PushButton extends _ButtonBase {
     super.accentColor,
     super.textStyle,
     super.width,
+    super.hovered,
   });
 
   @override
@@ -354,6 +374,7 @@ class _FlatButton extends _ButtonBase {
     super.accentColor,
     super.textStyle,
     super.width,
+    super.hovered,
   });
 
   @override
@@ -463,6 +484,7 @@ class _InlineButton extends _ButtonBase {
     super.accentColor,
     super.textStyle,
     super.width,
+    super.hovered,
   });
 
   @override
@@ -475,12 +497,20 @@ class _InlineButton extends _ButtonBase {
 class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
   late Color backgroundColor;
   late Color backgroundColorPressed;
+  late Color backgroundColorHovered;
+
+  bool get isDown => controller.isAnimating || controller.value > 0.0;
+
+  bool get isHovered => widget.hovered;
 
   @override
   Widget buildButton(BuildContext context, BoxConstraints constraints) {
     Color textColor;
-    final controlBackgroundColor = Color.lerp(
-        backgroundColor, backgroundColorPressed, colorAnimation.value);
+    final bool isDown = controller.isAnimating || controller.value > 0.0;
+    final controlBackgroundColor = isDown || !isHovered
+        ? Color.lerp(isHovered ? backgroundColorHovered : backgroundColor,
+            backgroundColorPressed, colorAnimation.value)
+        : backgroundColorHovered;
 
     if (widget.type == AppKitButtonType.destructive) {
       textColor =
@@ -548,8 +578,10 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
 
     if (blendedColorLuminance > 0.15) {
       backgroundColorPressed = Color.lerp(backgroundColor, Colors.black, 0.15)!;
+      backgroundColorHovered = Color.lerp(backgroundColor, Colors.black, 0.08)!;
     } else {
       backgroundColorPressed = Color.lerp(backgroundColor, Colors.white, 0.15)!;
+      backgroundColorHovered = Color.lerp(backgroundColor, Colors.white, 0.08)!;
     }
   }
 }
@@ -571,6 +603,7 @@ abstract class _ButtonBase extends StatefulWidget {
   final AppKitButtonType type;
   final TextStyle? textStyle;
   final double? width;
+  final bool hovered;
 
   abstract final AppKitButtonStyle style;
 
@@ -588,6 +621,7 @@ abstract class _ButtonBase extends StatefulWidget {
     this.padding,
     this.textStyle,
     this.width,
+    this.hovered = false,
   });
 
   bool get enabled =>

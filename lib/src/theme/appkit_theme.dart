@@ -232,7 +232,7 @@ class AppKitThemeData extends Equatable with Diagnosticable {
             ? controlColor.multiplyOpacity(0.5)
             : controlColor.multiplyOpacity(0.5),
       ),
-      push: AppKitPushButtonThemeData2(
+      push: AppKitPushButtonThemeData(
         secondaryColor: controlColor,
         destructiveColor: isDark
             ? AppKitColors.systemRed.darkColor

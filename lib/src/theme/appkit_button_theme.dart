@@ -27,7 +27,7 @@ class AppKitButtonTheme extends InheritedTheme {
 class AppKitButtonThemeData with Diagnosticable {
   final AppKitInlineButtonThemeData inline;
   final AppKitFlatButtonThemeData flat;
-  final AppKitPushButtonThemeData2 push;
+  final AppKitPushButtonThemeData push;
 
   AppKitButtonThemeData({
     required this.inline,
@@ -38,7 +38,7 @@ class AppKitButtonThemeData with Diagnosticable {
   AppKitButtonThemeData copyWith({
     AppKitInlineButtonThemeData? inline,
     AppKitFlatButtonThemeData? flat,
-    AppKitPushButtonThemeData2? push,
+    AppKitPushButtonThemeData? push,
   }) {
     return AppKitButtonThemeData(
       inline: inline ?? this.inline,
@@ -66,7 +66,7 @@ class AppKitButtonThemeData with Diagnosticable {
     properties
         .add(DiagnosticsProperty<AppKitFlatButtonThemeData>('flat', flat));
     properties
-        .add(DiagnosticsProperty<AppKitPushButtonThemeData2>('push', push));
+        .add(DiagnosticsProperty<AppKitPushButtonThemeData>('push', push));
   }
 
   static AppKitButtonThemeData lerp(
@@ -74,7 +74,7 @@ class AppKitButtonThemeData with Diagnosticable {
     return AppKitButtonThemeData(
       inline: AppKitInlineButtonThemeData.lerp(a?.inline, b?.inline, t),
       flat: AppKitFlatButtonThemeData.lerp(a?.flat, b?.flat, t),
-      push: AppKitPushButtonThemeData2.lerp(a?.push, b?.push, t),
+      push: AppKitPushButtonThemeData.lerp(a?.push, b?.push, t),
     );
   }
 }
@@ -121,6 +121,22 @@ class AppKitInlineButtonThemeData extends AppKitButtonThemeBaseData {
       destructiveColor: Color.lerp(a?.destructiveColor, b?.destructiveColor, t),
     );
   }
+
+  AppKitInlineButtonThemeData copyWith({
+    Color? accentColor,
+    Color? secondaryColor,
+    Color? destructiveColor,
+    Color? backgroundColorDisabled,
+    Color? backgroundColorHovered,
+  }) {
+    return AppKitInlineButtonThemeData(
+      accentColor: accentColor ?? this.accentColor,
+      secondaryColor: secondaryColor ?? this.secondaryColor,
+      destructiveColor: destructiveColor ?? this.destructiveColor,
+      backgroundColorDisabled:
+          backgroundColorDisabled ?? this.backgroundColorDisabled,
+    );
+  }
 }
 
 class AppKitFlatButtonThemeData extends AppKitButtonThemeBaseData {
@@ -141,23 +157,38 @@ class AppKitFlatButtonThemeData extends AppKitButtonThemeBaseData {
       destructiveColor: Color.lerp(a?.destructiveColor, b?.destructiveColor, t),
     );
   }
+
+  AppKitFlatButtonThemeData copyWith({
+    Color? accentColor,
+    Color? secondaryColor,
+    Color? destructiveColor,
+    Color? backgroundColorDisabled,
+  }) {
+    return AppKitFlatButtonThemeData(
+      accentColor: accentColor ?? this.accentColor,
+      secondaryColor: secondaryColor ?? this.secondaryColor,
+      destructiveColor: destructiveColor ?? this.destructiveColor,
+      backgroundColorDisabled:
+          backgroundColorDisabled ?? this.backgroundColorDisabled,
+    );
+  }
 }
 
-class AppKitPushButtonThemeData2 extends AppKitButtonThemeBaseData {
-  AppKitPushButtonThemeData2({
+class AppKitPushButtonThemeData extends AppKitButtonThemeBaseData {
+  AppKitPushButtonThemeData({
     required super.backgroundColorDisabled,
     super.accentColor,
     super.secondaryColor,
     super.destructiveColor,
   });
 
-  AppKitPushButtonThemeData2 copyWith({
+  AppKitPushButtonThemeData copyWith({
     Color? accentColor,
     Color? secondaryColor,
     Color? destructiveColor,
     Color? backgroundColorDisabled,
   }) {
-    return AppKitPushButtonThemeData2(
+    return AppKitPushButtonThemeData(
       accentColor: accentColor ?? this.accentColor,
       secondaryColor: secondaryColor ?? this.secondaryColor,
       destructiveColor: destructiveColor ?? this.destructiveColor,
@@ -166,9 +197,9 @@ class AppKitPushButtonThemeData2 extends AppKitButtonThemeBaseData {
     );
   }
 
-  static AppKitPushButtonThemeData2 lerp(
-      AppKitPushButtonThemeData2? a, AppKitPushButtonThemeData2? b, double t) {
-    return AppKitPushButtonThemeData2(
+  static AppKitPushButtonThemeData lerp(
+      AppKitPushButtonThemeData? a, AppKitPushButtonThemeData? b, double t) {
+    return AppKitPushButtonThemeData(
       accentColor: Color.lerp(a?.accentColor, b?.accentColor, t),
       backgroundColorDisabled: Color.lerp(
           a?.backgroundColorDisabled, b?.backgroundColorDisabled, t)!,
