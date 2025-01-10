@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:flutter/semantics.dart';
 
 const _kFocusRingSize = 15.0;
 const _kFocusRingSizeEnd = 3.0;
 const _kFocusAnimationDuration = 150;
-
-final _logger = newLogger('AppKitFocusContainer');
 
 class AppKitFocusContainer extends StatefulWidget {
   final FocusNode? focusNode;

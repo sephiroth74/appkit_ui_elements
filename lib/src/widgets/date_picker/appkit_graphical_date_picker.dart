@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:appkit_ui_elements/src/utils/appkit_logger.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide DateTimeRange;
 import 'package:flutter/services.dart';
@@ -50,9 +49,6 @@ class GraphicalDatePicker extends StatefulWidget {
 }
 
 class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
-  // ignore: unused_field
-  late final _logger = newLogger('GraphicalDatePicker');
-
   FocusNode? _focusNode;
 
   FocusNode get _effectiveFocusNode => _focusNode ??= FocusNode(

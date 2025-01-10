@@ -472,7 +472,6 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
         onTapCancel: enabled ? () => _handleTapCancel() : null,
         onTap: enabled
             ? () {
-                debugPrint('handleTap($_state)');
                 if (_state == _ColorWellExpandedWidgetType.popover) {
                   _handleTapPopover();
                 } else if (_state == _ColorWellExpandedWidgetType.picker) {

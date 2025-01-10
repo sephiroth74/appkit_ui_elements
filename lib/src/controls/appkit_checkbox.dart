@@ -9,7 +9,6 @@ import 'package:gradient_borders/gradient_borders.dart';
 
 const _kSize = 14.0;
 const _kCornerRadiusRatio = 4.0;
-const _kBorderWidthRatio = 28;
 const _kBoxShadowSpreadRatio = 28;
 const _kBoxShadowOffsetRatio = 10;
 

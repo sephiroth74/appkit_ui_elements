@@ -95,16 +95,6 @@ class _AppKitArcSliderState extends State<AppKitArcSlider> {
     final localPosition = details.localPosition + centerOffset;
     final delta = details.delta;
 
-    // // find angle of the pan relative to the center of the wheel
-    // final center = this.center;
-    // final angle = atan2(localPosition.dy - center.dy, localPosition.dx - center.dx);
-    // // find the new value based on the angle
-    // final newAngle = angle + pi / 2;
-    // final newValue = (newAngle / (2 * pi)) % 1;
-    // logger.d('newAngle: $newAngle, newValue: $newValue');
-    // _setValue(newValue.clamp(widget.min, widget.max));
-    // return;
-
     /// Pan location on the wheel
     bool onTop = localPosition.dy <= radius;
     bool onLeftSide = localPosition.dx <= radius;

@@ -1,6 +1,6 @@
 name: appkit_ui_elements
-description: "App Kit Ui Elements."
-version: 0.0.7
+description: "App Kit Ui Elements. Flutter widgets and themes implementing the current macOS design language. It was inspired by the great <a href='https://pub.dev/packages/macos_ui'>macos_ui</a> package."
+version: 0.0.8
 homepage: https://github.com/sephiroth74/appkit_ui_elements
 repository: https://github.com/sephiroth74/appkit_ui_elements
 
@@ -15,7 +15,6 @@ dependencies:
   flutter:
     sdk: flutter
   gradient_borders: ^1.0.1
-  logger: ^2.4.0
   macos_window_utils: ^1.6.0
   rxdart: ^0.28.0
   system_theme: ^3.1.2

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 100);
-const _longPressTick = Duration(milliseconds: 150);
 
 class AppKitButton extends StatefulWidget {
   final AppKitButtonStyle style;

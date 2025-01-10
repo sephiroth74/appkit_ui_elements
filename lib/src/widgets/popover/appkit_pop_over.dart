@@ -89,11 +89,6 @@ class AppKitPopoverState extends ChangeNotifier {
         Rect childRect = context.getWidgetBounds()!;
         final screenSize = MediaQuery.of(context).size;
         final safeScreenRect = (Offset.zero & screenSize).deflate(8.0);
-
-        debugPrint('safeScreenRect: $safeScreenRect');
-        debugPrint('childRect: $childRect');
-        debugPrint('itemRect: $itemRect');
-
         Offset finalPosition = Offset.zero;
 
         if (itemRect != null) {
