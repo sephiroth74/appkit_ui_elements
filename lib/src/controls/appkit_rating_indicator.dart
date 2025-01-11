@@ -2,7 +2,6 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
 
 const _kSize = 13.0;
-const _kItemsPadding = -1.0;
 
 class AppKitRatingIndicator extends StatefulWidget {
   final int min;

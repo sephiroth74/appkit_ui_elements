@@ -32,6 +32,7 @@ class AppKitCustomPainterButton extends StatefulWidget {
 
 class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
   bool _buttonHeldDown = false;
+  // ignore: unused_field
   bool _isHovered = false;
 
   void _handleTapDown(TapDownDetails event) {
