@@ -278,6 +278,10 @@ extension TextEditingControllerX on TextEditingController {
   void selectAll() {
     selection = TextSelection(baseOffset: 0, extentOffset: text.length);
   }
+
+  void clearSelection() {
+    selection = TextSelection.collapsed(offset: text.length);
+  }
 }
 
 extension TextStyleX on TextStyle {
