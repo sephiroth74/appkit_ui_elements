@@ -5,6 +5,19 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
+/// A view that displays a list of values in a pop-up menu where the user selects a value or types in a custom value.
+/// {@tool snippet}
+/// ```dart
+/// AppKitComboBox(
+///   items: ['Item 1', 'Item 2', 'Item 3'],
+///   placeholder: 'Select an item',
+///   onChanged: (value) {
+///     print('Selected value: $value');
+///   },
+/// )
+/// ```
+/// {@end-tool}
+/// https://developer.apple.com/documentation/appkit/nscombobox/
 class AppKitComboBox extends StatefulWidget {
   final AppKitControlSize controlSize;
   final List<String>? items;
