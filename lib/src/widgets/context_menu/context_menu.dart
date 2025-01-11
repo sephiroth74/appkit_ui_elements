@@ -6,6 +6,7 @@ class AppKitContextMenu<T> {
   double maxWidth;
   double minWidth;
   double? maxHeight;
+  bool scrollbars;
   List<AppKitContextMenuEntry<T>> entries;
 
   AppKitContextMenu({
@@ -15,6 +16,7 @@ class AppKitContextMenu<T> {
     this.minWidth = 50,
     this.maxHeight,
     this.size,
+    this.scrollbars = false,
   });
 
   AppKitContextMenuItem<T>? _firstWhereOrNull(
@@ -52,6 +54,7 @@ class AppKitContextMenu<T> {
     double? minWidth,
     double? maxHeight,
     Size? size,
+    bool? scrollbars,
   }) {
     return AppKitContextMenu<T>(
       position: position ?? this.position,
@@ -60,6 +63,7 @@ class AppKitContextMenu<T> {
       minWidth: minWidth ?? this.minWidth,
       maxHeight: maxHeight ?? this.maxHeight,
       size: size ?? this.size,
+      scrollbars: scrollbars ?? this.scrollbars,
     );
   }
 }

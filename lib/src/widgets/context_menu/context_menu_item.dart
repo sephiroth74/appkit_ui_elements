@@ -152,13 +152,10 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
                   )
                 : const SizedBox(width: 6.0);
 
-        final subMenuIconWidget = Padding(
-          padding: const EdgeInsets.only(right: 6.0),
-          child: Icon(
-            CupertinoIcons.right_chevron,
-            size: 12,
-            color: textColor,
-          ),
+        final subMenuIconWidget = Icon(
+          CupertinoIcons.right_chevron,
+          size: 12,
+          color: textColor,
         );
 
         final textWidget = DefaultTextStyle(
@@ -190,7 +187,6 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
                 statusIconWidget,
                 Flexible(child: textWidget),
                 if (hasSubmenu) ...[const Spacer(), subMenuIconWidget],
-                const SizedBox(width: 12),
               ],
             ),
           ),

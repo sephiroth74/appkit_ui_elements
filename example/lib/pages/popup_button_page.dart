@@ -20,11 +20,12 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
   double sliderValue1 = 0.5;
   double popupButtonWidth = 135.0;
 
-  String? popupSelectedItem;
+  String? popupSelectedItem = '1';
 
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
-          minWidth: 150,
+          scrollbars: true,
+          minWidth: 50,
           maxHeight: 200,
           entries: [
             for (var i = 0; i < 20; i++)

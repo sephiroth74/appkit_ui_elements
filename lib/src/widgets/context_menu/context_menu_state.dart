@@ -49,6 +49,10 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   int _selectionTicks = -1;
 
+  bool get scrollbars => menu.scrollbars;
+
+  final ScrollController scrollController = ScrollController();
+
   final HashMap<AppKitContextMenuEntry<T>, Rect> _itemLayouts = HashMap();
 
   AppKitContextMenuState({

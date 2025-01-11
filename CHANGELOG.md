@@ -1,3 +1,8 @@
+## 0.0.10
+
+ * Context menu, ability to show scrollbars
+ * Context menu, added up and down arrows
+
 ## 0.0.9
 
  * Some code cleanup
