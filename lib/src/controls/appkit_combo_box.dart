@@ -174,6 +174,7 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
 
   void _handleFocusChanged() {
     if (!_effectiveFocusNode.hasFocus && !_isMenuOpened) {
+      _controller.clearSelection();
       widget.onChanged?.call(_controller.text);
     }
   }
