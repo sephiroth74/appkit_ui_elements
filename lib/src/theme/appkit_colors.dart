@@ -85,45 +85,83 @@ class AppKitColors {
 
   static const black = Color(0xFF000000);
 
+  /// The primary color to use for text labels.
+  ///
+  /// Use this color in the most important text labels of your user interface.
+  /// You can also use it for other types of primary app content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/labelcolor
   static const CupertinoDynamicColor labelColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
     darkColor: Color(0xD8FFFFFF),
   );
 
+  /// The secondary color to use for text labels.
+  ///
+  /// Use this color in text fields that contain less important text in your user interface.
+  /// For example, you might use this in labels that display subheads or additional information.
+  /// You can also use it for other types of secondary app content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/secondarylabelcolor
   static const secondaryLabelColor = CupertinoDynamicColor.withBrightness(
     color: Color.fromRGBO(0, 0, 0, 0.5),
     darkColor: Color(0x8CFFFFFF),
   );
 
+  /// The tertiary color to use for text labels.
+  ///
+  /// Use this color for disabled text and for other less important text in your interface.
+  /// You can also use it for other types of tertiary app content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/tertiarylabelcolor
   static const tertiaryLabelColor = CupertinoDynamicColor.withBrightness(
     color: Color(0x42000000),
     darkColor: Color(0x3FFFFFFF),
   );
 
+  /// The quaternary color to use for text labels and separators.
+  ///
+  /// Use this color for the least important text in your interface and for separators between text items.
+  /// For example, you would use this color for secondary text that is disabled.
+  /// You can also use it for other types of quaternary app content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/quaternarylabelcolor
   static const quaternaryLabelColor = CupertinoDynamicColor.withBrightness(
     color: Color(0x19000000),
     darkColor: Color(0x19FFFFFF),
   );
 
+  /// The color to use for text.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/textcolor/
   static const CupertinoDynamicColor textColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFFFFFFF),
   );
 
+  /// The color to use for placeholder text in controls or text views.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/placeholdertextcolor
   static const CupertinoDynamicColor placeholderTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0x3F000000),
     darkColor: Color(0x3FFFFFFF),
   );
 
+  /// The color to use for selected text.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/selectedtextcolor
   static const CupertinoDynamicColor selectedTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFFFFFFF),
   );
 
+  /// The color to use for the background area behind text.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/textbackgroundcolor
   static const CupertinoDynamicColor textBackgroundColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF),
@@ -136,30 +174,45 @@ class AppKitColors {
     darkColor: Color.fromRGBO(255, 255, 255, 0.2),
   );
 
+  /// The color to use for selected text in an unemphasized context.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/unemphasizedselectedtextcolor/
   static const CupertinoDynamicColor unemphasizedSelectedTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFFFFFFFF),
   );
 
+  /// The color to use for the text background in an unemphasized context.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/unemphasizedselectedtextbackgroundcolor
   static const CupertinoDynamicColor unemphasizedSelectedTextBackgroundColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFDCDCDC),
     darkColor: Color(0xFF464646),
   );
 
+  /// The color to use for links.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/linkcolor
   static const CupertinoDynamicColor linkColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFF0068DA),
     darkColor: Color(0xFF419CFF),
   );
 
+  /// The color to use for separators between different sections of content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/separatorcolor
   static const CupertinoDynamicColor separatorColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0x19000000),
     darkColor: Color(0x19FFFFFF),
   );
 
+  /// The colors to use for alternating content, typically found in table views and collection views.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/alternatingcontentbackgroundcolors
   static const List<CupertinoDynamicColor> alternatingContentBackgroundColors =
       [
     CupertinoDynamicColor.withBrightness(
@@ -168,6 +221,9 @@ class AppKitColors {
         color: Color(0xFFF4F5F5), darkColor: Color(0x0CFFFFFF)),
   ];
 
+  /// The color to use for selected and unemphasized content.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/unemphasizedselectedcontentbackgroundcolor
   static const CupertinoDynamicColor
       unemphasizedSelectedContentBackgroundColor =
       CupertinoDynamicColor.withBrightness(
@@ -175,66 +231,90 @@ class AppKitColors {
     darkColor: Color(0xFF464646),
   );
 
+  /// The color to use for the text in menu items.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/selectedmenuitemtextcolor
   static const CupertinoDynamicColor selectedMenuItemTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF), // TBD
     darkColor: Color(0xFFFFFFFF),
   );
 
+  /// The color to use for the optional gridlines, such as those in a table view.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/gridcolor
   static const CupertinoDynamicColor gridColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFE6E6E6),
     darkColor: Color(0xFF1A1A1A),
   );
 
+  /// The color to use for text in header cells in table views and outline views.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/headertextcolor
   static const CupertinoDynamicColor headerTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
     darkColor: Color(0xFFFFFFFF),
   );
 
+  /// The color to use for the flat surfaces of a control.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/controlcolor
   static const CupertinoDynamicColor controlColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF),
     darkColor: Color(0x3FFFFFFF),
   );
 
+  /// The color to use for the background of large controls, such as scroll views or table views.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/controlbackgroundcolor
   static const CupertinoDynamicColor controlBackgroundColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF),
     darkColor: Color(0xFF1E1E1E),
   );
 
+  /// The color to use for text on enabled controls.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/controltextcolor
   static const CupertinoDynamicColor controlTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
     darkColor: Color(0xD8FFFFFF),
   );
 
+  /// The color to use for text on disabled controls.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/disabledcontroltextcolor
   static const CupertinoDynamicColor disabledControlTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0x3F000000),
     darkColor: Color(0x3FFFFFFF),
   );
 
-  static const CupertinoDynamicColor selectedControlColor =
-      CupertinoDynamicColor.withBrightness(
-    color: Color(0xFFDFC5E0),
-    darkColor: Color(0xFF705771),
-  );
-
+  /// The color to use for text in a selected control—that is, a control being clicked or dragged.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/selectedcontroltextcolor
   static const CupertinoDynamicColor selectedControlTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
     darkColor: Color(0xD8FFFFFF),
   );
 
+  /// The color to use for text in a selected control.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/alternateselectedcontroltextcolor
   static const CupertinoDynamicColor alternateSelectedControlTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF),
     darkColor: Color(0xFFFFFFFF),
   );
 
+  /// The color to use for the window background.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/windowbackgroundcolor
   static const CupertinoDynamicColor windowBackgroundColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFECECEC),
@@ -245,41 +325,54 @@ class AppKitColors {
       color: Color.fromRGBO(246, 246, 246, 1.0),
       darkColor: Color.fromRGBO(40, 40, 40, 1.0));
 
+  /// The color to use for text in a window’s frame.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/windowframetextcolor
   static const CupertinoDynamicColor windowFrameTextColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xD8000000),
     darkColor: Color(0xD8FFFFFF),
   );
 
+  /// The color to use in the area beneath your window’s views.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/underpagebackgroundcolor
   static const CupertinoDynamicColor underPageBackgroundColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xE5969696),
     darkColor: Color(0xFF282828),
   );
 
+  /// The highlight color to use for the bubble that shows inline search result values.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/findhighlightcolor
   static const CupertinoDynamicColor findHighlightColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFF00), // TBD
     darkColor: Color(0xFFFFFF00),
   );
 
+  /// The color to use as a virtual light source on the screen.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/highlightcolor
   static const CupertinoDynamicColor highlightColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF),
     darkColor: Color(0xFFB4B4B4),
   );
 
+  /// The color to use for virtual shadows cast by raised objects on the screen.
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/shadowcolor
   static const CupertinoDynamicColor shadowColor =
       CupertinoDynamicColor.withBrightness(
     color: Color(0xFF000000),
     darkColor: Color(0xFF000000),
   );
 
-  static const dividerColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0x1F000000),
-    darkColor: Color(0x1FFFFFFF),
-  );
-
+  /// The system color used for scroll “bars”—that is, for the groove in which a scroller’s knob moves
+  ///
+  /// https://developer.apple.com/documentation/appkit/nscolor/scrollbarcolor
   static CupertinoDynamicColor scrollbarColor =
       CupertinoDynamicColor.withBrightness(
     color: AppKitColors.systemGray.color.withValues(alpha: 0.8),
@@ -291,19 +384,6 @@ class AppKitColors {
     darkColor: Color.fromRGBO(255, 255, 255, 0.5),
   );
 
-  static const BoxShadow shadowPrimary = BoxShadow(
-      color: Color(0x66000000),
-      offset: Offset(0.0, 1.0),
-      blurRadius: 0.5,
-      spreadRadius: 0.0,
-      blurStyle: BlurStyle.outer);
-  static const BoxShadow shadowSecondary = BoxShadow(
-      color: Color(0x1a000000),
-      offset: Offset(0.0, 0.0),
-      blurRadius: 0.0,
-      spreadRadius: 0.5,
-      blurStyle: BlurStyle.outer);
-
   /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemRed =
       CupertinoDynamicColor.withBrightnessAndContrast(
@@ -313,6 +393,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(255, 79, 68, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemOrange =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFFFF9500),
@@ -321,6 +402,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(255, 169, 20, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemYellow =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFFFFCC00),
@@ -329,6 +411,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(255, 224, 20, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemGreen =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFF28CD41),
@@ -337,6 +420,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(60, 225, 85, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemMint =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(0, 199, 190, 1),
@@ -345,6 +429,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(108, 224, 219, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemTeal =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFF59ADC4),
@@ -353,6 +438,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(68, 212, 237, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemCyan =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color.fromRGBO(85, 190, 240, 1),
@@ -361,6 +447,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(90, 205, 250, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemBlue =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFF007AFF),
@@ -369,6 +456,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(20, 142, 255, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemIndigo =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFF5856D6),
@@ -377,6 +465,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(99, 97, 242, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemPurple =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFFAF52DE),
@@ -385,6 +474,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(204, 101, 255, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemPink =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFFFF2D55),
@@ -393,6 +483,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(255, 65, 105, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemBrown =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFFA2845E),
@@ -401,6 +492,7 @@ class AppKitColors {
     darkHighContrastColor: Color.fromRGBO(182, 152, 114, 1),
   );
 
+  /// https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
   static const CupertinoDynamicColor systemGray =
       CupertinoDynamicColor.withBrightnessAndContrast(
     color: Color(0xFF8E8E93),
@@ -421,10 +513,29 @@ class AppKitColors {
 }
 
 class AppKitMaterial {
+  /// A mostly opaque material.
+  ///
+  /// https://developer.apple.com/documentation/swiftui/material/ultrathick/
   final AppKitMaterialColor ultraThick;
+
+  /// A material that’s more opaque than translucent.
+  ///
+  /// https://developer.apple.com/documentation/swiftui/material/thick
   final AppKitMaterialColor thick;
+
+  /// A material that’s somewhat translucent.
+  ///
+  /// https://developer.apple.com/documentation/swiftui/material/regular
   final AppKitMaterialColor medium;
+
+  /// A material that’s more translucent than opaque.
+  ///
+  /// https://developer.apple.com/documentation/swiftui/material/thin
   final AppKitMaterialColor thin;
+
+  /// A mostly translucent material.
+  ///
+  /// https://developer.apple.com/documentation/swiftui/material/ultrathin
   final AppKitMaterialColor ultraThin;
 
   AppKitMaterial(

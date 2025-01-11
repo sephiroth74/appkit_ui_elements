@@ -14,7 +14,7 @@ class AppKitToolBarDivider extends AppKitToolbarItem {
   @override
   Widget build(BuildContext context, {required Brightness brightness}) {
     final dividerColor =
-        color ?? AppKitColors.dividerColor.resolveFromBrightness(brightness);
+        color ?? AppKitColors.separatorColor.resolveFromBrightness(brightness);
 
     return SizedBox(
         width: (padding?.horizontal ?? 0) + 1,

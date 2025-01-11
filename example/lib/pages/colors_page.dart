@@ -240,10 +240,6 @@ class _ColorsPageState extends State<ColorsPage> {
                                 colorName: 'Disabled Control Text',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.dividerColor,
-                                colorName: 'Divider',
-                                isDark: isDark),
-                            ColorBox(
                                 color: AppKitColors.findHighlightColor,
                                 colorName: 'Find Highlight',
                                 isDark: isDark),
@@ -284,7 +280,9 @@ class _ColorsPageState extends State<ColorsPage> {
                                 colorName: 'Secondary Label',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.selectedControlColor,
+                                color: CupertinoDynamicColor.withBrightness(
+                                    color: theme.selectedControlColor,
+                                    darkColor: theme.selectedControlColor),
                                 colorName: 'Selected Control',
                                 isDark: isDark),
                             ColorBox(

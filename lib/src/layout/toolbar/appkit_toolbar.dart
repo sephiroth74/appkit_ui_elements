@@ -121,8 +121,8 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
     final Brightness brightness = widget.brightness(context);
     Color dividerColor = widget.dividerColor ??
         (isDark
-            ? AppKitColors.dividerColor.darkColor
-            : AppKitColors.dividerColor.color);
+            ? AppKitColors.separatorColor.darkColor
+            : AppKitColors.separatorColor.color);
     final route = ModalRoute.of(context);
     double overflowBreakpoint = 0.0;
 
