@@ -58,6 +58,7 @@ class AppKitDialog extends StatelessWidget {
 
     return MainWindowBuilder(builder: (context, isMainWindow) {
       final theme = AppKitTheme.of(context);
+      final isHeightConstrained = constraints?.hasBoundedHeight ?? false;
       return Dialog(
         elevation: 20,
         shadowColor: AppKitColors.shadowColor,
@@ -90,98 +91,117 @@ class AppKitDialog extends StatelessWidget {
             return ConstrainedBox(
               constraints: constraints,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize:
+                    isHeightConstrained ? MainAxisSize.max : MainAxisSize.min,
                 children: [
                   if (icon != null) ...[
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxHeight: 64,
-                        maxWidth: 64,
-                      ),
-                      child: SizedBox(
-                        width: 64,
-                        height: 64,
-                        child: AppKitIconTheme(
-                            data: AppKitTheme.of(context)
-                                .iconTheme
-                                .copyWith(size: 64),
-                            child: icon!),
+                    Flexible(
+                      flex: 0,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 64,
+                          maxWidth: 64,
+                        ),
+                        child: SizedBox(
+                          width: 64,
+                          height: 64,
+                          child: AppKitIconTheme(
+                              data: AppKitTheme.of(context)
+                                  .iconTheme
+                                  .copyWith(size: 64),
+                              child: icon!),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
                   ],
-                  DefaultTextStyle(
-                    style: theme.typography.headline,
-                    textAlign: TextAlign.center,
-                    child: title,
+                  Flexible(
+                    flex: 0,
+                    child: DefaultTextStyle(
+                      style: theme.typography.headline,
+                      textAlign: TextAlign.center,
+                      child: title,
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  DefaultTextStyle(
-                    textAlign: TextAlign.center,
-                    style: theme.typography.subheadline,
-                    child: message.call(context),
+                  Expanded(
+                    flex: isHeightConstrained ? 1 : 0,
+                    child: DefaultTextStyle(
+                      textAlign: TextAlign.center,
+                      style: theme.typography.subheadline,
+                      child: message.call(context),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   if (horizontalActions) ...[
-                    Row(
-                      children: [
-                        if (tertiaryButton != null) ...[
-                          Expanded(flex: 4, child: tertiaryButton!),
-                          const SizedBox(width: 16.0),
-                          const Spacer(
-                            flex: 1,
-                          )
-                        ],
-                        if (secondaryButton != null) ...[
+                    Flexible(
+                      flex: 0,
+                      child: Row(
+                        children: [
+                          if (tertiaryButton != null) ...[
+                            Expanded(flex: 4, child: tertiaryButton!),
+                            const SizedBox(width: 16.0),
+                            const Spacer(
+                              flex: 1,
+                            )
+                          ],
+                          if (secondaryButton != null) ...[
+                            Expanded(
+                              flex: 4,
+                              child: secondaryButton!,
+                            ),
+                            const SizedBox(width: 8.0),
+                          ],
                           Expanded(
                             flex: 4,
-                            child: secondaryButton!,
+                            child: primaryButton,
                           ),
-                          const SizedBox(width: 8.0),
                         ],
-                        Expanded(
-                          flex: 4,
-                          child: primaryButton,
-                        ),
-                      ],
+                      ),
                     ),
                   ] else ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(child: primaryButton),
+                    Flexible(
+                      flex: 0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(child: primaryButton),
+                            ],
+                          ),
+                          if (secondaryButton != null) ...[
+                            const SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: secondaryButton!,
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
-                        if (secondaryButton != null) ...[
-                          const SizedBox(height: 8.0),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: secondaryButton!,
-                              ),
-                            ],
-                          ),
+                          if (tertiaryButton != null) ...[
+                            const SizedBox(height: 8.0),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: tertiaryButton!,
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
-                        if (tertiaryButton != null) ...[
-                          const SizedBox(height: 8.0),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: tertiaryButton!,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ],
+                      ),
                     ),
                   ],
                   if (suppress != null) ...[
                     const SizedBox(height: 16),
-                    DefaultTextStyle(
-                      style: theme.typography.headline,
-                      child: suppress!,
+                    Flexible(
+                      flex: 0,
+                      child: DefaultTextStyle(
+                        style: theme.typography.headline,
+                        child: suppress!,
+                      ),
                     ),
                   ],
                 ],

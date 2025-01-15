@@ -22,7 +22,7 @@ class AppKitComboBox extends StatefulWidget {
   final AppKitControlSize controlSize;
   final List<String>? items;
   final String? placeholder;
-  final String? title;
+  final String? value;
   final AppKitComboBoxStyle style;
   final Color? color;
   final TextAlign textAlign;
@@ -45,7 +45,7 @@ class AppKitComboBox extends StatefulWidget {
     this.controlSize = AppKitControlSize.regular,
     this.items,
     this.placeholder,
-    this.title,
+    this.value,
     this.style = AppKitComboBoxStyle.bordered,
     this.color,
     this.textAlign = TextAlign.start,
@@ -81,7 +81,8 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
 
   AppKitControlSize get controlSize => widget.controlSize;
 
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.value);
 
   FocusNode get _effectiveFocusNode =>
       widget.focusNode ??
@@ -170,6 +171,9 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controlSize != widget.controlSize) {
       _textFieldSize.value = null;
+    }
+    if (oldWidget.value != widget.value) {
+      _controller.text = widget.value ?? '';
     }
   }
 

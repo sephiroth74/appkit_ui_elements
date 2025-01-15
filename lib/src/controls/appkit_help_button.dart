@@ -84,8 +84,8 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
                 minHeight: widget.size,
                 maxWidth: widget.size,
                 maxHeight: widget.size),
-            child: MainWindowBuilder(
-              builder: (context, isMainWindow) {
+            child: Builder(
+              builder: (context) {
                 final theme = AppKitTheme.of(context);
                 final isDark = theme.brightness == Brightness.dark;
                 final color = widget.enabled

@@ -39,7 +39,6 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) {
-                                debugPrint('generate dialog widget');
                                 return AppKitDialog(
                                   constraints: const BoxConstraints(
                                       maxWidth: 400, maxHeight: 300),
