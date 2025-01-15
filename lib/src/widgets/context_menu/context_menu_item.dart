@@ -143,7 +143,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
             ? const SizedBox.shrink()
             : itemState != null
                 ? Padding(
-                    padding: const EdgeInsets.only(right: 4.0),
+                    padding: const EdgeInsets.only(right: 4.0, top: 2.5),
                     child: Icon(
                       icon,
                       size: 12,
@@ -152,10 +152,13 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
                   )
                 : const SizedBox(width: 6.0);
 
-        final subMenuIconWidget = Icon(
-          CupertinoIcons.right_chevron,
-          size: 12,
-          color: textColor,
+        final subMenuIconWidget = Padding(
+          padding: const EdgeInsets.only(top: 2.5),
+          child: Icon(
+            CupertinoIcons.right_chevron,
+            size: 12,
+            color: textColor,
+          ),
         );
 
         final textWidget = Padding(
@@ -181,7 +184,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           ),
           child: Padding(
             padding: const EdgeInsets.only(
-                left: 6.0, top: 3.5, right: 6.0, bottom: 3.5),
+                left: 6.0, top: 2.5, right: 6.0, bottom: 4.5),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               textDirection: Directionality.of(context),
