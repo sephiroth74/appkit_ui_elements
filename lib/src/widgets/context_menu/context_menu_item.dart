@@ -158,17 +158,20 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           color: textColor,
         );
 
-        final textWidget = DefaultTextStyle(
-          softWrap: true,
-          maxLines: 1,
-          style: theme.typography.body.copyWith(
-            fontSize: 13,
-            color: textColor,
+        final textWidget = Padding(
+          padding: const EdgeInsets.only(right: 6.0),
+          child: DefaultTextStyle(
+            softWrap: true,
+            maxLines: 1,
+            style: theme.typography.body.copyWith(
+              fontSize: 13,
+              color: textColor,
+            ),
+            overflow: TextOverflow.ellipsis,
+            child: AppKitIconTheme(
+                data: AppKitIconTheme.of(context).copyWith(color: textColor),
+                child: child),
           ),
-          overflow: TextOverflow.ellipsis,
-          child: AppKitIconTheme(
-              data: AppKitIconTheme.of(context).copyWith(color: textColor),
-              child: child),
         );
 
         return DecoratedBox(
@@ -178,7 +181,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
           ),
           child: Padding(
             padding: const EdgeInsets.only(
-                left: 6.0, top: 3.5, right: 3.0, bottom: 3.5),
+                left: 6.0, top: 3.5, right: 6.0, bottom: 3.5),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               textDirection: Directionality.of(context),

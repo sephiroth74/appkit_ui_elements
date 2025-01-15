@@ -55,7 +55,7 @@ extension RenderBoxExtensions on RenderBox? {
 /// Calculates the position of the context menu based on the position of the
 /// menu and the position of the parent menu. To prevent the menu from
 /// extending beyond the screen boundaries.
-({Offset pos, Size? size, AlignmentGeometry alignment})
+({Offset pos, Size? size, AlignmentGeometry alignment, bool scrollbarsRequired})
     calculateContextMenuBoundaries({
   required BuildContext context,
   required AppKitContextMenu menu,
@@ -68,7 +68,9 @@ extension RenderBoxExtensions on RenderBox? {
   final screenSize = MediaQuery.of(context).size;
   final safeScreenRect = (Offset.zero & screenSize).deflate(8.0);
   Rect menuRect = context.getWidgetBounds()!;
+  Rect originalMenuRect = menuRect;
   AlignmentGeometry nextSpawnAlignment = spawnAlignment;
+  bool scrollbarsRequired = false;
 
   if (maxHeight != null) {
     menuRect = menuRect.copyWith(
@@ -85,6 +87,7 @@ extension RenderBoxExtensions on RenderBox? {
 
   if (menuRect.height > screenSize.height) {
     menuRect = menuRect.copyWith(top: menuRect.top, bottom: screenSize.height);
+    scrollbarsRequired = true;
   }
 
   bool isWidthExceed() => x + menuRect.width > screenSize.width || x < 0;
@@ -174,7 +177,18 @@ extension RenderBoxExtensions on RenderBox? {
     menuSize = menuRect.size;
   }
 
-  return (pos: Offset(x, y), size: menuSize, alignment: nextSpawnAlignment);
+  if (!scrollbarsRequired) {
+    if (originalMenuRect.height > menuSize.height) {
+      scrollbarsRequired = true;
+    }
+  }
+
+  return (
+    pos: Offset(x, y),
+    size: menuSize,
+    alignment: nextSpawnAlignment,
+    scrollbarsRequired: scrollbarsRequired
+  );
 }
 
 bool hasSameFocusNodeId(String line1, String line2) {

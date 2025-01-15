@@ -2,6 +2,7 @@
 
  * Context menu, ability to show scrollbars
  * Context menu, added up and down arrows
+ * Fixed text field right padding when clear button is hidden
 
 ## 0.0.9
 

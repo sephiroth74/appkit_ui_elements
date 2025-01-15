@@ -49,7 +49,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   int _selectionTicks = -1;
 
-  bool get scrollbars => menu.scrollbars;
+  bool? scrollbarsRequired;
 
   final ScrollController scrollController = ScrollController();
 
@@ -65,6 +65,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
         _isSubmenu = false,
         _focusedEntry = menu.findItemByValue(focusedEntry),
         selfClose = null,
+        scrollbarsRequired = menu.scrollbars,
         _menuEdge = menuEdge;
 
   AppKitContextMenuState.submenu({
@@ -78,6 +79,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   })  : _spawnAlignment = spawnAlignmen ?? AlignmentDirectional.topEnd,
         _parentItemRect = parentItemRect,
         _isSubmenu = true,
+        scrollbarsRequired = menu.scrollbars,
         _menuEdge = menuEdge;
 
   List<AppKitContextMenuEntry<T>> get entries => menu.entries;
@@ -251,6 +253,13 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
       menu.position = boundaries.pos;
       menu.size = boundaries.size;
+
+      if (scrollbarsRequired == null) {
+        scrollbarsRequired = boundaries.scrollbarsRequired;
+      } else if (scrollbarsRequired == true) {
+        scrollbarsRequired = boundaries.scrollbarsRequired;
+      }
+
       _spawnAlignment = boundaries.alignment;
 
       notifyListeners();

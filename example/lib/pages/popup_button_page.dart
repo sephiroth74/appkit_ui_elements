@@ -24,9 +24,8 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
 
   ContextMenuBuilder<String> get popupMenuBuilder => (context) {
         return AppKitContextMenu<String>(
-          scrollbars: true,
           minWidth: 50,
-          maxHeight: 200,
+          maxHeight: 300,
           entries: [
             for (var i = 0; i < 20; i++)
               if (i % 5 == 0 && i > 0)

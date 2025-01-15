@@ -62,9 +62,6 @@ class AppKitSidebarItems extends StatelessWidget {
 
   final MouseCursor? cursor;
 
-  AppKitAccentColor _getAccentColor(BuildContext context) =>
-      AppKitTheme.of(context).accentColor;
-
   List<AppKitSidebarItem> get _allItems {
     List<AppKitSidebarItem> result = [];
     for (var element in items) {

@@ -381,10 +381,10 @@ class _AppKitTextFieldState extends State<AppKitTextField>
       valueListenable: _effectiveController,
       child: editableText,
       builder: (BuildContext context, TextEditingValue? text, Widget? child) {
+        final multiline = widget.maxLines == null || widget.maxLines! > 1;
         return Row(
-          crossAxisAlignment: widget.maxLines == null || widget.maxLines! > 1
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.center,
+          crossAxisAlignment:
+              multiline ? CrossAxisAlignment.start : CrossAxisAlignment.center,
           children: [
             // Insert a prefix at the front if the prefix visibility mode matches
             // the current text state.
@@ -432,45 +432,47 @@ class _AppKitTextFieldState extends State<AppKitTextField>
 
               final showClearButton = _showClearButton(text);
 
-              return FocusScope(
-                canRequestFocus: false,
-                child: TapRegion(
-                  behavior: HitTestBehavior.opaque,
-                  consumeOutsideTaps: false,
-                  enabled: enabled && showClearButton,
-                  onTapInside: (event) {
-                    _handleClearButtonTap();
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.basic,
-                    child: GestureDetector(
-                      key: _clearGlobalKey,
-                      child: Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: widget.padding.top + 0.5,
-                            bottom: widget.padding.bottom - 0.5,
-                            left: 6.0,
-                            right: 6.0,
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: showClearButton
-                                ? Icon(
-                                    CupertinoIcons.clear_thick_circled,
-                                    color: iconsColor,
-                                    size: clearButtonSize,
-                                  )
-                                : SizedBox(
-                                    height: clearButtonSize,
-                                    width: clearButtonSize),
+              return enabled && showClearButton
+                  ? FocusScope(
+                      canRequestFocus: false,
+                      child: TapRegion(
+                        behavior: HitTestBehavior.opaque,
+                        consumeOutsideTaps: false,
+                        enabled: enabled && showClearButton,
+                        onTapInside: (event) {
+                          _handleClearButtonTap();
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.basic,
+                          child: GestureDetector(
+                            key: _clearGlobalKey,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                // bottom: widget.padding.bottom - 0.5,
+                                top: multiline ? widget.padding.top - 0.5 : 0.0,
+                                left: 6.0,
+                                right: 6.0,
+                              ),
+                              child: SizedBox(
+                                height: clearButtonSize,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: showClearButton
+                                      ? Icon(
+                                          CupertinoIcons.clear_thick_circled,
+                                          color: iconsColor,
+                                        )
+                                      : SizedBox(
+                                          height: clearButtonSize,
+                                        ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              );
+                    )
+                  : SizedBox(height: clearButtonSize);
             }),
           ],
         );
