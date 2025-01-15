@@ -1,3 +1,8 @@
+## 0.0.11
+
+ * Fixed AppKitDialog constraints
+ * AppKitComboBox changed property *title* to *value* and correctly set the initial value of the component.
+
 ## 0.0.10
 
  * Context menu, ability to show scrollbars
