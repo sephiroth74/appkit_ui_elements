@@ -2,6 +2,7 @@
 
  * Fixed AppKitDialog constraints
  * AppKitComboBox changed property *title* to *value* and correctly set the initial value of the component.
+ * Adjusted context menu item paddings
 
 ## 0.0.10
 

@@ -112,6 +112,9 @@ class AppKitThemeData extends Equatable with Diagnosticable {
   final Color selectedContentBackgroundColor;
   final Color selectedContentBackgroundColorUnfocused;
 
+  /// Returns true if the theme is dark.
+  bool get isDark => brightness == Brightness.dark;
+
   factory AppKitThemeData({
     Brightness brightness = Brightness.light,
     VisualDensity? visualDensity,
