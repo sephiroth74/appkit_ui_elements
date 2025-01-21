@@ -7,20 +7,92 @@ import 'package:flutter/material.dart';
 const _kArcSweepAngle = 20.0;
 const _kSize = 48.0;
 
+/// A custom slider widget that displays a slider in an arc shape.
+///
+/// The [AppKitArcSlider] widget allows users to select a value from a range
+/// by dragging a thumb along an arc. The arc's appearance and behavior can be
+/// customized using various properties.
+///
+/// The [value] property must be between [min] and [max].
+///
+/// Example usage:
+/// ```dart
+/// AppKitArcSlider(
+///   value: 0.5,
+///   min: 0.0,
+///   max: 1.0,
+///   onChanged: (newValue) {
+///     print('New value: $newValue');
+///   },
+/// )
+/// ```
 class AppKitArcSlider extends StatefulWidget {
+  /// The size of the slider.
+  ///
+  /// Defaults to [_kSize].
   final double size;
+
+  /// The current value of the slider.
+  ///
+  /// Must be between [min] and [max].
   final double value;
+
+  /// The minimum value the slider can have.
+  ///
+  /// Defaults to 0.0.
   final double min;
+
+  /// The maximum value the slider can have.
+  ///
+  /// Defaults to 1.0.
   final double max;
+
+  /// Called when the user changes the slider's value.
+  ///
+  /// If null, the slider will be disabled.
   final ValueChanged<double>? onChanged;
+
+  /// The sweep angle of the arc in degrees.
+  ///
+  /// Defaults to [_kArcSweepAngle].
   final double sweepAngle;
+
+  /// The semantic label for the slider.
+  ///
+  /// Used by accessibility tools to describe the slider.
   final String? semanticLabel;
+
+  /// The radius of the thumb.
+  ///
+  /// If null, a default radius will be used.
   final double? thumbRadius;
+
+  /// The color of the track.
+  ///
+  /// If null, a default color will be used.
   final Color? trackColor;
+
+  /// The color of the progress indicator.
+  ///
+  /// If null, a default color will be used.
   final Color? progressColor;
+
+  /// The width of the track.
+  ///
+  /// If null, a default width will be used.
   final double? trackWidth;
+
+  /// The width of the progress indicator.
+  ///
+  /// If null, a default width will be used.
   final double? progressWidth;
 
+  /// Creates an [AppKitArcSlider] widget.
+  ///
+  /// The [value] parameter must be between [min] and [max].
+  /// The [size] parameter must be greater than 0.
+  /// The [sweepAngle] parameter must be between 0 and 180 degrees.
+  /// The [thumbRadius] parameter, if provided, must be greater than 0 and less than [size] / 3.
   const AppKitArcSlider({
     super.key,
     required this.value,
@@ -39,13 +111,13 @@ class AppKitArcSlider extends StatefulWidget {
         assert(min < max),
         assert(size > 0),
         assert(sweepAngle >= 0 && sweepAngle < 180),
-        assert(
-            thumbRadius == null || thumbRadius > 0 || thumbRadius < size / 3);
+        assert(thumbRadius == null || thumbRadius > 0 || thumbRadius < size / 3);
 
   @override
   State<AppKitArcSlider> createState() => _AppKitArcSliderState();
 }
 
+/// The state for an [AppKitArcSlider] widget.
 class _AppKitArcSliderState extends State<AppKitArcSlider> {
   double thumbRadius = 0;
 

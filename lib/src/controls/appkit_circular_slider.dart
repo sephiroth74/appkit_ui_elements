@@ -13,17 +13,73 @@ const _kAnimationDuration = 200;
 const _kThumbPaddingRatio = 4;
 const _kThumbSizeRatio = 3.666667;
 
+/// A custom circular slider widget with customizable properties.
+///
+/// The [AppKitCircularSlider] widget allows users to select a value from a range
+/// by dragging a thumb along a circular path. The appearance and behavior of the
+/// slider can be customized using various properties.
+///
+/// Example usage:
+/// ```dart
+/// AppKitCircularSlider(
+///   value: 0.5,
+///   min: 0.0,
+///   max: 1.0,
+///   onChanged: (newValue) {
+///     print('New value: $newValue');
+///   },
+/// )
+/// ```
 class AppKitCircularSlider extends StatefulWidget {
+  /// The minimum value the slider can have.
+  ///
+  /// Defaults to [_kMin].
   final double min;
+
+  /// The maximum value the slider can have.
+  ///
+  /// Defaults to [_kMax].
   final double max;
+
+  /// The current value of the slider.
+  ///
+  /// Must be between [min] and [max].
   final double value;
+
+  /// The semantic label for the slider.
+  ///
+  /// Used by accessibility tools to describe the slider.
   final String? semanticLabel;
+
+  /// The number of tick marks on the slider.
+  ///
+  /// If 0, no tick marks will be displayed.
   final int tickMarks;
+
+  /// Whether the slider is continuous.
+  ///
+  /// If true, the slider will allow continuous values. If false, the slider will
+  /// snap to the nearest tick mark.
   final bool continuous;
+
+  /// The size of the slider.
+  ///
+  /// Defaults to [_kSize].
   final double size;
+
+  /// The color of the slider.
+  ///
+  /// If null, a default color will be used.
   final Color? color;
+
+  /// Called when the user changes the slider's value.
+  ///
+  /// If null, the slider will be disabled.
   final ValueChanged<double>? onChanged;
 
+  /// Creates an [AppKitCircularSlider] widget.
+  ///
+  /// The [value] parameter must be between [min] and [max].
   const AppKitCircularSlider({
     super.key,
     this.min = _kMin,
@@ -35,14 +91,16 @@ class AppKitCircularSlider extends StatefulWidget {
     this.size = _kSize,
     this.color,
     this.onChanged,
-  })  : assert(min <= max),
-        assert(value >= min && value <= max),
-        assert(tickMarks > 0 ? tickMarks > 1 : true);
+  })  : assert(value >= min && value <= max),
+        assert(tickMarks > 0 ? tickMarks > 1 : true),
+        assert(min < max),
+        assert(size > 0);
 
   @override
   State<AppKitCircularSlider> createState() => _AppKitCircularSliderState();
 }
 
+/// The state for an [AppKitCircularSlider] widget.
 class _AppKitCircularSliderState extends State<AppKitCircularSlider>
     with SingleTickerProviderStateMixin {
   bool _handleDown = false;

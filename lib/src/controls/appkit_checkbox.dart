@@ -12,13 +12,51 @@ const _kCornerRadiusRatio = 4.0;
 const _kBoxShadowSpreadRatio = 28;
 const _kBoxShadowOffsetRatio = 10;
 
+/// A custom checkbox widget with customizable properties.
+///
+/// The [AppKitCheckbox] widget allows users to create checkboxes with different
+/// colors, sizes, and behaviors. It supports indeterminate state and can be
+/// customized with various properties.
+///
+/// Example usage:
+/// ```dart
+/// AppKitCheckbox(
+///   value: true,
+///   onChanged: (newValue) {
+///     print('Checkbox state: $newValue');
+///   },
+/// )
+/// ```
 class AppKitCheckbox extends StatefulWidget {
+  /// The current value of the checkbox.
+  ///
+  /// If true, the checkbox is checked. If false, the checkbox is unchecked.
+  /// If null, the checkbox is in an indeterminate state.
   final bool? value;
+
+  /// The color of the checkbox.
+  ///
+  /// If null, a default color will be used.
   final Color? color;
+
+  /// Called when the user changes the checkbox's value.
+  ///
+  /// If null, the checkbox will be disabled.
   final ValueChanged<bool>? onChanged;
+
+  /// The semantic label for the checkbox.
+  ///
+  /// Used by accessibility tools to describe the checkbox.
   final String? semanticLabel;
+
+  /// The size of the checkbox.
+  ///
+  /// Defaults to [_kSize].
   final double size;
 
+  /// Creates an [AppKitCheckbox] widget.
+  ///
+  /// The [value] parameter must not be null.
   const AppKitCheckbox({
     super.key,
     required this.value,
@@ -28,8 +66,14 @@ class AppKitCheckbox extends StatefulWidget {
     this.size = _kSize,
   });
 
+  /// Whether the checkbox is enabled.
+  ///
+  /// Returns true if [onChanged] is not null.
   bool get enabled => onChanged != null;
 
+  /// Whether the checkbox is in an indeterminate state.
+  ///
+  /// Returns true if [value] is null.
   bool get isIndeterminate => value == null;
 
   @override
@@ -51,6 +95,7 @@ class AppKitCheckbox extends StatefulWidget {
   }
 }
 
+/// The state for an [AppKitCheckbox] widget.
 class _AppKitCheckboxState extends State<AppKitCheckbox> {
   @visibleForTesting
   bool buttonHeldDown = false;

@@ -13,18 +13,65 @@ import 'package:indexed/indexed.dart';
 import 'package:uuid/uuid.dart';
 
 /// See: https://developer.apple.com/documentation/appkit/nscolorpanel/mode
+/// A custom color well widget with customizable properties.
+///
+/// The [AppKitColorWell] widget allows users to select a color from a color picker.
+/// The appearance and behavior of the color well can be customized using various properties.
+///
+/// Example usage:
+/// ```dart
+/// AppKitColorWell(
+///   onChanged: (newColor) {
+///     print('Selected color: $newColor');
+///   },
+/// )
+/// ```
 class AppKitColorWell extends StatefulWidget {
+  /// A unique identifier for the color well.
+  ///
+  /// Automatically generated if not provided.
   final String uuid;
+
+  /// Called when the user selects a new color.
+  ///
+  /// If null, the color well will be disabled.
   final ValueChanged<Color>? onChanged;
+
+  /// The mode of the color picker.
+  ///
+  /// Determines the appearance and behavior of the color picker.
+  /// Defaults to [AppKitColorPickerMode.wheel].
   final AppKitColorPickerMode mode;
+
+  /// Whether the color picker includes an alpha (transparency) slider.
+  ///
+  /// Defaults to false.
   final bool withAlpha;
+
+  /// The semantic label for the color well.
+  ///
+  /// Used by accessibility tools to describe the color well.
   final String? semanticLabel;
+
+  /// The initial color of the color well.
+  ///
+  /// If null, a default color will be used.
   final Color? color;
+
+  /// The style of the color well.
+  ///
+  /// Determines the visual appearance of the color well.
+  /// Defaults to [AppKitColorWellStyle.regular].
   final AppKitColorWellStyle style;
 
   /// The label for the button that opens the color picker (inside the colors popover).
+  ///
+  /// Defaults to 'Show Colors...'.
   final String popoverColorsButtonLabel;
 
+  /// Creates an [AppKitColorWell] widget.
+  ///
+  /// The [onChanged] parameter must not be null.
   AppKitColorWell({
     super.key,
     required this.onChanged,
@@ -40,6 +87,7 @@ class AppKitColorWell extends StatefulWidget {
   State<AppKitColorWell> createState() => _AppKitColorWellState();
 }
 
+/// The state for an [AppKitColorWell] widget.
 class _AppKitColorWellState extends State<AppKitColorWell> {
   StreamSubscription<Color?>? _colorSubscription;
 
