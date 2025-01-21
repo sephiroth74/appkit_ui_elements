@@ -127,7 +127,11 @@ class _AppKitPopOverPageRoute<T> extends PageRoute<T> {
         return MainWindowBuilder(builder: (context, isMainWindow) {
           if (!isMainWindow) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.removeRoute(context, this);
+              // remove the navigator overlay, if it's a AppKitPopOverPageRoute
+              final navigator = Navigator.of(context);
+              if(navigator.canPop()) {
+                Navigator.of(context).popUntil((route) => route is! _AppKitPopOverPageRoute);
+              }
             });
           }
           return pageBuilder(context, animation, secondaryAnimation);

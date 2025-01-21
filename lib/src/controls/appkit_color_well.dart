@@ -562,8 +562,8 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppKitColors.shadowColor.withValues(alpha: 0.2),
-                    offset: const Offset(0, 0.5),
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.15),
+                    offset: const Offset(0, 1),
                     blurRadius: 0.25,
                   ),
                 ]),
@@ -633,8 +633,6 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
                           _handleMouseExit(_ColorWellExpandedWidgetType.picker)
                       : null,
                   child: GestureDetector(
-                    // onTapUp: enabled ? (_) => _handleTapPicker() : null,
-                    // behavior: HitTestBehavior.opaque,
                     child: Container(
                       width: 20.0,
                       decoration: BoxDecoration(

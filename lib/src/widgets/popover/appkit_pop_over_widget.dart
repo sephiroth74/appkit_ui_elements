@@ -63,7 +63,6 @@ class AppKitPopoverWidget extends StatelessWidget {
                         cornerRadius: kCornerRadius,
                         anchorHeight: kAnchorHeight,
                         anchorWidth: kAnchorWidth,
-                        // color: AppKitDynamicColor.resolve(context, AppKitColors.windowBackgroundColor),
                         color: isDark
                             ? AppKitDynamicColor.resolve(
                                     context, AppKitColors.windowBackgroundColor)

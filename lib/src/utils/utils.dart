@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:appkit_ui_elements/appkit_ui_elements.dart' hide left, right;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -49,6 +49,23 @@ extension RenderBoxExtensions on RenderBox? {
     final widgetPosition = this!.localToGlobal(offset ?? Offset.zero);
     final widgetSize = size ?? this!.size;
     return widgetPosition & widgetSize;
+  }
+}
+
+extension RectExtension on Rect {
+  Rect round() {
+    return Rect.fromLTWH(
+      left.roundToDouble(),
+      top.roundToDouble(),
+      width.roundToDouble(),
+      height.roundToDouble(),
+    );
+  }
+}
+
+extension OffsetExtension on Offset {
+  Offset round() {
+    return Offset(dx.roundToDouble(), dy.roundToDouble());
   }
 }
 
