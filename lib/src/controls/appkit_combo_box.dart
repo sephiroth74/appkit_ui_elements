@@ -5,41 +5,126 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
-/// A view that displays a list of values in a pop-up menu where the user selects a value or types in a custom value.
-/// {@tool snippet}
+/// A custom combo box widget with customizable properties.
+///
+/// The [AppKitComboBox] widget allows users to select a value from a dropdown list
+/// or enter a custom value. The appearance and behavior of the combo box can be
+/// customized using various properties.
+///
+/// Example usage:
 /// ```dart
 /// AppKitComboBox(
-///   items: ['Item 1', 'Item 2', 'Item 3'],
-///   placeholder: 'Select an item',
-///   onChanged: (value) {
-///     print('Selected value: $value');
+///   value: 'Option 1',
+///   items: ['Option 1', 'Option 2', 'Option 3'],
+///   onChanged: (newValue) {
+///     print('Selected value: $newValue');
 ///   },
 /// )
 /// ```
-/// {@end-tool}
-/// https://developer.apple.com/documentation/appkit/nscombobox/
 class AppKitComboBox extends StatefulWidget {
+  /// The size of the control.
+  ///
+  /// Determines the overall dimensions of the combo box.
   final AppKitControlSize controlSize;
+
+  /// The list of items to display in the dropdown.
+  ///
+  /// Must not be null.
   final List<String>? items;
+
+  /// The placeholder text to display when no value is selected.
+  ///
+  /// If null, no placeholder will be displayed.
   final String? placeholder;
+
+  /// The current value of the combo box.
+  ///
+  /// Must be one of the items in the [items] list or a custom value.
   final String? value;
+
+  /// The style of the combo box.
+  ///
+  /// Determines the visual appearance of the combo box.
   final AppKitComboBoxStyle style;
+
+  /// The color of the combo box.
+  ///
+  /// If null, a default color will be used.
   final Color? color;
+
+  /// The alignment of the text inside the combo box.
+  ///
+  /// Defaults to [TextAlign.start].
   final TextAlign textAlign;
+
+  /// The semantic label for the combo box.
+  ///
+  /// Used by accessibility tools to describe the combo box.
   final String? semanticLabel;
+
+  /// The focus node for the combo box.
+  ///
+  /// If null, a new focus node will be created.
   final FocusNode? focusNode;
+
+  /// Whether the combo box can request focus.
+  ///
+  /// Defaults to true.
   final bool canRequestFocus;
+
+  /// Whether the combo box should automatically focus when first displayed.
+  ///
+  /// Defaults to false.
   final bool autofocus;
+
+  /// Whether the combo box should autocomplete user input.
+  ///
+  /// Defaults to true.
   final bool autocompletes;
+
+  /// Called when the user changes the combo box's value.
+  ///
+  /// If null, the combo box will be disabled.
   final ValueChanged<String>? onChanged;
+
+  /// The behavior of the text field inside the combo box.
+  ///
+  /// Determines how the text field behaves.
   final AppKitTextFieldBehavior behavior;
+
+  /// The maximum length of the input.
+  ///
+  /// If null, no maximum length is enforced.
   final int? maxLength;
+
+  /// The enforcement policy for the maximum length.
+  ///
+  /// If null, no enforcement policy is applied.
   final MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// The input formatters for the text field.
+  ///
+  /// If null, no input formatters are applied.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// The type of input for the text field.
+  ///
+  /// Defaults to [TextInputType.text].
   final TextInputType inputType;
+
+  /// Whether the combo box is enabled.
+  ///
+  /// Defaults to true.
   final bool enabled;
+
+  /// The maximum height of the dropdown menu.
+  ///
+  /// If null, the height will be determined by the number of items.
   final double? maxItemsMenuHeight;
 
+  /// Creates an [AppKitComboBox] widget.
+  ///
+  /// The [value] and [items] parameters must not be null.
   const AppKitComboBox({
     super.key,
     this.controlSize = AppKitControlSize.regular,

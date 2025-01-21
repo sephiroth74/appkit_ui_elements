@@ -111,7 +111,8 @@ class AppKitArcSlider extends StatefulWidget {
         assert(min < max),
         assert(size > 0),
         assert(sweepAngle >= 0 && sweepAngle < 180),
-        assert(thumbRadius == null || thumbRadius > 0 || thumbRadius < size / 3);
+        assert(
+            thumbRadius == null || thumbRadius > 0 || thumbRadius < size / 3);
 
   @override
   State<AppKitArcSlider> createState() => _AppKitArcSliderState();

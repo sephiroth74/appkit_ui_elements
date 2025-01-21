@@ -284,13 +284,11 @@ extension RectX on Rect {
 
 extension EdgeInsetsX on EdgeInsets {
   EdgeInsets invertHorizontally() {
-    return EdgeInsets.only(
-        left: this.right, right: this.left, top: top, bottom: bottom);
+    return EdgeInsets.only(left: right, right: left, top: top, bottom: bottom);
   }
 
   EdgeInsets invertVertically() {
-    return EdgeInsets.only(
-        left: this.left, right: this.right, top: bottom, bottom: top);
+    return EdgeInsets.only(left: left, right: right, top: bottom, bottom: top);
   }
 }
 
