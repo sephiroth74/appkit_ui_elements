@@ -484,14 +484,12 @@ class _ColorWellExpandedWidgetState extends State<_ColorWellExpandedWidget> {
   }
 
   void _handleMouseEnter(_ColorWellExpandedWidgetType type) {
-    debugPrint('handleMouseEnter($type)');
     setState(() {
       _state = type;
     });
   }
 
   void _handleMouseExit(_ColorWellExpandedWidgetType type) {
-    debugPrint('handleMouseExit($type)');
     if (_state == type) {
       setState(() {
         _state = null;
