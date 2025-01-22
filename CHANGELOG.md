@@ -1,3 +1,7 @@
+## 0.0.12
+
+ * Added some documentation
+
 ## 0.0.11
 
  * Fixed AppKitDialog constraints

@@ -9,22 +9,66 @@ const _kTickMarkWidth = 1.0;
 const _kTickMarkHeightMajor = 6.0;
 const _kTickMarkHeightMinor = 3.0;
 
+/// A custom widget that represents a level indicator in the AppKit UI.
+///
+/// This widget is a stateful widget that can be used to display different
+/// levels or progress in a visual format. It is part of the AppKit UI elements
+/// library.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitLevelIndicator()
+/// ```
+///
+/// The widget can be customized and updated dynamically based on the state.
 class AppKitLevelIndicator extends StatefulWidget {
+  /// Indicates whether the level indicator draws tiered capacity levels.
   final bool drawsTieredCapacityLevels;
+
+  /// Indicates whether the level indicator is continuous.
   final bool continuous;
+
+  /// The current value of the level indicator.
   final double value;
+
+  /// The minimum value of the level indicator.
   final int min;
+
+  /// The maximum value of the level indicator.
   final int max;
+
+  /// The value at which the level indicator shows a warning state.
   final double warningValue;
+
+  /// The value at which the level indicator shows a critical state.
   final double criticalValue;
+
+  /// The color used for the normal state of the level indicator.
   final Color? normalColor;
+
+  /// The color used for the warning state of the level indicator.
   final Color? warningColor;
+
+  /// The color used for the critical state of the level indicator.
   final Color? criticalColor;
+
+  /// The semantic label for the level indicator.
   final String? semanticLabel;
+
+  /// The number of major tick marks on the level indicator.
   final int majorTickMarks;
+
+  /// The number of minor tick marks on the level indicator.
   final int minorTickMarks;
+
+  /// The position of the tick marks on the level indicator.
   final AppKitLevelIndicatorTickMarkPosition tickMarkPosition;
+
+  /// The style of the level indicator.
   final AppKitLevelIndicatorStyle style;
+
+  /// Callback that is called when the value of the level indicator changes.
   final ValueChanged<double>? onChanged;
 
   const AppKitLevelIndicator({

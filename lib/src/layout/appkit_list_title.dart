@@ -1,5 +1,22 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 
+/// A stateless widget that represents a list tile in the AppKit UI elements library.
+///
+/// This widget is used to display a single item in a list with a title and optional
+/// leading and trailing widgets.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitListTile(
+///   leading: Icon(Icons.star),
+///   title: Text('List Tile Title'),
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [ListTile], which is a similar widget in the Flutter framework.
 class AppKitListTile extends StatelessWidget {
   const AppKitListTile({
     super.key,

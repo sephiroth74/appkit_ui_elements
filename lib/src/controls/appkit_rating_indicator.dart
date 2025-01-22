@@ -3,20 +3,88 @@ import 'package:flutter/material.dart';
 
 const _kSize = 13.0;
 
+/// A custom rating indicator widget with customizable properties.
+///
+/// The [AppKitRatingIndicator] widget allows users to display a rating indicator
+/// with customizable icons, colors, and behavior. The appearance and behavior of
+/// the rating indicator can be customized using various properties.
+///
+/// Example usage:
+/// ```dart
+/// AppKitRatingIndicator(
+///   min: 1,
+///   max: 5,
+///   value: 3,
+///   continuous: true,
+///   onChanged: (newValue) {
+///     print('Rating changed: $newValue');
+///   },
+/// )
+/// ```
 class AppKitRatingIndicator extends StatefulWidget {
+  /// The minimum rating value.
+  ///
+  /// Must be less than or equal to [max].
   final int min;
+
+  /// The maximum rating value.
+  ///
+  /// Must be greater than or equal to [min].
   final int max;
+
+  /// The current rating value.
+  ///
+  /// Must be between [min] and [max].
   final int value;
+
+  /// Whether the rating indicator is continuous.
+  ///
+  /// If true, the rating indicator allows fractional values.
   final bool continuous;
+
+  /// Whether the placeholder icon is always visible.
+  ///
+  /// Defaults to true.
   final bool placeholderAlwaysVisible;
+
+  /// The color of the rating icons.
+  ///
+  /// If null, a default color will be used.
   final Color? imageColor;
+
+  /// The icon to use for the rating indicator.
+  ///
+  /// If null, a default icon will be used.
   final IconData? icon;
+
+  /// The icon to use for the placeholder.
+  ///
+  /// If null, a default placeholder icon will be used.
   final IconData? placeholderIcon;
+
+  /// The semantic label for the rating indicator.
+  ///
+  /// Used by accessibility tools to describe the rating indicator.
   final String? semanticLabel;
+
+  /// Called when the user changes the rating value.
+  ///
+  /// If null, the rating indicator will be read-only.
   final ValueChanged<int>? onChanged;
+
+  /// The size of the rating icons.
+  ///
+  /// Defaults to [_kSize].
   final double? size;
+
+  /// The padding between the rating icons.
+  ///
+  /// If null, a default padding will be used.
   final double? iconsPadding;
 
+  /// Creates an [AppKitRatingIndicator] widget.
+  ///
+  /// The [min], [max], and [value] parameters must not be null.
   const AppKitRatingIndicator({
     super.key,
     required this.min,

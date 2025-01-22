@@ -7,11 +7,38 @@ import 'package:flutter/rendering.dart';
 const Duration _fadeInDuration = Duration(milliseconds: 150);
 const Duration _fadeOutDuration = Duration(milliseconds: 75);
 
+/// A custom tooltip widget for the AppKit UI elements library.
+///
+/// This widget displays a tooltip with custom styling and behavior.
+/// It extends the [StatefulWidget] to maintain its state.
+///
+/// Usage:
+/// ```dart
+/// AppKitTooltip.plain(
+///   message: 'This is a tooltip message',
+///   child: Icon(Icons.info),
+/// )
+/// ```
+///
+/// You can customize the tooltip by providing various parameters.
+///
+/// See also:
+///
+///  * [Tooltip], which is the standard Flutter tooltip widget.
 class AppKitTooltip extends StatefulWidget {
+  /// A text span that represents the message to be displayed in the tooltip.
   final TextSpan message;
+
+  /// Whether the message should be soft-wrapped if it exceeds the width of the tooltip.
   final bool softWrap;
+
+  /// The widget that will trigger the tooltip when interacted with.
   final Widget child;
+
+  /// Whether to use the mouse position to determine the tooltip's position.
   final bool useMousePosition;
+
+  /// The padding around the tooltip's content.
   final EdgeInsetsGeometry? padding;
 
   const AppKitTooltip({
@@ -23,6 +50,20 @@ class AppKitTooltip extends StatefulWidget {
     this.padding,
   });
 
+  /// Creates a plain AppKitTooltip.
+  ///
+  /// This factory constructor allows you to create a tooltip with default settings.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AppKitTooltip.plain(
+  ///   message: 'This is a tooltip',
+  ///   child: Text('Hover over me'),
+  /// );
+  /// ```
+  ///
+  /// - `message`: The text to display in the tooltip.
+  /// - `child`: The widget that will trigger the tooltip when hovered over.
   factory AppKitTooltip.plain({
     required String message,
     required Widget child,
@@ -39,6 +80,33 @@ class AppKitTooltip extends StatefulWidget {
     );
   }
 
+  /// Creates a rich tooltip with the given properties.
+  ///
+  /// The [rich] constructor allows you to create a tooltip with more complex
+  /// content, such as multiple lines of text, images, or other widgets.
+  ///
+  /// The [AppKitTooltip.rich] constructor takes the following parameters:
+  ///
+  /// - `key`: An optional key for the widget.
+  /// - `message`: The primary message to be displayed in the tooltip.
+  /// - `child`: The widget that will trigger the tooltip when hovered over or
+  ///   long-pressed.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AppKitTooltip.rich(
+  ///   message: TestSpan(
+  ///     text: 'This is a tooltip message',
+  ///     style: TextStyle(color: Colors.white),
+  ///     children: [
+  ///       TextSpan(text: ' with multiple lines of text.'),
+  ///       TextSpan(text: '\n\nThis is a new paragraph.'),
+  ///       WidgetSpan(child: Icon(Icons.info)),
+  ///    ],
+  ///   ),
+  ///   child: Icon(Icons.info),
+  /// );
+  /// ```
   factory AppKitTooltip.rich({
     required TextSpan message,
     required Widget child,

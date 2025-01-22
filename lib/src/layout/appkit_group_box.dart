@@ -2,6 +2,31 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+/// A widget that represents a group box in the AppKit UI framework.
+///
+/// This widget is used to group together other widgets and provide a visual
+/// boundary around them. It is typically used to organize related content
+/// in a visually distinct manner.
+///
+/// The [AppKitGroupBox] extends [StatelessWidget], meaning it does not
+/// maintain any state of its own.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitGroupBox(
+///   child: Column(
+///     children: [
+///       Text('Item 1'),
+///       Text('Item 2'),
+///     ],
+///   ),
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [Container], which can also be used to group widgets together.
 class AppKitGroupBox extends StatelessWidget {
   final Widget? child;
   final AlignmentGeometry? alignment;
@@ -11,9 +36,41 @@ class AppKitGroupBox extends StatelessWidget {
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry? margin;
   final Matrix4? transform;
+
+  /// The alignment of the transform origin relative to the size of the box.
+  ///
+  /// This property is used to define how the transformation should be aligned
+  /// within the box. If null, the default alignment is used.
   final AlignmentGeometry? transformAlignment;
+
+  /// Defines how the content should be clipped (or not clipped) when it
+  /// overflows the container.
+  ///
+  /// This property controls the clipping behavior of the widget. It can
+  /// be set to one of the values from the [Clip] enum, such as [Clip.none],
+  /// [Clip.hardEdge], [Clip.antiAlias], or [Clip.antiAliasWithSaveLayer].
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AppKitGroupBox(
+  ///   clipBehavior: Clip.hardEdge,
+  ///   // other properties
+  /// )
+  /// ```
+  ///
+  /// Defaults to [Clip.none] if not specified.
   final Clip clipBehavior;
+
+  /// Indicates whether the group box is enabled or not.
+  ///
+  /// When set to `true`, the group box is enabled and can interact with the user.
+  /// When set to `false`, the group box is disabled and cannot be interacted with.
   final bool enabled;
+
+  /// The style of the AppKitGroupBox.
+  ///
+  /// This determines the visual appearance of the group box, such as its
+  /// border, background, and other stylistic elements.
   final AppKitGroupBoxStyle style;
 
   const AppKitGroupBox({

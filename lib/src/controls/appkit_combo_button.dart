@@ -3,16 +3,79 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
+/// A custom combo button widget with customizable properties.
+///
+/// The [AppKitComboButton] widget allows users to create a button with an attached
+/// context menu. The appearance and behavior of the combo button can be customized
+/// using various properties.
+///
+/// Example usage:
+/// ```dart
+/// AppKitComboButton(
+///   child: Text('Press me'),
+///   onPressed: () {
+///     print('Button pressed');
+///   },
+///   menuBuilder: (context) => <AppKitContextMenuItem<String>>[
+///     AppKitContextMenuItem<String>(
+///       value: 'Option 1',
+///       child: Text('Option 1'),
+///     ),
+///     AppKitContextMenuItem<String>(
+///       value: 'Option 2',
+///       child: Text('Option 2'),
+///     ),
+///   ],
+///   onItemSelected: (item) {
+///     print('Selected item: ${item?.value}');
+///   },
+/// )
+/// ```
 class AppKitComboButton<T> extends StatefulWidget {
+  /// The padding inside the button.
+  ///
+  /// If null, a default padding will be used.
   final EdgeInsetsGeometry? padding;
+
+  /// Called when the button is pressed.
+  ///
+  /// If null, the button will be disabled.
   final VoidCallback? onPressed;
+
+  /// The semantic label for the button.
+  ///
+  /// Used by accessibility tools to describe the button.
   final String? semanticLabel;
+
+  /// The widget to display inside the button.
+  ///
+  /// Typically a [Text] or [Icon] widget.
   final Widget child;
+
+  /// The size of the control.
+  ///
+  /// Determines the overall dimensions of the combo button.
   final AppKitControlSize controlSize;
+
+  /// The builder for the context menu.
+  ///
+  /// If null, no context menu will be displayed.
   final ContextMenuBuilder<T>? menuBuilder;
+
+  /// Called when the user selects an item from the context menu.
+  ///
+  /// If null, the context menu will be disabled.
   final ValueChanged<AppKitContextMenuItem<T>?>? onItemSelected;
+
+  /// The style of the combo button.
+  ///
+  /// Determines the visual appearance of the combo button.
+  /// Defaults to [AppKitComboButtonStyle.split].
   final AppKitComboButtonStyle style;
 
+  /// Creates an [AppKitComboButton] widget.
+  ///
+  /// The [child] parameter must not be null.
   const AppKitComboButton({
     super.key,
     this.padding,

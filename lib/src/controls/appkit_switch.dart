@@ -50,11 +50,52 @@ extension _AppKitControlSizeX on AppKitControlSize {
   double get borderRadius => size.height / 2;
 }
 
+/// A custom switch widget that extends [StatefulWidget].
+///
+/// This widget represents a switch that can be toggled on or off.
+/// It maintains its own state and provides a callback for when the state changes.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitSwitch(
+///   checked: true,
+///   onChanged: (bool newValue) {
+///     // Handle the switch state change
+///   },
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [Switch], the material design switch widget.
 class AppKitSwitch extends StatefulWidget {
+  /// Indicates whether the switch is in the checked (on) state.
+  ///
+  /// If `true`, the switch is checked (on). If `false`, the switch is unchecked (off).
   final bool checked;
   final String? semanticLabel;
+
+  /// A callback function that is called when the switch is toggled.
+  ///
+  /// The function takes a single parameter of type `bool` which indicates
+  /// the new state of the switch. If the switch is turned on, the value
+  /// will be `true`, and if it is turned off, the value will be `false`.
+  ///
+  /// This callback can be `null`, in which case the switch will be
+  /// disabled and cannot be toggled by the user.
   final ValueChanged<bool>? onChanged;
+
+  /// The color of the switch.
+  ///
+  /// This property defines the color that will be used for the switch.
+  /// If no color is provided, the default color will be used.
   final Color? color;
+
+  /// The size of the AppKit control.
+  ///
+  /// This property determines the overall dimensions of the AppKit switch control.
+  /// It uses the [AppKitControlSize] enum to specify the size.
   final AppKitControlSize size;
 
   const AppKitSwitch({

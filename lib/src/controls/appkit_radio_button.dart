@@ -12,14 +12,74 @@ const _kBorderWidthRatio = 28;
 const _kBoxShadowSpreadRatio = 28;
 const _kBoxShadowOffsetRatio = 10;
 
+/// A custom radio button widget that allows selection of a single option
+/// from a set of options.
+///
+/// The [AppKitRadioButton] is a generic widget that can be used with any
+/// type [T]. It extends [StatefulWidget] to maintain the state of the
+/// selected option.
+///
+/// Example usage:
+/// ```dart
+/// AppKitRadioButton<String>(
+///   value: 'Option 1',
+///   groupValue: selectedValue,
+///   onChanged: (value) {
+///     setState(() {
+///       selectedValue = value;
+///     });
+///   },
+/// )
+/// ```
+///
+/// The [value] parameter represents the value of this radio button.
+/// The [groupValue] parameter represents the currently selected value
+/// for the group of radio buttons.
+/// The [onChanged] callback is called when the user selects this radio button.
 class AppKitRadioButton<T> extends StatefulWidget {
+  /// The value that is currently selected in the group of radio buttons.
+  ///
+  /// This value is used to determine whether this radio button is selected.
+  /// If the value matches the [value] of this radio button, it is selected.
   final T? groupValue;
+
+  /// The value represented by this radio button.
+  ///
+  /// This value is compared with the [groupValue] to determine whether this
+  /// radio button is selected.
   final T value;
+
+  /// The color to use when painting this radio button.
+  ///
+  /// If null, the default color is used.
   final Color? color;
+
+  /// Called when the user selects this radio button.
+  ///
+  /// The callback receives the value of this radio button as a parameter.
+  /// If null, the radio button is disabled.
   final ValueChanged<T>? onChanged;
+
+  /// The semantic label for this radio button.
+  ///
+  /// This label is used by accessibility tools to describe the radio button.
   final String? semanticLabel;
+
+  /// The size of the radio button.
+  ///
+  /// This value determines the diameter of the radio button.
   final double size;
 
+  /// Creates an instance of [AppKitRadioButton].
+  ///
+  /// This constructor initializes the [AppKitRadioButton] widget.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AppKitRadioButton(
+  ///   // Add your parameters here
+  /// );
+  /// ```
   const AppKitRadioButton({
     super.key,
     required this.groupValue,
@@ -30,10 +90,22 @@ class AppKitRadioButton<T> extends StatefulWidget {
     this.size = _kSize,
   });
 
+  /// Checks if the current radio button is selected.
+  ///
+  /// Returns `true` if the [groupValue] is equal to the [value] of this radio button,
+  /// indicating that this radio button is selected. Otherwise, returns `false`.
   bool get isSelected => groupValue == value;
 
+  /// Returns `true` if the radio button is enabled, which is determined by whether
+  /// the `onChanged` callback is not `null`.
+  ///
+  /// If `onChanged` is `null`, the radio button is considered disabled.
   bool get enabled => onChanged != null;
 
+  /// Indicates whether the radio button is in an indeterminate state.
+  ///
+  /// Returns `true` if the `groupValue` is `null`, indicating that no
+  /// radio button in the group is selected. Otherwise, returns `false`.
   bool get isIndeterminate => groupValue == null;
 
   @override

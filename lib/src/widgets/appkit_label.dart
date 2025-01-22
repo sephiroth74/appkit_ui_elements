@@ -1,5 +1,17 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 
+/// A custom label widget that extends [StatelessWidget].
+///
+/// This widget is used to display text with custom styling and properties.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitLabel(
+///   text: Text('Hello, World!'),
+/// )
+/// ```
+///
 class AppKitLabel extends StatelessWidget {
   /// Creates a label.
   const AppKitLabel({

@@ -1,10 +1,38 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
 
+/// A plain button widget for the AppKit UI library.
+///
+/// This button is a stateful widget that provides a simple button
+/// with customizable appearance and behavior.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitPlainButton(
+///   onPressed: () {
+///     // Handle button press
+///   },
+///   child: Text('Press Me'),
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [AppKitIconButton], a similar button that includes an icon.
+///  * [AppKitButton], a button that displays text.
+///
 class AppKitPlainButton extends StatefulWidget {
+  /// A widget that represents the child of the button.
   final Widget child;
+
+  /// The color of the button. If null, the default color will be used.
   final Color? color;
+
+  /// The callback that is called when the button is pressed. If null, the button will be disabled.
   final VoidCallback? onPressed;
+
+  /// The semantic label for the button, used for accessibility.
   final String? semanticLabel;
 
   const AppKitPlainButton({

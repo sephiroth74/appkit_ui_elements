@@ -8,13 +8,51 @@ const int _kHorizontalPaddingThreshold = 0;
 // overall minimum width of the widget
 const double _kOverallMinWidth = 100.0;
 
+/// A custom slider widget for the AppKit UI library.
+///
+/// This widget extends [StatefulWidget] to provide a slider control
+/// that can be used to select a value from a range of values.
+///
+/// The [AppKitSlider] can be customized with various properties
+/// to control its appearance and behavior.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitSlider(
+///   min: 0,
+///   max: 100,
+///   value: 50,
+///   onChanged: (newValue) {
+///     // Handle value change
+///   },
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [Slider], which is a similar widget provided by Flutter.
 class AppKitSlider extends StatefulWidget {
+  /// The current value of the slider. Must be between [min] and [max].
   final double value;
+
+  /// The minimum value the user can select.
   final double min;
+
+  /// The maximum value the user can select.
   final double max;
+
+  /// Called during a drag when the user is selecting a new value for the slider.
+  /// The slider passes the new value to the callback but does not actually change state until the callback returns.
   final ValueChanged<double>? onChanged;
+
+  /// The style to use for this slider.
   final AppKitSliderStyle style;
+
+  /// A list of discrete values that the slider can take. If empty, the slider is continuous.
   final List<double> stops;
+
+  /// The semantic label for the slider.
   final String? semanticLabel;
 
   const AppKitSlider({

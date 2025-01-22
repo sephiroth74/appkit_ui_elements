@@ -6,21 +6,85 @@ import 'package:flutter/services.dart';
 
 typedef OnDateChanged = void Function(Either<DateTime, DateTimeRange> date);
 
+/// A widget that provides a date picker control.
+///
+/// The `AppKitDatePicker` widget allows users to select a date or time from a calendar interface.
+/// It is a stateful widget that maintains the selected date and updates the UI accordingly.
+///
+/// Example usage:
+///
+/// ```dart
+///   AppKitDatePicker(
+///     canRequestFocus: true,
+///     autofocus: false,
+///     date: left(_selectedDateRange.start),
+///     minimumDate: _minimumDate,
+///     maximumDate: _maximumDate,
+///     dateElements: AppKitDateElements.monthDayYear,
+///     timeElements:
+///         AppKitTimeElements.hourMinuteSecond,
+///     semanticLabel: 'Date Picker',
+///     type: AppKitDatePickerType.textual,
+///     onChanged:
+///         (Either<DateTime, DateTimeRange> d) {
+///       debugPrint('Date Changed ($d)');
+///     },
+///   );
+/// ```
+///
 class AppKitDatePicker extends StatefulWidget {
+  /// Whether the date picker should automatically gain focus when the widget is displayed.
+  ///
+  /// If true, the date picker will request focus as soon as it is displayed.
+  /// If false, the date picker will not request focus automatically.
+  ///
+  /// Defaults to false.
   final bool autofocus;
+
+  /// Indicates whether the date picker can request focus.
+  ///
+  /// If set to `true`, the date picker can request focus when interacted with.
+  /// If set to `false`, the date picker will not request focus.
   final bool canRequestFocus;
+
+  /// The type of the date picker, which determines its appearance and behavior.
   final AppKitDatePickerType type;
+
+  /// The elements of the date picker related to date selection.
   final AppKitDateElements dateElements;
+
+  /// The elements of the date picker related to time selection.
   final AppKitTimeElements timeElements;
+
+  /// The initial date or date range to be selected in the date picker.
+  /// This can be either a single `DateTime` or a `DateTimeRange`.
   final Either<DateTime, DateTimeRange> initialDateTime;
+
+  /// The minimum selectable date for the date picker.
   final DateTime? minimumDate;
+
+  /// The maximum selectable date for the date picker.
   final DateTime? maximumDate;
+
+  /// The semantic label for the date picker, used for accessibility.
   final String? semanticLabel;
+
+  /// The text style to use for the date picker text.
   final TextStyle? textStyle;
+
+  /// The color to use for the date picker.
   final Color? color;
+
+  /// Whether to draw the background of the date picker.
   final bool drawBackground;
+
+  /// Whether to draw the border of the date picker.
   final bool drawBorder;
+
+  /// Callback that is called when the selected date changes.
   final OnDateChanged? onChanged;
+
+  /// The type of selection for the date picker (e.g., single date, date range).
   final AppKitDatePickerSelectionType selectionType;
 
   AppKitDatePicker({

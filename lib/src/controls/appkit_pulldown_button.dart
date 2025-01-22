@@ -3,25 +3,139 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
+/// A custom pulldown button widget for the AppKit UI framework.
+///
+/// This widget is a stateful widget that allows for the creation of a pulldown
+/// button with customizable options.
+///
+/// Type parameter [T] represents the type of the items in the pulldown menu.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitPulldownButton<String>(
+///   items: ['Option 1', 'Option 2', 'Option 3'],
+///   onSelected: (value) {
+///     print('Selected: $value');
+///   },
+/// );
+/// ```
+///
+/// See also:
+///
+///  * [DropdownButton], which is a similar widget in the Flutter framework.
 class AppKitPulldownButton<T> extends StatefulWidget {
+  /// A builder function for creating the context menu.
+  ///
+  /// The builder function takes a context and returns a widget that represents
+  /// the context menu.
   final ContextMenuBuilder<T>? menuBuilder;
+
+  /// A list of items to be displayed in the context menu.
+  ///
+  /// Each item is an instance of [AppKitContextMenuEntry].
   final List<AppKitContextMenuEntry<T>>? items;
+
+  /// A callback that is called when an item is selected.
+  ///
+  /// The callback takes the selected item as a parameter.
   final ValueChanged<T?>? onItemSelected;
+
+  /// The minimum width of the button.
+  ///
+  /// This value is used to constrain the width of the button.
   final double minWidth;
+
+  /// The maximum width of the button.
+  ///
+  /// This value is used to constrain the width of the button.
   final double maxWidth;
+
+  /// The edge of the menu where the button is aligned.
+  ///
+  /// This value determines the alignment of the menu relative to the button.
   final AppKitMenuEdge menuEdge;
+
+  /// The style of the button.
+  ///
+  /// This value determines the visual appearance of the button.
   final AppKitPulldownButtonStyle style;
+
+  /// The color of the button.
+  ///
+  /// This value determines the background color of the button.
   final Color? color;
+
+  /// The title of the button.
+  ///
+  /// This value is displayed as the button's label.
   final String? title;
+
+  /// The icon of the button.
+  ///
+  /// This value is displayed as the button's icon.
   final IconData? icon;
+
+  /// The alignment of the image within the button.
+  ///
+  /// This value determines how the image is aligned within the button.
   final AppKitMenuImageAlignment imageAlignment;
+
+  /// The alignment of the text within the button.
+  ///
+  /// This value determines how the text is aligned within the button.
   final TextAlign textAlign;
+
+  /// The size of the control.
+  ///
+  /// This value determines the overall size of the button.
   final AppKitControlSize controlSize;
+
+  /// The semantic label for the button.
+  ///
+  /// This value is used by accessibility tools to describe the button.
   final String? semanticLabel;
+
+  /// The focus node for the button.
+  ///
+  /// This value is used to manage the focus state of the button.
   final FocusNode? focusNode;
+
+  /// Whether the button can request focus.
+  ///
+  /// This value determines if the button is focusable.
   final bool canRequestFocus;
+
+  /// The color of the icon.
+  ///
+  /// This value determines the color of the button's icon.
   final Color? iconColor;
 
+  /// Creates an instance of [AppKitPulldownButton].
+  ///
+  /// This widget represents a pulldown button in the AppKit UI elements library.
+  ///
+  /// The [AppKitPulldownButton] is a customizable button that displays a list of
+  /// options when pressed, allowing the user to select one of the options.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// AppKitPulldownButton(
+  ///   items: ['Option 1', 'Option 2', 'Option 3'],
+  ///   minWidth: 100.0,
+  ///   onItemSelected: (value) {
+  ///     print('Selected: $value');
+  /// },
+  /// );
+  /// ```
+  ///
+  /// You can customize the appearance and behavior of the button by providing
+  /// various parameters.
+  ///
+  /// See also:
+  ///
+  ///  * [AppKitPulldownButton] for more details on how to use this widget.
   const AppKitPulldownButton({
     super.key,
     required this.minWidth,

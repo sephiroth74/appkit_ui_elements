@@ -12,66 +12,257 @@ import 'package:gradient_borders/gradient_borders.dart';
 const int _kiOSHorizontalCursorOffsetPixels = -2;
 const int _kChangedTimerDuration = 500;
 
+/// A custom text field widget for the AppKit UI library.
+///
+/// This widget extends [StatefulWidget] to provide a text input field with
+/// additional functionality and customization options.
+///
+/// Usage:
+/// ```dart
+/// AppKitTextField(
+///   // Add your parameters here
+/// )
+/// ```
+///
+/// See also:
+/// - [AppKitSearchField], which is the underlying widget used for text input.
 class AppKitTextField extends StatefulWidget {
+  /// The controller for the text field.
+  ///
+  /// This controller can be used to manipulate the text being edited.
+  /// If null, a default controller will be created and used.
   final TextEditingController? controller;
+
+  /// The focus node for the text field, which allows control over the focus state.
+  ///
+  /// If null, the text field will create its own FocusNode.
   final FocusNode? focusNode;
+
+  /// The padding around the text field content.
   final EdgeInsets padding;
+
+  /// The placeholder text displayed when the text field is empty.
   final String? placeholder;
+
+  /// The title of the text field, typically used as a label.
   final String? title;
+
+  /// The style to use for the text being edited.
   final TextStyle? style;
+
+  /// The style to use for the placeholder text.
   final TextStyle? placeholderStyle;
+
+  /// The type of keyboard to use for editing the text.
   final TextInputType keyboardType;
+
+  /// The action button to use for the keyboard.
   final TextInputAction? textInputAction;
+
+  /// Configures how the text should be capitalized.
   final TextCapitalization textCapitalization;
+
+  /// The strut style to use for the text in the text field.
+  ///
+  /// This defines the minimum height of the line boxes, as well as the vertical
+  /// alignment of the text within those boxes.
   final StrutStyle? strutStyle;
+
+  /// How the text should be aligned horizontally.
+  ///
+  /// This can be used to align the text to the left, right, center, or justify.
   final TextAlign textAlign;
+
+  /// How the text should be aligned vertically.
+  ///
+  /// This can be used to align the text to the top, center, or bottom.
   final TextAlignVertical textAlignVertical;
+
+  /// Whether the text field should automatically gain focus when the widget is
+  /// first created.
   final bool autofocus;
+
+  /// Whether to enable autocorrect for the text field.
+  ///
+  /// If true, the text field will attempt to correct misspelled words.
   final bool autocorrect;
+
+  /// The type of smart dashes to use for the text field.
+  ///
+  /// This can be used to automatically convert double hyphens into em dashes.
   final SmartDashesType smartDashesType;
+
+  /// The type of smart quotes to use for the text field.
+  ///
+  /// This can be used to automatically convert straight quotes into curly quotes.
   final SmartQuotesType smartQuotesType;
+
+  /// The maximum number of lines the text field can have.
+  ///
+  /// If null, there is no limit to the number of lines.
   final int? maxLines;
+
+  /// The minimum number of lines the text field can have.
+  ///
+  /// If null, the text field will have a single line by default.
   final int? minLines;
+
+  /// The maximum number of characters the text field can have.
+  ///
+  /// If null, there is no limit to the number of characters.
   final int? maxLength;
+
+  /// Whether the text field should expand to fill its parent.
+  ///
+  /// If true, the text field will expand to fill the available space.
   final bool expands;
+
+  /// The maximum length enforcement for the text field.
+  ///
+  /// This determines how the text field should enforce the maximum length
+  /// constraint. If null, the default behavior is used.
   final MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// A list of input formatters to apply to the text field.
+  ///
+  /// These formatters can be used to restrict the input to certain patterns
+  /// or formats.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// Whether the text field is enabled or not.
+  ///
+  /// If false, the text field will be disabled and not respond to user input.
   final bool enabled;
+
+  /// The height style to use for the selection highlight.
+  ///
+  /// This determines how the height of the selection highlight is calculated.
   final ui.BoxHeightStyle selectionHeightStyle;
+
+  /// The width style to use for the selection highlight.
+  ///
+  /// This determines how the width of the selection highlight is calculated.
   final ui.BoxWidthStyle selectionWidthStyle;
+
+  /// The amount of padding to apply when scrolling the text field.
+  ///
+  /// This padding is applied to the scrollable area of the text field.
   final EdgeInsets scrollPadding;
+
+  /// Whether interactive selection is enabled for the text field.
+  ///
+  /// If false, the user will not be able to interactively select text.
   final bool enableInteractiveSelection;
+
+  /// The selection controls to use for the text field.
+  ///
+  /// These controls determine the behavior of text selection, such as
+  /// copy, paste, and cut actions.
   final TextSelectionControls? selectionControls;
+
+  /// The behavior to use when starting a drag gesture.
+  ///
+  /// This determines how the text field responds to drag gestures.
   final DragStartBehavior dragStartBehavior;
+
+  /// The scroll controller to use for the text field.
+  ///
+  /// This controller can be used to control the scrolling behavior of the
+  /// text field.
   final ScrollController? scrollController;
+
+  /// The scroll physics to use for the text field.
+  ///
+  /// These physics determine the behavior of the scrolling, such as
+  /// how the scroll view responds to user input.
   final ScrollPhysics? scrollPhysics;
+
+  /// The autofill hints to use for the text field.
+  ///
+  /// These hints provide suggestions to the autofill service about the
+  /// expected content of the text field.
   final Iterable<String>? autofillHints;
+
+  /// An optional identifier for the restoration scope of this text field.
   final String? restorationId;
+
+  /// A widget to display after the editable part of the text field.
   final Widget? suffix;
+
+  /// Controls the visibility of the suffix widget.
   final AppKitOverlayVisibilityMode? suffixMode;
+
+  /// Controls the visibility of the clear button within the text field.
   final AppKitOverlayVisibilityMode? clearButtonMode;
+
+  /// The character used for obscuring text in the text field.
   final String obscuringCharacter;
+
+  /// Whether to obscure the text being edited (e.g., for passwords).
   final bool obscureText;
+
+  /// A widget to display before the editable part of the text field.
   final Widget? prefix;
+
+  /// Padding for the prefix widget.
   final EdgeInsets prefixPadding;
+
+  /// Controls the visibility of the prefix widget.
   final AppKitOverlayVisibilityMode prefixMode;
+
+  /// The color of the cursor in the text field.
   final Color? cursorColor;
+
+  /// The width of the cursor in the text field.
   final double cursorWidth;
+
+  /// The height of the cursor in the text field.
   final double? cursorHeight;
+
+  /// Indicates whether the cursor should be shown.
   final bool showCursor;
+
+  /// Defines the style of the border for the text field.
   final AppKitTextFieldBorderStyle borderStyle;
+
+  /// Specifies the radius of the cursor.
   final Radius cursorRadius;
+
+  /// Specifies the offset of the cursor.
   final Offset? cursorOffset;
+
+  /// A builder for creating a custom context menu for the text field.
   final EditableTextContextMenuBuilder? contextMenuBuilder;
+
+  /// Defines the behavior of the text field.
   final AppKitTextFieldBehavior behavior;
+
+  /// The background color of the text field.
   final Color? backgroundColor;
+
+  /// A decoration to be applied to the text field.
   final BoxDecoration? decoration;
+
+  /// Indicates whether the text field should have continuous behavior.
   final bool continuous;
+
+  /// The border radius of the text field.
   final double? borderRadius;
 
+  /// Callback that is called when the text field's value changes.
+  ///
+  /// The `value` parameter is the current value of the text field.
   final ValueChanged<String>? onChanged;
+
+  /// Callback that is called when the user submits the text field's value.
+  ///
+  /// The `value` parameter is the value that was submitted.
   final ValueChanged<String>? onSubmitted;
+
+  /// Callback that is called when the user has completed editing the text field.
   final VoidCallback? onEditingComplete;
+
+  /// Callback that is called when the text field is tapped.
   final GestureTapCallback? onTap;
 
   bool get selectionEnabled => enableInteractiveSelection;

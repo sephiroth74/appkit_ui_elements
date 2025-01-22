@@ -7,13 +7,46 @@ import 'package:flutter/material.dart';
 const _longPressDuration = Duration(milliseconds: 500);
 const _tickerDuration = Duration(milliseconds: 100);
 
+/// A custom stepper widget that provides a way to display numeric stepper.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitStepper(
+///   minValue: 0,
+///   maxValue: 100,
+///   increment: 1,
+///   value: 50,
+///   onChanged: (newValue) {
+///     print('Stepper value changed: $newValue');
+///   },
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [Stepper], which is a material design stepper widget.
+///  * [Step], which is used to define each step in the stepper.
 class AppKitStepper extends StatefulWidget {
+  /// A semantic label for the stepper, used for accessibility purposes.
   final String? semanticLabel;
+
+  /// The minimum value that the stepper can have.
   final double minValue;
+
+  /// The maximum value that the stepper can have.
   final double maxValue;
+
+  /// The amount by which the stepper value is incremented or decremented.
   final double increment;
+
+  /// The current value of the stepper.
   final double value;
+
+  /// A callback that is called when the stepper value changes.
   final ValueChanged<double>? onChanged;
+
+  /// The size of the control, which determines its visual appearance.
   final AppKitControlSize controlSize;
 
   const AppKitStepper({

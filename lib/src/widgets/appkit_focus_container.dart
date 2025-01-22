@@ -7,6 +7,16 @@ const _kFocusRingSize = 15.0;
 const _kFocusRingSizeEnd = 3.0;
 const _kFocusAnimationDuration = 150;
 
+/// A container widget that manages focus for its child widgets.
+///
+/// The `AppKitFocusContainer` is a stateful widget that provides a focus
+/// visual management mechanism for its child widgets. It ensures that the focus
+/// is properly shown.
+///
+/// See also:
+///
+///  * [Focus], which is the underlying widget used to manage focus.
+///  * [FocusScope], which is used to create a scope for focus management.
 class AppKitFocusContainer extends StatefulWidget {
   final FocusNode? focusNode;
   final bool canRequestFocus;

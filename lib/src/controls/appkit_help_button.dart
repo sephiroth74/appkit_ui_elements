@@ -6,14 +6,53 @@ import 'package:flutter/material.dart';
 const _kSize = 20.0;
 const _kSizeIconRatio = 0.65;
 
+/// A custom help button widget with customizable properties.
+///
+/// The [AppKitHelpButton] widget allows users to create a button that typically
+/// displays a help icon and can trigger a help action when pressed.
+///
+/// Example usage:
+/// ```dart
+/// AppKitHelpButton(
+///   onPressed: () {
+///     print('Help button pressed');
+///   },
+/// )
+/// ```
 class AppKitHelpButton extends StatefulWidget {
+  /// The color of the button.
+  ///
+  /// If null, a default color will be used.
   final Color? color;
+
+  /// The color of the button when it is disabled.
+  ///
+  /// If null, a default disabled color will be used.
   final Color? disabledColor;
+
+  /// Called when the button is pressed.
+  ///
+  /// If null, the button will be disabled.
   final VoidCallback? onPressed;
+
+  /// The semantic label for the button.
+  ///
+  /// Used by accessibility tools to describe the button.
   final String? semanticLabel;
+
+  /// The mouse cursor to display when hovering over the button.
+  ///
+  /// Defaults to [SystemMouseCursors.basic].
   final MouseCursor cursor;
+
+  /// The size of the button.
+  ///
+  /// Defaults to [_kSize].
   final double size;
 
+  /// Creates an [AppKitHelpButton] widget.
+  ///
+  /// The [onPressed] parameter must not be null.
   const AppKitHelpButton({
     super.key,
     this.color,
@@ -24,6 +63,9 @@ class AppKitHelpButton extends StatefulWidget {
     this.size = _kSize,
   });
 
+  /// Whether the button is enabled.
+  ///
+  /// Returns true if [onPressed] is not null.
   bool get enabled => onPressed != null;
 
   @override

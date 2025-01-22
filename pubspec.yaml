@@ -1,6 +1,6 @@
 name: appkit_ui_elements
 description: "Flutter widgets and themes for the current macOS desktop. It was inspired by the great [macos_ui](https://pub.dev/packages/macos_ui) library."
-version: 0.0.11
+version: 0.0.12
 homepage: https://github.com/sephiroth74/appkit_ui_elements
 repository: https://github.com/sephiroth74/appkit_ui_elements
 

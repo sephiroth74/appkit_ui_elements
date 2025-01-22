@@ -3,6 +3,11 @@ import 'dart:math' as math;
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/rendering.dart';
 
+/// A scaffold widget for the AppKit UI elements.
+///
+/// This widget serves as the base structure for the AppKit UI, providing
+/// a consistent layout and design for the application.
+///
 class AppKitScaffold extends StatefulWidget {
   const AppKitScaffold({
     super.key,

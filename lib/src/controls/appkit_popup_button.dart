@@ -23,20 +23,97 @@ List<BoxShadow> getElevatedShadow(BuildContext context) => [
       ),
     ];
 
+/// A custom popup button widget for the AppKit UI framework.
+///
+/// The `AppKitPopupButton` is a stateful widget that provides a popup button
+/// with customizable options. It allows users to select from a list of items
+/// of type `T`.
+///
+/// The generic type `T` represents the type of the items in the popup button.
+///
+/// Example usage:
+/// ```dart
+/// AppKitPopupButton<String>(
+///   items: ['Option 1', 'Option 2', 'Option 3'],
+///   onSelected: (value) {
+///     print('Selected: $value');
+///   },
+/// );
+/// ```
+/// See also:
+/// - [StatefulWidget], which is the base class for stateful widgets.
+/// - [AppKitPushButton], which is a similar widget provided by Flutter.
 class AppKitPopupButton<T> extends StatefulWidget {
+  /// A builder function to create the context menu.
+  ///
+  /// The builder function takes a context and returns a widget that represents
+  /// the context menu.
   final ContextMenuBuilder<T>? menuBuilder;
+
+  /// A list of items to be displayed in the context menu.
+  ///
+  /// Each item is an instance of [AppKitContextMenuEntry].
   final List<AppKitContextMenuEntry<T>>? items;
+
+  /// The currently selected item.
+  ///
+  /// This item is highlighted in the context menu.
   final T? selectedItem;
+
+  /// A callback that is called when an item is selected.
+  ///
+  /// The callback receives the selected item as a parameter.
   final ValueChanged<T?>? onItemSelected;
+
+  /// A builder function to create the selected item widget.
+  ///
+  /// The builder function takes a context and the selected item, and returns
+  /// a widget that represents the selected item.
   final SelectedItemBuilder<T>? itemBuilder;
+
+  /// The edge of the menu where the popup should be anchored.
+  ///
+  /// This determines the position of the popup menu relative to the button.
   final AppKitMenuEdge menuEdge;
+
+  /// The style of the popup button.
+  ///
+  /// This includes properties such as padding, shape, and elevation.
   final AppKitPopupButtonStyle style;
+
+  /// The color of the popup button.
+  ///
+  /// This color is used as the background color of the button.
   final Color? color;
+
+  /// A hint text to be displayed when no item is selected.
+  ///
+  /// This is typically used to provide a description of the expected input.
   final String? hint;
+
+  /// The size of the control.
+  ///
+  /// This determines the overall dimensions of the popup button.
   final AppKitControlSize controlSize;
+
+  /// A semantic label for the popup button.
+  ///
+  /// This is used by accessibility tools to describe the button.
   final String? semanticLabel;
+
+  /// The focus node for the popup button.
+  ///
+  /// This is used to manage the focus state of the button.
   final FocusNode? focusNode;
+
+  /// Whether the button can request focus.
+  ///
+  /// If false, the button will not be focusable.
   final bool canRequestFocus;
+
+  /// Whether the menu should force its width to match the button's width.
+  ///
+  /// If true, the menu will have the same width as the button.
   final bool forceMenuWidth;
 
   const AppKitPopupButton({

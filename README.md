@@ -2,7 +2,13 @@
 Flutter widgets and themes implementing the current macOS design language. It has been inspired by the <a href='https://pub.dev/packages/macos_ui'>macos_ui</a> flutter package.
 
 
-![screenshot](./pages/images/screenshot-001.png)
+![popup buttons](./pages/images/screenshot-001.png)
+
+
+![sliders](./pages/images/screenshot-002.png)
+
+
+![date time pickers](./pages/images/screenshot-003.png)
 
 ## Features
 

@@ -6,6 +6,26 @@ import 'package:flutter/services.dart' show SystemMouseCursor;
 const EdgeInsets kResizablePaneSafeArea = EdgeInsets.only(top: 52);
 const double _kResizeThresholdSize = 6.0;
 
+/// A widget that represents a resizable pane in the AppKit UI.
+///
+/// This widget is a stateful widget that allows users to resize the pane
+/// within the application. It is part of the `appkit_ui_elements` library.
+///
+/// Usage:
+/// ```dart
+/// AppKitResizablePane(
+///   minSize: 180,
+///   startSize: 200,
+///   windowBreakpoint: 700,
+///   resizableSide: AppKitResizableSide.right,
+///   builder: (_, __) {
+///     return const Center(
+///       child: Text('Left Resizable Pane'),
+///     );
+///   },
+/// );
+/// ```
+///
 class AppKitResizablePane extends StatefulWidget {
   const AppKitResizablePane({
     super.key,

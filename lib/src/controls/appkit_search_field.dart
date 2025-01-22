@@ -4,34 +4,122 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+/// A custom search field widget for the AppKit UI library.
+///
+/// This widget provides a search input field with additional functionality
+/// and customization options.
+///
+/// To use this widget, simply include it in your widget tree and provide
+/// any necessary parameters.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitSearchField(
+///   // Add your parameters here
+/// )
+/// ```
+///
+/// This widget is stateful, meaning it maintains its own state and can
+/// update dynamically based on user input or other interactions.
 class AppKitSearchField extends StatefulWidget {
+  /// A builder function for creating a custom context menu for the search field.
   final ContextMenuBuilder<String>? contextMenuBuilder;
+
+  /// A list of suggestions to display in the search field.
   final List<String>? suggestions;
+
+  /// A controller for the text being edited.
   final TextEditingController? controller;
+
+  /// A focus node for managing the focus of the search field.
   final FocusNode? focusNode;
+
+  /// The padding around the search field.
   final EdgeInsets? padding;
+
+  /// A placeholder text to display when the search field is empty.
   final String? placeholder;
+
+  /// The style to use for the placeholder text.
   final TextStyle? placeholderStyle;
+
+  /// The style to use for the text being edited.
   final TextStyle? style;
+
+  /// How the text should be aligned horizontally.
   final TextAlign textAlign;
+
+  /// Whether to enable autocorrect.
   final bool autocorrect;
+
+  /// Whether the search field should automatically get focus when the widget is built.
   final bool autofocus;
+
+  /// The maximum number of characters that can be entered.
   final int? maxLength;
+
+  /// The enforcement strategy for the maximum length limit.
   final MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// Called when the text being edited changes.
   final ValueChanged<String>? onChanged;
+
+  /// Called when the user submits the text.
   final ValueChanged<String>? onSubmitted;
+
+  /// Called when the user finishes editing the text.
   final VoidCallback? onEditingComplete;
+
+  /// Called when the search field is tapped.
   final GestureTapCallback? onTap;
 
+  /// A list of [TextInputFormatter]s that will be applied to the input field.
+  /// This can be used to restrict or format the text input.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// The type of keyboard to use for text input. This can be used to specify
+  /// different keyboard layouts, such as numeric or email keyboards.
   final TextInputType inputType;
+
+  /// The style of the border around the text field. This can be used to customize
+  /// the appearance of the text field's border.
   final AppKitTextFieldBorderStyle borderStyle;
+
+  /// Whether the text field is enabled or disabled. If false, the text field
+  /// will be read-only and not respond to user input.
   final bool enabled;
+
+  /// Whether the text field should continuously update its value as the user
+  /// types. If false, the value will only be updated when the user finishes
+  /// editing.
   final bool continuous;
+
+  /// The size of the control. This can be used to adjust the overall size of
+  /// the text field, such as making it larger or smaller.
   final AppKitControlSize controlSize;
+
+  /// The visibility mode of the clear button. This can be used to control when
+  /// the clear button is shown, such as always, while editing, or never.
   final AppKitOverlayVisibilityMode clearButtonMode;
+
+  /// The behavior of the text field. This can be used to customize how the text
+  /// field behaves in different situations, such as when it gains or loses focus.
   final AppKitTextFieldBehavior behavior;
 
+  /// Creates an instance of [AppKitSearchField].
+  ///
+  /// This widget provides a search field with customizable properties.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AppKitSearchField(
+  ///   // Add your parameters here
+  /// );
+  /// ```
+  ///
+  /// You can customize the appearance and behavior of the search field
+  /// by providing the appropriate parameters.
   const AppKitSearchField({
     super.key,
     this.contextMenuBuilder,

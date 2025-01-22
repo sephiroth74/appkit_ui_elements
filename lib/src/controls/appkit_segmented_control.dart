@@ -4,13 +4,55 @@ import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 
 class AppKitSegmentedControl extends StatefulWidget {
+  /// A controller for the segmented control.
+  ///
+  /// This is used to manage the state and behavior of the segmented control.
   final AppKitSegmentedController controller;
+
+  /// A list of icons to be displayed in the segmented control.
+  ///
+  /// This can be null if no icons are needed.
   final List<IconData>? icons;
+
+  /// A list of labels to be displayed in the segmented control.
+  ///
+  /// This can be null if no labels are needed.
   final List<String>? labels;
+
+  /// A callback function that is triggered when the selection changes.
+  ///
+  /// The function takes two parameters:
+  /// - A set of integers representing the selected indices.
+  /// - An integer representing the index of the segment that was changed.
   final Function(Set<int>, int)? onSelectionChanged;
+
+  /// The size of the segmented control.
+  ///
+  /// This determines the overall size of the control.
   final AppKitSegmentedControlSize size;
+
+  /// The color of the segmented control.
+  ///
+  /// This can be null if the default color is to be used.
   final Color? color;
 
+  /// Creates an instance of [AppKitSegmentedControl].
+  ///
+  /// This constructor initializes the segmented control with the provided parameters.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// AppKitSegmentedControl(
+  ///   controller: AppKitSegmentedController.single(length: 3),
+  /// );
+  /// ```
+  ///
+  /// You can customize the segmented control by passing the appropriate parameters.
+  ///
+  /// See also:
+  ///
+  ///  * [AppKitTabView], which is used to display the content of the selected tab.
   const AppKitSegmentedControl({
     super.key,
     required this.controller,
@@ -529,27 +571,79 @@ class _SingleSegmentedChild extends StatelessWidget {
   }
 }
 
+/// An abstract class that extends [ChangeNotifier] to provide
+/// a base implementation for segmented controls in the AppKit UI.
+///
+/// This class should be extended to create custom segmented controls
+/// with specific behavior and appearance.
+///
+/// Classes that extend [AppKitSegmentedController] should implement
+/// the necessary methods and properties to manage the state and
+/// interaction of the segmented control.
 abstract class AppKitSegmentedController extends ChangeNotifier {
   final int length;
 
+  /// A controller for managing the state of an AppKit segmented control.
+  ///
+  /// The [AppKitSegmentedController] class provides methods to manage the
+  /// selection state of a segmented control, including checking if a segment
+  /// is selected, toggling the selection state of a segment, and setting
+  /// multiple selected indexes.
+  ///
+  /// The [length] parameter must be greater than 0.
+  ///
+  /// Properties:
+  /// - `length`: The number of segments in the control.
+  /// - `selectedIndexes`: A set of indexes representing the currently selected segments.
+  /// - `isSingle`: A boolean indicating if only a single segment can be selected.
+  ///
+  /// Methods:
+  /// - `isSelected(int index)`: Returns `true` if the segment at the given index is selected.
+  /// - `toggleIndex(int index)`: Toggles the selection state of the segment at the given index.
+  /// - `setSelectedIndexes(Set<int> indexes)`: Sets the selected segments to the given indexes.
   AppKitSegmentedController({required this.length}) : assert(length > 0);
 
+  /// Checks if the item at the given index is selected.
+  ///
+  /// Returns `true` if the item is selected, otherwise `false`.
+  ///
+  /// - Parameter index: The index of the item to check.
   bool isSelected(int index);
 
+  /// Toggles the selection state of the item at the given index.
+  ///
+  /// - Parameter index: The index of the item to toggle.
   void toggleIndex(int index);
 
+  /// Sets the selected indexes to the provided set of indexes.
+  ///
+  /// - Parameter indexes: A set of indexes to be selected.
   void setSelectedIndexes(Set<int> indexes);
 
+  /// Gets the set of currently selected indexes.
+  ///
+  /// Returns a set of integers representing the selected indexes.
   Set<int> get selectedIndexes;
 
+  /// Checks if the control allows only a single selection.
+  ///
+  /// Returns `true` if only a single selection is allowed, otherwise `false`.
   bool get isSingle;
 
+  /// Creates a single selection segmented controller.
+  ///
+  /// This factory constructor returns an instance of [SegmentedControllerSingle]
+  /// which allows only one segment to be selected at a time.
   static SegmentedControllerSingle single(
       {int initialSelection = 0, required int length}) {
     return SegmentedControllerSingle(
         initialIndex: initialSelection, length: length);
   }
 
+  /// Creates a [SegmentedControllerMultiple] instance.
+  ///
+  /// This factory constructor is used to create a segmented controller
+  /// that allows multiple selections.
   static SegmentedControllerMultiple multiple(
       {Set<int>? initialSelection, required int length}) {
     return SegmentedControllerMultiple(
@@ -557,6 +651,10 @@ abstract class AppKitSegmentedController extends ChangeNotifier {
   }
 }
 
+/// A controller for managing a single selection in an AppKit segmented control.
+///
+/// This class extends the [AppKitSegmentedController] to provide functionality
+/// specific to single selection segmented controls.
 class SegmentedControllerSingle extends AppKitSegmentedController {
   SegmentedControllerSingle({int initialIndex = 0, required super.length})
       : _index = initialIndex,
@@ -619,6 +717,12 @@ class SegmentedControllerSingle extends AppKitSegmentedController {
   bool get isSingle => true;
 }
 
+/// A controller for managing multiple segments in an AppKit segmented control.
+///
+/// This class extends the [AppKitSegmentedController] to provide functionality
+/// for handling multiple segments within a segmented control. It allows for
+/// the selection and management of multiple segments, providing a more
+/// flexible and customizable user interface component.
 class SegmentedControllerMultiple extends AppKitSegmentedController {
   final Set<int> _selectedIndexes;
 

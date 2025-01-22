@@ -5,9 +5,21 @@ import 'package:flutter/material.dart';
 const _kHeight = 6.0;
 const _kAnimationDuration = Duration(milliseconds: 1500);
 
+/// An abstract class representing a progress indicator in the AppKit UI.
+///
+/// This class serves as a base for creating custom progress indicators
+/// that can be used within the AppKit UI framework. Subclasses should
+/// implement the necessary methods and properties to define the behavior
+/// and appearance of the progress indicator.
 abstract class AppKitProgress {
   const AppKitProgress._();
 
+  /// Creates a circular progress bar widget.
+  ///
+  /// The [circle] method allows you to customize the appearance and behavior
+  /// of the circular progress bar.
+  ///
+  /// Returns a [Widget] that displays a circular progress bar.
   static Widget circle({
     double? value,
     Color? color,
@@ -26,6 +38,28 @@ abstract class AppKitProgress {
     );
   }
 
+  /// Creates a linear progress bar widget.
+  ///
+  /// This widget displays a linear progress bar that can be customized
+  /// with various parameters.
+  ///
+  /// The [linear] method allows you to specify the appearance and behavior
+  /// of the progress bar.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// Widget progressBar = AppKitProgressBar.linear(
+  ///   value: 0.5,
+  ///   minHeight: 4.0,
+  ///   backgroundColor: Colors.grey,
+  ///   valueColor: Colors.blue,
+  /// );
+  /// ```
+  ///
+  /// - [value]: The current progress value, ranging from 0.0 to 1.0.
+  /// - [minHeight]: The minimum height of the progress bar.
+  /// - [backgroundColor]: The color of the progress bar's background.
+  /// - [valueColor]: The color of the progress bar's value indicator.
   static Widget linear({
     double? value,
     double height = _kHeight,
@@ -43,6 +77,22 @@ abstract class AppKitProgress {
   }
 }
 
+/// A custom progress bar widget for the AppKit UI library.
+///
+/// This widget extends [StatefulWidget] and provides a customizable progress bar
+/// that can be used to indicate the progress of a task.
+///
+/// Example usage:
+///
+/// ```dart
+/// AppKitProgressBar(
+///   value: 0.5, // 50% progress
+///   color: Colors.blue,
+/// )
+/// ```
+///
+/// The [value] parameter specifies the current progress as a fraction between 0.0 and 1.0.
+/// The [color] parameter allows customization of the progress bar color.
 class AppKitProgressBar extends StatefulWidget {
   final double? value;
   final double height;

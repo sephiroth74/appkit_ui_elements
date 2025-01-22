@@ -5,14 +5,48 @@ import 'package:flutter/foundation.dart';
 const double _kSize = 64.0;
 const double _kStrokeWidth = 10.0;
 
+/// A widget that displays a circular progress indicator.
+///
+/// The `AppKitProgressCircle` is a stateless widget that shows a circular
+/// progress indicator, typically used to indicate that the application is
+/// performing a task.
+///
+/// This widget can be customized to fit the design and requirements of your
+/// application.
 class AppKitProgressCircle extends StatelessWidget {
+  /// The current value of the progress circle. If null, the progress circle will be indeterminate.
   final double? value;
+
+  /// The color of the progress circle.
   final Color? color;
+
+  /// The color of the track behind the progress circle.
   final Color? trackColor;
+
+  /// The size of the progress circle.
   final double _size;
+
+  /// The stroke width of the progress circle.
   final double _strokeWidth;
+
+  /// The semantic label for the progress circle, used for accessibility.
   final String? semanticsLabel;
 
+  /// Creates an instance of [AppKitProgressCircle].
+  ///
+  /// This widget displays a circular progress indicator.
+  ///
+  /// The [AppKitProgressCircle] can be customized with various properties
+  /// to match the desired appearance and behavior.
+  ///
+  /// If value if null, the progress circle will be indeterminate.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AppKitProgressCircle(
+  ///   value: 0.5,
+  /// );
+  /// ```
   const AppKitProgressCircle({
     super.key,
     this.value,
