@@ -6,21 +6,90 @@ import 'package:gradient_borders/gradient_borders.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 100);
 
+/// A custom button widget with various styles and behaviors.
+///
+/// The [AppKitButton] widget allows users to create buttons with different
+/// styles, sizes, and behaviors. It supports tap, long press, and long press end
+/// gestures, and can be customized with various properties.
+///
+/// Example usage:
+/// ```dart
+/// AppKitButton(
+///   child: Text('Press me'),
+///   onTap: () {
+///     print('Button pressed');
+///   },
+/// )
+/// ```
 class AppKitButton extends StatefulWidget {
+  /// The style of the button.
+  ///
+  /// Determines the visual appearance of the button.
   final AppKitButtonStyle style;
+
+  /// The type of the button.
+  ///
+  /// Determines the behavior and interaction of the button.
   final AppKitButtonType type;
+
+  /// The size of the button.
+  ///
+  /// Determines the overall dimensions of the button.
   final AppKitControlSize size;
+
+  /// The widget to display inside the button.
+  ///
+  /// Typically a [Text] or [Icon] widget.
   final Widget child;
+
+  /// Called when the button is tapped.
+  ///
+  /// If null, the button will be disabled.
   final VoidCallback? onTap;
+
+  /// Called when the button is long-pressed.
+  ///
+  /// If null, the long press gesture will be disabled.
   final VoidCallback? onLongPress;
+
+  /// Called when the long press gesture ends.
+  ///
+  /// If null, the long press end gesture will be disabled.
   final GestureLongPressEndCallback? onLongPressEnd;
+
+  /// The accent color of the button.
+  ///
+  /// If null, a default color will be used.
   final Color? accentColor;
+
+  /// The padding inside the button.
+  ///
+  /// If null, a default padding will be used.
   final EdgeInsetsGeometry? padding;
+
+  /// The semantic label for the button.
+  ///
+  /// Used by accessibility tools to describe the button.
   final String? semanticLabel;
+
+  /// The mouse cursor to display when hovering over the button.
+  ///
+  /// If null, a default cursor will be used.
   final MouseCursor? mouseCursor;
+
+  /// The text style for the button's child.
+  ///
+  /// If null, a default text style will be used.
   final TextStyle? textStyle;
+
+  /// The width of the button.
+  ///
+  /// If null, the button will size itself to fit its child.
   final double? width;
 
+  /// Creates an [AppKitButton] widget.
+  ///
+  /// The [child] parameter must not be null.
   const AppKitButton({
     super.key,
     required this.child,
