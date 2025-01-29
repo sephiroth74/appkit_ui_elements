@@ -261,6 +261,14 @@ extension ColorX on Color {
     return hslColor.lightness;
   }
 
+  Color merge(Color other) {
+    final amount = other.a;
+    final newR = (other.r * amount + r * (1 - amount));
+    final newG = (other.g * amount + g * (1 - amount));
+    final newB = (other.b * amount + b * (1 - amount));
+    return withValues(alpha: a, red: newR, green: newG, blue: newB);
+  }
+
   String toHexString() {
     final alphaInt = (a * 255).round();
     final redInt = (r * 255).round();

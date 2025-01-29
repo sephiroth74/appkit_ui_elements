@@ -1,3 +1,7 @@
+## 0.0.13
+
+ * Added AppKitIconButtonType to the icon button.
+
 ## 0.0.12
 
  * Added some documentation

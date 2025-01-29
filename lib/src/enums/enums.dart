@@ -227,3 +227,8 @@ enum AppKitResizableSide {
   right,
   top,
 }
+
+enum AppKitIconButtonType {
+  flat,
+  outlined,
+}

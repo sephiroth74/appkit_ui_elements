@@ -437,6 +437,85 @@ class _ControlsPageState extends State<ControlsPage> {
                           ),
                         ],
                       ),
+                      const SizedBox(width: 16.0, height: 16.0),
+                      const Divider(thickness: 0.5),
+                      const WidgetTitle(label: 'IconButton'),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          AppKitIconButton(
+                            icon: Icons.add,
+                            onPressed: () {},
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitIconButton(
+                            icon: Icons.remove,
+                            onPressed: () {},
+                          ),
+                          const SizedBox(width: 16.0),
+                          const AppKitIconButton(
+                            icon: Icons.remove,
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitIconButton(
+                            icon: Icons.add,
+                            onPressed: () {},
+                            color: AppKitColors.systemOrange,
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitIconButton(
+                            icon: Icons.remove,
+                            onPressed: () {},
+                            color: AppKitColors.systemOrange,
+                          ),
+                          const SizedBox(width: 16.0),
+                          const AppKitIconButton(
+                            icon: Icons.remove,
+                            color: AppKitColors.systemOrange,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16.0, height: 16.0),
+                      Row(
+                        children: [
+                          AppKitIconButton(
+                            type: AppKitIconButtonType.flat,
+                            icon: Icons.copy,
+                            onPressed: () {},
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitIconButton(
+                            type: AppKitIconButtonType.flat,
+                            icon: Icons.paste,
+                            onPressed: () {},
+                          ),
+                          const SizedBox(width: 16.0),
+                          const AppKitIconButton(
+                            type: AppKitIconButtonType.flat,
+                            icon: Icons.paste,
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitIconButton(
+                            type: AppKitIconButtonType.flat,
+                            icon: Icons.copy,
+                            onPressed: () {},
+                            color: AppKitColors.systemOrange,
+                          ),
+                          const SizedBox(width: 16.0),
+                          AppKitIconButton(
+                            type: AppKitIconButtonType.flat,
+                            icon: Icons.paste,
+                            onPressed: () {},
+                            color: AppKitColors.systemOrange,
+                          ),
+                          const SizedBox(width: 16.0),
+                          const AppKitIconButton(
+                            type: AppKitIconButtonType.flat,
+                            icon: Icons.paste,
+                            color: AppKitColors.systemOrange,
+                          ),
+                        ],
+                      ),
                     ],
                   );
                 },

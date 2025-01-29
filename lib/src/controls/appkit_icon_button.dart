@@ -24,7 +24,10 @@ class AppKitIconButton extends StatefulWidget {
     this.padding,
     this.mouseCursor = SystemMouseCursors.basic,
     this.color,
+    this.type = AppKitIconButtonType.outlined,
   });
+
+  final AppKitIconButtonType type;
 
   final Color? color;
 
@@ -140,18 +143,6 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
     final theme = AppKitIconButtonTheme.of(context);
     final iconTheme = AppKitIconTheme.of(context);
 
-    final Color backgroundColor =
-        widget.backgroundColor ?? theme.backgroundColor ?? Colors.transparent;
-    final Color hoverColor =
-        widget.hoverColor ?? theme.hoverColor ?? Colors.transparent;
-    final Color? disabledColor = widget.disabledColor ?? theme.disabledColor;
-    final Color pressedColor =
-        widget.pressedColor ?? theme.pressedColor ?? Colors.transparent;
-    final Color? iconColor =
-        (widget.color ?? iconTheme.color)?.multiplyOpacity(enabled ? 1.0 : 0.5);
-
-    final padding = widget.padding ?? theme.padding ?? const EdgeInsets.all(8);
-
     return MouseRegion(
       cursor: widget.mouseCursor!,
       onEnter: (e) {
@@ -171,37 +162,65 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
           button: true,
           child: ConstrainedBox(
             constraints: widget.boxConstraints,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: widget.shape,
-                borderRadius: widget.borderRadius ??
-                    (widget.shape == BoxShape.rectangle
-                        ? const BorderRadius.all(Radius.circular(6))
-                        : null),
-                color: !enabled
-                    ? disabledColor
-                    : _buttonHeldDown
-                        ? pressedColor
-                        : _isHovered
-                            ? hoverColor
-                            : backgroundColor,
-              ),
-              child: Padding(
-                padding: padding,
-                child: Align(
-                  alignment: widget.alignment,
-                  widthFactor: 1.0,
-                  heightFactor: 1.0,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: AppKitIconTheme(
-                      data: iconTheme.copyWith(color: iconColor),
-                      child: AppKitIcon(widget.icon),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            child: Builder(builder: (context) {
+              if (widget.type == AppKitIconButtonType.outlined) {
+                final Color backgroundColor = widget.backgroundColor ??
+                    theme.outlined.backgroundColor ??
+                    Colors.transparent;
+                final Color hoverColor = widget.hoverColor ??
+                    theme.outlined.hoverColor ??
+                    Colors.transparent;
+                final Color? disabledColor =
+                    widget.disabledColor ?? theme.outlined.disabledColor;
+                final Color pressedColor = widget.pressedColor ??
+                    theme.outlined.pressedColor ??
+                    Colors.transparent;
+                final Color? iconColor = (widget.color ?? iconTheme.color)
+                    ?.multiplyOpacity(enabled ? 1.0 : 0.5);
+                final padding = widget.padding ??
+                    theme.outlined.padding ??
+                    const EdgeInsets.all(8);
+
+                return _OutlinedContainer(
+                    widget: widget,
+                    enabled: enabled,
+                    disabledColor: disabledColor,
+                    buttonHeldDown: _buttonHeldDown,
+                    pressedColor: pressedColor,
+                    isHovered: _isHovered,
+                    hoverColor: hoverColor,
+                    backgroundColor: backgroundColor,
+                    padding: padding,
+                    iconTheme: iconTheme,
+                    iconColor: iconColor);
+              } else {
+                final Color hoverColor = widget.hoverColor ??
+                    theme.flat.hoverColor ??
+                    Colors.transparent;
+                final Color? disabledColor =
+                    widget.disabledColor ?? theme.flat.disabledColor;
+                final Color pressedColor = widget.pressedColor ??
+                    theme.flat.pressedColor ??
+                    Colors.transparent;
+                final Color? iconColor = (widget.color ?? iconTheme.color)
+                    ?.multiplyOpacity(enabled ? 1.0 : 0.5);
+                final padding = widget.padding ??
+                    theme.flat.padding ??
+                    const EdgeInsets.all(8);
+
+                return _PlainContainer(
+                    widget: widget,
+                    enabled: enabled,
+                    disabledColor: disabledColor,
+                    buttonHeldDown: _buttonHeldDown,
+                    pressedColor: pressedColor,
+                    isHovered: _isHovered,
+                    hoverColor: hoverColor,
+                    padding: padding,
+                    iconTheme: iconTheme,
+                    iconColor: iconColor);
+              }
+            }),
           ),
         ),
       ),
@@ -221,5 +240,130 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
         ? AppKitColors.controlBackgroundPressedColor.color
         : AppKitColors.controlBackgroundPressedColor.darkColor;
     return color;
+  }
+}
+
+class _PlainContainer extends StatelessWidget {
+  const _PlainContainer({
+    super.key,
+    required this.widget,
+    required this.enabled,
+    required this.disabledColor,
+    required bool buttonHeldDown,
+    required this.pressedColor,
+    required bool isHovered,
+    required this.hoverColor,
+    required this.padding,
+    required this.iconTheme,
+    required this.iconColor,
+  })  : _buttonHeldDown = buttonHeldDown,
+        _isHovered = isHovered;
+
+  final AppKitIconButton widget;
+  final bool enabled;
+  final Color? disabledColor;
+  final bool _buttonHeldDown;
+  final Color pressedColor;
+  final bool _isHovered;
+  final Color hoverColor;
+  final EdgeInsetsGeometry padding;
+  final AppKitIconThemeData iconTheme;
+  final Color? iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    AppKitIconThemeData iconTheme =
+        AppKitIconTheme.of(context).copyWith(color: iconColor);
+    final color = iconTheme.color;
+
+    iconTheme = AppKitIconTheme.of(context).copyWith(
+        color: !enabled
+            ? disabledColor
+            : _buttonHeldDown
+                ? color?.merge(pressedColor)
+                : _isHovered
+                    ? color?.merge(hoverColor)
+                    : color);
+
+    return Padding(
+      padding: padding,
+      child: Align(
+        alignment: widget.alignment,
+        widthFactor: 1.0,
+        heightFactor: 1.0,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: AppKitIconTheme(
+            data: iconTheme,
+            child: AppKitIcon(widget.icon),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OutlinedContainer extends StatelessWidget {
+  const _OutlinedContainer({
+    super.key,
+    required this.widget,
+    required this.enabled,
+    required this.disabledColor,
+    required bool buttonHeldDown,
+    required this.pressedColor,
+    required bool isHovered,
+    required this.hoverColor,
+    required this.backgroundColor,
+    required this.padding,
+    required this.iconTheme,
+    required this.iconColor,
+  })  : _buttonHeldDown = buttonHeldDown,
+        _isHovered = isHovered;
+
+  final AppKitIconButton widget;
+  final bool enabled;
+  final Color? disabledColor;
+  final bool _buttonHeldDown;
+  final Color pressedColor;
+  final bool _isHovered;
+  final Color hoverColor;
+  final Color backgroundColor;
+  final EdgeInsetsGeometry padding;
+  final AppKitIconThemeData iconTheme;
+  final Color? iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: widget.shape,
+        borderRadius: widget.borderRadius ??
+            (widget.shape == BoxShape.rectangle
+                ? const BorderRadius.all(Radius.circular(6))
+                : null),
+        color: !enabled
+            ? disabledColor
+            : _buttonHeldDown
+                ? pressedColor
+                : _isHovered
+                    ? hoverColor
+                    : backgroundColor,
+      ),
+      child: Padding(
+        padding: padding,
+        child: Align(
+          alignment: widget.alignment,
+          widthFactor: 1.0,
+          heightFactor: 1.0,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: AppKitIconTheme(
+              data: iconTheme.copyWith(color: iconColor),
+              child: AppKitIcon(widget.icon),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
