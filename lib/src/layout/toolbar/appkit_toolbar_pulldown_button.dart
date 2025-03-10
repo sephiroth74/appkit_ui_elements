@@ -8,6 +8,7 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
     required this.items,
     this.icon,
     this.tooltipMessage,
+    this.iconColor,
     this.showLabel = true,
     double? width,
   }) : width = width ?? (showLabel ? 100 : 44);
@@ -23,6 +24,8 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
   final bool showLabel;
 
   final double width;
+
+  final Color? iconColor;
 
   get menuBuilder => (context) {
         return AppKitContextMenu<String>(
@@ -41,7 +44,8 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
     final Color arrowsColor;
 
     textColor = AppKitColors.textColor.resolveFromBrightness(brightness);
-    iconColor = AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
+    iconColor = this.iconColor ??
+        AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
     inlineHoveredBackgroundColor = isDark
         ? Colors.white.withValues(alpha: 0.06)
         : Colors.black.withValues(alpha: 0.05);

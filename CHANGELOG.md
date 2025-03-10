@@ -1,3 +1,7 @@
+## 0.0.14
+
+ * added 'iconColor' to AppKitToolBarPullDownButton
+
 ## 0.0.13
 
  * Added AppKitIconButtonType to the icon button.
