@@ -245,7 +245,6 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
 
 class _PlainContainer extends StatelessWidget {
   const _PlainContainer({
-    super.key,
     required this.widget,
     required this.enabled,
     required this.disabledColor,
@@ -305,7 +304,6 @@ class _PlainContainer extends StatelessWidget {
 
 class _OutlinedContainer extends StatelessWidget {
   const _OutlinedContainer({
-    super.key,
     required this.widget,
     required this.enabled,
     required this.disabledColor,

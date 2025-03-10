@@ -90,7 +90,6 @@ class AppKitContextMenuWidget extends StatelessWidget {
 
 class _InnerMenu extends StatefulWidget {
   const _InnerMenu({
-    super.key,
     required this.menuState,
     required this.backgroundColor,
     required this.borderRadius,
