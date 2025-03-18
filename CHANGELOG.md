@@ -1,3 +1,7 @@
+## 0.0.15
+
+* indeterminate progress circle to use custom color
+
 ## 0.0.14
 
  * added 'iconColor' to AppKitToolBarPullDownButton

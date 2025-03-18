@@ -67,6 +67,9 @@ class _IndicatorsPageState extends State<IndicatorsPage> {
                               AppKitProgress.circle(),
                               const SizedBox(width: 20.0),
                               AppKitProgress.circle(size: 24),
+                              const SizedBox(width: 20.0),
+                              AppKitProgress.circle(
+                                  size: 24, color: AppKitColors.appleOrange),
                             ],
                           ),
                           const SizedBox(height: 20.0),

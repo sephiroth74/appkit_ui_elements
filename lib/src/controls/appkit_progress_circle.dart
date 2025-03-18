@@ -84,7 +84,10 @@ class AppKitProgressCircle extends StatelessWidget {
     if (indeterminate) {
       return Semantics(
         label: semanticsLabel,
-        child: cupertino.CupertinoActivityIndicator(radius: size / 2),
+        child: cupertino.CupertinoActivityIndicator(
+          radius: size / 2,
+          color: color,
+        ),
       );
     }
     return Semantics(
