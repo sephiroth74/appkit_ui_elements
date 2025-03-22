@@ -59,6 +59,27 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                   const AppKitContextMenuDivider(),
                   const AppKitContextMenuItem(
                       child: Text('Select All'), value: 'select_all'),
+                  const AppKitContextMenuDivider(),
+                  const AppKitContextMenuItem.submenu(
+                      child: Text('Sub menu long 1'),
+                      items: [
+                        AppKitContextMenuItem(
+                            child: Text('Sub menu 1'), value: 'sub_menu_1'),
+                        AppKitContextMenuItem(
+                            child: Text('Sub menu 2'), value: 'sub_menu_2'),
+                        AppKitContextMenuItem(
+                            child: Text('Sub menu 3'), value: 'sub_menu_3'),
+                      ]),
+                  const AppKitContextMenuItem.submenu(
+                      child: Text('Sub menu 2'),
+                      items: [
+                        AppKitContextMenuItem(
+                            child: Text('Sub menu 2.1'), value: 'sub_menu2_1'),
+                        AppKitContextMenuItem(
+                            child: Text('Sub menu 2.2'), value: 'sub_menu2_2'),
+                        AppKitContextMenuItem(
+                            child: Text('Sub menu 2.3'), value: 'sub_menu2_3'),
+                      ]),
                 ],
                 maxHeight: 300,
                 minWidth: 200,

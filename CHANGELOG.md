@@ -1,3 +1,7 @@
+## 0.0.16
+
+ * correct arrow position for context menu sub menu entry
+
 ## 0.0.15
 
 * indeterminate progress circle to use custom color

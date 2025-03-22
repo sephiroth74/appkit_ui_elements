@@ -191,8 +191,16 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
               children: [
                 // Left to right
                 statusIconWidget,
-                Flexible(child: textWidget),
-                if (hasSubmenu) ...[const Spacer(), subMenuIconWidget],
+                Flexible(
+                  flex: 0,
+                  child: textWidget,
+                ),
+                if (hasSubmenu) ...[
+                  const Spacer(
+                    flex: 2,
+                  ),
+                  subMenuIconWidget
+                ],
               ],
             ),
           ),
