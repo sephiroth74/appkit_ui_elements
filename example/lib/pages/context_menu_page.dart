@@ -64,7 +64,9 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                       child: Text('Sub menu long 1'),
                       items: [
                         AppKitContextMenuItem(
-                            child: Text('Sub menu 1'), value: 'sub_menu_1'),
+                            child: Text('Sub menu 1'),
+                            value: 'sub_menu_1',
+                            itemState: AppKitItemState.on),
                         AppKitContextMenuItem(
                             child: Text('Sub menu 2'), value: 'sub_menu_2'),
                         AppKitContextMenuItem(

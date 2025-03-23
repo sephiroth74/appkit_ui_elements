@@ -12,6 +12,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     onKeyEvent: (node, event) {
       if (event.logicalKey == LogicalKeyboardKey.enter) {
         this._handleItemSelection(node.context, focusedEntry);
+        return KeyEventResult.handled;
       }
       return KeyEventResult.ignored;
     },

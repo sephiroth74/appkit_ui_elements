@@ -48,10 +48,15 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
     final menuState = AppKitContextMenuState.of(context);
 
     return MouseRegion(
-      onEnter: (event) =>
-          enabled ? _onMouseEnter(context, event, menuState) : null,
+      onEnter: (event) => enabled
+          ? _onMouseEnter(context,
+              event: event, menuState: menuState, focusNode: focusNode)
+          : null,
       onExit: (event) => widget.entry.onMouseExit(event, menuState),
-      onHover: (event) => enabled ? _onMouseHover(event, menuState) : null,
+      onHover: (event) => enabled
+          ? _onMouseHover(
+              event: event, menuState: menuState, focusNode: focusNode)
+          : null,
       child: Builder(
         builder: (_) {
           if (entry is AppKitContextMenuItem) {
@@ -63,7 +68,10 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
               onFocusChange: enabled
                   ? (value) {
                       if (value) {
-                        _ensureFocused(item, menuState, focusNode);
+                        _ensureFocused(
+                            entry: item,
+                            menuState: menuState,
+                            focusNode: focusNode);
                       }
                     }
                   : null,
@@ -77,21 +85,16 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
     );
   }
 
-  /// Handles the mouse enter event for the context menu entry.
-  ///
-  /// This method is called when the mouse pointer enters the area of the context menu entry.
-  /// - If the entry is a submenu, it shows the submenu if it is not already opened.
-  /// - If the entry is not a submenu, it closes the current context menu.
-  void _onMouseEnter(
-    BuildContext context,
-    PointerEnterEvent event,
-    AppKitContextMenuState menuState,
-  ) {
+  void _onEnter(BuildContext context, AppKitContextMenuState menuState) {
     if (widget.entry is AppKitContextMenuItem) {
       final item = widget.entry as AppKitContextMenuItem;
       final isSubmenuItem = item.hasSubmenu;
       final isOpenedSubmenu = menuState.isOpened(item);
       final isFocused = menuState.isFocused(item);
+
+      if (isFocused && menuState.isSubmenuOpen && !isOpenedSubmenu) {
+        menuState.closeSubmenu();
+      }
 
       if (!isSubmenuItem && !isFocused) {
         menuState.closeSubmenu();
@@ -101,19 +104,41 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
 
       menuState.setFocusedEntry(item);
     }
+  }
+
+  /// Handles the mouse enter event for the context menu entry.
+  ///
+  /// This method is called when the mouse pointer enters the area of the context menu entry.
+  /// - If the entry is a submenu, it shows the submenu if it is not already opened.
+  /// - If the entry is not a submenu, it closes the current context menu.
+  void _onMouseEnter(
+    BuildContext context, {
+    required PointerEnterEvent event,
+    required AppKitContextMenuState menuState,
+    required FocusNode focusNode,
+  }) {
+    _ensureFocused(entry: entry, menuState: menuState, focusNode: focusNode);
     widget.entry.onMouseEnter(event, menuState);
   }
 
-  _onMouseHover(PointerHoverEvent event, AppKitContextMenuState menuState) {
-    if (menuState.isFocused(entry)) {
-      _ensureFocused(entry, menuState, focusNode);
+  _onMouseHover({
+    required PointerHoverEvent event,
+    required AppKitContextMenuState menuState,
+    required FocusNode focusNode,
+  }) {
+    if (!menuState.isFocused(entry)) {
+      _ensureFocused(entry: entry, menuState: menuState, focusNode: focusNode);
     }
     widget.entry.onMouseHover(event, menuState);
   }
 
-  void _ensureFocused(AppKitContextMenuEntry entry,
-      AppKitContextMenuState menuState, FocusNode focusNode) {
+  void _ensureFocused({
+    required AppKitContextMenuEntry entry,
+    required AppKitContextMenuState menuState,
+    required FocusNode focusNode,
+  }) {
     menuState.focusScopeNode.requestFocus(focusNode);
     menuState.setFocusedEntry(entry);
+    _onEnter(context, menuState);
   }
 }

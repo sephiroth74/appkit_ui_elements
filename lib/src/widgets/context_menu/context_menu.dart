@@ -44,7 +44,8 @@ class AppKitContextMenu<T> {
   }
 
   AppKitContextMenuItem<T>? findItemByValue(T? value) {
-    return _firstWhereOrNull(entries, (e) => e.value == value);
+    return _firstWhereOrNull(
+        entries, (e) => e.value != null && e.value == value);
   }
 
   AppKitContextMenu<T> copyWith({

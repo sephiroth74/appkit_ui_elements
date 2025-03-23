@@ -150,7 +150,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
                       color: iconColor,
                     ),
                   )
-                : const SizedBox(width: 6.0);
+                : const SizedBox(width: 16.0);
 
         final subMenuIconWidget = Padding(
           padding: const EdgeInsets.only(top: 2.5),
