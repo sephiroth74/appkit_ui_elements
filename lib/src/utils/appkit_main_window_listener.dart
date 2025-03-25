@@ -120,6 +120,37 @@ class _MainWindowStateListenerDelegate extends NSWindowDelegate {
   void windowDidResignMain() => onWindowDidResignMain();
 }
 
+/// Model for the main window.
+///
+/// This model is used to determine if the current window is the main window.
+///
+/// This model is used by [MainWindowProviderWidgetBuilder].
+/// Example:
+///
+/// ```dart
+/// MainWindowProviderWidgetBuilder(
+///   builder: (context, isMainWindow) {
+///     return isMainWindow ? MyMainWindow() : MySecondaryWindow();
+///   },
+/// )
+/// ```
+///
+/// Inside a child widget it can be just consumed:
+///
+/// ```dart
+/// final isMainWindow = context.watch<MainWindowModel>().isMainWindow;
+/// ```
+///
+/// or:
+///
+/// ```dart
+/// Consumer<MainWindowModel>(
+///   builder: (context, model, child) {
+///     return model.isMainWindow ? MyMainWindow() : MySecondaryWindow();
+///   },
+/// )
+/// ```
+///
 class MainWindowModel extends ChangeNotifier {
   bool _isMainWindow = true;
 
