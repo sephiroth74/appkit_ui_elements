@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 /// A custom combo box widget with customizable properties.
 ///
@@ -373,7 +374,8 @@ class _AppKitComboBoxState extends State<AppKitComboBox> {
               onEnter: enabled ? _handleMouseEnter : null,
               onExit: enabled ? _handleMouseExit : null,
               child: GestureDetector(
-                child: MainWindowBuilder(builder: (context, isMainWindow) {
+                child: Consumer<MainWindowModel>(builder: (context, model, _) {
+                  final isMainWindow = model.isMainWindow;
                   final theme = AppKitTheme.of(context);
                   final suffix = textFieldSize != null
                       ? _buildPullDownWidget(

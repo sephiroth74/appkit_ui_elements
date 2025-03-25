@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 extension PopoverX on BuildContext {
   Future<dynamic> showPopover(
@@ -124,8 +125,8 @@ class _AppKitPopOverPageRoute<T> extends PageRoute<T> {
       removeLeft: true,
       removeRight: true,
       child: capturedThemes.wrap(LayoutBuilder(builder: (context, constraints) {
-        return MainWindowBuilder(builder: (context, isMainWindow) {
-          if (!isMainWindow) {
+        return Consumer<MainWindowModel>(builder: (context, model, _) {
+          if (!model.isMainWindow) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               // remove the navigator overlay, if it's a AppKitPopOverPageRoute
               final navigator = Navigator.of(context);

@@ -5,29 +5,11 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:macos_window_utils/macos/ns_window_delegate.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
-
-class MainWindowStreamBuilder extends StreamBuilder {
-  MainWindowStreamBuilder({super.key, required super.builder})
-      : super(stream: MainWindowStateListener.instance.isMainWindow);
-}
 
 typedef MainWindowWidgetBuilder = Widget Function(
     BuildContext context, bool isMainWindow);
-
-class MainWindowBuilder extends StatelessWidget {
-  final MainWindowWidgetBuilder builder;
-
-  const MainWindowBuilder({super.key, required this.builder});
-
-  @override
-  Widget build(BuildContext context) {
-    return MainWindowStreamBuilder(builder: (context, snapshot) {
-      final isMainWindow = snapshot.hasData ? snapshot.data as bool : true;
-      return builder(context, isMainWindow);
-    });
-  }
-}
 
 class MainWindowListener extends StatefulWidget {
   final Widget child;
@@ -136,4 +118,62 @@ class _MainWindowStateListenerDelegate extends NSWindowDelegate {
 
   @override
   void windowDidResignMain() => onWindowDidResignMain();
+}
+
+class MainWindowModel extends ChangeNotifier {
+  bool _isMainWindow = true;
+
+  bool get isMainWindow => _isMainWindow;
+
+  set isMainWindow(bool value) {
+    if (_isMainWindow == value) return;
+    _isMainWindow = value;
+    notifyListeners();
+  }
+}
+
+class MainWindowProviderWidgetBuilder extends StatefulWidget {
+  final Function(BuildContext context, bool isMainWindow) builder;
+  const MainWindowProviderWidgetBuilder({super.key, required this.builder});
+
+  @override
+  State<MainWindowProviderWidgetBuilder> createState() =>
+      _MainWindowProviderWidgetBuilderState();
+}
+
+class _MainWindowProviderWidgetBuilderState
+    extends State<MainWindowProviderWidgetBuilder> {
+  late final debugLabel = shortHash(this);
+  late final _model = MainWindowModel();
+  late StreamSubscription<bool> _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _subscription =
+        MainWindowStateListener.instance.isMainWindow.listen((isMainWindow) {
+      _model.isMainWindow = isMainWindow;
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: _model,
+      builder: (context, child) {
+        return Consumer<MainWindowModel>(
+          builder: (context, model, child) {
+            return widget.builder(context, model.isMainWindow);
+          },
+        );
+      },
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const _kSheetBorderRadius = BorderRadius.all(Radius.circular(12.0));
 const EdgeInsets _defaultInsetPadding =
@@ -29,7 +30,7 @@ class AppKitSheet extends StatelessWidget {
     final EdgeInsets effectivePadding =
         MediaQuery.of(context).viewInsets + (insetPadding ?? EdgeInsets.zero);
 
-    return MainWindowBuilder(builder: (context, isMainWindow) {
+    return Consumer<MainWindowModel>(builder: (context, model, _) {
       final theme = AppKitTheme.of(context);
       final brightness = AppKitTheme.brightnessOf(context);
 
@@ -112,8 +113,8 @@ Future<T?> showAppKitSheet<T>({
       _AppKitSheetRoute<T>(
         settings: routeSettings,
         pageBuilder: (context, animation, secondaryAnimation) {
-          return MainWindowBuilder(
-            builder: (context, isMainWindow) {
+          return Consumer<MainWindowModel>(
+            builder: (context, model, _) {
               return builder(context);
             },
           );

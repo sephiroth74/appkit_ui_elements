@@ -2,6 +2,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 /// A custom combo button widget with customizable properties.
 ///
@@ -196,7 +197,8 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
       label: widget.semanticLabel,
       button: true,
       enabled: enabled,
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
+        final isMainWindow = model.isMainWindow;
         final theme = AppKitTheme.of(context);
         final comboButtonTheme = AppKitComboButtonTheme.of(context);
         final comboButtonThemeDataSize =

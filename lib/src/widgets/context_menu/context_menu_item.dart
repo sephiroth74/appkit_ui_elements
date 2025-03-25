@@ -23,6 +23,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     this.itemState,
     this.onTap,
     super.enabled = true,
+    super.debugLabel,
   });
 
   AppKitContextMenuItem.plain(
@@ -35,9 +36,9 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     this.itemState,
     this.onTap,
     super.enabled = true,
+    super.debugLabel,
   }) : child = Text(label);
 
-  @override
   @override
   String toString() => 'ContextMenuItem(title: $child, value: $value)';
 
@@ -57,13 +58,15 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     required this.child,
     required this.items,
     super.enabled = true,
+    super.debugLabel,
     this.onTap,
-  })  : value = null,
-        itemState = AppKitItemState.off,
+    this.value,
+  })  : itemState = AppKitItemState.off,
         mixedImage = null,
         onImage = null,
         offImage = null;
 
+  @override
   bool get hasSubmenu => items != null;
 
   bool get isFocusMaintained => false;

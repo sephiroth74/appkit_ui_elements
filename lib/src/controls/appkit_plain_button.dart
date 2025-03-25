@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// A plain button widget for the AppKit UI library.
 ///
@@ -80,7 +81,7 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
         onTapUp: enabled ? _handleTapUp : null,
         onTapCancel: enabled ? _handleTapCancel : null,
         onTap: enabled ? _handleTap : null,
-        child: MainWindowBuilder(builder: (context, isMainWindow) {
+        child: Consumer<MainWindowModel>(builder: (context, model, _) {
           final theme = AppKitTheme.of(context);
           final isDark = theme.brightness == Brightness.dark;
           final color = widget.color ??

@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 const int _kAnimationDuration = 200;
 
@@ -253,7 +254,8 @@ class _AppKitSliderState extends State<AppKitSlider>
       slider: true,
       label: widget.semanticLabel,
       value: widget.value.toStringAsFixed(2),
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
+        final isMainWindow = model.isMainWindow;
         final AppKitThemeData theme = AppKitTheme.of(context);
         final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
         final discreteThumbSize = sliderTheme.discreteThumbSize;

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 const _kMin = 0.0;
 const _kMax = 1.0;
@@ -277,7 +278,8 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
       child: SizedBox(
         width: size,
         height: size,
-        child: MainWindowBuilder(builder: (context, isMainWindow) {
+        child: Consumer<MainWindowModel>(builder: (context, model, _) {
+          final isMainWindow = model.isMainWindow;
           final controlBackgroundColor =
               AppKitDynamicColor.resolve(context, AppKitColors.controlColor);
           final sliderTheme = AppKitCircularSliderTheme.of(context);

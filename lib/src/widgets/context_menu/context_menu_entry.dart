@@ -1,12 +1,15 @@
 import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_state.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 abstract base class AppKitContextMenuEntry<T> extends Equatable {
   final bool enabled;
+  final String? _debugLabel;
 
-  const AppKitContextMenuEntry({required this.enabled});
+  const AppKitContextMenuEntry({required this.enabled, String? debugLabel})
+      : _debugLabel = debugLabel;
 
   Widget builder(BuildContext context, AppKitContextMenuState menuState);
 
@@ -18,9 +21,10 @@ abstract base class AppKitContextMenuEntry<T> extends Equatable {
   void onMouseHover(
       PointerHoverEvent event, AppKitContextMenuState menuState) {}
 
+  bool get hasSubmenu => false;
+
   @override
   List<Object?> get props => [];
 
-  String get debugLabel =>
-      '$runtimeType ${hashCode.toString().substring(0, 5)}';
+  String get debugLabel => _debugLabel ?? '$runtimeType ${shortHash(this)}';
 }

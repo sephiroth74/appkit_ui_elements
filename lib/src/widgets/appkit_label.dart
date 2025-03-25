@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:provider/provider.dart';
 
 /// A custom label widget that extends [StatelessWidget].
 ///
@@ -33,7 +34,7 @@ class AppKitLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    return MainWindowBuilder(builder: (context, isMainWindow) {
+    return Consumer<MainWindowModel>(builder: (context, model, _) {
       final theme = AppKitTheme.of(context);
       final text = DefaultTextStyle(
         style: (theme.typography.body).copyWith(

@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 /// Shows the root context menu popup.
 Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
@@ -116,8 +117,8 @@ class _AppKitContextMenuPageRoute<T> extends PageRoute<T> {
       removeLeft: true,
       removeRight: true,
       child: capturedThemes.wrap(LayoutBuilder(builder: (context, constraints) {
-        return MainWindowBuilder(builder: (context, isMainWindow) {
-          if (!isMainWindow) {
+        return Consumer<MainWindowModel>(builder: (context, model, _) {
+          if (!model.isMainWindow) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               Navigator.removeRoute(context, this);
             });

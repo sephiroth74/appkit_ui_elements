@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 const int _kiOSHorizontalCursorOffsetPixels = -2;
 const int _kChangedTimerDuration = 500;
@@ -692,7 +693,7 @@ class _AppKitTextFieldState extends State<AppKitTextField>
     TextStyle? resolvedPlaceholderStyle = widget.placeholderStyle;
     TextStyle? resolvedStyle = widget.style;
 
-    return MainWindowBuilder(builder: (context, isMainWindow) {
+    return Consumer<MainWindowModel>(builder: (context, model, _) {
       final theme = AppKitTheme.of(context);
       Color textColor = theme.typography.body.color ??
           AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary);

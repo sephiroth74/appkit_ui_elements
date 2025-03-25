@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:provider/provider.dart';
 
 class AppKitOverlayFilterWidget extends StatelessWidget {
   const AppKitOverlayFilterWidget({
@@ -32,7 +33,7 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppKitWallpaperTintingOverride(
       enabled: enableWallpaperTinting,
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
         return Container(
           decoration: BoxDecoration(
             color: color,

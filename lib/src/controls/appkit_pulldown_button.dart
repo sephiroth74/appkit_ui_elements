@@ -2,6 +2,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 /// A custom pulldown button widget for the AppKit UI framework.
 ///
@@ -397,7 +398,8 @@ class _AppKitPulldownButtonState<T> extends State<AppKitPulldownButton<T>>
       onExit: enabled ? _handleMouseExit : null,
       child: GestureDetector(
         onTap: enabled ? _handleTap : null,
-        child: MainWindowBuilder(builder: (context, isMainWindow) {
+        child: Consumer<MainWindowModel>(builder: (context, model, _) {
+          final isMainWindow = model.isMainWindow;
           final popupButtonTheme = AppKitPopupButtonTheme.of(context);
           final height = style.getHeight(
               theme: popupButtonTheme, controlSize: controlSize);

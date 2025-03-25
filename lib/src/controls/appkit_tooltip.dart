@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 const Duration _fadeInDuration = Duration(milliseconds: 150);
 const Duration _fadeOutDuration = Duration(milliseconds: 75);
@@ -313,7 +314,8 @@ class _AppKitTooltipState extends State<AppKitTooltip>
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
 
-    Widget result = MainWindowBuilder(builder: (context, isMainWindow) {
+    Widget result =
+        Consumer<MainWindowModel>(builder: (context, isMainWindow, _) {
       return widget.child;
     });
 

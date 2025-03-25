@@ -1,6 +1,6 @@
 name: appkit_ui_elements
 description: "Flutter widgets and themes for the current macOS desktop. It was inspired by the great [macos_ui](https://pub.dev/packages/macos_ui) library."
-version: 0.0.18
+version: 0.0.19
 homepage: https://github.com/sephiroth74/appkit_ui_elements
 repository: https://github.com/sephiroth74/appkit_ui_elements
 
@@ -24,6 +24,7 @@ dependencies:
   indexed: ^0.0.8
   dartz: ^0.10.1
   intl: ">=0.19.0"
+  provider: ^6.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

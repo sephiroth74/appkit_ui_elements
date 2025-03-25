@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const _kSize = 22.0;
 const _kBorderRadiusRatio = 4.4;
@@ -99,7 +100,8 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
                 minHeight: widget.size,
                 maxWidth: widget.size,
                 maxHeight: widget.size),
-            child: MainWindowBuilder(builder: (context, isMainWindow) {
+            child: Consumer<MainWindowModel>(builder: (context, model, _) {
+              final isMainWindow = model.isMainWindow;
               final theme = AppKitTheme.of(context);
               switch (widget.style) {
                 case AppKitControlButtonIconStyle.bordered:

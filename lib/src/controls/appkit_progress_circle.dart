@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 const double _kSize = 64.0;
 const double _kStrokeWidth = 10.0;
@@ -93,7 +94,7 @@ class AppKitProgressCircle extends StatelessWidget {
     return Semantics(
       value: value?.toStringAsFixed(2),
       label: semanticsLabel,
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
         final theme = AppKitTheme.of(context);
         final progressTheme = AppKitProgressTheme.of(context);
         final isMainWindow =

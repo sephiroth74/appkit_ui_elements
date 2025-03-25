@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const _kSize = 13.0;
 
@@ -201,7 +202,7 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
         label: widget.semanticLabel,
         slider: true,
         value: widget.value.toString(),
-        child: MainWindowBuilder(builder: (context, isMainWindow) {
+        child: Consumer<MainWindowModel>(builder: (context, model, _) {
           final placeholderOpacity = theme.placeholderOpacity;
           final fillColor = widget.imageColor ?? theme.imageColor;
           final placeholderColor = placeholderAlwaysVisible || _handleDown

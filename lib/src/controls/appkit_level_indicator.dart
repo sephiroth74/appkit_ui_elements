@@ -1,4 +1,5 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:provider/provider.dart';
 
 const _kHeight = 16.0;
 const _kWidth = 64.0;
@@ -194,7 +195,7 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
       label: widget.semanticLabel,
       slider: true,
       value: widget.value.toStringAsFixed(2),
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
         return LayoutBuilder(builder: (context, constraints) {
           final levelIndicatorsTheme = AppKitLevelIndicatorsTheme.of(context);
           final normalColor =

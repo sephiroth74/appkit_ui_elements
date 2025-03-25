@@ -84,7 +84,7 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                       ]),
                 ],
                 maxHeight: 300,
-                minWidth: 200,
+                minWidth: 100,
               ),
               child: const SizedBox.expand(
                 child: Center(

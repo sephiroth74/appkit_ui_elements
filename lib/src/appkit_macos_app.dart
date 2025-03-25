@@ -310,7 +310,7 @@ class _AppKitMacosAppState extends State<AppKitMacosApp> {
       widget.routerDelegate != null || widget.routerConfig != null;
 
   Widget _macosBuilder(BuildContext context, Widget? child) {
-    return MainWindowBuilder(builder: (context, isMainWindow) {
+    return MainWindowProviderWidgetBuilder(builder: (context, isMainWindow) {
       return StreamBuilder(
           stream: AppKitAccentColorListener.instance.onChanged,
           builder: (context, _) {

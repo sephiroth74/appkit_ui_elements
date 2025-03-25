@@ -1,5 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppKitPopoverWidget extends StatelessWidget {
   final AppKitPopoverState popoverState;
@@ -55,7 +56,7 @@ class AppKitPopoverWidget extends StatelessWidget {
               child: Transform.scale(
                 scale: value,
                 alignment: Alignment.center,
-                child: MainWindowBuilder(builder: (context, isMainWindow) {
+                child: Consumer<MainWindowModel>(builder: (context, model, _) {
                   final theme = AppKitTheme.of(context);
                   final isDark = theme.brightness == Brightness.dark;
                   return CustomPaint(

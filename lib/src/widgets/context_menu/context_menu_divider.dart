@@ -13,7 +13,4 @@ final class AppKitContextMenuDivider<T> extends AppKitContextMenuEntry<T> {
       endIndent: 6,
     );
   }
-
-  @override
-  String get debugLabel => 'ContextMenuItemDivider';
 }

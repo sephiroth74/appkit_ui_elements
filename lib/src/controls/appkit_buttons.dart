@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 100);
 
@@ -166,7 +167,8 @@ class _AppKitButtonState extends State<AppKitButton> {
             ? widget.mouseCursor ?? SystemMouseCursors.basic
             : SystemMouseCursors.basic,
         hitTestBehavior: HitTestBehavior.opaque,
-        child: MainWindowBuilder(builder: (context, isMainWindow) {
+        child: Consumer<MainWindowModel>(builder: (context, model, child) {
+          final isMainWindow = model.isMainWindow;
           final theme = AppKitTheme.of(context);
           final buttonTheme = AppKitButtonTheme.of(context);
           if (widget.style == AppKitButtonStyle.inline) {

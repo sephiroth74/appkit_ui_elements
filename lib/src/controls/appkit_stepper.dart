@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const _longPressDuration = Duration(milliseconds: 500);
 const _tickerDuration = Duration(milliseconds: 100);
@@ -111,7 +112,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
           onPanCancel: widget.enabled ? _onPanCancel : null,
           onPanUpdate: widget.enabled ? _onPanUpdate : null,
           onPanStart: widget.enabled ? _onPanStart : null,
-          child: MainWindowBuilder(builder: (context, isMainWindow) {
+          child: Consumer<MainWindowModel>(builder: (context, model, _) {
             final AppKitThemeData theme = AppKitTheme.of(context);
             final isDark = theme.brightness.isDark;
             final controlBorderColor = isDark

@@ -3,6 +3,7 @@ import 'package:appkit_ui_elements/src/widgets/date_picker/appkit_graphical_date
 import 'package:appkit_ui_elements/src/widgets/date_picker/appkit_textual_date_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 typedef OnDateChanged = void Function(Either<DateTime, DateTimeRange> date);
 
@@ -158,7 +159,8 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
     return Semantics(
       label: widget.semanticLabel,
       container: true,
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
+        final isMainWindow = model.isMainWindow;
         if (widget.type == AppKitDatePickerType.textual ||
             widget.type == AppKitDatePickerType.textualWithStepper) {
           return TextualDatePicker(

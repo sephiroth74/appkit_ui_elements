@@ -80,8 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('build');
-
     return PlatformMenuBar(
       menus: const [],
       child: AppKitWindow(

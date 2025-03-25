@@ -2,6 +2,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 class AppKitSegmentedControl extends StatefulWidget {
   /// A controller for the segmented control.
@@ -144,8 +145,9 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    return MainWindowBuilder(
-      builder: (context, isMainWindow) {
+    return Consumer<MainWindowModel>(
+      builder: (context, model, _) {
+        final isMainWindow = model.isMainWindow;
         final AppKitThemeData theme = AppKitTheme.of(context);
         final segmentedControlTheme = AppKitSegmentedControlTheme.of(context);
         final accentColor = widget.color ??

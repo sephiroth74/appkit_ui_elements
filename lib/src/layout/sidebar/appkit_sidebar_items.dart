@@ -1,6 +1,7 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 const ShapeBorder _defaultShape = RoundedRectangleBorder(
@@ -79,7 +80,7 @@ class AppKitSidebarItems extends StatelessWidget {
     if (items.isEmpty) return const SizedBox.shrink();
     assert(debugCheckHasAppKitTheme(context));
     assert(currentIndex < _allItems.length);
-    return MainWindowBuilder(builder: (context, isMainWindow) {
+    return Consumer<MainWindowModel>(builder: (context, model, _) {
       return AppKitIconTheme.merge(
         data: const AppKitIconThemeData(size: 20),
         child: Builder(

@@ -2,6 +2,7 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:provider/provider.dart';
 
 const _kDialogBorderRadius = BorderRadius.all(Radius.circular(10.0));
 const _kDefaultDialogConstraints = BoxConstraints(
@@ -56,7 +57,7 @@ class AppKitDialog extends StatelessWidget {
       Colors.white.withValues(alpha: 0.15),
     );
 
-    return MainWindowBuilder(builder: (context, isMainWindow) {
+    return Consumer<MainWindowModel>(builder: (context, model, _) {
       final theme = AppKitTheme.of(context);
       final isHeightConstrained = constraints?.hasBoundedHeight ?? false;
       return Dialog(

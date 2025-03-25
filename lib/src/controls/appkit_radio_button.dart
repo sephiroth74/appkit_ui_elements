@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:provider/provider.dart';
 
 const _kSize = 14.0;
 const _kBorderWidthRatio = 28;
@@ -163,8 +164,9 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
       child: Semantics(
         checked: widget.isSelected,
         label: widget.semanticLabel,
-        child: MainWindowBuilder(
-          builder: (context, isMainWindow) {
+        child: Consumer<MainWindowModel>(
+          builder: (context, model, _) {
+            final isMainWindow = model.isMainWindow;
             final theme = AppKitTheme.of(context);
             final isDark = theme.brightness == Brightness.dark;
             final controlBackgroundColor = theme.controlColor;

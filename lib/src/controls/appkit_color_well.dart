@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:indexed/indexed.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// See: https://developer.apple.com/documentation/appkit/nscolorpanel/mode
@@ -265,7 +266,7 @@ class _AppKitColorWellState extends State<AppKitColorWell> {
     return Semantics(
       label: widget.semanticLabel,
       button: true,
-      child: MainWindowBuilder(builder: (context, isMainWindow) {
+      child: Consumer<MainWindowModel>(builder: (context, model, _) {
         final theme = AppKitTheme.of(context);
         final colorTheme = AppKitColorWellTheme.of(context);
         return MouseRegion(
