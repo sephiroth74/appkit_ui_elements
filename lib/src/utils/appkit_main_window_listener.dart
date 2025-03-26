@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:appkit_ui_elements/src/utils/debugger.dart';
@@ -7,68 +6,101 @@ import 'package:flutter/foundation.dart';
 import 'package:macos_window_utils/macos/ns_window_delegate.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:window_manager/window_manager.dart';
 
 typedef MainWindowWidgetBuilder = Widget Function(
     BuildContext context, bool isMainWindow);
 
-class MainWindowStateListener {
-  final BehaviorSubject<bool> isMainWindow = BehaviorSubject.seeded(true);
+abstract mixin class _MainWindowStateListener {
+  void dispose();
+}
 
-  static MainWindowStateListener instance =
-      MainWindowStateListener._constructor();
+class _MainWindowStateListenerWindowManager
+    with WindowListener, _MainWindowStateListener {
+  _MainWindowStateListenerWindowManager() {
+    windowManager.addListener(this);
+  }
 
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+  }
+
+  @override
+  void onWindowFocus() {
+    super.onWindowFocus();
+    MainWindowStateListener.instance.isMainWindow.add(true);
+  }
+
+  @override
+  void onWindowBlur() {
+    super.onWindowBlur();
+    MainWindowStateListener.instance.isMainWindow.add(false);
+  }
+}
+
+class _MainWindowStateListenerNSWindowDelegate extends NSWindowDelegate
+    with _MainWindowStateListener {
   NSWindowDelegateHandle? _handle;
 
-  MainWindowStateListener._constructor() {
+  _MainWindowStateListenerNSWindowDelegate() {
     _init();
   }
 
   _init() {
-    if (kIsWeb) return;
-    if (!Platform.isMacOS) return;
-
     _initDelegate();
     _initIsWindowMain();
   }
 
   /// Initializes the [NSWindowDelegate] to listen for main window changes.
   void _initDelegate() {
-    final delegate = _MainWindowStateListenerDelegate(
-      onWindowDidBecomeMain: () => isMainWindow.add(true),
-      onWindowDidResignMain: () => isMainWindow.add(false),
-    );
-    _handle = WindowManipulator.addNSWindowDelegate(delegate);
+    _handle = WindowManipulator.addNSWindowDelegate(this);
+  }
+
+  @override
+  void windowDidBecomeMain() {
+    super.windowDidBecomeMain();
+    MainWindowStateListener.instance.isMainWindow.sink.add(true);
+  }
+
+  @override
+  void windowDidResignMain() {
+    super.windowDidResignMain();
+    MainWindowStateListener.instance.isMainWindow.sink.add(false);
   }
 
   /// Initializes the [_isMainWindow] variable.
   Future<void> _initIsWindowMain() async {
-    isMainWindow.sink.add(await WindowManipulator.isMainWindow());
+    MainWindowStateListener.instance.isMainWindow.sink
+        .add(await WindowManipulator.isMainWindow());
   }
 
   /// Disposes this listener.
+  @override
   void dispose() {
     _handle?.removeFromHandler();
   }
 }
 
-/// The [NSWindowDelegate] used by [WindowMainStateListener].
-class _MainWindowStateListenerDelegate extends NSWindowDelegate {
-  _MainWindowStateListenerDelegate({
-    required this.onWindowDidBecomeMain,
-    required this.onWindowDidResignMain,
-  });
+class MainWindowStateListener {
+  final BehaviorSubject<bool> isMainWindow = BehaviorSubject.seeded(true);
+  static MainWindowStateListener instance = MainWindowStateListener._();
+  MainWindowStateListener._();
+}
 
-  /// Called when the window becomes the main window.
-  final void Function() onWindowDidBecomeMain;
+class MainWindowStateListenerDelegate {
+  _MainWindowStateListener? _listener;
 
-  /// Called when the window resigns as the main window.
-  final void Function() onWindowDidResignMain;
+  void init() {
+    _listener ??= AppKitUiElements.useWindowManager
+        ? _MainWindowStateListenerWindowManager()
+        : _MainWindowStateListenerNSWindowDelegate();
+  }
 
-  @override
-  void windowDidBecomeMain() => onWindowDidBecomeMain();
-
-  @override
-  void windowDidResignMain() => onWindowDidResignMain();
+  void dispose() {
+    _listener?.dispose();
+    _listener = null;
+  }
 }
 
 /// Model for the main window.
@@ -128,20 +160,23 @@ class _MainWindowProviderWidgetBuilderState
   late final debugLabel = shortHash(this);
   late final _model = MainWindowModel();
   late StreamSubscription<bool> _subscription;
+  MainWindowStateListenerDelegate? _delegate;
 
   @override
   void initState() {
     super.initState();
 
-    _subscription = MainWindowStateListener.instance.isMainWindow
-        .distinct()
-        .listen((isMainWindow) {
+    _subscription =
+        MainWindowStateListener.instance.isMainWindow.listen((isMainWindow) {
       _model.isMainWindow = isMainWindow;
     });
+
+    _delegate = MainWindowStateListenerDelegate()..init();
   }
 
   @override
   void dispose() {
+    _delegate?.dispose();
     _subscription.cancel();
     super.dispose();
   }

@@ -218,7 +218,7 @@ class _DecoratedContainer extends StatelessWidget {
             ? Colors.black
             : Colors.white
         : !isMainWindow && enabled
-            ? Colors.white
+            ? Colors.black
             : Colors.black.withValues(alpha: 0.5);
 
     return Container(
