@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
-var _kLoggerLevel = Level.FINEST;
+var _kLoggerLevel = Level.ALL;
 
 void initLogging({bool isDebug = true}) {
   hierarchicalLoggingEnabled = true;

@@ -41,7 +41,7 @@ void main() async {
   assert(Platform.isMacOS && !kIsWeb,
       'This example is intended to run on macOS desktop only.');
   await _configureMacosWindowUtils();
-  await AppKitUiElements.ensureInitialized(debug: false);
+  await AppKitUiElements.ensureInitialized(debug: true);
   runApp(const MyApp());
 }
 
