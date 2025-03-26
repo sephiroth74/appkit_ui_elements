@@ -9,6 +9,3 @@ export 'theme/library.dart';
 export 'utils/library.dart';
 export 'widgets/library.dart';
 export 'enums/enums.dart';
-
-export 'package:macos_window_utils/macos_window_utils.dart';
-export 'package:appkit_ui_element_colors/appkit_ui_element_colors.dart';
