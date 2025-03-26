@@ -1,3 +1,8 @@
+## 0.0.20
+
+* Visual effects for toolbar and main content
+* Fixed some issues with the context menu positioning
+
 ## 0.0.17
 
 * libs update
