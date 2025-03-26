@@ -241,8 +241,8 @@ class _DecoratedContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           boxShadow: [
             if (!isDark && enabled && (value == false || !isMainWindow)) ...[
-              const BoxShadow(
-                color: AppKitColors.shadowColor,
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
               ),
               BoxShadow(
                 color:
