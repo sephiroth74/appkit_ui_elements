@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:appkit_ui_elements/appkit_ui_elements.dart' hide left, right;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,16 +20,6 @@ bool debugCheckHasAppKitTheme(BuildContext context, [bool check = true]) {
   }());
   return true;
 }
-
-Color luminance(Color backgroundColor,
-    {required CupertinoDynamicColor textColor}) {
-  return backgroundColor.computeLuminance() >= 0.5
-      ? textColor.darkColor
-      : textColor.color;
-}
-
-int lerpInt(int begin, int end, double t) =>
-    (begin + (end - begin) * t).round();
 
 extension BuildContextExtensions on BuildContext {
   Rect? getWidgetBounds() {
@@ -67,168 +55,6 @@ extension OffsetExtension on Offset {
   Offset round() {
     return Offset(dx.roundToDouble(), dy.roundToDouble());
   }
-}
-
-/// Calculates the position of the context menu based on the position of the
-/// menu and the position of the parent menu. To prevent the menu from
-/// extending beyond the screen boundaries.
-({Offset pos, Size? size, AlignmentGeometry alignment, bool scrollbarsRequired})
-    calculateContextMenuBoundaries({
-  required BuildContext context,
-  required AppKitContextMenu menu,
-  Rect? parentRect,
-  required AlignmentGeometry spawnAlignment,
-  required bool isSubmenu,
-  AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
-  double? maxHeight,
-}) {
-  final screenSize = MediaQuery.of(context).size;
-  final safeScreenRect = (Offset.zero & screenSize).deflate(8.0);
-  Rect menuRect = context.getWidgetBounds()!;
-  Rect originalMenuRect = menuRect;
-  AlignmentGeometry nextSpawnAlignment = spawnAlignment;
-  bool scrollbarsRequired = false;
-
-  if (maxHeight != null) {
-    menuRect = menuRect.copyWith(
-        bottom: min(menuRect.bottom, menuRect.top + maxHeight));
-  }
-
-  double x = menuRect.left;
-  double y = menuRect.top;
-  Size? menuSize;
-
-  if (menuEdge == AppKitMenuEdge.left) {
-    x -= menuRect.width;
-  }
-
-  if (menuRect.height > screenSize.height) {
-    menuRect = menuRect.copyWith(top: menuRect.top, bottom: screenSize.height);
-    scrollbarsRequired = true;
-  }
-
-  bool isWidthExceed() => x + menuRect.width > screenSize.width || x < 0;
-
-  bool isHeightExceed() => y + menuRect.height > screenSize.height || y < 0;
-
-  Rect currentRect() => Offset(x, y) & menuRect.size;
-
-  if (isWidthExceed()) {
-    if (isSubmenu && parentRect != null) {
-      final toRightSide = parentRect.right;
-      final toLeftSide = parentRect.left - menuRect.width;
-      final maxRight = safeScreenRect.right - menuRect.width;
-      final maxLeft = safeScreenRect.left;
-
-      if (spawnAlignment == AlignmentDirectional.topEnd) {
-        if (currentRect().right > safeScreenRect.right) {
-          x = min(toRightSide, safeScreenRect.right);
-          nextSpawnAlignment = AlignmentDirectional.topStart;
-          if (isWidthExceed()) {
-            x = toLeftSide;
-            nextSpawnAlignment = AlignmentDirectional.topEnd;
-            if (isWidthExceed()) {
-              x = min(toRightSide, maxRight);
-              nextSpawnAlignment = AlignmentDirectional.topStart;
-            }
-          }
-        } else {
-          x = min(toRightSide, safeScreenRect.right);
-          nextSpawnAlignment = AlignmentDirectional.topEnd;
-          if (isWidthExceed()) {
-            x = toLeftSide;
-            nextSpawnAlignment = AlignmentDirectional.topStart;
-            if (isWidthExceed()) {
-              x = min(toRightSide, maxRight);
-              nextSpawnAlignment = AlignmentDirectional.topEnd;
-            }
-          }
-        }
-      } else {
-        if (currentRect().left < safeScreenRect.left) {
-          x = toRightSide;
-          nextSpawnAlignment = AlignmentDirectional.topEnd;
-          if (isWidthExceed()) {
-            x = toLeftSide;
-            nextSpawnAlignment = AlignmentDirectional.topStart;
-            if (isWidthExceed()) {
-              x = min(toRightSide, maxRight);
-              nextSpawnAlignment = AlignmentDirectional.topEnd;
-            }
-          }
-        } else {
-          x = toLeftSide;
-          nextSpawnAlignment = AlignmentDirectional.topEnd;
-          if (isWidthExceed()) {
-            x = toRightSide;
-            nextSpawnAlignment = AlignmentDirectional.topStart;
-            if (isWidthExceed()) {
-              x = max(toLeftSide, maxLeft);
-              nextSpawnAlignment = AlignmentDirectional.topEnd;
-            }
-          }
-        }
-      }
-    } else if (!isSubmenu) {
-      x = max(safeScreenRect.left, safeScreenRect.right - menuRect.width);
-    }
-  }
-
-  if (isHeightExceed()) {
-    if (isSubmenu && parentRect != null) {
-      y = max(safeScreenRect.top, safeScreenRect.bottom - menuRect.height);
-    } else if (!isSubmenu) {
-      y = max(safeScreenRect.top, menuRect.top - menuRect.height);
-    }
-  }
-
-  final globalMenuRect = Rect.fromLTWH(x, y, menuRect.width, menuRect.height);
-
-  if (globalMenuRect.top < safeScreenRect.top) {
-    menuRect = globalMenuRect.shift(Offset(0, safeScreenRect.top - y));
-    menuSize = menuRect.size;
-  } else if (globalMenuRect.bottom > safeScreenRect.bottom) {
-    menuRect = globalMenuRect.shift(Offset(0, safeScreenRect.bottom - y));
-    menuSize = menuRect.size;
-  } else {
-    menuSize = menuRect.size;
-  }
-
-  if (!scrollbarsRequired) {
-    if (originalMenuRect.height > menuSize.height) {
-      scrollbarsRequired = true;
-    }
-  }
-
-  return (
-    pos: Offset(x, y),
-    size: menuSize,
-    alignment: nextSpawnAlignment,
-    scrollbarsRequired: scrollbarsRequired
-  );
-}
-
-bool hasSameFocusNodeId(String line1, String line2) {
-  RegExp focusNodeRegex = RegExp(r"FocusNode#(\d+)");
-
-  RegExpMatch? match1 = focusNodeRegex.firstMatch(line1);
-  RegExpMatch? match2 = focusNodeRegex.firstMatch(line2);
-
-  if (match1 != null && match2 != null) {
-    String? focusNodeId1 = match1.group(1);
-    String? focusNodeId2 = match2.group(1);
-
-    return focusNodeId1 == focusNodeId2;
-  } else {
-    return false;
-  }
-}
-
-Rect getScreenRect(BuildContext context) {
-  final size = MediaQueryData.fromView(
-          WidgetsBinding.instance.platformDispatcher.views.first)
-      .size;
-  return Offset.zero & size;
 }
 
 extension ColorX on Color {
@@ -288,6 +114,22 @@ extension RectX on Rect {
       bottom ?? this.bottom,
     );
   }
+
+  /// Returns a new rectangle with horizontal edges moved outwards by the given delta.
+  Rect inflateHorizontal(double delta) {
+    return Rect.fromLTRB(left - delta, top, right + delta, bottom);
+  }
+
+  /// Returns a new rectangle with vertical edges moved outwards by the given delta.
+  Rect inflateVertical(double delta) {
+    return Rect.fromLTRB(left, top - delta, right, bottom + delta);
+  }
+
+  /// Returns a new rectangle with horizontal edges moved inwards by the given delta.
+  Rect deflateHorizontal(double delta) => inflateHorizontal(-delta);
+
+  /// Returns a new rectangle with vertical edges moved inwards by the given delta.
+  Rect deflateVertical(double delta) => inflateVertical(-delta);
 }
 
 extension EdgeInsetsX on EdgeInsets {
@@ -453,3 +295,36 @@ Color textLuminance(Color backgroundColor) {
       ? CupertinoColors.black
       : CupertinoColors.white;
 }
+
+bool hasSameFocusNodeId(String line1, String line2) {
+  RegExp focusNodeRegex = RegExp(r"FocusNode#(\d+)");
+
+  RegExpMatch? match1 = focusNodeRegex.firstMatch(line1);
+  RegExpMatch? match2 = focusNodeRegex.firstMatch(line2);
+
+  if (match1 != null && match2 != null) {
+    String? focusNodeId1 = match1.group(1);
+    String? focusNodeId2 = match2.group(1);
+
+    return focusNodeId1 == focusNodeId2;
+  } else {
+    return false;
+  }
+}
+
+Rect getScreenRect(BuildContext context) {
+  final size = MediaQueryData.fromView(
+          WidgetsBinding.instance.platformDispatcher.views.first)
+      .size;
+  return Offset.zero & size;
+}
+
+Color luminance(Color backgroundColor,
+    {required CupertinoDynamicColor textColor}) {
+  return backgroundColor.computeLuminance() >= 0.5
+      ? textColor.darkColor
+      : textColor.color;
+}
+
+int lerpInt(int begin, int end, double t) =>
+    (begin + (end - begin) * t).round();

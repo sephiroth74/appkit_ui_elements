@@ -19,6 +19,11 @@ class AppKitContextMenu<T> {
     this.scrollbars,
   });
 
+  @override
+  String toString() {
+    return 'AppKitContextMenu{position: $position, size: $size, maxWidth: $maxWidth, minWidth: $minWidth, maxHeight: $maxHeight, scrollbars: $scrollbars, entries: ${entries.length}}';
+  }
+
   AppKitContextMenuItem<T>? _firstWhereOrNull(
       List<AppKitContextMenuEntry<T>> entries,
       bool Function(AppKitContextMenuItem<T> element) test) {

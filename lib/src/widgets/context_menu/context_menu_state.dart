@@ -2,25 +2,23 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
-import 'package:flutter/services.dart';
+import 'package:appkit_ui_elements/src/utils/debugger.dart';
+import 'package:appkit_ui_elements/src/widgets/context_menu/context_menu_helper.dart';
+import 'package:flutter/foundation.dart';
 
 const _kAnimationDuration = Duration(milliseconds: 64);
 const _kAnimationCount = 4;
 
 class AppKitContextMenuState<T> extends ChangeNotifier {
-  late final focusScopeNode = FocusScopeNode(
-    onKeyEvent: (node, event) {
-      if (event.logicalKey == LogicalKeyboardKey.enter) {
-        this._handleItemSelection(node.context, focusedEntry);
-        return KeyEventResult.handled;
-      }
-      return KeyEventResult.ignored;
-    },
-  );
+  late final focusScopeNode = FocusScopeNode();
+  late final debugLabel = 'AppkitContextMenuState [${shortHash(this)}]';
+  late final logger = getLogger(this);
 
   final overlayController = OverlayPortalController(debugLabel: 'ContextMenu');
 
   final bool enableWallpaperTinting;
+
+  final AppKitContextMenuState<T>? parent;
 
   AppKitContextMenuEntry<T>? _futureSelectedEntry;
 
@@ -35,8 +33,6 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   AlignmentGeometry _spawnAlignment = AlignmentDirectional.topEnd;
 
   final Rect? _parentItemRect;
-
-  final bool _isSubmenu;
 
   final AppKitContextMenu<T> menu;
 
@@ -58,12 +54,12 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   AppKitContextMenuState({
     required this.menu,
+    this.parent,
     this.parentItem,
     this.enableWallpaperTinting = true,
     T? focusedEntry,
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   })  : _parentItemRect = null,
-        _isSubmenu = false,
         _focusedEntry = menu.findItemByValue(focusedEntry),
         selfClose = null,
         scrollbarsRequired = menu.scrollbars,
@@ -72,6 +68,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   AppKitContextMenuState.submenu({
     required this.menu,
     required this.selfClose,
+    required this.parent,
     this.parentItem,
     this.enableWallpaperTinting = true,
     AlignmentGeometry? spawnAlignmen,
@@ -79,7 +76,6 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
   })  : _spawnAlignment = spawnAlignmen ?? AlignmentDirectional.topEnd,
         _parentItemRect = parentItemRect,
-        _isSubmenu = true,
         scrollbarsRequired = menu.scrollbars,
         _menuEdge = menuEdge;
 
@@ -122,7 +118,9 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   Rect? get parentItemRect => _parentItemRect;
 
-  bool get hasSubmenu => _isSubmenu;
+  bool get isSubmenu => parentItem != null;
+
+  bool get hasSubmenu => isSubmenu;
 
   static AppKitContextMenuState of(BuildContext context) {
     final provider =
@@ -137,22 +135,24 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   void setFocusedEntry(AppKitContextMenuEntry<T>? value) {
     if (value == _focusedEntry || _futureSelectedEntry != null) return;
+    logger.info('setFocusedEntry: $value');
     _focusedEntry = value;
     _futureSelectedEntry = null;
     _selectionTimer?.cancel();
     notifyListeners();
   }
 
-  void _handleItemSelection(
+  void handleItemSelection(
       BuildContext? context, AppKitContextMenuEntry<T>? item) {
+    logger.info('handleItemSelection: $item');
     if (null == item || null == context) return;
     if (item is! AppKitContextMenuItem<T>) return;
-    if (item.hasSubmenu) return;
     item.handleItemSelection(context);
   }
 
   void animateSelectedItem(
       AppKitContextMenuItem<T>? value, VoidCallback? action) {
+    logger.info('animateSelectedItem: $value');
     if (_futureSelectedEntry != null) return;
 
     _selectionTimer?.cancel();
@@ -173,6 +173,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   }
 
   void setSelectedItem(AppKitContextMenuItem<T>? value) {
+    logger.info('setSelectedItem: $value');
     if (value == _selectedItem ||
         (_futureSelectedEntry != null && _futureSelectedEntry != value)) {
       return;
@@ -184,6 +185,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   }
 
   void setSpawnAlignment(AlignmentGeometry value) {
+    logger.info('setSpawnAlignment: $value');
+    if (_spawnAlignment == value) return;
     _spawnAlignment = value;
     notifyListeners();
   }
@@ -210,6 +213,8 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   }) {
     closeSubmenu();
 
+    logger.info('showSubmenu: $parent');
+
     final items = parent.items;
     final submenuParentRect = context.getWidgetBounds();
     if (submenuParentRect == null) return;
@@ -224,6 +229,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
           position: submenuPosition,
           size: Size.infinite,
         ),
+        parent: this,
         spawnAlignmen: spawnAlignment,
         parentItemRect: submenuParentRect,
         selfClose: closeSubmenu,
@@ -248,7 +254,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
           menu: menu,
           parentRect: parentItemRect,
           spawnAlignment: _spawnAlignment,
-          isSubmenu: _isSubmenu,
+          isSubmenu: isSubmenu,
           menuEdge: _menuEdge,
           maxHeight: maxHeight);
 
@@ -271,6 +277,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   /// Closes the current submenu and removes the overlay.
   void closeSubmenu() {
+    logger.info('closeSubmenu');
     if (!isSubmenuOpen) return;
     _selectedItem = null;
     overlayController.hide();
@@ -279,6 +286,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   /// Closes the context menu and removes the overlay.
   void close() {
+    debugPrint('$debugLabel - close');
     try {
       focusScopeNode.dispose();
     } catch (e) {
@@ -289,6 +297,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   @override
   void dispose() {
+    logger.info('dispose');
     close();
     super.dispose();
   }

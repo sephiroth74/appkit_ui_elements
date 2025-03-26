@@ -54,14 +54,15 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         onTap,
       ];
 
-  const AppKitContextMenuItem.submenu({
-    required this.child,
+  AppKitContextMenuItem.submenu(
+    String label, {
     required this.items,
     super.enabled = true,
     super.debugLabel,
     this.onTap,
     this.value,
-  })  : itemState = AppKitItemState.off,
+  })  : child = Text(label),
+        itemState = AppKitItemState.off,
         mixedImage = null,
         onImage = null,
         offImage = null;
@@ -167,7 +168,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
         final textWidget = Padding(
           padding: const EdgeInsets.only(right: 6.0),
           child: DefaultTextStyle(
-            softWrap: true,
+            softWrap: false,
             maxLines: 1,
             style: theme.typography.body.copyWith(
               fontSize: 13,
@@ -194,13 +195,12 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
               children: [
                 // Left to right
                 statusIconWidget,
-                Flexible(
-                  flex: 0,
+                Expanded(
                   child: textWidget,
                 ),
                 if (hasSubmenu) ...[
-                  const Spacer(
-                    flex: 2,
+                  const SizedBox(
+                    width: 8.0,
                   ),
                   subMenuIconWidget
                 ],

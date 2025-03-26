@@ -65,6 +65,13 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
             return Focus(
               autofocus: false,
               focusNode: item.isFocusMaintained ? null : focusNode,
+              onKeyEvent: (node, event) {
+                if (event.logicalKey == LogicalKeyboardKey.enter) {
+                  menuState.handleItemSelection(context, item);
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              },
               onFocusChange: enabled
                   ? (value) {
                       if (value) {
@@ -117,7 +124,9 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
     required AppKitContextMenuState menuState,
     required FocusNode focusNode,
   }) {
-    _ensureFocused(entry: entry, menuState: menuState, focusNode: focusNode);
+    if (!menuState.isFocused(entry)) {
+      _ensureFocused(entry: entry, menuState: menuState, focusNode: focusNode);
+    }
     widget.entry.onMouseEnter(event, menuState);
   }
 

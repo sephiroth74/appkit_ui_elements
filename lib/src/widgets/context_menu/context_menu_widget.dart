@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +105,7 @@ class _InnerMenu extends StatefulWidget {
   State<_InnerMenu> createState() => _InnerMenuState();
 }
 
-const _kScrollThreshold = 20.0;
+const _kScrollThreshold = 10.0;
 const _kScrollArrowSize = 10.0;
 
 class _InnerMenuState extends State<_InnerMenu> {
@@ -161,11 +163,38 @@ class _InnerMenuState extends State<_InnerMenu> {
   Widget build(BuildContext context) {
     _verifyScroll();
 
+    final menuSize = widget.menuState.size;
+    // debugPrint('menu size: $menuSize');
+
     final arrowsColor =
         AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     final arrowWidth = widget.menuState.size != null
-        ? widget.menuState.size!.width.abs() - 2
+        ? max(menuSize!.width.abs() - 2, 0.0)
         : 0.0;
+
+    final child = SingleChildScrollView(
+      clipBehavior: Clip.hardEdge,
+      primary: true,
+      child: Padding(
+        padding: padding,
+        child: IntrinsicWidth(
+          child: Column(
+            children: [
+              for (final item in widget.menuState.entries)
+                AppKitMenuEntryWidget(
+                    enabled: widget.menuState.isVerified,
+                    entry: item,
+                    focused: widget.menuState.focusedEntry == item),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (widget.menuState.scrollbarsRequired == false) {
+      return child;
+    }
+    // debugPrint('scrollbars required: ${widget.menuState.scrollbarsRequired}');
 
     return Stack(
       fit: StackFit.passthrough,
@@ -175,24 +204,7 @@ class _InnerMenuState extends State<_InnerMenu> {
               .copyWith(scrollbars: widget.menuState.scrollbarsRequired),
           child: PrimaryScrollController(
             controller: widget.menuState.scrollController,
-            child: SingleChildScrollView(
-              clipBehavior: Clip.hardEdge,
-              primary: true,
-              child: Padding(
-                padding: padding,
-                child: IntrinsicWidth(
-                  child: Column(
-                    children: [
-                      for (final item in widget.menuState.entries)
-                        AppKitMenuEntryWidget(
-                            enabled: widget.menuState.isVerified,
-                            entry: item,
-                            focused: widget.menuState.focusedEntry == item),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            child: child,
           ),
         ),
         if (_arrowUpVisible) ...[

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:appkit_ui_elements/src/utils/debugger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:macos_window_utils/macos/ns_window_delegate.dart';
@@ -152,7 +153,7 @@ class _MainWindowStateListenerDelegate extends NSWindowDelegate {
 /// ```
 ///
 class MainWindowModel extends ChangeNotifier {
-  bool _isMainWindow = true;
+  bool _isMainWindow = false;
 
   bool get isMainWindow => _isMainWindow;
 
@@ -182,8 +183,9 @@ class _MainWindowProviderWidgetBuilderState
   void initState() {
     super.initState();
 
-    _subscription =
-        MainWindowStateListener.instance.isMainWindow.listen((isMainWindow) {
+    _subscription = MainWindowStateListener.instance.isMainWindow
+        .distinct()
+        .listen((isMainWindow) {
       _model.isMainWindow = isMainWindow;
     });
   }
@@ -201,6 +203,7 @@ class _MainWindowProviderWidgetBuilderState
       builder: (context, child) {
         return Consumer<MainWindowModel>(
           builder: (context, model, child) {
+            logDebug(this, 'isMainWindow: ${model.isMainWindow}');
             return widget.builder(context, model.isMainWindow);
           },
         );

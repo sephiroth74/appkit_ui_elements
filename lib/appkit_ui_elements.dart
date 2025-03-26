@@ -1,6 +1,7 @@
 library appkit_ui_elements;
 
 import 'package:appkit_ui_elements/src/utils/appkit_main_window_listener.dart';
+import 'package:appkit_ui_elements/src/utils/debugger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/find_locale.dart';
 
@@ -14,6 +15,7 @@ class AppKitUiElements {
   static Future<void> ensureInitialized() async {
     await findSystemLocale();
     await initializeDateFormatting();
+    initLogging();
     MainWindowStateListener.instance;
   }
 }
