@@ -27,7 +27,8 @@ getLogger(dynamic classNameOrInstance) {
 }
 
 void logDebug(dynamic className, String message) {
-  getLogger(className).fine(message);
+  getLogger(className).config(message);
+  debugPrint('DEBUG: $message');
 }
 
 void logInfo(dynamic className, String message) {
