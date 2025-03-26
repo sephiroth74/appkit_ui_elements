@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
+import 'package:macos_window_utils/widgets/visual_effect_subview_container/visual_effect_subview_container.dart';
 import 'package:provider/provider.dart';
 
 class AppKitOverlayFilterWidget extends StatelessWidget {
@@ -34,32 +35,35 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
     return AppKitWallpaperTintingOverride(
       enabled: enableWallpaperTinting,
       child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        return Container(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: borderRadius,
-            border: Border.all(
-              color: AppKitColors.shadowColor.withValues(alpha: 0.35),
-              width: 0.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppKitColors.shadowColor.withValues(alpha: 0.25),
-                offset: const Offset(0, 3.5),
-                blurRadius: 11.0,
-                spreadRadius: 0.0,
+        return VisualEffectSubviewContainer(
+          material: NSVisualEffectViewMaterial.menu,
+          child: Container(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: borderRadius,
+              border: Border.all(
+                color: AppKitColors.shadowColor.withValues(alpha: 0.35),
+                width: 0.5,
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: borderRadius,
-            child: BackdropFilter(
-              blendMode: BlendMode.srcOver,
-              filter: ImageFilter.blur(
-                  sigmaX: backgroundBlur,
-                  sigmaY: backgroundBlur,
-                  tileMode: TileMode.clamp),
-              child: child,
+              boxShadow: [
+                BoxShadow(
+                  color: AppKitColors.shadowColor.withValues(alpha: 0.25),
+                  offset: const Offset(0, 3.5),
+                  blurRadius: 11.0,
+                  spreadRadius: 0.0,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: borderRadius,
+              child: BackdropFilter(
+                blendMode: BlendMode.srcOver,
+                filter: ImageFilter.blur(
+                    sigmaX: backgroundBlur,
+                    sigmaY: backgroundBlur,
+                    tileMode: TileMode.clamp),
+                child: child,
+              ),
             ),
           ),
         );

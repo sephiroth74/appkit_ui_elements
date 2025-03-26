@@ -66,12 +66,14 @@ class AppKitContextMenuRegion<T> extends StatelessWidget {
   final ContextMenuBuilder<T>? menuBuilder;
   final Widget child;
   final ValueChanged<T?>? onItemSelected;
+  final bool enableWallpaperTinting;
 
   const AppKitContextMenuRegion({
     super.key,
     required this.menuBuilder,
     required this.child,
     this.onItemSelected,
+    this.enableWallpaperTinting = true,
   });
 
   @override
@@ -98,7 +100,8 @@ class AppKitContextMenuRegion<T> extends StatelessWidget {
     final value = await showContextMenu<T>(
       context,
       contextMenu: menu,
-      enableWallpaperTinting: true,
+      enableWallpaperTinting: enableWallpaperTinting,
+      opaque: false,
     );
 
     if (value != null) {

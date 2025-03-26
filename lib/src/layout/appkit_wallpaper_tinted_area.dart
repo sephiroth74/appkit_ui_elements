@@ -6,8 +6,12 @@ class AppKitWallpaperTintedArea extends StatelessWidget {
     super.key,
     required this.backgroundColor,
     this.insertRepaintBoundary = false,
+    this.material = NSVisualEffectViewMaterial.windowBackground,
     this.child,
   });
+
+  /// The material effect to apply to the background.
+  final NSVisualEffectViewMaterial material;
 
   /// The color to apply to the background when wallpaper tinting is disabled.
   final Color backgroundColor;
@@ -29,6 +33,7 @@ class AppKitWallpaperTintedArea extends StatelessWidget {
       return RepaintBoundary(
         child: _WallpaperTintedAreaLayoutBuilder(
           backgroundColor: backgroundColor,
+          material: material,
           child: child,
         ),
       );
@@ -36,6 +41,7 @@ class AppKitWallpaperTintedArea extends StatelessWidget {
 
     return _WallpaperTintedAreaLayoutBuilder(
       backgroundColor: backgroundColor,
+      material: material,
       child: child,
     );
   }
@@ -44,8 +50,12 @@ class AppKitWallpaperTintedArea extends StatelessWidget {
 class _WallpaperTintedAreaLayoutBuilder extends StatelessWidget {
   const _WallpaperTintedAreaLayoutBuilder({
     required this.backgroundColor,
+    required this.material,
     required this.child,
   });
+
+  /// The material effect to apply to the background.
+  final NSVisualEffectViewMaterial material;
 
   /// The color to apply to the background when wallpaper tinting is disabled.
   final Color backgroundColor;
@@ -71,7 +81,8 @@ class _WallpaperTintedAreaLayoutBuilder extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, _) {
         return VisualEffectSubviewContainer(
-          material: NSVisualEffectViewMaterial.windowBackground,
+          material: material,
+          state: NSVisualEffectViewState.followsWindowActiveState,
           child: AppKitWallpaperTintingSettingsBuilder(
             builder: (context, data) {
               final isWallpaperTintingEnabled = data.isWallpaperTintingEnabled;

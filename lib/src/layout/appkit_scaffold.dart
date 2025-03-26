@@ -14,11 +14,15 @@ class AppKitScaffold extends StatefulWidget {
     this.children = const <Widget>[],
     this.toolBar,
     this.backgroundColor,
+    this.material = NSVisualEffectViewMaterial.windowBackground,
   });
 
   final Color? backgroundColor;
   final List<Widget> children;
   final AppKitToolBar? toolBar;
+
+  /// The material effect to apply to the background.
+  final NSVisualEffectViewMaterial material;
 
   @override
   State<AppKitScaffold> createState() => _AppKitScaffoldState();
@@ -74,6 +78,7 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
               height: height,
               child: AppKitWallpaperTintedArea(
                 backgroundColor: backgroundColor,
+                material: widget.material,
                 insertRepaintBoundary: true,
                 child: MediaQuery(
                   data: mediaQuery.copyWith(

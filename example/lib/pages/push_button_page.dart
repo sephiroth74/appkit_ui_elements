@@ -14,6 +14,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
   @override
   Widget build(BuildContext context) {
     return AppKitScaffold(
+      material: NSVisualEffectViewMaterial.underWindowBackground,
       toolBar: AppKitToolBar(
         title: const Text('Buttons'),
         titleWidth: 200,

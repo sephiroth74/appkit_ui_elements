@@ -27,8 +27,12 @@ class AppKitToolBar extends StatefulWidget with Diagnosticable {
     this.dividerColor,
     this.allowWallpaperTintingOverrides = true,
     this.enableBlur = false,
+    this.material = NSVisualEffectViewMaterial.headerView,
     bool? isDark,
   }) : _isDark = isDark;
+
+  /// The material effect to apply to the background.
+  final NSVisualEffectViewMaterial material;
 
   final bool? _isDark;
 
@@ -90,6 +94,19 @@ class AppKitToolBar extends StatefulWidget with Diagnosticable {
       ifTrue: 'center title',
     ));
     properties.add(DiagnosticsProperty<Color>('dividerColor', dividerColor));
+    properties.add(FlagProperty(
+      'allowWallpaperTintingOverrides',
+      value: allowWallpaperTintingOverrides,
+      ifTrue: 'allow wallpaper tinting overrides',
+    ));
+    properties.add(FlagProperty(
+      'enableBlur',
+      value: enableBlur,
+      ifTrue: 'enable blur',
+    ));
+    properties.add(EnumProperty<NSVisualEffectViewMaterial>(
+        'material', material,
+        defaultValue: null));
   }
 
   @override
@@ -200,6 +217,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
         isWidgetVisible: widget.allowWallpaperTintingOverrides,
         backgroundColor: theme.canvasColor,
         widgetOpacity: widget.decoration?.color?.a,
+        material: widget.material,
         child: Container(
           alignment: widget.alignment,
           padding: widget.padding,
@@ -269,8 +287,10 @@ class _WallpaperTintedAreaOrBlurFilter extends StatelessWidget {
     required this.backgroundColor,
     required this.widgetOpacity,
     required this.isWidgetVisible,
+    required this.material,
   });
 
+  final NSVisualEffectViewMaterial material;
   final Widget child;
   final bool enableWallpaperTintedArea;
   final Color backgroundColor;
@@ -281,6 +301,7 @@ class _WallpaperTintedAreaOrBlurFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     if (enableWallpaperTintedArea) {
       return AppKitWallpaperTintedArea(
+        material: material,
         backgroundColor: backgroundColor,
         insertRepaintBoundary: true,
         child: child,
