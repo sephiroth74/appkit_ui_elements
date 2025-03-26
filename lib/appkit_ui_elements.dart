@@ -12,10 +12,10 @@ export 'package:macos_window_utils/macos_window_utils.dart';
 export 'src/library.dart';
 
 class AppKitUiElements {
-  static Future<void> ensureInitialized() async {
+  static Future<void> ensureInitialized({bool debug = false}) async {
     await findSystemLocale();
     await initializeDateFormatting();
-    initLogging();
+    initLogging(isDebug: debug);
     MainWindowStateListener.instance;
   }
 }
