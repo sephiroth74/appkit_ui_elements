@@ -1,3 +1,7 @@
+## 0.0.21
+
+ * Updated checkbox design
+
 ## 0.0.20
 
 * Visual effects for toolbar and main content

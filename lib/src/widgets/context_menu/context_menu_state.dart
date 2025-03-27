@@ -12,7 +12,6 @@ const _kAnimationCount = 4;
 class AppKitContextMenuState<T> extends ChangeNotifier {
   late final focusScopeNode = FocusScopeNode();
   late final debugLabel = 'AppkitContextMenuState [${shortHash(this)}]';
-  late final logger = getLogger(this);
 
   final overlayController = OverlayPortalController(debugLabel: 'ContextMenu');
 
@@ -135,7 +134,6 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   void setFocusedEntry(AppKitContextMenuEntry<T>? value) {
     if (value == _focusedEntry || _futureSelectedEntry != null) return;
-    logger.info('setFocusedEntry: $value');
     _focusedEntry = value;
     _futureSelectedEntry = null;
     _selectionTimer?.cancel();
@@ -144,7 +142,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   void handleItemSelection(
       BuildContext? context, AppKitContextMenuEntry<T>? item) {
-    logger.info('handleItemSelection: $item');
+    logDebug(this, 'handleItemSelection: $item');
     if (null == item || null == context) return;
     if (item is! AppKitContextMenuItem<T>) return;
     item.handleItemSelection(context);
@@ -152,7 +150,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   void animateSelectedItem(
       AppKitContextMenuItem<T>? value, VoidCallback? action) {
-    logger.info('animateSelectedItem: $value');
+    logDebug(this, 'animateSelectedItem: $value');
     if (_futureSelectedEntry != null) return;
 
     _selectionTimer?.cancel();
@@ -173,7 +171,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   }
 
   void setSelectedItem(AppKitContextMenuItem<T>? value) {
-    logger.info('setSelectedItem: $value');
+    logDebug(this, 'setSelectedItem: $value');
     if (value == _selectedItem ||
         (_futureSelectedEntry != null && _futureSelectedEntry != value)) {
       return;
@@ -185,7 +183,6 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   }
 
   void setSpawnAlignment(AlignmentGeometry value) {
-    logger.info('setSpawnAlignment: $value');
     if (_spawnAlignment == value) return;
     _spawnAlignment = value;
     notifyListeners();
@@ -213,7 +210,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   }) {
     closeSubmenu();
 
-    logger.info('showSubmenu: $parent');
+    logInfo(this, 'showSubmenu: $parent');
 
     final items = parent.items;
     final submenuParentRect = context.getWidgetBounds();
@@ -277,7 +274,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   /// Closes the current submenu and removes the overlay.
   void closeSubmenu() {
-    logger.info('closeSubmenu');
+    logInfo(this, 'closeSubmenu');
     if (!isSubmenuOpen) return;
     _selectedItem = null;
     overlayController.hide();
@@ -297,7 +294,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   @override
   void dispose() {
-    logger.info('dispose');
+    logInfo(this, 'dispose');
     close();
     super.dispose();
   }

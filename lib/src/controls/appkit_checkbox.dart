@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_borders/gradient_borders.dart';
 import 'package:provider/provider.dart';
 
 const _kSize = 14.0;
@@ -211,8 +210,6 @@ class _DecoratedContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
     final controlBackgroundColor = theme.controlColor;
-    final radius = size / _kCornerRadiusRatio;
-    final shadowSpread = size / _kBoxShadowSpreadRatio;
     final iconColor = enabled && isMainWindow
         ? color.computeLuminance() > 0.5
             ? Colors.black
@@ -227,99 +224,61 @@ class _DecoratedContainer extends StatelessWidget {
               color: AppKitDynamicColor.resolve(
                   context, AppKitColors.controlBackgroundPressedColor))
           : null,
-      child: Container(
-        decoration: BoxDecoration(
-          color: !enabled
-              ? isDark
-                  ? AppKitColors.controlBackgroundColor.color
-                      .withValues(alpha: 0.2)
-                  : AppKitColors.controlBackgroundColor.darkColor
-                      .withValues(alpha: 0.1)
-              : value != false
-                  ? color
-                  : controlBackgroundColor.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(radius),
-          boxShadow: [
-            if (!isDark && enabled && (value == false || !isMainWindow)) ...[
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-              ),
-              BoxShadow(
-                color:
-                    controlBackgroundColor.withValues(alpha: enabled ? 1 : 0.1),
-                spreadRadius: -shadowSpread,
-                blurRadius: shadowSpread,
-                offset: Offset(0, size / _kBoxShadowOffsetRatio),
-              ),
-            ],
-          ],
-        ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            border: enabled || (!isDark && value == false)
-                ? GradientBoxBorder(
-                    gradient: LinearGradient(
-                      colors: isDark
-                          ? [
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.secondary)
-                                  .multiplyOpacity(0.75),
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.quaternary)
-                                  .multiplyOpacity(0.0)
-                            ]
-                          : [
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.tertiary)
-                                  .multiplyOpacity(0.75),
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.secondary)
-                                  .multiplyOpacity(0.5)
-                            ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
-                    ),
-                    width: 0.5,
-                  )
-                : null,
-            gradient: value != false && isMainWindow && enabled
-                ? LinearGradient(
-                    colors: [
-                      Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
-                      Colors.white.withValues(alpha: 0),
-                    ],
-                    transform: const GradientRotation(pi / 2),
-                  )
-                : value == false && enabled
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            isDark
+                ? 'assets/components/checkbox/background_dark.png'
+                : 'assets/components/checkbox/background_light.png',
+            package: 'appkit_ui_elements',
+            width: size,
+            height: size,
+            fit: BoxFit.fill,
+            color: controlBackgroundColor,
+            colorBlendMode: BlendMode.dstOver,
+            // centerSlice: Rect.fromCenter(center: const Offset(14, 15), width: 14, height: 14),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: !enabled
+                  ? isDark
+                      ? AppKitColors.controlBackgroundColor.color
+                          .withValues(alpha: 0.2)
+                      : AppKitColors.controlBackgroundColor.darkColor
+                          .withValues(alpha: 0.1)
+                  : value != false
+                      ? color
+                      : null,
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: value != false && isMainWindow && enabled
                     ? LinearGradient(
                         colors: [
-                          isDark
-                              ? Colors.black.withValues(alpha: 0.5)
-                              : Colors.white.withValues(alpha: 0.5),
-                          isDark
-                              ? Colors.black.withValues(alpha: 0.0)
-                              : Colors.white.withValues(alpha: 0.0),
+                          Colors.white.withValues(alpha: 0.17),
+                          Colors.white.withValues(alpha: 0),
                         ],
                         transform: const GradientRotation(pi / 2),
                       )
                     : null,
+              ),
+              child: (value != false)
+                  ? Center(
+                      child: CustomPaint(
+                        size: Size.square(size * 0.9),
+                        painter: _CheckboxIconPainter(
+                          type: value == null
+                              ? _IconType.indeterminate
+                              : _IconType.check,
+                          color: iconColor,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
           ),
-          child: (value != false)
-              ? Center(
-                  child: CustomPaint(
-                    size: Size.square(size * 0.9),
-                    painter: _CheckboxIconPainter(
-                      type: value == null
-                          ? _IconType.indeterminate
-                          : _IconType.check,
-                      color: iconColor,
-                    ),
-                  ),
-                )
-              : null,
-        ),
+        ],
       ),
     );
   }
