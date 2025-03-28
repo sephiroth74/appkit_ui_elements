@@ -36,6 +36,7 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
       enabled: enableWallpaperTinting,
       child: Consumer<MainWindowModel>(builder: (context, model, _) {
         return VisualEffectSubviewContainer(
+          cornerRadius: borderRadius.topLeft.x,
           material: NSVisualEffectViewMaterial.menu,
           child: Container(
             decoration: BoxDecoration(

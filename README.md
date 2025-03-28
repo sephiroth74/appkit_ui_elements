@@ -17,6 +17,7 @@ A complete set of components (including some not bundled with the macos_ui packa
 ## Resources
 
  * <a href='https://developer.apple.com/design/resources/'>Apple Design Resources</a>
+ * <a href='https://www.figma.com/community/file/1251588934545918753/apple-design-resources-macos'>Apple Design Resources (UiKit)</a>
 
 ## Usage
 
