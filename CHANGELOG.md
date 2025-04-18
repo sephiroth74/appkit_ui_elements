@@ -1,3 +1,8 @@
+## 0.1.0
+
+ * Updated min macos version to 11
+ * Updated depenendecies
+
 ## 0.0.22
 
  * Updated dependencies
