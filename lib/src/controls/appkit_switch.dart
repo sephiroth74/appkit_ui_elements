@@ -365,180 +365,188 @@ class _AppKitSwitchState extends State<AppKitSwitch>
   @override
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
-    return Semantics(
-        button: true,
-        label: widget.semanticLabel,
-        checked: widget.checked,
-        child: Builder(
-          builder: (context) {
-            final animationValue = positionCurvedAnimation.value;
-            final theme = AppKitTheme.of(context);
-            final switchTheme = AppKitSwitchTheme.of(context);
-            final isDark = theme.brightness == Brightness.dark;
-            final enableFactor = enabled ? 1.0 : 0.5;
-            final uncheckedColor = enabled
-                ? switchTheme.uncheckedColor
-                : switchTheme.uncheckedColorDisabled;
-            final checkedColor = enabled
-                ? (widget.color ?? switchTheme.checkedColor)
-                : uncheckedColor;
-            final controlBackgroundColor =
-                AppKitColors.controlBackgroundColor.color;
-
-            final accentColor = enabled
-                ? Color.lerp(uncheckedColor, checkedColor, animationValue)!
-                : controlBackgroundColor.withValues(alpha: 0.2);
-
-            final containerBackgroundColor = enabled
-                ? AppKitDynamicColor.resolve(
-                        context, AppKitColors.fills.opaque.secondary)
-                    .withValues(
-                        alpha: AppKitDynamicColor.resolve(context,
-                                    AppKitColors.fills.opaque.secondary)
-                                .a *
-                            (1.0 - animationValue))
-                : AppKitColors.fills.opaque.primary.color
-                    .withValues(alpha: 0.04);
-
-            final Color borderColor = isDark
-                ? Colors.white.withValues(alpha: 0.2)
-                : Colors.black.withValues(alpha: 0.2);
-
-            final Color innerShadowColor;
-            if (enabled) {
-              final hsvColor = HSLColor.fromColor(accentColor);
-              final checkedInnerShadowColor =
-                  hsvColor.withLightness(hsvColor.lightness / 1.05).toColor();
-              final uncheckedInnerShadowColor =
-                  Colors.black.withValues(alpha: 0.2);
-              innerShadowColor = Color.lerp(uncheckedInnerShadowColor,
-                  checkedInnerShadowColor, animationValue)!;
-            } else {
-              innerShadowColor = Colors.black.withValues(alpha: 0.1);
-            }
-
-            return MouseRegion(
-              onExit: enabled ? _handleMouseExit : null,
-              onEnter: enabled ? _handleMouseEnter : null,
-              child: GestureDetector(
-                onTap: enabled ? _handleTap : null,
-                onTapDown: enabled
-                    ? (details) => _handleTapDown(details.localPosition)
-                    : null,
-                onTapUp: enabled ? _handleTapUp : null,
-                onHorizontalDragStart: enabled ? _handleDragStart : null,
-                onHorizontalDragUpdate: enabled ? _handleDragUpdate : null,
-                onHorizontalDragEnd: enabled ? _handleDragEnd : null,
-                onHorizontalDragCancel: enabled ? _handleDragCancel : null,
-                onHorizontalDragDown: enabled
-                    ? (details) => _handleTapDown(details.localPosition)
-                    : null,
-                dragStartBehavior: DragStartBehavior.start,
-                child: SizedBox(
-                  width: _size.width,
-                  height: _size.height,
-                  child: Container(
-                    foregroundDecoration: enabled &&
-                            statusController.value > 0.0
-                        ? BoxDecoration(
-                            color: Color.lerp(
-                                theme.controlBackgroundPressedColor
-                                    .withValues(alpha: 0.0),
-                                theme.controlBackgroundPressedColor,
-                                statusController.value),
-                            borderRadius: BorderRadius.circular(_borderRadius))
-                        : null,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(_borderRadius),
-                      color: containerBackgroundColor,
-                    ),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: borderColor,
-                          width: 0.5,
-                        ),
-                        borderRadius: BorderRadius.circular(_borderRadius),
-                        color: accentColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: innerShadowColor,
-                          ),
-                          BoxShadow(
-                            blurStyle: BlurStyle.normal,
-                            color: accentColor,
-                            spreadRadius: -1.0,
-                            blurRadius: 1.0,
-                          ),
-                        ],
-                      ),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(_borderRadius),
-                          gradient: enabled
-                              ? LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  stops: const [0.0, 0.68],
-                                  colors: [
-                                    Color.fromRGBO(
-                                        102, 102, 102, 0.3 * animationValue),
-                                    const Color(0x00666666),
-                                  ],
-                                )
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          flex: 0,
+          child: Semantics(
+              button: true,
+              label: widget.semanticLabel,
+              checked: widget.checked,
+              child: Builder(
+                builder: (context) {
+                  final animationValue = positionCurvedAnimation.value;
+                  final theme = AppKitTheme.of(context);
+                  final switchTheme = AppKitSwitchTheme.of(context);
+                  final isDark = theme.brightness == Brightness.dark;
+                  final enableFactor = enabled ? 1.0 : 0.5;
+                  final uncheckedColor = enabled
+                      ? switchTheme.uncheckedColor
+                      : switchTheme.uncheckedColorDisabled;
+                  final checkedColor = enabled
+                      ? (widget.color ?? switchTheme.checkedColor)
+                      : uncheckedColor;
+                  final controlBackgroundColor =
+                      AppKitColors.controlBackgroundColor.color;
+          
+                  final accentColor = enabled
+                      ? Color.lerp(uncheckedColor, checkedColor, animationValue)!
+                      : controlBackgroundColor.withValues(alpha: 0.2);
+          
+                  final containerBackgroundColor = enabled
+                      ? AppKitDynamicColor.resolve(
+                              context, AppKitColors.fills.opaque.secondary)
+                          .withValues(
+                              alpha: AppKitDynamicColor.resolve(context,
+                                          AppKitColors.fills.opaque.secondary)
+                                      .a *
+                                  (1.0 - animationValue))
+                      : AppKitColors.fills.opaque.primary.color
+                          .withValues(alpha: 0.04);
+          
+                  final Color borderColor = isDark
+                      ? Colors.white.withValues(alpha: 0.2)
+                      : Colors.black.withValues(alpha: 0.2);
+          
+                  final Color innerShadowColor;
+                  if (enabled) {
+                    final hsvColor = HSLColor.fromColor(accentColor);
+                    final checkedInnerShadowColor =
+                        hsvColor.withLightness(hsvColor.lightness / 1.05).toColor();
+                    final uncheckedInnerShadowColor =
+                        Colors.black.withValues(alpha: 0.2);
+                    innerShadowColor = Color.lerp(uncheckedInnerShadowColor,
+                        checkedInnerShadowColor, animationValue)!;
+                  } else {
+                    innerShadowColor = Colors.black.withValues(alpha: 0.1);
+                  }
+          
+                  return MouseRegion(
+                    onExit: enabled ? _handleMouseExit : null,
+                    onEnter: enabled ? _handleMouseEnter : null,
+                    child: GestureDetector(
+                      onTap: enabled ? _handleTap : null,
+                      onTapDown: enabled
+                          ? (details) => _handleTapDown(details.localPosition)
+                          : null,
+                      onTapUp: enabled ? _handleTapUp : null,
+                      onHorizontalDragStart: enabled ? _handleDragStart : null,
+                      onHorizontalDragUpdate: enabled ? _handleDragUpdate : null,
+                      onHorizontalDragEnd: enabled ? _handleDragEnd : null,
+                      onHorizontalDragCancel: enabled ? _handleDragCancel : null,
+                      onHorizontalDragDown: enabled
+                          ? (details) => _handleTapDown(details.localPosition)
+                          : null,
+                      dragStartBehavior: DragStartBehavior.start,
+                      child: SizedBox(
+                        width: _size.width,
+                        height: _size.height,
+                        child: Container(
+                          foregroundDecoration: enabled &&
+                                  statusController.value > 0.0
+                              ? BoxDecoration(
+                                  color: Color.lerp(
+                                      theme.controlBackgroundPressedColor
+                                          .withValues(alpha: 0.0),
+                                      theme.controlBackgroundPressedColor,
+                                      statusController.value),
+                                  borderRadius: BorderRadius.circular(_borderRadius))
                               : null,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all((_handlePadding / 2)),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: animationValue *
-                                    ((_size.width -
-                                        _handleSize -
-                                        _handlePadding)),
-                                child: SizedBox(
-                                  width: _handleSize,
-                                  height: _handleSize,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withValues(
-                                          alpha: 0.08 * enableFactor),
-                                      shape: BoxShape.circle,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(_borderRadius),
+                            color: containerBackgroundColor,
+                          ),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: borderColor,
+                                width: 0.5,
+                              ),
+                              borderRadius: BorderRadius.circular(_borderRadius),
+                              color: accentColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: innerShadowColor,
+                                ),
+                                BoxShadow(
+                                  blurStyle: BlurStyle.normal,
+                                  color: accentColor,
+                                  spreadRadius: -1.0,
+                                  blurRadius: 1.0,
+                                ),
+                              ],
+                            ),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(_borderRadius),
+                                gradient: enabled
+                                    ? LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: const [0.0, 0.68],
+                                        colors: [
+                                          Color.fromRGBO(
+                                              102, 102, 102, 0.3 * animationValue),
+                                          const Color(0x00666666),
+                                        ],
+                                      )
+                                    : null,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all((_handlePadding / 2)),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: animationValue *
+                                          ((_size.width -
+                                              _handleSize -
+                                              _handlePadding)),
+                                      child: SizedBox(
+                                        width: _handleSize,
+                                        height: _handleSize,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withValues(
+                                                alpha: 0.08 * enableFactor),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          padding:
+                                              EdgeInsets.all((_handlePadding / 2)),
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                                color: enabled
+                                                    ? controlBackgroundColor
+                                                    : controlBackgroundColor
+                                                        .multiplyOpacity(0.75),
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black.withValues(
+                                                        alpha: enabled ? 0.12 : 0.02),
+                                                    blurStyle: BlurStyle.outer,
+                                                    spreadRadius: 0.0,
+                                                    blurRadius: 0.25,
+                                                    offset: const Offset(0.0, 0.2),
+                                                  ),
+                                                ]),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    padding:
-                                        EdgeInsets.all((_handlePadding / 2)),
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: enabled
-                                              ? controlBackgroundColor
-                                              : controlBackgroundColor
-                                                  .multiplyOpacity(0.75),
-                                          shape: BoxShape.circle,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withValues(
-                                                  alpha: enabled ? 0.12 : 0.02),
-                                              blurStyle: BlurStyle.outer,
-                                              spreadRadius: 0.0,
-                                              blurRadius: 0.25,
-                                              offset: const Offset(0.0, 0.2),
-                                            ),
-                                          ]),
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
+                  );
+                },
+              )),
+        ),
+      ],
+    );
   }
 }

@@ -1,3 +1,8 @@
+## 0.2.0
+
+ * Upgraded minimum required ox version to 11.7.10
+ * Switch component keeps its size even when placed inside an expanded widget
+
 ## 0.1.0
 
  * Updated min macos version to 11
