@@ -13,7 +13,7 @@ PODS:
     - FlutterMacOS
   - system_theme (0.0.1):
     - FlutterMacOS
-  - window_manager (0.2.0):
+  - window_manager (0.5.0):
     - FlutterMacOS
 
 DEPENDENCIES:
@@ -45,14 +45,14 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
-  appkit_ui_element_colors: 39bb2d80be3f19b152ccf4c70d5bbe6cba43d74a
+  appkit_ui_element_colors: bb247a2d02b8313cc47e1b83be48d996034c4001
   appkit_ui_elements: af3633614c5729044e411a2cb779d84591afec8e
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  macos_window_utils: 933f91f64805e2eb91a5bd057cf97cd097276663
+  macos_window_utils: 721df4da91cb4bde7b2b7b6ae93cdead4851118f
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   screen_retriever_macos: 776e0fa5d42c6163d2bf772d22478df4b302b161
   system_theme: c7b9f6659a5caa26c9bc2284da096781e9a6fcbc
-  window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8
+  window_manager: e25faf20d88283a0d46e7b1a759d07261ca27575
 
 PODFILE CHECKSUM: 04eaf592f37500e0be87934558f7cbbd1cc039c5
 

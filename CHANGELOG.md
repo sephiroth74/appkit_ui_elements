@@ -1,3 +1,7 @@
+## 0.2.1
+
+ * Upgraded window_manager to 0.5.0
+
 ## 0.2.0
 
  * Upgraded minimum required ox version to 11.7.10
