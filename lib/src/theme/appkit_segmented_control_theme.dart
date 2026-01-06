@@ -4,8 +4,7 @@ import 'package:flutter/foundation.dart';
 class AppKitSegmentedControlTheme extends InheritedTheme {
   final AppKitSegmentedControlThemeData data;
 
-  const AppKitSegmentedControlTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitSegmentedControlTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitSegmentedControlTheme oldWidget) {
@@ -40,10 +39,8 @@ class AppKitSegmentedControlThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(ColorProperty(
-        'dividerColorMultipleSelection', dividerColorMultipleSelection));
-    properties.add(ColorProperty(
-        'dividerColorSingleSelection', dividerColorSingleSelection));
+    properties.add(ColorProperty('dividerColorMultipleSelection', dividerColorMultipleSelection));
+    properties.add(ColorProperty('dividerColorSingleSelection', dividerColorSingleSelection));
     properties.add(ColorProperty('singleSelectionColor', singleSelectionColor));
     properties.add(ColorProperty('accentColor', accentColor));
   }
@@ -55,17 +52,14 @@ class AppKitSegmentedControlThemeData with Diagnosticable {
     Color? accentColor,
   }) {
     return AppKitSegmentedControlThemeData(
-      dividerColorMultipleSelection:
-          dividerColorMultipleSelection ?? this.dividerColorMultipleSelection,
-      dividerColorSingleSelection:
-          dividerColorSingleSelection ?? this.dividerColorSingleSelection,
+      dividerColorMultipleSelection: dividerColorMultipleSelection ?? this.dividerColorMultipleSelection,
+      dividerColorSingleSelection: dividerColorSingleSelection ?? this.dividerColorSingleSelection,
       singleSelectionColor: singleSelectionColor ?? this.singleSelectionColor,
       accentColor: accentColor ?? this.accentColor,
     );
   }
 
-  AppKitSegmentedControlThemeData merge(
-      AppKitSegmentedControlThemeData? other) {
+  AppKitSegmentedControlThemeData merge(AppKitSegmentedControlThemeData? other) {
     if (other == null) return this;
     return copyWith(
       dividerColorMultipleSelection: other.dividerColorMultipleSelection,
@@ -75,15 +69,15 @@ class AppKitSegmentedControlThemeData with Diagnosticable {
     );
   }
 
-  static AppKitSegmentedControlThemeData lerp(AppKitSegmentedControlThemeData a,
-      AppKitSegmentedControlThemeData b, double t) {
+  static AppKitSegmentedControlThemeData lerp(
+    AppKitSegmentedControlThemeData a,
+    AppKitSegmentedControlThemeData b,
+    double t,
+  ) {
     return AppKitSegmentedControlThemeData(
-      dividerColorMultipleSelection: Color.lerp(
-          a.dividerColorMultipleSelection, b.dividerColorMultipleSelection, t)!,
-      dividerColorSingleSelection: Color.lerp(
-          a.dividerColorSingleSelection, b.dividerColorSingleSelection, t)!,
-      singleSelectionColor:
-          Color.lerp(a.singleSelectionColor, b.singleSelectionColor, t)!,
+      dividerColorMultipleSelection: Color.lerp(a.dividerColorMultipleSelection, b.dividerColorMultipleSelection, t)!,
+      dividerColorSingleSelection: Color.lerp(a.dividerColorSingleSelection, b.dividerColorSingleSelection, t)!,
+      singleSelectionColor: Color.lerp(a.singleSelectionColor, b.singleSelectionColor, t)!,
       accentColor: Color.lerp(a.accentColor, b.accentColor, t),
     );
   }

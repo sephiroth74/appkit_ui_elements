@@ -28,8 +28,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
           builder: (context, ScrollController scrollController) {
             final theme = AppKitTheme.of(context);
             final textStyle = theme.typography.body;
-            final disabledTextStyle = textStyle.copyWith(
-                color: textStyle.color?.withValues(alpha: 0.5));
+            final disabledTextStyle = textStyle.copyWith(color: textStyle.color?.withValues(alpha: 0.5));
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -47,9 +46,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                             style: AppKitGroupBoxStyle.defaultScrollBox,
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: DefaultTextStyle(
-                                  style: textStyle,
-                                  child: const Text(groupMessage)),
+                              child: DefaultTextStyle(style: textStyle, child: const Text(groupMessage)),
                             ),
                           ),
                         ),
@@ -60,9 +57,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                             style: AppKitGroupBoxStyle.roundedScrollBox,
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: DefaultTextStyle(
-                                  style: textStyle,
-                                  child: const Text(groupMessage)),
+                              child: DefaultTextStyle(style: textStyle, child: const Text(groupMessage)),
                             ),
                           ),
                         ),
@@ -73,9 +68,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                             style: AppKitGroupBoxStyle.standardScrollBox,
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: DefaultTextStyle(
-                                  style: textStyle,
-                                  child: const Text(groupMessage)),
+                              child: DefaultTextStyle(style: textStyle, child: const Text(groupMessage)),
                             ),
                           ),
                         ),
@@ -95,9 +88,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                             enabled: false,
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: DefaultTextStyle(
-                                  style: disabledTextStyle,
-                                  child: const Text(groupMessage)),
+                              child: DefaultTextStyle(style: disabledTextStyle, child: const Text(groupMessage)),
                             ),
                           ),
                         ),
@@ -109,9 +100,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                             enabled: false,
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: DefaultTextStyle(
-                                  style: disabledTextStyle,
-                                  child: const Text(groupMessage)),
+                              child: DefaultTextStyle(style: disabledTextStyle, child: const Text(groupMessage)),
                             ),
                           ),
                         ),
@@ -123,9 +112,7 @@ class _GroupedBoxPageState extends State<GroupedBoxPage> {
                             enabled: false,
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: DefaultTextStyle(
-                                  style: disabledTextStyle,
-                                  child: const Text(groupMessage)),
+                              child: DefaultTextStyle(style: disabledTextStyle, child: const Text(groupMessage)),
                             ),
                           ),
                         ),

@@ -6,8 +6,7 @@ import 'package:flutter/foundation.dart';
 class AppKitContextMenuTheme extends InheritedTheme {
   final AppKitContextMenuThemeData data;
 
-  const AppKitContextMenuTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitContextMenuTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitContextMenuTheme oldWidget) {
@@ -20,10 +19,8 @@ class AppKitContextMenuTheme extends InheritedTheme {
   }
 
   static AppKitContextMenuThemeData of(BuildContext context) {
-    final appKitContextMenuTheme =
-        context.dependOnInheritedWidgetOfExactType<AppKitContextMenuTheme>();
-    return appKitContextMenuTheme?.data ??
-        AppKitTheme.of(context).contextMenuTheme;
+    final appKitContextMenuTheme = context.dependOnInheritedWidgetOfExactType<AppKitContextMenuTheme>();
+    return appKitContextMenuTheme?.data ?? AppKitTheme.of(context).contextMenuTheme;
   }
 }
 
@@ -32,17 +29,9 @@ class AppKitContextMenuThemeData with Diagnosticable {
   final double borderRadius;
   final Color? backgroundColor;
 
-  AppKitContextMenuThemeData({
-    required this.backgroundBlur,
-    required this.borderRadius,
-    this.backgroundColor,
-  });
+  AppKitContextMenuThemeData({required this.backgroundBlur, required this.borderRadius, this.backgroundColor});
 
-  AppKitContextMenuThemeData copyWith({
-    double? backgroundBlur,
-    double? borderRadius,
-    Color? backgroundColor,
-  }) {
+  AppKitContextMenuThemeData copyWith({double? backgroundBlur, double? borderRadius, Color? backgroundColor}) {
     return AppKitContextMenuThemeData(
       backgroundBlur: backgroundBlur ?? this.backgroundBlur,
       borderRadius: borderRadius ?? this.borderRadius,
@@ -58,8 +47,7 @@ class AppKitContextMenuThemeData with Diagnosticable {
     properties.add(ColorProperty('backgroundColor', backgroundColor));
   }
 
-  static AppKitContextMenuThemeData lerp(
-      AppKitContextMenuThemeData a, AppKitContextMenuThemeData b, double t) {
+  static AppKitContextMenuThemeData lerp(AppKitContextMenuThemeData a, AppKitContextMenuThemeData b, double t) {
     return AppKitContextMenuThemeData(
       backgroundBlur: lerpDouble(a.backgroundBlur, b.backgroundBlur, t)!,
       borderRadius: lerpDouble(a.borderRadius, b.borderRadius, t)!,

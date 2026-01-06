@@ -6,8 +6,7 @@ import 'package:flutter/foundation.dart';
 class AppKitSliderTheme extends InheritedTheme {
   final AppKitSliderThemeData data;
 
-  const AppKitSliderTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitSliderTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitSliderTheme oldWidget) {
@@ -20,8 +19,7 @@ class AppKitSliderTheme extends InheritedTheme {
   }
 
   static AppKitSliderThemeData of(BuildContext context) {
-    final AppKitSliderTheme? theme =
-        context.dependOnInheritedWidgetOfExactType<AppKitSliderTheme>();
+    final AppKitSliderTheme? theme = context.dependOnInheritedWidgetOfExactType<AppKitSliderTheme>();
     return theme?.data ?? AppKitTheme.of(context).sliderTheme;
   }
 }
@@ -88,20 +86,20 @@ class AppKitSliderThemeData with Diagnosticable {
     this.tickColor,
     this.animationDuration,
     this.accentColorUnfocused,
-  })  : assert(discreteAnchorThreshold >= 0.0),
-        assert(discreteThumbCornerRadius >= 0.0),
-        assert(continuousTrackCornerRadius >= 0.0),
-        assert(discreteTickCornerRadius >= 0.0),
-        assert(trackHeight >= 0.0),
-        assert(tickHeight >= 0.0),
-        assert(tickWidth >= 0.0),
-        assert(continuousThumbSize > 0.0),
-        assert(discreteThumbSize.width > 0.0),
-        assert(discreteThumbSize.height > 0.0),
-        assert(trackHeight <= discreteThumbSize.height),
-        assert(trackHeight <= continuousThumbSize),
-        assert(tickHeight <= discreteThumbSize.height),
-        assert(tickHeight <= continuousThumbSize);
+  }) : assert(discreteAnchorThreshold >= 0.0),
+       assert(discreteThumbCornerRadius >= 0.0),
+       assert(continuousTrackCornerRadius >= 0.0),
+       assert(discreteTickCornerRadius >= 0.0),
+       assert(trackHeight >= 0.0),
+       assert(tickHeight >= 0.0),
+       assert(tickWidth >= 0.0),
+       assert(continuousThumbSize > 0.0),
+       assert(discreteThumbSize.width > 0.0),
+       assert(discreteThumbSize.height > 0.0),
+       assert(trackHeight <= discreteThumbSize.height),
+       assert(trackHeight <= continuousThumbSize),
+       assert(tickHeight <= discreteThumbSize.height),
+       assert(tickHeight <= continuousThumbSize);
 
   AppKitSliderThemeData copyWith({
     Color? thumbColor,
@@ -125,15 +123,11 @@ class AppKitSliderThemeData with Diagnosticable {
       trackColor: trackColor ?? this.trackColor,
       tickColor: tickColor ?? this.tickColor,
       sliderColor: sliderColor ?? this.sliderColor,
-      discreteAnchorThreshold:
-          discreteAnchorThreshold ?? this.discreteAnchorThreshold,
+      discreteAnchorThreshold: discreteAnchorThreshold ?? this.discreteAnchorThreshold,
       animationDuration: animationDuration ?? this.animationDuration,
-      discreteThumbCornerRadius:
-          discreteThumbCornerRadius ?? this.discreteThumbCornerRadius,
-      continuousTrackCornerRadius:
-          continuousTrackCornerRadius ?? this.continuousTrackCornerRadius,
-      discreteTickCornerRadius:
-          discreteTickCornerRadius ?? this.discreteTickCornerRadius,
+      discreteThumbCornerRadius: discreteThumbCornerRadius ?? this.discreteThumbCornerRadius,
+      continuousTrackCornerRadius: continuousTrackCornerRadius ?? this.continuousTrackCornerRadius,
+      discreteTickCornerRadius: discreteTickCornerRadius ?? this.discreteTickCornerRadius,
       trackHeight: trackHeight ?? this.trackHeight,
       tickHeight: tickHeight ?? this.tickHeight,
       tickWidth: tickWidth ?? this.tickWidth,
@@ -171,15 +165,11 @@ class AppKitSliderThemeData with Diagnosticable {
     properties.add(ColorProperty('trackColor', trackColor));
     properties.add(ColorProperty('tickColor', tickColor));
     properties.add(ColorProperty('sliderColor', sliderColor));
-    properties.add(
-        DoubleProperty('discreteAnchorThreshold', discreteAnchorThreshold));
+    properties.add(DoubleProperty('discreteAnchorThreshold', discreteAnchorThreshold));
     properties.add(IntProperty('animationDuration', animationDuration));
-    properties.add(
-        DoubleProperty('discreteThumbCornerRadius', discreteThumbCornerRadius));
-    properties.add(DoubleProperty(
-        'continuousTrackCornerRadius', continuousTrackCornerRadius));
-    properties.add(
-        DoubleProperty('discreteTickCornerRadius', discreteTickCornerRadius));
+    properties.add(DoubleProperty('discreteThumbCornerRadius', discreteThumbCornerRadius));
+    properties.add(DoubleProperty('continuousTrackCornerRadius', continuousTrackCornerRadius));
+    properties.add(DoubleProperty('discreteTickCornerRadius', discreteTickCornerRadius));
     properties.add(DoubleProperty('trackHeight', trackHeight));
     properties.add(DoubleProperty('tickHeight', tickHeight));
     properties.add(DoubleProperty('tickWidth', tickWidth));
@@ -188,34 +178,25 @@ class AppKitSliderThemeData with Diagnosticable {
     properties.add(ColorProperty('accentColorUnfocused', accentColorUnfocused));
   }
 
-  static AppKitSliderThemeData lerp(
-      AppKitSliderThemeData a, AppKitSliderThemeData b, double t) {
+  static AppKitSliderThemeData lerp(AppKitSliderThemeData a, AppKitSliderThemeData b, double t) {
     return AppKitSliderThemeData(
       thumbColor: Color.lerp(a.thumbColor, b.thumbColor, t)!,
       trackColor: Color.lerp(a.trackColor, b.trackColor, t)!,
       tickColor: Color.lerp(a.tickColor, b.tickColor, t),
       sliderColor: Color.lerp(a.sliderColor, b.sliderColor, t)!,
-      discreteAnchorThreshold:
-          lerpDouble(a.discreteAnchorThreshold, b.discreteAnchorThreshold, t)!,
-      animationDuration:
-          a.animationDuration != null && b.animationDuration != null
-              ? lerpInt(a.animationDuration!, b.animationDuration!, t)
-              : b.animationDuration,
-      discreteThumbCornerRadius: lerpDouble(
-          a.discreteThumbCornerRadius, b.discreteThumbCornerRadius, t)!,
-      continuousTrackCornerRadius: lerpDouble(
-          a.continuousTrackCornerRadius, b.continuousTrackCornerRadius, t)!,
-      discreteTickCornerRadius: lerpDouble(
-          a.discreteTickCornerRadius, b.discreteTickCornerRadius, t)!,
+      discreteAnchorThreshold: lerpDouble(a.discreteAnchorThreshold, b.discreteAnchorThreshold, t)!,
+      animationDuration: a.animationDuration != null && b.animationDuration != null
+          ? lerpInt(a.animationDuration!, b.animationDuration!, t)
+          : b.animationDuration,
+      discreteThumbCornerRadius: lerpDouble(a.discreteThumbCornerRadius, b.discreteThumbCornerRadius, t)!,
+      continuousTrackCornerRadius: lerpDouble(a.continuousTrackCornerRadius, b.continuousTrackCornerRadius, t)!,
+      discreteTickCornerRadius: lerpDouble(a.discreteTickCornerRadius, b.discreteTickCornerRadius, t)!,
       trackHeight: lerpDouble(a.trackHeight, b.trackHeight, t)!,
       tickHeight: lerpDouble(a.tickHeight, b.tickHeight, t)!,
       tickWidth: lerpDouble(a.tickWidth, b.tickWidth, t)!,
-      discreteThumbSize:
-          Size.lerp(a.discreteThumbSize, b.discreteThumbSize, t)!,
-      continuousThumbSize:
-          lerpDouble(a.continuousThumbSize, b.continuousThumbSize, t)!,
-      accentColorUnfocused:
-          Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t),
+      discreteThumbSize: Size.lerp(a.discreteThumbSize, b.discreteThumbSize, t)!,
+      continuousThumbSize: lerpDouble(a.continuousThumbSize, b.continuousThumbSize, t)!,
+      accentColorUnfocused: Color.lerp(a.accentColorUnfocused, b.accentColorUnfocused, t),
     );
   }
 }

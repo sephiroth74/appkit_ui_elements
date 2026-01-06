@@ -43,16 +43,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   String toString() => 'ContextMenuItem(title: $child, value: $value)';
 
   @override
-  List<Object?> get props =>
-      super.props +
-      [
-        value,
-        child,
-        onImage,
-        offImage,
-        mixedImage,
-        onTap,
-      ];
+  List<Object?> get props => super.props + [value, child, onImage, offImage, mixedImage, onTap];
 
   AppKitContextMenuItem.submenu(
     String label, {
@@ -61,11 +52,11 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
     super.debugLabel,
     this.onTap,
     this.value,
-  })  : child = Text(label),
-        itemState = AppKitItemState.off,
-        mixedImage = null,
-        onImage = null,
-        offImage = null;
+  }) : child = Text(label),
+       itemState = AppKitItemState.off,
+       mixedImage = null,
+       onImage = null,
+       offImage = null;
 
   @override
   bool get hasSubmenu => items != null;
@@ -89,8 +80,7 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   }
 
   void _toggleSubmenu(BuildContext context, AppKitContextMenuState menuState) {
-    if (menuState.isSubmenuOpen &&
-        menuState.focusedEntry == menuState.selectedItem) {
+    if (menuState.isSubmenuOpen && menuState.focusedEntry == menuState.selectedItem) {
       menuState.closeSubmenu();
     } else {
       menuState.showSubmenu(context: context, parent: this);
@@ -98,26 +88,21 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
   }
 
   @override
-  Widget builder(BuildContext context, AppKitContextMenuState menuState,
-      [FocusNode? focusNode]) {
+  Widget builder(BuildContext context, AppKitContextMenuState menuState, [FocusNode? focusNode]) {
     final theme = AppKitTheme.of(context);
     final contextMenuTheme = AppKitContextMenuTheme.of(context);
-    final selectedOrFocused =
-        menuState.focusedEntry == this || menuState.selectedItem == this;
-    final isSelectionAnimating = menuState.isSelectionAnimating &&
-        menuState.focusedEntry == this &&
-        menuState.selectionTicks % 2 == 0;
+    final selectedOrFocused = menuState.focusedEntry == this || menuState.selectedItem == this;
+    final isSelectionAnimating =
+        menuState.isSelectionAnimating && menuState.focusedEntry == this && menuState.selectionTicks % 2 == 0;
 
     final accentColor = theme.activeColor;
-    final decorationColor = selectedOrFocused && !isSelectionAnimating
-        ? accentColor
-        : Colors.transparent;
+    final decorationColor = selectedOrFocused && !isSelectionAnimating ? accentColor : Colors.transparent;
 
     final decorationColorBlended = Color.lerp(
-        contextMenuTheme.backgroundColor ??
-            AppKitDynamicColor.resolve(context, AppKitColors.materials.medium),
-        decorationColor,
-        decorationColor.a)!;
+      contextMenuTheme.backgroundColor ?? AppKitDynamicColor.resolve(context, AppKitColors.materials.medium),
+      decorationColor,
+      decorationColor.a,
+    )!;
 
     final IconData? icon;
     if (itemState == AppKitItemState.on) {
@@ -130,85 +115,65 @@ final class AppKitContextMenuItem<T> extends AppKitContextMenuEntry<T> {
 
     Color textColor = selectedOrFocused && enabled
         ? decorationColorBlended.computeLuminance() > 0.5
-            ? Colors.black
-            : Colors.white
+              ? Colors.black
+              : Colors.white
         : AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
     if (!enabled) {
       textColor = textColor.withValues(alpha: 0.3);
     }
 
-    final Color iconColor =
-        itemState?.isOff == true ? Colors.transparent : textColor;
+    final Color iconColor = itemState?.isOff == true ? Colors.transparent : textColor;
 
     return GestureDetector(
       onTap: () => enabled ? handleItemSelection(context) : null,
-      child: Builder(builder: (context) {
-        final statusIconWidget = !menuState.statusIconRequired
-            ? const SizedBox.shrink()
-            : itemState != null
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 4.0, top: 2.5),
-                    child: Icon(
-                      icon,
-                      size: 12,
-                      color: iconColor,
-                    ),
-                  )
-                : const SizedBox(width: 16.0);
+      child: Builder(
+        builder: (context) {
+          final statusIconWidget = !menuState.statusIconRequired
+              ? const SizedBox.shrink()
+              : itemState != null
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 4.0, top: 2.5),
+                  child: Icon(icon, size: 12, color: iconColor),
+                )
+              : const SizedBox(width: 16.0);
 
-        final subMenuIconWidget = Padding(
-          padding: const EdgeInsets.only(top: 2.5),
-          child: Icon(
-            CupertinoIcons.right_chevron,
-            size: 12,
-            color: textColor,
-          ),
-        );
+          final subMenuIconWidget = Padding(
+            padding: const EdgeInsets.only(top: 2.5),
+            child: Icon(CupertinoIcons.right_chevron, size: 12, color: textColor),
+          );
 
-        final textWidget = Padding(
-          padding: const EdgeInsets.only(right: 6.0),
-          child: DefaultTextStyle(
-            softWrap: false,
-            maxLines: 1,
-            style: theme.typography.body.copyWith(
-              fontSize: 13,
-              color: textColor,
-            ),
-            overflow: TextOverflow.ellipsis,
-            child: AppKitIconTheme(
+          final textWidget = Padding(
+            padding: const EdgeInsets.only(right: 6.0),
+            child: DefaultTextStyle(
+              softWrap: false,
+              maxLines: 1,
+              style: theme.typography.body.copyWith(fontSize: 13, color: textColor),
+              overflow: TextOverflow.ellipsis,
+              child: AppKitIconTheme(
                 data: AppKitIconTheme.of(context).copyWith(color: textColor),
-                child: child),
-          ),
-        );
-
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            color: decorationColor,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 6.0, top: 2.5, right: 6.0, bottom: 4.5),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              textDirection: Directionality.of(context),
-              children: [
-                // Left to right
-                statusIconWidget,
-                Expanded(
-                  child: textWidget,
-                ),
-                if (hasSubmenu) ...[
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  subMenuIconWidget
-                ],
-              ],
+                child: child,
+              ),
             ),
-          ),
-        );
-      }),
+          );
+
+          return DecoratedBox(
+            decoration: BoxDecoration(color: decorationColor, borderRadius: BorderRadius.circular(5)),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 6.0, top: 2.5, right: 6.0, bottom: 4.5),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                textDirection: Directionality.of(context),
+                children: [
+                  // Left to right
+                  statusIconWidget,
+                  Expanded(child: textWidget),
+                  if (hasSubmenu) ...[const SizedBox(width: 8.0), subMenuIconWidget],
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

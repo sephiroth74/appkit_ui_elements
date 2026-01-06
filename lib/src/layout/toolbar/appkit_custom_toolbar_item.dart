@@ -19,10 +19,7 @@ class AppKitCustomToolbarItem extends AppKitToolbarItem {
   Widget build(BuildContext context, {required Brightness brightness}) {
     Widget widget = inToolbarBuilder(context);
     if (tooltipMessage != null) {
-      widget = AppKitTooltip.plain(
-        message: tooltipMessage!,
-        child: widget,
-      );
+      widget = AppKitTooltip.plain(message: tooltipMessage!, child: widget);
     }
     return widget;
   }

@@ -1,8 +1,6 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 
-const _kTabViewRadius = BorderRadius.all(
-  Radius.circular(6.0),
-);
+const _kTabViewRadius = BorderRadius.all(Radius.circular(6.0));
 
 const _kTabInnerPadding = 36.0;
 
@@ -30,14 +28,13 @@ class AppKitTabView extends StatefulWidget {
     this.outerDecoration,
     this.innerDecoration,
     this.innerPadding = _kTabInnerPadding,
-    this.outerPadding =
-        const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0, bottom: 12.0),
+    this.outerPadding = const EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0, bottom: 12.0),
     this.onTabChanged,
     this.position = AppKitTabPosition.top,
     this.size = AppKitSegmentedControlSize.regular,
-  })  : assert(children.length == controller.count),
-        assert(icons == null || icons.length == children.length),
-        assert(labels == null || labels.length == children.length);
+  }) : assert(children.length == controller.count),
+       assert(icons == null || icons.length == children.length),
+       assert(labels == null || labels.length == children.length);
 
   @override
   State<AppKitTabView> createState() => _AppKitTabViewState();
@@ -130,17 +127,12 @@ class _AppKitTabViewState extends State<AppKitTabView> {
 
     final brightness = AppKitTheme.brightnessOf(context);
 
-    final outerBorderColor = brightness.resolve(
-      const Color(0xFFE1E2E4),
-      const Color(0xFF3E4045),
-    );
+    final outerBorderColor = brightness.resolve(const Color(0xFFE1E2E4), const Color(0xFF3E4045));
 
-    final decoration = widget.outerDecoration ??
+    final decoration =
+        widget.outerDecoration ??
         BoxDecoration(
-          border: Border.all(
-            color: outerBorderColor,
-            width: 1.0,
-          ),
+          border: Border.all(color: outerBorderColor, width: 1.0),
           borderRadius: _kTabViewRadius,
         );
 
@@ -149,57 +141,51 @@ class _AppKitTabViewState extends State<AppKitTabView> {
       decoration: decoration,
       child: Padding(
         padding: widget.outerPadding,
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Stack(
-            alignment: _alignment,
-            children: [
-              Builder(builder: (context) {
-                return Positioned(
-                  top: widget.position == AppKitTabPosition.top ? 0 : null,
-                  bottom:
-                      widget.position == AppKitTabPosition.bottom ? 0 : null,
-                  left: widget.position == AppKitTabPosition.left ? 0 : null,
-                  right: widget.position == AppKitTabPosition.right ? 0 : null,
-                  child: RotatedBox(
-                    quarterTurns: _tabRotation,
-                    child: ConstrainedBox(
-                      constraints: _getSegmentConstraints(constraints),
-                      child: AppKitSegmentedControl(
-                        icons: widget.icons,
-                        labels: widget.labels,
-                        size: widget.size,
-                        onSelectionChanged: _handleSelectionChanged,
-                        controller: widget.controller,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              Padding(
-                padding: _innerPadding,
-                child: DecoratedBox(
-                  decoration: widget.innerDecoration ??
-                      BoxDecoration(
-                        color: brightness.resolve(
-                          const Color(0x77e8eaee),
-                          const Color(0x772B2E33),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              alignment: _alignment,
+              children: [
+                Builder(
+                  builder: (context) {
+                    return Positioned(
+                      top: widget.position == AppKitTabPosition.top ? 0 : null,
+                      bottom: widget.position == AppKitTabPosition.bottom ? 0 : null,
+                      left: widget.position == AppKitTabPosition.left ? 0 : null,
+                      right: widget.position == AppKitTabPosition.right ? 0 : null,
+                      child: RotatedBox(
+                        quarterTurns: _tabRotation,
+                        child: ConstrainedBox(
+                          constraints: _getSegmentConstraints(constraints),
+                          child: AppKitSegmentedControl(
+                            icons: widget.icons,
+                            labels: widget.labels,
+                            size: widget.size,
+                            onSelectionChanged: _handleSelectionChanged,
+                            controller: widget.controller,
+                          ),
                         ),
-                        border: Border.all(
-                          color: outerBorderColor,
-                          width: 1.0,
-                        ),
-                        borderRadius: _kTabViewRadius,
                       ),
-                  child: IndexedStack(
-                    sizing: StackFit.loose,
-                    index: _currentIndex,
-                    children: _childrenWithKey,
+                    );
+                  },
+                ),
+                Padding(
+                  padding: _innerPadding,
+                  child: DecoratedBox(
+                    decoration:
+                        widget.innerDecoration ??
+                        BoxDecoration(
+                          color: brightness.resolve(const Color(0x77e8eaee), const Color(0x772B2E33)),
+                          border: Border.all(color: outerBorderColor, width: 1.0),
+                          borderRadius: _kTabViewRadius,
+                        ),
+                    child: IndexedStack(sizing: StackFit.loose, index: _currentIndex, children: _childrenWithKey),
                   ),
                 ),
-              ),
-            ],
-          );
-        }),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -242,9 +228,4 @@ class _AppKitTabViewState extends State<AppKitTabView> {
   }
 }
 
-enum AppKitTabPosition {
-  left,
-  right,
-  top,
-  bottom,
-}
+enum AppKitTabPosition { left, right, top, bottom }

@@ -11,16 +11,10 @@ class AppKitMenuEntryWidget<T> extends StatefulWidget {
   final AppKitContextMenuEntry<T> entry;
   final bool focused;
   final bool enabled;
-  const AppKitMenuEntryWidget({
-    super.key,
-    required this.entry,
-    this.focused = false,
-    this.enabled = true,
-  });
+  const AppKitMenuEntryWidget({super.key, required this.entry, this.focused = false, this.enabled = true});
 
   @override
-  State<AppKitMenuEntryWidget<T>> createState() =>
-      _AppKitMenuEntryWidgetState<T>();
+  State<AppKitMenuEntryWidget<T>> createState() => _AppKitMenuEntryWidgetState<T>();
 }
 
 class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
@@ -48,15 +42,10 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
     final menuState = AppKitContextMenuState.of(context);
 
     return MouseRegion(
-      onEnter: (event) => enabled
-          ? _onMouseEnter(context,
-              event: event, menuState: menuState, focusNode: focusNode)
-          : null,
+      onEnter: (event) =>
+          enabled ? _onMouseEnter(context, event: event, menuState: menuState, focusNode: focusNode) : null,
       onExit: (event) => widget.entry.onMouseExit(event, menuState),
-      onHover: (event) => enabled
-          ? _onMouseHover(
-              event: event, menuState: menuState, focusNode: focusNode)
-          : null,
+      onHover: (event) => enabled ? _onMouseHover(event: event, menuState: menuState, focusNode: focusNode) : null,
       child: Builder(
         builder: (_) {
           if (entry is AppKitContextMenuItem) {
@@ -75,10 +64,7 @@ class _AppKitMenuEntryWidgetState<T> extends State<AppKitMenuEntryWidget<T>> {
               onFocusChange: enabled
                   ? (value) {
                       if (value) {
-                        _ensureFocused(
-                            entry: item,
-                            menuState: menuState,
-                            focusNode: focusNode);
+                        _ensureFocused(entry: item, menuState: menuState, focusNode: focusNode);
                       }
                     }
                   : null,

@@ -8,15 +8,13 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:window_manager/window_manager.dart';
 
-typedef MainWindowWidgetBuilder = Widget Function(
-    BuildContext context, bool isMainWindow);
+typedef MainWindowWidgetBuilder = Widget Function(BuildContext context, bool isMainWindow);
 
 abstract mixin class _MainWindowStateListener {
   void dispose();
 }
 
-class _MainWindowStateListenerWindowManager
-    with WindowListener, _MainWindowStateListener {
+class _MainWindowStateListenerWindowManager with WindowListener, _MainWindowStateListener {
   _MainWindowStateListenerWindowManager() {
     windowManager.addListener(this);
   }
@@ -39,8 +37,7 @@ class _MainWindowStateListenerWindowManager
   }
 }
 
-class _MainWindowStateListenerNSWindowDelegate extends NSWindowDelegate
-    with _MainWindowStateListener {
+class _MainWindowStateListenerNSWindowDelegate extends NSWindowDelegate with _MainWindowStateListener {
   NSWindowDelegateHandle? _handle;
 
   _MainWindowStateListenerNSWindowDelegate() {
@@ -71,8 +68,7 @@ class _MainWindowStateListenerNSWindowDelegate extends NSWindowDelegate
 
   /// Initializes the [_isMainWindow] variable.
   Future<void> _initIsWindowMain() async {
-    MainWindowStateListener.instance.isMainWindow.sink
-        .add(await WindowManipulator.isMainWindow());
+    MainWindowStateListener.instance.isMainWindow.sink.add(await WindowManipulator.isMainWindow());
   }
 
   /// Disposes this listener.
@@ -151,12 +147,10 @@ class MainWindowProviderWidgetBuilder extends StatefulWidget {
   const MainWindowProviderWidgetBuilder({super.key, required this.builder});
 
   @override
-  State<MainWindowProviderWidgetBuilder> createState() =>
-      _MainWindowProviderWidgetBuilderState();
+  State<MainWindowProviderWidgetBuilder> createState() => _MainWindowProviderWidgetBuilderState();
 }
 
-class _MainWindowProviderWidgetBuilderState
-    extends State<MainWindowProviderWidgetBuilder> {
+class _MainWindowProviderWidgetBuilderState extends State<MainWindowProviderWidgetBuilder> {
   late final debugLabel = shortHash(this);
   late final _model = MainWindowModel();
   late StreamSubscription<bool> _subscription;
@@ -166,8 +160,7 @@ class _MainWindowProviderWidgetBuilderState
   void initState() {
     super.initState();
 
-    _subscription =
-        MainWindowStateListener.instance.isMainWindow.listen((isMainWindow) {
+    _subscription = MainWindowStateListener.instance.isMainWindow.listen((isMainWindow) {
       _model.isMainWindow = isMainWindow;
     });
 

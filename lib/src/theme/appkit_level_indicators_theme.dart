@@ -6,8 +6,7 @@ import 'package:flutter/foundation.dart';
 class AppKitLevelIndicatorsTheme extends InheritedTheme {
   final AppKitLevelIndicatorsThemeData data;
 
-  const AppKitLevelIndicatorsTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitLevelIndicatorsTheme({super.key, required super.child, required this.data});
 
   @override
   Widget wrap(BuildContext context, Widget child) {
@@ -15,8 +14,7 @@ class AppKitLevelIndicatorsTheme extends InheritedTheme {
   }
 
   static AppKitLevelIndicatorsThemeData of(BuildContext context) {
-    final AppKitLevelIndicatorsTheme? theme = context
-        .dependOnInheritedWidgetOfExactType<AppKitLevelIndicatorsTheme>();
+    final AppKitLevelIndicatorsTheme? theme = context.dependOnInheritedWidgetOfExactType<AppKitLevelIndicatorsTheme>();
     return theme?.data ?? AppKitTheme.of(context).levelIndicatorsTheme;
   }
 
@@ -72,8 +70,11 @@ class AppKitLevelIndicatorsThemeData with Diagnosticable {
     );
   }
 
-  static AppKitLevelIndicatorsThemeData lerp(AppKitLevelIndicatorsThemeData? a,
-      AppKitLevelIndicatorsThemeData? b, double t) {
+  static AppKitLevelIndicatorsThemeData lerp(
+    AppKitLevelIndicatorsThemeData? a,
+    AppKitLevelIndicatorsThemeData? b,
+    double t,
+  ) {
     return AppKitLevelIndicatorsThemeData(
       normalColor: Color.lerp(a?.normalColor, b?.normalColor, t)!,
       warningColor: Color.lerp(a?.warningColor, b?.warningColor, t)!,

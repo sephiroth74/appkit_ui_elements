@@ -5,12 +5,7 @@ class AppKitMeasureSingleChildWidget extends SingleChildRenderObjectWidget {
   final ValueChanged<Size>? onSizeChanged;
   final ValueChanged<Rect>? onLayout;
 
-  const AppKitMeasureSingleChildWidget({
-    super.key,
-    super.child,
-    this.onSizeChanged,
-    this.onLayout,
-  });
+  const AppKitMeasureSingleChildWidget({super.key, super.child, this.onSizeChanged, this.onLayout});
 
   @override
   RenderObject createRenderObject(BuildContext context) {
@@ -26,8 +21,7 @@ class AppKitMeasureSingleChildWidget extends SingleChildRenderObjectWidget {
 }
 
 class _RenderMenuItem extends RenderProxyBox {
-  _RenderMenuItem(this.onLayout, this.onSizeChanged, [RenderBox? child])
-      : super(child);
+  _RenderMenuItem(this.onLayout, this.onSizeChanged, [RenderBox? child]) : super(child);
 
   ValueChanged<Rect>? onLayout;
   ValueChanged<Size>? onSizeChanged;

@@ -82,14 +82,11 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                       text: 'custom color',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: AppKitDynamicColor.resolve(
-                                              context,
-                                              AppKitColors.systemMint)),
+                                          color: AppKitDynamicColor.resolve(context, AppKitColors.systemMint)),
                                     ),
                                   ]),
                                   child: AppKitButton(
-                                      accentColor: AppKitDynamicColor.resolve(
-                                          context, AppKitColors.systemMint),
+                                      accentColor: AppKitDynamicColor.resolve(context, AppKitColors.systemMint),
                                       onTap: () {},
                                       style: AppKitButtonStyle.inline,
                                       size: controlSize,
@@ -98,9 +95,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Inline button disabled',
                                   child: AppKitButton(
-                                      style: AppKitButtonStyle.inline,
-                                      size: controlSize,
-                                      child: const Text('Get'))),
+                                      style: AppKitButtonStyle.inline, size: controlSize, child: const Text('Get'))),
                             ],
                           ),
                           const SizedBox(height: 16.0),
@@ -154,14 +149,11 @@ class _PushButtonPageState extends State<PushButtonPage> {
                                       text: 'custom color',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: AppKitDynamicColor.resolve(
-                                              context,
-                                              AppKitColors.systemMint)),
+                                          color: AppKitDynamicColor.resolve(context, AppKitColors.systemMint)),
                                     ),
                                   ]),
                                   child: AppKitButton(
-                                      accentColor: AppKitDynamicColor.resolve(
-                                          context, AppKitColors.systemMint),
+                                      accentColor: AppKitDynamicColor.resolve(context, AppKitColors.systemMint),
                                       onTap: () {},
                                       style: AppKitButtonStyle.flat,
                                       size: controlSize,
@@ -170,9 +162,7 @@ class _PushButtonPageState extends State<PushButtonPage> {
                               AppKitTooltip.plain(
                                   message: 'Flat button disabled',
                                   child: AppKitButton(
-                                      style: AppKitButtonStyle.flat,
-                                      size: controlSize,
-                                      child: const Text('Get'))),
+                                      style: AppKitButtonStyle.flat, size: controlSize, child: const Text('Get'))),
                             ],
                           ),
                           const SizedBox(height: 16.0),

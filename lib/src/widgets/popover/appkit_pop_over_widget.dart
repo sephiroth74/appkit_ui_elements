@@ -5,12 +5,8 @@ import 'package:provider/provider.dart';
 class AppKitPopoverWidget extends StatelessWidget {
   final AppKitPopoverState popoverState;
   final Duration transitionDuration;
-  const AppKitPopoverWidget({
-    super.key,
-    required this.popoverState,
-    Duration? transitionDuration,
-  }) : transitionDuration =
-            transitionDuration ?? const Duration(milliseconds: 200);
+  const AppKitPopoverWidget({super.key, required this.popoverState, Duration? transitionDuration})
+    : transitionDuration = transitionDuration ?? const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +17,10 @@ class AppKitPopoverWidget extends StatelessWidget {
           final state = AppKitPopoverState.of(context);
           state.verifyPosition(context);
 
-          final child = Opacity(
-            opacity: state.isPositionVerified ? 1.0 : 0.0,
-            child: _buildPopover(
-              context,
-              state,
-            ),
-          );
+          final child = Opacity(opacity: state.isPositionVerified ? 1.0 : 0.0, child: _buildPopover(context, state));
 
           if (state.link == null) {
-            return Positioned(
-                left: state.position.dx, top: state.position.dy, child: child);
+            return Positioned(left: state.position.dx, top: state.position.dy, child: child);
           }
 
           return CompositedTransformFollower(
@@ -47,46 +36,48 @@ class AppKitPopoverWidget extends StatelessWidget {
 
   Widget _buildPopover(BuildContext context, AppKitPopoverState state) {
     return TweenAnimationBuilder(
-        curve: Curves.easeOutBack,
-        duration: transitionDuration,
-        tween: Tween(begin: 0.0, end: 1.0),
-        builder: (context, value, child) {
-          return Opacity(
-              opacity: value.clamp(0.0, 1.0),
-              child: Transform.scale(
-                scale: value,
-                alignment: Alignment.center,
-                child: Consumer<MainWindowModel>(builder: (context, model, _) {
-                  final theme = AppKitTheme.of(context);
-                  final isDark = theme.brightness == Brightness.dark;
-                  return CustomPaint(
-                      painter: _PopoverBackgroundPainter(
-                        cornerRadius: kCornerRadius,
-                        anchorHeight: kAnchorHeight,
-                        anchorWidth: kAnchorWidth,
-                        color: isDark
-                            ? AppKitDynamicColor.resolve(
-                                    context, AppKitColors.windowBackgroundColor)
-                                .multiplyLuminance(1.35)
-                            : AppKitDynamicColor.resolve(
-                                context, AppKitColors.windowBackgroundColor),
-                        anchorOffset: state.anchorOffset,
-                        anchorDirection:
-                            state.showArrow ? state.direction : null,
-                        shadowColor: AppKitColors.shadowColor,
-                      ),
-                      child: Padding(
-                        padding: state.paddings,
-                        child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minWidth: 50,
-                              minHeight: 50,
-                            ),
-                            child: state.child),
-                      ));
-                }),
-              ));
-        });
+      curve: Curves.easeOutBack,
+      duration: transitionDuration,
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value.clamp(0.0, 1.0),
+          child: Transform.scale(
+            scale: value,
+            alignment: Alignment.center,
+            child: Consumer<MainWindowModel>(
+              builder: (context, model, _) {
+                final theme = AppKitTheme.of(context);
+                final isDark = theme.brightness == Brightness.dark;
+                return CustomPaint(
+                  painter: _PopoverBackgroundPainter(
+                    cornerRadius: kCornerRadius,
+                    anchorHeight: kAnchorHeight,
+                    anchorWidth: kAnchorWidth,
+                    color: isDark
+                        ? AppKitDynamicColor.resolve(
+                            context,
+                            AppKitColors.windowBackgroundColor,
+                          ).multiplyLuminance(1.35)
+                        : AppKitDynamicColor.resolve(context, AppKitColors.windowBackgroundColor),
+                    anchorOffset: state.anchorOffset,
+                    anchorDirection: state.showArrow ? state.direction : null,
+                    shadowColor: AppKitColors.shadowColor,
+                  ),
+                  child: Padding(
+                    padding: state.paddings,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minWidth: 50, minHeight: 50),
+                      child: state.child,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -140,13 +131,13 @@ class _PopoverBackgroundPainter extends CustomPainter {
     }
 
     if (null == anchorOffset) {
-      offsetDx = (anchorDirection == AppKitMenuEdge.top ||
+      offsetDx =
+          (anchorDirection == AppKitMenuEdge.top ||
               anchorDirection == AppKitMenuEdge.bottom ||
               anchorDirection == AppKitMenuEdge.auto)
           ? rect.topCenter.dx
           : 0;
-      offsetDy = (anchorDirection == AppKitMenuEdge.left ||
-              anchorDirection == AppKitMenuEdge.right)
+      offsetDy = (anchorDirection == AppKitMenuEdge.left || anchorDirection == AppKitMenuEdge.right)
           ? rect.centerLeft.dy
           : 0;
     } else {
@@ -156,8 +147,7 @@ class _PopoverBackgroundPainter extends CustomPainter {
 
     path.moveTo(rect.left + cornerRadius, rect.top);
 
-    if ((anchorDirection == AppKitMenuEdge.bottom ||
-            anchorDirection == AppKitMenuEdge.auto) &&
+    if ((anchorDirection == AppKitMenuEdge.bottom || anchorDirection == AppKitMenuEdge.auto) &&
         (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
       path.lineTo(rect.left + offsetDx - anchorWidth / 2, rect.top);
       path.lineTo(rect.left + offsetDx, rect.top - anchorHeight);
@@ -165,44 +155,37 @@ class _PopoverBackgroundPainter extends CustomPainter {
     }
 
     path.lineTo(rect.right - cornerRadius, rect.top);
-    path.arcToPoint(Offset(rect.right, cornerRadius + rect.top),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.right, cornerRadius + rect.top), radius: Radius.circular(cornerRadius));
 
     // right
-    if (anchorDirection == AppKitMenuEdge.left &&
-        (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
+    if (anchorDirection == AppKitMenuEdge.left && (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
       path.lineTo(rect.right, rect.top + offsetDy - anchorWidth / 2);
       path.lineTo(rect.right + anchorHeight, rect.top + offsetDy);
       path.lineTo(rect.right, rect.top + offsetDy + anchorWidth / 2);
     }
 
     path.lineTo(rect.right, rect.bottom - cornerRadius);
-    path.arcToPoint(Offset(rect.right - cornerRadius, rect.bottom),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.right - cornerRadius, rect.bottom), radius: Radius.circular(cornerRadius));
 
     // bottom
-    if (anchorDirection == AppKitMenuEdge.top &&
-        (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
+    if (anchorDirection == AppKitMenuEdge.top && (offsetDx > anchorWidth && (rect.right - offsetDx) > anchorWidth)) {
       path.lineTo(rect.left + offsetDx + anchorWidth / 2, rect.bottom);
       path.lineTo(rect.left + offsetDx, rect.bottom + anchorHeight);
       path.lineTo(rect.left + offsetDx - anchorWidth / 2, rect.bottom);
     }
 
     path.lineTo(rect.left + cornerRadius, rect.bottom);
-    path.arcToPoint(Offset(rect.left, rect.bottom - cornerRadius),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.left, rect.bottom - cornerRadius), radius: Radius.circular(cornerRadius));
 
     // left
-    if (anchorDirection == AppKitMenuEdge.right &&
-        (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
+    if (anchorDirection == AppKitMenuEdge.right && (offsetDy > anchorWidth && (rect.bottom - offsetDy) > anchorWidth)) {
       path.lineTo(rect.left, rect.top + offsetDy + anchorWidth / 2);
       path.lineTo(rect.left - anchorHeight, rect.top + offsetDy);
       path.lineTo(rect.left, rect.top + offsetDy - anchorWidth / 2);
     }
 
     path.lineTo(rect.left, rect.top + cornerRadius);
-    path.arcToPoint(Offset(rect.left + cornerRadius, rect.top),
-        radius: Radius.circular(cornerRadius));
+    path.arcToPoint(Offset(rect.left + cornerRadius, rect.top), radius: Radius.circular(cornerRadius));
     path.close();
 
     canvas.drawShadow(path, shadowColor, 6.0, true);
@@ -220,7 +203,6 @@ class _PopoverBackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return oldDelegate != this ||
-        (oldDelegate as _PopoverBackgroundPainter).color != color;
+    return oldDelegate != this || (oldDelegate as _PopoverBackgroundPainter).color != color;
   }
 }

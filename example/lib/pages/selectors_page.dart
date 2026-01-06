@@ -17,11 +17,9 @@ class _SelectorsPageState extends State<SelectorsPage> {
     end: DateTime.now().add(const Duration(days: 4)),
   );
 
-  late final DateTime _minimumDate =
-      _selectedDate.subtract(const Duration(days: 365));
+  late final DateTime _minimumDate = _selectedDate.subtract(const Duration(days: 365));
 
-  late final DateTime _maximumDate =
-      _selectedDate.add(const Duration(days: 365));
+  late final DateTime _maximumDate = _selectedDate.add(const Duration(days: 365));
 
   set selectedDate(DateTime value) {
     setState(() {
@@ -84,26 +82,20 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                   minimumDate: _minimumDate,
                                   maximumDate: _maximumDate,
                                   dateElements: AppKitDateElements.monthDayYear,
-                                  timeElements:
-                                      AppKitTimeElements.hourMinuteSecond,
+                                  timeElements: AppKitTimeElements.hourMinuteSecond,
                                   semanticLabel: 'Date Picker',
                                   type: AppKitDatePickerType.textual,
-                                  onChanged:
-                                      (Either<DateTime, DateTimeRange> d) {
+                                  onChanged: (Either<DateTime, DateTimeRange> d) {
                                     debugPrint('[1] Date Changed ($d)');
                                     final pickedDate = d.left;
 
-                                    if (pickedDate
-                                        .isAfter(_selectedDateRange.end)) {
-                                      selectedDateRange =
-                                          _selectedDateRange.copyWith(
+                                    if (pickedDate.isAfter(_selectedDateRange.end)) {
+                                      selectedDateRange = _selectedDateRange.copyWith(
                                         start: pickedDate,
-                                        end: pickedDate
-                                            .add(const Duration(days: 1)),
+                                        end: pickedDate.add(const Duration(days: 1)),
                                       );
                                     } else {
-                                      selectedDateRange = _selectedDateRange
-                                          .copyWith(start: pickedDate);
+                                      selectedDateRange = _selectedDateRange.copyWith(start: pickedDate);
                                     }
                                   },
                                 ),
@@ -116,8 +108,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const AppKitLabel(
-                                  text: Text('Textual with Stepper (end)')),
+                              const AppKitLabel(text: Text('Textual with Stepper (end)')),
                               const SizedBox(height: 8.0),
                               SizedBox(
                                 width: 190,
@@ -128,25 +119,19 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                   minimumDate: _minimumDate,
                                   maximumDate: _maximumDate,
                                   dateElements: AppKitDateElements.monthDayYear,
-                                  timeElements:
-                                      AppKitTimeElements.hourMinuteSecond,
+                                  timeElements: AppKitTimeElements.hourMinuteSecond,
                                   type: AppKitDatePickerType.textualWithStepper,
-                                  onChanged:
-                                      (Either<DateTime, DateTimeRange> d) {
+                                  onChanged: (Either<DateTime, DateTimeRange> d) {
                                     debugPrint('[2] Date Changed ($d)');
                                     final pickedDate = d.left;
 
-                                    if (pickedDate
-                                        .isBefore(_selectedDateRange.start)) {
-                                      selectedDateRange =
-                                          _selectedDateRange.copyWith(
+                                    if (pickedDate.isBefore(_selectedDateRange.start)) {
+                                      selectedDateRange = _selectedDateRange.copyWith(
                                         start: pickedDate,
-                                        end: pickedDate
-                                            .add(const Duration(days: 1)),
+                                        end: pickedDate.add(const Duration(days: 1)),
                                       );
                                     } else {
-                                      selectedDateRange = _selectedDateRange
-                                          .copyWith(end: pickedDate);
+                                      selectedDateRange = _selectedDateRange.copyWith(end: pickedDate);
                                     }
                                   },
                                 ),
@@ -162,39 +147,31 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const AppKitLabel(
-                                      text: Text('Graphical (start date)')),
+                                  const AppKitLabel(text: Text('Graphical (start date)')),
                                   const SizedBox(height: 8.0),
                                   AppKitDatePicker(
                                     autofocus: true,
-                                    dateElements:
-                                        AppKitDateElements.monthDayYear,
+                                    dateElements: AppKitDateElements.monthDayYear,
                                     timeElements: AppKitTimeElements.none,
-                                    semanticLabel:
-                                        'Date Picker (single - graphical)',
+                                    semanticLabel: 'Date Picker (single - graphical)',
                                     date: left(_selectedDateRange.start),
                                     type: AppKitDatePickerType.graphical,
                                     drawBackground: true,
                                     drawBorder: true,
                                     minimumDate: _minimumDate,
                                     maximumDate: _maximumDate,
-                                    selectionType:
-                                        AppKitDatePickerSelectionType.single,
+                                    selectionType: AppKitDatePickerSelectionType.single,
                                     onChanged: (d) {
                                       debugPrint('[3] Date Changed ($d)');
                                       final pickedDate = d.left;
 
-                                      if (pickedDate
-                                          .isAfter(_selectedDateRange.end)) {
-                                        selectedDateRange =
-                                            _selectedDateRange.copyWith(
+                                      if (pickedDate.isAfter(_selectedDateRange.end)) {
+                                        selectedDateRange = _selectedDateRange.copyWith(
                                           start: pickedDate,
-                                          end: pickedDate
-                                              .add(const Duration(days: 1)),
+                                          end: pickedDate.add(const Duration(days: 1)),
                                         );
                                       } else {
-                                        selectedDateRange = _selectedDateRange
-                                            .copyWith(start: pickedDate);
+                                        selectedDateRange = _selectedDateRange.copyWith(start: pickedDate);
                                       }
                                     },
                                   ),
@@ -206,28 +183,23 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const AppKitLabel(
-                                      text: Text('Graphical (start time)')),
+                                  const AppKitLabel(text: Text('Graphical (start time)')),
                                   const SizedBox(height: 8.0),
                                   AppKitDatePicker(
                                     autofocus: true,
                                     dateElements: AppKitDateElements.none,
-                                    timeElements:
-                                        AppKitTimeElements.hourMinuteSecond,
-                                    semanticLabel:
-                                        'Time Picker (single - graphical)',
+                                    timeElements: AppKitTimeElements.hourMinuteSecond,
+                                    semanticLabel: 'Time Picker (single - graphical)',
                                     date: left(_selectedDateRange.start),
                                     minimumDate: _minimumDate,
                                     maximumDate: _maximumDate,
                                     type: AppKitDatePickerType.graphical,
                                     drawBackground: true,
                                     drawBorder: true,
-                                    selectionType:
-                                        AppKitDatePickerSelectionType.single,
+                                    selectionType: AppKitDatePickerSelectionType.single,
                                     onChanged: (d) {
                                       debugPrint('[3] Date Changed ($d)');
-                                      selectedDateRange = _selectedDateRange
-                                          .copyWith(start: d.left);
+                                      selectedDateRange = _selectedDateRange.copyWith(start: d.left);
                                     },
                                   ),
                                 ],
@@ -240,8 +212,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const AppKitLabel(
-                                  text: Text('Graphical (date range)')),
+                              const AppKitLabel(text: Text('Graphical (date range)')),
                               const SizedBox(height: 8.0),
                               AppKitDatePicker(
                                 autofocus: true,
@@ -252,8 +223,7 @@ class _SelectorsPageState extends State<SelectorsPage> {
                                 type: AppKitDatePickerType.graphical,
                                 drawBackground: true,
                                 drawBorder: true,
-                                selectionType:
-                                    AppKitDatePickerSelectionType.range,
+                                selectionType: AppKitDatePickerSelectionType.range,
                                 date: right(_selectedDateRange),
                                 onChanged: (d) {
                                   debugPrint('[3] Date Changed ($d)');

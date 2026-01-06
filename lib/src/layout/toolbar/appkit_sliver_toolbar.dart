@@ -170,39 +170,34 @@ class AppKitSliverToolBar extends StatefulWidget with Diagnosticable {
     properties.add(DiagnosticsProperty<Alignment>('alignment', alignment));
     properties.add(DiagnosticsProperty<Widget>('title', title));
     properties.add(DoubleProperty('titleWidth', titleWidth));
-    properties
-        .add(DiagnosticsProperty<BoxDecoration>('decoration', decoration));
+    properties.add(DiagnosticsProperty<BoxDecoration>('decoration', decoration));
     properties.add(DiagnosticsProperty<EdgeInsets>('padding', padding));
     properties.add(DiagnosticsProperty<Widget>('leading', leading));
-    properties.add(FlagProperty(
-      'automaticallyImplyLeading',
-      value: automaticallyImplyLeading,
-      ifTrue: 'automatically imply leading',
-    ));
-    properties
-        .add(DiagnosticsProperty<List<AppKitToolbarItem>>('actions', actions));
     properties.add(
-      FlagProperty('centerTitle', value: centerTitle, ifTrue: 'center title'),
+      FlagProperty(
+        'automaticallyImplyLeading',
+        value: automaticallyImplyLeading,
+        ifTrue: 'automatically imply leading',
+      ),
     );
+    properties.add(DiagnosticsProperty<List<AppKitToolbarItem>>('actions', actions));
+    properties.add(FlagProperty('centerTitle', value: centerTitle, ifTrue: 'center title'));
     properties.add(DiagnosticsProperty<Color>('dividerColor', dividerColor));
     properties.add(FlagProperty('pinned', value: pinned, ifTrue: 'pinned'));
-    properties
-        .add(FlagProperty('floating', value: floating, ifTrue: 'floating'));
+    properties.add(FlagProperty('floating', value: floating, ifTrue: 'floating'));
   }
 
   @override
   State<AppKitSliverToolBar> createState() => _AppKitSliverToolBarState();
 }
 
-class _AppKitSliverToolBarState extends State<AppKitSliverToolBar>
-    with TickerProviderStateMixin {
+class _AppKitSliverToolBarState extends State<AppKitSliverToolBar> with TickerProviderStateMixin {
   int overflowedActionsCount = 0;
 
   @override
   void didUpdateWidget(AppKitSliverToolBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.actions != null &&
-        widget.actions!.length != oldWidget.actions!.length) {
+    if (widget.actions != null && widget.actions!.length != oldWidget.actions!.length) {
       overflowedActionsCount = 0;
     }
   }
@@ -284,25 +279,15 @@ class _SliverToolBarDelegate extends SliverPersistentHeaderDelegate {
   final TickerProvider vsync;
 
   @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    final bool isScrolledUnder = overlapsContent ||
-        (pinned || floating && shrinkOffset > maxExtent - minExtent);
-    final double opacity =
-        pinned || floating && isScrolledUnder ? toolbarOpacity : 1.0;
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final bool isScrolledUnder = overlapsContent || (pinned || floating && shrinkOffset > maxExtent - minExtent);
+    final double opacity = pinned || floating && isScrolledUnder ? toolbarOpacity : 1.0;
 
     BoxDecoration? effectiveDecoration;
     if (isScrolledUnder) {
-      effectiveDecoration = decoration?.copyWith(
-            color: decoration?.color?.withValues(alpha: opacity),
-          ) ??
-          BoxDecoration(
-            color:
-                AppKitTheme.of(context).canvasColor.withValues(alpha: opacity),
-          );
+      effectiveDecoration =
+          decoration?.copyWith(color: decoration?.color?.withValues(alpha: opacity)) ??
+          BoxDecoration(color: AppKitTheme.of(context).canvasColor.withValues(alpha: opacity));
     }
 
     return FlexibleSpaceBar.createSettings(
@@ -344,7 +329,6 @@ class _SliverToolBarDelegate extends SliverPersistentHeaderDelegate {
         dividerColor != oldDelegate.dividerColor ||
         floating != oldDelegate.floating ||
         pinned != oldDelegate.pinned ||
-        allowWallpaperTintingOverrides !=
-            oldDelegate.allowWallpaperTintingOverrides;
+        allowWallpaperTintingOverrides != oldDelegate.allowWallpaperTintingOverrides;
   }
 }

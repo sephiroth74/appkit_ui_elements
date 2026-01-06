@@ -36,8 +36,7 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                   AppKitToolBarIconButton(
                     label: 'Pinned',
                     icon: pinned ? CupertinoIcons.pin_fill : CupertinoIcons.pin,
-                    tooltipMessage:
-                        'Whether the toolbar should remain visible at the start of the scroll view.',
+                    tooltipMessage: 'Whether the toolbar should remain visible at the start of the scroll view.',
                     showLabel: false,
                     onPressed: () {
                       setState(() => pinned = !pinned);
@@ -45,11 +44,8 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                   ),
                   AppKitToolBarIconButton(
                     label: 'Floating',
-                    icon: floating
-                        ? CupertinoIcons.arrow_up_circle
-                        : CupertinoIcons.arrow_down_circle,
-                    tooltipMessage:
-                        'Whether the toolbar should become visible as soon as the user scrolls upwards',
+                    icon: floating ? CupertinoIcons.arrow_up_circle : CupertinoIcons.arrow_down_circle,
+                    tooltipMessage: 'Whether the toolbar should become visible as soon as the user scrolls upwards',
                     showLabel: false,
                     onPressed: () {
                       setState(() => floating = !floating);
@@ -71,8 +67,7 @@ class _SliverToolbarPageState extends State<SliverToolbarPage> {
                                 AppKitContextMenuItem.plain('25%', value: 0.25),
                                 AppKitContextMenuItem.plain('50%', value: 0.5),
                                 AppKitContextMenuItem.plain('75%', value: 0.75),
-                                AppKitContextMenuItem.plain('90% (Default)',
-                                    value: 0.9),
+                                AppKitContextMenuItem.plain('90% (Default)', value: 0.9),
                               ]);
                             },
                             onItemSelected: (item) {

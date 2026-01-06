@@ -6,8 +6,7 @@ import 'package:flutter/foundation.dart';
 class AppKitComboButtonTheme extends InheritedTheme {
   final AppKitComboButtonThemeData data;
 
-  const AppKitComboButtonTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitComboButtonTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
@@ -20,8 +19,7 @@ class AppKitComboButtonTheme extends InheritedTheme {
   }
 
   static AppKitComboButtonThemeData of(BuildContext context) {
-    final AppKitComboButtonTheme? buttonTheme =
-        context.dependOnInheritedWidgetOfExactType<AppKitComboButtonTheme>();
+    final AppKitComboButtonTheme? buttonTheme = context.dependOnInheritedWidgetOfExactType<AppKitComboButtonTheme>();
     return buttonTheme?.data ?? AppKitTheme.of(context).comboButtonTheme;
   }
 }
@@ -29,16 +27,13 @@ class AppKitComboButtonTheme extends InheritedTheme {
 class AppKitComboButtonThemeData with Diagnosticable {
   final Map<AppKitControlSize, AppKitComboButtonThemeDataSize> dataMap;
 
-  AppKitComboButtonThemeData({
-    required this.dataMap,
-  });
+  AppKitComboButtonThemeData({required this.dataMap});
 
   AppKitComboButtonThemeDataSize get(AppKitControlSize size) {
     return dataMap[size]!;
   }
 
-  static AppKitComboButtonThemeData fallback(
-      {required Brightness brightness, required AppKitTypography typography}) {
+  static AppKitComboButtonThemeData fallback({required Brightness brightness, required AppKitTypography typography}) {
     return AppKitComboButtonThemeData(
       dataMap: {
         AppKitControlSize.mini: AppKitComboButtonThemeDataSize(
@@ -62,20 +57,15 @@ class AppKitComboButtonThemeData with Diagnosticable {
         AppKitControlSize.large: AppKitComboButtonThemeDataSize(
           buttonSize: const Size(58.0, 30.0),
           borderRadius: 7.0,
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, bottom: 4.0, top: 2.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 4.0, top: 2.0),
           fontSize: 14.0,
         ),
       },
     );
   }
 
-  AppKitComboButtonThemeData copyWith({
-    Map<AppKitControlSize, AppKitComboButtonThemeDataSize>? dataMap,
-  }) {
-    return AppKitComboButtonThemeData(
-      dataMap: dataMap ?? this.dataMap,
-    );
+  AppKitComboButtonThemeData copyWith({Map<AppKitControlSize, AppKitComboButtonThemeDataSize>? dataMap}) {
+    return AppKitComboButtonThemeData(dataMap: dataMap ?? this.dataMap);
   }
 
   AppKitComboButtonThemeData merge(AppKitComboButtonThemeData? other) {
@@ -87,22 +77,12 @@ class AppKitComboButtonThemeData with Diagnosticable {
     );
   }
 
-  static AppKitComboButtonThemeData lerp(
-    AppKitComboButtonThemeData? a,
-    AppKitComboButtonThemeData? b,
-    double t,
-  ) {
+  static AppKitComboButtonThemeData lerp(AppKitComboButtonThemeData? a, AppKitComboButtonThemeData? b, double t) {
     return AppKitComboButtonThemeData(
       dataMap: Map.fromEntries(
-        a!.dataMap.entries.map(
-          (entry) {
-            return MapEntry(
-              entry.key,
-              AppKitComboButtonThemeDataSize.lerp(
-                  entry.value, b!.dataMap[entry.key], t),
-            );
-          },
-        ),
+        a!.dataMap.entries.map((entry) {
+          return MapEntry(entry.key, AppKitComboButtonThemeDataSize.lerp(entry.value, b!.dataMap[entry.key], t));
+        }),
       ),
     );
   }

@@ -30,8 +30,5 @@ class AppKitDisclosureButton extends AppKitCustomPainterButton {
     super.semanticLabel,
     super.onPressed,
     required this.isDown,
-  }) : super(
-            icon: isDown
-                ? AppKitControlButtonIcon.disclosureDown
-                : AppKitControlButtonIcon.disclosureUp);
+  }) : super(icon: isDown ? AppKitControlButtonIcon.disclosureDown : AppKitControlButtonIcon.disclosureUp);
 }

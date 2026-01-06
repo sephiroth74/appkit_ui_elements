@@ -31,28 +31,16 @@ class AppKitWallpaperTintedArea extends StatelessWidget {
   Widget build(BuildContext context) {
     if (insertRepaintBoundary) {
       return RepaintBoundary(
-        child: _WallpaperTintedAreaLayoutBuilder(
-          backgroundColor: backgroundColor,
-          material: material,
-          child: child,
-        ),
+        child: _WallpaperTintedAreaLayoutBuilder(backgroundColor: backgroundColor, material: material, child: child),
       );
     }
 
-    return _WallpaperTintedAreaLayoutBuilder(
-      backgroundColor: backgroundColor,
-      material: material,
-      child: child,
-    );
+    return _WallpaperTintedAreaLayoutBuilder(backgroundColor: backgroundColor, material: material, child: child);
   }
 }
 
 class _WallpaperTintedAreaLayoutBuilder extends StatelessWidget {
-  const _WallpaperTintedAreaLayoutBuilder({
-    required this.backgroundColor,
-    required this.material,
-    required this.child,
-  });
+  const _WallpaperTintedAreaLayoutBuilder({required this.backgroundColor, required this.material, required this.child});
 
   /// The material effect to apply to the background.
   final NSVisualEffectViewMaterial material;
@@ -65,12 +53,9 @@ class _WallpaperTintedAreaLayoutBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (AppKitGlobalWallpaperTintingSettings
-        .data.isWallpaperTintingDisabledByWindow) {
+    if (AppKitGlobalWallpaperTintingSettings.data.isWallpaperTintingDisabledByWindow) {
       return Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-        ),
+        decoration: BoxDecoration(color: backgroundColor),
         child: child,
       );
     }
@@ -119,10 +104,7 @@ class _WallpaperTintedAreaTweenAnimationBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 100),
-      tween: Tween<double>(
-        begin: isWallpaperTintingEnabled ? 0.0 : 1.0,
-        end: isWallpaperTintingEnabled ? 0.0 : 1.0,
-      ),
+      tween: Tween<double>(begin: isWallpaperTintingEnabled ? 0.0 : 1.0, end: isWallpaperTintingEnabled ? 0.0 : 1.0),
       builder: (context, value, child) {
         return Container(
           decoration: BoxDecoration(
@@ -132,9 +114,7 @@ class _WallpaperTintedAreaTweenAnimationBuilder extends StatelessWidget {
           child: child,
         );
       },
-      child: RepaintBoundary(
-        child: child,
-      ),
+      child: RepaintBoundary(child: child),
     );
   }
 }

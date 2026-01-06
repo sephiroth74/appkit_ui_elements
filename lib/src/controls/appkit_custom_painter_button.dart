@@ -27,8 +27,7 @@ class AppKitCustomPainterButton extends StatefulWidget {
   bool get enabled => onPressed != null;
 
   @override
-  State<AppKitCustomPainterButton> createState() =>
-      _AppKitCustomPainterButtonState();
+  State<AppKitCustomPainterButton> createState() => _AppKitCustomPainterButtonState();
 }
 
 class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
@@ -72,9 +71,7 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
     properties.add(ColorProperty('color', widget.color));
     properties.add(DoubleProperty('size', widget.size));
     properties.add(StringProperty('semanticLabel', widget.semanticLabel));
-    properties.add(ObjectFlagProperty<VoidCallback>(
-        'onPressed', widget.onPressed,
-        ifNull: 'disabled'));
+    properties.add(ObjectFlagProperty<VoidCallback>('onPressed', widget.onPressed, ifNull: 'disabled'));
     properties.add(EnumProperty<AppKitControlButtonIcon>('icon', widget.icon));
   }
 
@@ -96,33 +93,30 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
           button: true,
           child: ConstrainedBox(
             constraints: BoxConstraints(
-                minWidth: widget.size,
-                minHeight: widget.size,
-                maxWidth: widget.size,
-                maxHeight: widget.size),
-            child: Consumer<MainWindowModel>(builder: (context, model, _) {
-              final isMainWindow = model.isMainWindow;
-              final theme = AppKitTheme.of(context);
-              switch (widget.style) {
-                case AppKitControlButtonIconStyle.bordered:
-                  return buildBorderedContainer(
-                      theme: theme, isMainWindow: isMainWindow);
-              }
-            }),
+              minWidth: widget.size,
+              minHeight: widget.size,
+              maxWidth: widget.size,
+              maxHeight: widget.size,
+            ),
+            child: Consumer<MainWindowModel>(
+              builder: (context, model, _) {
+                final isMainWindow = model.isMainWindow;
+                final theme = AppKitTheme.of(context);
+                switch (widget.style) {
+                  case AppKitControlButtonIconStyle.bordered:
+                    return buildBorderedContainer(theme: theme, isMainWindow: isMainWindow);
+                }
+              },
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget buildBorderedContainer({
-    required AppKitThemeData theme,
-    required bool isMainWindow,
-  }) {
+  Widget buildBorderedContainer({required AppKitThemeData theme, required bool isMainWindow}) {
     final Color color = widget.enabled
-        ? (isMainWindow
-            ? widget.color ?? theme.controlColor
-            : theme.controlColor)
+        ? (isMainWindow ? widget.color ?? theme.controlColor : theme.controlColor)
         : theme.controlColor.multiplyOpacity(0.5);
 
     final isDark = theme.brightness == Brightness.dark;
@@ -130,21 +124,15 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
 
     final iconColor = colorLuminance >= 0.5
         ? widget.enabled
-            ? isDark
-                ? AppKitColors.labelColor.darkColor
-                : AppKitColors.labelColor.color
-            : (isDark
+              ? isDark
                     ? AppKitColors.labelColor.darkColor
-                    : AppKitColors.labelColor.color)
-                .withValues(alpha: 0.35)
+                    : AppKitColors.labelColor.color
+              : (isDark ? AppKitColors.labelColor.darkColor : AppKitColors.labelColor.color).withValues(alpha: 0.35)
         : widget.enabled
-            ? isDark
-                ? AppKitColors.labelColor.darkColor
-                : AppKitColors.labelColor.color
-            : (isDark
-                    ? AppKitColors.labelColor.color
-                    : AppKitColors.labelColor.darkColor)
-                .withValues(alpha: 0.35);
+        ? isDark
+              ? AppKitColors.labelColor.darkColor
+              : AppKitColors.labelColor.color
+        : (isDark ? AppKitColors.labelColor.color : AppKitColors.labelColor.darkColor).withValues(alpha: 0.35);
 
     final foregroundColor = colorLuminance >= 0.5
         ? AppKitColors.labelColor.color.withValues(alpha: 0.1)
@@ -156,28 +144,25 @@ class _AppKitCustomPainterButtonState extends State<AppKitCustomPainterButton> {
         borderRadius: BorderRadius.circular(widget.size / _kBorderRadiusRatio),
       ),
       child: DecoratedBox(
-          decoration: BoxDecoration(
-              color: color,
-              borderRadius:
-                  BorderRadius.circular(widget.size / _kBorderRadiusRatio),
-              boxShadow: [
-                BoxShadow(
-                  color: AppKitColors.shadowColor.color.withValues(alpha: 0.75),
-                  blurRadius: 0.5,
-                  spreadRadius: 0,
-                  offset: const Offset(0, 0.5),
-                  blurStyle: BlurStyle.outer,
-                ),
-              ]),
-          child: SizedBox.expand(
-            child: CustomPaint(
-              painter: IconButtonPainter(
-                color: iconColor,
-                size: widget.size * 0.8,
-                icon: widget.icon,
-              ),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(widget.size / _kBorderRadiusRatio),
+          boxShadow: [
+            BoxShadow(
+              color: AppKitColors.shadowColor.color.withValues(alpha: 0.75),
+              blurRadius: 0.5,
+              spreadRadius: 0,
+              offset: const Offset(0, 0.5),
+              blurStyle: BlurStyle.outer,
             ),
-          )),
+          ],
+        ),
+        child: SizedBox.expand(
+          child: CustomPaint(
+            painter: IconButtonPainter(color: iconColor, size: widget.size * 0.8, icon: widget.icon),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -199,11 +184,11 @@ class IconButtonPainter extends CustomPainter {
     this.strokeWidth,
     this.strokeCap,
   }) : _paint = Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth ?? size / 10
-          ..strokeCap = strokeCap ?? StrokeCap.round
-          ..strokeJoin = StrokeJoin.round;
+         ..color = color
+         ..style = PaintingStyle.stroke
+         ..strokeWidth = strokeWidth ?? size / 10
+         ..strokeCap = strokeCap ?? StrokeCap.round
+         ..strokeJoin = StrokeJoin.round;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -231,12 +216,9 @@ class IconButtonPainter extends CustomPainter {
         {
           final double arrowWidthSize = size.width / 6.285;
           final double arrowHeightSize = size.width / 11;
-          path.moveTo(halfSize - arrowWidthSize + offset.dx,
-              halfSize + arrowHeightSize + offset.dy);
-          path.lineTo(
-              halfSize + offset.dx, halfSize - arrowHeightSize + offset.dy);
-          path.lineTo(halfSize + offset.dx + arrowWidthSize,
-              halfSize + arrowHeightSize + offset.dy);
+          path.moveTo(halfSize - arrowWidthSize + offset.dx, halfSize + arrowHeightSize + offset.dy);
+          path.lineTo(halfSize + offset.dx, halfSize - arrowHeightSize + offset.dy);
+          path.lineTo(halfSize + offset.dx + arrowWidthSize, halfSize + arrowHeightSize + offset.dy);
           break;
         }
 
@@ -244,12 +226,9 @@ class IconButtonPainter extends CustomPainter {
         {
           final double arrowWidthSize = size.width / 6.285;
           final double arrowHeightSize = size.width / 11;
-          path.moveTo(halfSize - arrowWidthSize + offset.dx,
-              halfSize - arrowHeightSize + offset.dy);
-          path.lineTo(
-              halfSize + offset.dx, halfSize + arrowHeightSize + offset.dy);
-          path.lineTo(halfSize + arrowWidthSize + offset.dx,
-              halfSize - arrowHeightSize + offset.dy);
+          path.moveTo(halfSize - arrowWidthSize + offset.dx, halfSize - arrowHeightSize + offset.dy);
+          path.lineTo(halfSize + offset.dx, halfSize + arrowHeightSize + offset.dy);
+          path.lineTo(halfSize + arrowWidthSize + offset.dx, halfSize - arrowHeightSize + offset.dy);
           break;
         }
 
@@ -258,12 +237,9 @@ class IconButtonPainter extends CustomPainter {
           // draw an arrow pointing left
           final double arrowWidthSize = size.width / 11;
           final double arrowHeightSize = size.width / 6.285;
-          path.moveTo(halfSize + arrowWidthSize + offset.dx,
-              halfSize - arrowHeightSize + offset.dy);
-          path.lineTo(
-              halfSize - arrowWidthSize + offset.dx, halfSize + offset.dy);
-          path.lineTo(halfSize + arrowWidthSize + offset.dx,
-              halfSize + arrowHeightSize + offset.dy);
+          path.moveTo(halfSize + arrowWidthSize + offset.dx, halfSize - arrowHeightSize + offset.dy);
+          path.lineTo(halfSize - arrowWidthSize + offset.dx, halfSize + offset.dy);
+          path.lineTo(halfSize + arrowWidthSize + offset.dx, halfSize + arrowHeightSize + offset.dy);
 
           break;
         }

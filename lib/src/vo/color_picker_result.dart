@@ -11,18 +11,15 @@ class ColorPickerResult {
   ColorPickerResult({required this.id, required this.color});
 
   ColorPickerResult.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int,
-        color = RGBAColor.fromJson(json['color'] as Map<String, dynamic>);
+    : id = json['id'] as int,
+      color = RGBAColor.fromJson(json['color'] as Map<String, dynamic>);
 
   @override
   String toString() {
     return 'ColorPickerResult{id: $id, color: $color}';
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'color': color.toJson(),
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'color': color.toJson()};
 }
 
 enum ColorSpaceMode {
@@ -40,8 +37,7 @@ enum ColorSpaceMode {
   const ColorSpaceMode(this.value);
 
   static ColorSpaceMode fromValue(int value) {
-    return ColorSpaceMode.values.firstWhere((element) => element.value == value,
-        orElse: () => ColorSpaceMode.unknown);
+    return ColorSpaceMode.values.firstWhere((element) => element.value == value, orElse: () => ColorSpaceMode.unknown);
   }
 }
 
@@ -55,17 +51,17 @@ class RGBAColor {
   RGBAColor(this.red, this.green, this.blue, this.alpha, this.mode);
 
   RGBAColor.fromJson(Map<dynamic, dynamic> json)
-      : red = jsonToDouble(json['red']),
-        green = jsonToDouble(json['green']),
-        blue = jsonToDouble(json['blue']),
-        alpha = jsonToDouble(json['alpha']),
-        mode = ColorSpaceMode.fromValue((json['mode'] as int?) ?? -1);
+    : red = jsonToDouble(json['red']),
+      green = jsonToDouble(json['green']),
+      blue = jsonToDouble(json['blue']),
+      alpha = jsonToDouble(json['alpha']),
+      mode = ColorSpaceMode.fromValue((json['mode'] as int?) ?? -1);
 
   RGBAColor.fromColor(Color color, {this.mode = ColorSpaceMode.unknown})
-      : red = color.r,
-        green = color.g,
-        blue = color.b,
-        alpha = color.a;
+    : red = color.r,
+      green = color.g,
+      blue = color.b,
+      alpha = color.a;
 
   @override
   String toString() {
@@ -73,15 +69,8 @@ class RGBAColor {
   }
 
   Color toColor() {
-    return Color.fromRGBO((red * 255).toInt(), (green * 255).toInt(),
-        (blue * 255).toInt(), alpha);
+    return Color.fromRGBO((red * 255).toInt(), (green * 255).toInt(), (blue * 255).toInt(), alpha);
   }
 
-  Map<String, dynamic> toJson() => {
-        'red': red,
-        'green': green,
-        'blue': blue,
-        'alpha': alpha,
-        'mode': mode.value,
-      };
+  Map<String, dynamic> toJson() => {'red': red, 'green': green, 'blue': blue, 'alpha': alpha, 'mode': mode.value};
 }

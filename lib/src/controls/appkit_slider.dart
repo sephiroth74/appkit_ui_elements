@@ -65,16 +65,15 @@ class AppKitSlider extends StatefulWidget {
     this.stops = const [0.0, 0.5, 1.0],
     this.semanticLabel,
     this.style = AppKitSliderStyle.continuous,
-  })  : assert(value >= min && value <= max),
-        assert(style != AppKitSliderStyle.continuous ? stops.length > 1 : true),
-        assert(min < max);
+  }) : assert(value >= min && value <= max),
+       assert(style != AppKitSliderStyle.continuous ? stops.length > 1 : true),
+       assert(min < max);
 
   @override
   State<AppKitSlider> createState() => _AppKitSliderState();
 }
 
-class _AppKitSliderState extends State<AppKitSlider>
-    with SingleTickerProviderStateMixin {
+class _AppKitSliderState extends State<AppKitSlider> with SingleTickerProviderStateMixin {
   bool get continous => widget.style == AppKitSliderStyle.continuous;
 
   bool get discreteFree => widget.style == AppKitSliderStyle.discreteFree;
@@ -99,8 +98,7 @@ class _AppKitSliderState extends State<AppKitSlider>
 
     if (widget.style != AppKitSliderStyle.continuous) {
       // check if stops are within min and max limits
-      assert(
-          widget.stops.first == widget.min && widget.stops.last == widget.max);
+      assert(widget.stops.first == widget.min && widget.stops.last == widget.max);
       // check if stops are in ascending order
       for (int i = 0; i < widget.stops.length - 1; i++) {
         assert(widget.stops[i] < widget.stops[i + 1]);
@@ -111,20 +109,16 @@ class _AppKitSliderState extends State<AppKitSlider>
       AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
       discreteAnchorThreshold = sliderTheme.discreteAnchorThreshold;
       _animationController = AnimationController(
-          duration: Duration(
-              milliseconds:
-                  sliderTheme.animationDuration ?? _kAnimationDuration),
-          vsync: this);
-      _animationCurve = CurvedAnimation(
-          parent: _animationController, curve: Curves.easeInOut);
+        duration: Duration(milliseconds: sliderTheme.animationDuration ?? _kAnimationDuration),
+        vsync: this,
+      );
+      _animationCurve = CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
       _animationTween = Tween<double>(begin: percentage, end: percentage);
 
       _animation = _animationTween.animate(_animationCurve)
         ..addListener(() {
-          if (_animationController.isAnimating ||
-              _animationController.isCompleted) {
-            widget.onChanged
-                ?.call(_animation.value.clamp(widget.min, widget.max));
+          if (_animationController.isAnimating || _animationController.isCompleted) {
+            widget.onChanged?.call(_animation.value.clamp(widget.min, widget.max));
           }
         });
     });
@@ -144,9 +138,7 @@ class _AppKitSliderState extends State<AppKitSlider>
     properties.add(DoubleProperty('max', widget.max));
     properties.add(EnumProperty<AppKitSliderStyle>('style', widget.style));
     properties.add(IterableProperty<double>('stops', widget.stops));
-    properties.add(ObjectFlagProperty<ValueChanged<double>>(
-        'onChanged', widget.onChanged,
-        ifNull: 'disabled'));
+    properties.add(ObjectFlagProperty<ValueChanged<double>>('onChanged', widget.onChanged, ifNull: 'disabled'));
     properties.add(StringProperty('semanticLabel', widget.semanticLabel));
   }
 
@@ -190,10 +182,8 @@ class _AppKitSliderState extends State<AppKitSlider>
     return -1;
   }
 
-  void _update(
-      String type, double sliderWidth, double localPosition, bool animate) {
-    double newValue =
-        (localPosition / sliderWidth) * (widget.max - widget.min) + widget.min;
+  void _update(String type, double sliderWidth, double localPosition, bool animate) {
+    double newValue = (localPosition / sliderWidth) * (widget.max - widget.min) + widget.min;
     if (discreteFixed) {
       // find the closest stop
       final int stopIndex = _findClosestStopIndex(newValue);
@@ -202,9 +192,7 @@ class _AppKitSliderState extends State<AppKitSlider>
       if (discreteFree) {
         // check if the value is close to a stop
         final int stopIndex = widget.stops.indexWhere((element) {
-          return (_getValuePercentage(element) - _getValuePercentage(newValue))
-                  .abs() <
-              0.01;
+          return (_getValuePercentage(element) - _getValuePercentage(newValue)).abs() < 0.01;
         });
         if (stopIndex != -1) {
           newValue = widget.stops[stopIndex];
@@ -254,203 +242,173 @@ class _AppKitSliderState extends State<AppKitSlider>
       slider: true,
       label: widget.semanticLabel,
       value: widget.value.toStringAsFixed(2),
-      child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        final isMainWindow = model.isMainWindow;
-        final AppKitThemeData theme = AppKitTheme.of(context);
-        final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
-        final discreteThumbSize = sliderTheme.discreteThumbSize;
-        final continuousThumbSize = sliderTheme.continuousThumbSize;
-        final overallHeight =
-            sliderTheme.continuousThumbSize + _kHorizontalPaddingThreshold;
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
+          final isMainWindow = model.isMainWindow;
+          final AppKitThemeData theme = AppKitTheme.of(context);
+          final AppKitSliderThemeData sliderTheme = AppKitSliderTheme.of(context);
+          final discreteThumbSize = sliderTheme.discreteThumbSize;
+          final continuousThumbSize = sliderTheme.continuousThumbSize;
+          final overallHeight = sliderTheme.continuousThumbSize + _kHorizontalPaddingThreshold;
 
-        return ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: _kOverallMinWidth),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              double width = constraints.maxWidth;
-              if (width.isInfinite) width = _kOverallMinWidth;
+          return ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: _kOverallMinWidth),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double width = constraints.maxWidth;
+                if (width.isInfinite) width = _kOverallMinWidth;
 
-              double horizontalPadding;
-              if (!continous) {
-                horizontalPadding = (discreteThumbSize.width / 2) +
-                    _kHorizontalPaddingThreshold;
-              } else {
-                horizontalPadding =
-                    (continuousThumbSize / 2) + _kHorizontalPaddingThreshold;
-              }
+                double horizontalPadding;
+                if (!continous) {
+                  horizontalPadding = (discreteThumbSize.width / 2) + _kHorizontalPaddingThreshold;
+                } else {
+                  horizontalPadding = (continuousThumbSize / 2) + _kHorizontalPaddingThreshold;
+                }
 
-              width -= (horizontalPadding * 2);
+                width -= (horizontalPadding * 2);
 
-              final accentColor = isMainWindow
-                  ? (sliderTheme.sliderColor ?? theme.activeColor)
-                  : (sliderTheme.accentColorUnfocused ??
-                      theme.activeColorUnfocused);
+                final accentColor = isMainWindow
+                    ? (sliderTheme.sliderColor ?? theme.activeColor)
+                    : (sliderTheme.accentColorUnfocused ?? theme.activeColorUnfocused);
 
-              return Center(
-                child: SizedBox(
-                  height: overallHeight,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTapDown: (details) {
-                      if (_thumbHeldDown) {
-                        return;
-                      }
-                      _update('onTapDown', width,
-                          details.localPosition.dx - horizontalPadding, true);
-                    },
-                    onHorizontalDragStart: (details) {
-                      trackIsDragging = true;
-                      _update('onHorizontalDragStart', width,
-                          details.localPosition.dx - horizontalPadding, false);
-                    },
-                    onHorizontalDragUpdate: (details) {
-                      _update('onHorizontalDragUpdate', width,
-                          details.localPosition.dx - horizontalPadding, false);
-                    },
-                    onHorizontalDragEnd: (details) => thumbHeldDown = false,
-                    onHorizontalDragCancel: () => thumbHeldDown = false,
-                    onTapCancel: () {
-                      if (!trackIsDragging) {
-                        thumbHeldDown = false;
-                      }
-                    },
-                    onTapUp: (details) => thumbHeldDown = false,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        // track
-                        Center(
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: horizontalPadding),
-                            height: sliderTheme.trackHeight,
-                            width: width,
-                            decoration: BoxDecoration(
-                              color: enabled
-                                  ? sliderTheme.trackColor
-                                  : sliderTheme.trackColor
-                                      .withValues(alpha: 0.5),
-                              border: Border.all(
-                                  color: AppKitColors.fills.opaque.tertiary,
-                                  width: 0.5),
-                              borderRadius: continous
-                                  ? BorderRadius.all(Radius.circular(
-                                      sliderTheme.continuousTrackCornerRadius))
-                                  : null,
-                            ),
-                          ),
-                        ),
-
-                        // filled track
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: horizontalPadding),
-                            height: sliderTheme.trackHeight,
-                            width: width * percentage,
-                            decoration: BoxDecoration(
-                              color: enabled
-                                  ? (accentColor)
-                                  : (accentColor).withValues(alpha: 0.5),
-                              borderRadius: continous
-                                  ? BorderRadius.all(Radius.circular(
-                                      sliderTheme.continuousTrackCornerRadius))
-                                  : null,
-                            ),
-                          ),
-                        ),
-
-                        if (!continous) ...[
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: horizontalPadding),
-                            child: SizedBox(
-                              height: overallHeight,
+                return Center(
+                  child: SizedBox(
+                    height: overallHeight,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTapDown: (details) {
+                        if (_thumbHeldDown) {
+                          return;
+                        }
+                        _update('onTapDown', width, details.localPosition.dx - horizontalPadding, true);
+                      },
+                      onHorizontalDragStart: (details) {
+                        trackIsDragging = true;
+                        _update('onHorizontalDragStart', width, details.localPosition.dx - horizontalPadding, false);
+                      },
+                      onHorizontalDragUpdate: (details) {
+                        _update('onHorizontalDragUpdate', width, details.localPosition.dx - horizontalPadding, false);
+                      },
+                      onHorizontalDragEnd: (details) => thumbHeldDown = false,
+                      onHorizontalDragCancel: () => thumbHeldDown = false,
+                      onTapCancel: () {
+                        if (!trackIsDragging) {
+                          thumbHeldDown = false;
+                        }
+                      },
+                      onTapUp: (details) => thumbHeldDown = false,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          // track
+                          Center(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                              height: sliderTheme.trackHeight,
                               width: width,
-                              child: CustomPaint(
-                                size: Size(width, overallHeight),
-                                painter: _DiscreteTickPainter(
-                                  tickWidth: sliderTheme.tickWidth,
-                                  tickHeight: sliderTheme.tickHeight,
-                                  cornerRadius:
-                                      sliderTheme.discreteTickCornerRadius,
-                                  color: enabled
-                                      ? accentColor
-                                      : accentColor.withValues(alpha: 0.5),
-                                  backgroundColor: sliderTheme.tickColor ??
-                                      AppKitDynamicColor.resolve(context,
-                                          AppKitColors.fills.opaque.primary),
-                                  selectedPercentage: percentage,
-                                  stops: widget.stops
-                                      .map((e) => _getValuePercentage(e))
-                                      .toList(),
-                                ),
+                              decoration: BoxDecoration(
+                                color: enabled ? sliderTheme.trackColor : sliderTheme.trackColor.withValues(alpha: 0.5),
+                                border: Border.all(color: AppKitColors.fills.opaque.tertiary, width: 0.5),
+                                borderRadius: continous
+                                    ? BorderRadius.all(Radius.circular(sliderTheme.continuousTrackCornerRadius))
+                                    : null,
                               ),
                             ),
                           ),
-                        ],
 
-                        // continuous thumb
-                        if (continous) ...[
-                          Positioned(
-                            left:
-                                width * percentage - (continuousThumbSize / 2),
-                            width: (continuousThumbSize * 2) +
-                                (_kHorizontalPaddingThreshold * 2),
-                            height: continuousThumbSize,
-                            top: overallHeight / 2 - continuousThumbSize / 2,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: horizontalPadding),
-                              child: GestureDetector(
-                                onTapDown: (details) => thumbHeldDown = true,
-                                child: AppKitCircularSliderThumb(
-                                  continuousThumbSize: continuousThumbSize,
-                                  color: sliderTheme.thumbColor,
-                                  foregroundColor: enabled && _thumbHeldDown
-                                      ? AppKitDynamicColor.resolve(context,
-                                          AppKitColors.fills.opaque.tertiary)
-                                      : null,
-                                ),
+                          // filled track
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                              height: sliderTheme.trackHeight,
+                              width: width * percentage,
+                              decoration: BoxDecoration(
+                                color: enabled ? (accentColor) : (accentColor).withValues(alpha: 0.5),
+                                borderRadius: continous
+                                    ? BorderRadius.all(Radius.circular(sliderTheme.continuousTrackCornerRadius))
+                                    : null,
                               ),
                             ),
                           ),
-                        ] else ...[
-                          Positioned(
-                            left: width * percentage -
-                                (discreteThumbSize.width / 2),
-                            width: (discreteThumbSize.width * 2) + 4,
-                            height: discreteThumbSize.height,
-                            top: overallHeight / 2 -
-                                (discreteThumbSize.height / 2),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: horizontalPadding),
-                              child: GestureDetector(
-                                onTapDown: (_) => thumbHeldDown = true,
-                                child: _DiscreteThumb(
-                                  size: discreteThumbSize,
-                                  color: sliderTheme.thumbColor,
-                                  cornerRadius:
-                                      sliderTheme.discreteThumbCornerRadius,
-                                  foregroundColor: enabled && _thumbHeldDown
-                                      ? AppKitColors.fills.opaque.tertiary.color
-                                      : null,
+
+                          if (!continous) ...[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                              child: SizedBox(
+                                height: overallHeight,
+                                width: width,
+                                child: CustomPaint(
+                                  size: Size(width, overallHeight),
+                                  painter: _DiscreteTickPainter(
+                                    tickWidth: sliderTheme.tickWidth,
+                                    tickHeight: sliderTheme.tickHeight,
+                                    cornerRadius: sliderTheme.discreteTickCornerRadius,
+                                    color: enabled ? accentColor : accentColor.withValues(alpha: 0.5),
+                                    backgroundColor:
+                                        sliderTheme.tickColor ??
+                                        AppKitDynamicColor.resolve(context, AppKitColors.fills.opaque.primary),
+                                    selectedPercentage: percentage,
+                                    stops: widget.stops.map((e) => _getValuePercentage(e)).toList(),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
+
+                          // continuous thumb
+                          if (continous) ...[
+                            Positioned(
+                              left: width * percentage - (continuousThumbSize / 2),
+                              width: (continuousThumbSize * 2) + (_kHorizontalPaddingThreshold * 2),
+                              height: continuousThumbSize,
+                              top: overallHeight / 2 - continuousThumbSize / 2,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                child: GestureDetector(
+                                  onTapDown: (details) => thumbHeldDown = true,
+                                  child: AppKitCircularSliderThumb(
+                                    continuousThumbSize: continuousThumbSize,
+                                    color: sliderTheme.thumbColor,
+                                    foregroundColor: enabled && _thumbHeldDown
+                                        ? AppKitDynamicColor.resolve(context, AppKitColors.fills.opaque.tertiary)
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ] else ...[
+                            Positioned(
+                              left: width * percentage - (discreteThumbSize.width / 2),
+                              width: (discreteThumbSize.width * 2) + 4,
+                              height: discreteThumbSize.height,
+                              top: overallHeight / 2 - (discreteThumbSize.height / 2),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                child: GestureDetector(
+                                  onTapDown: (_) => thumbHeldDown = true,
+                                  child: _DiscreteThumb(
+                                    size: discreteThumbSize,
+                                    color: sliderTheme.thumbColor,
+                                    cornerRadius: sliderTheme.discreteThumbCornerRadius,
+                                    foregroundColor: enabled && _thumbHeldDown
+                                        ? AppKitColors.fills.opaque.tertiary.color
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        );
-      }),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -474,14 +432,11 @@ class AppKitCircularSliderThumb extends StatelessWidget {
       height: continuousThumbSize,
       width: continuousThumbSize,
       foregroundDecoration: foregroundColor != null
-          ? BoxDecoration(
-              color: foregroundColor,
-              borderRadius: BorderRadius.circular(continuousThumbSize))
+          ? BoxDecoration(color: foregroundColor, borderRadius: BorderRadius.circular(continuousThumbSize))
           : null,
       decoration: BoxDecoration(
         color: color,
-        border: Border.all(
-            color: AppKitColors.fills.opaque.quinary.color, width: 0.5),
+        border: Border.all(color: AppKitColors.fills.opaque.quinary.color, width: 0.5),
         borderRadius: BorderRadius.all(Radius.circular(continuousThumbSize)),
         boxShadow: const [
           BoxShadow(
@@ -505,12 +460,7 @@ class AppKitCircularSliderThumb extends StatelessWidget {
 }
 
 class _DiscreteThumb extends StatelessWidget {
-  const _DiscreteThumb({
-    required this.color,
-    required this.cornerRadius,
-    required this.size,
-    this.foregroundColor,
-  });
+  const _DiscreteThumb({required this.color, required this.cornerRadius, required this.size, this.foregroundColor});
 
   final Color color;
   final Color? foregroundColor;
@@ -523,14 +473,11 @@ class _DiscreteThumb extends StatelessWidget {
       height: size.height,
       width: size.width,
       foregroundDecoration: foregroundColor != null
-          ? BoxDecoration(
-              color: foregroundColor,
-              borderRadius: BorderRadius.circular(cornerRadius))
+          ? BoxDecoration(color: foregroundColor, borderRadius: BorderRadius.circular(cornerRadius))
           : null,
       decoration: BoxDecoration(
         color: color,
-        border: Border.all(
-            color: AppKitColors.fills.opaque.quinary.color, width: 0.5),
+        border: Border.all(color: AppKitColors.fills.opaque.quinary.color, width: 0.5),
         borderRadius: BorderRadius.all(Radius.circular(cornerRadius)),
         boxShadow: const [
           BoxShadow(
@@ -589,12 +536,7 @@ class _DiscreteTickPainter extends CustomPainter {
 
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-          Rect.fromLTWH(
-            x - (tickWidth / 2),
-            (size.height / 2) - (tickHeight / 2),
-            tickWidth,
-            tickHeight,
-          ),
+          Rect.fromLTWH(x - (tickWidth / 2), (size.height / 2) - (tickHeight / 2), tickWidth, tickHeight),
           Radius.circular(cornerRadius),
         ),
         isPastSelectedPercentage ? backgroundPaint : paint,

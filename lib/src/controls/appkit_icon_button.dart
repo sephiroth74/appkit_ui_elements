@@ -15,12 +15,7 @@ class AppKitIconButton extends StatefulWidget {
     this.borderRadius,
     this.alignment = Alignment.center,
     this.semanticLabel,
-    this.boxConstraints = const BoxConstraints(
-      minHeight: 20,
-      minWidth: 20,
-      maxWidth: 30,
-      maxHeight: 30,
-    ),
+    this.boxConstraints = const BoxConstraints(minHeight: 20, minWidth: 20, maxWidth: 30, maxHeight: 30),
     this.padding,
     this.mouseCursor = SystemMouseCursors.basic,
     this.color,
@@ -162,26 +157,18 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
           button: true,
           child: ConstrainedBox(
             constraints: widget.boxConstraints,
-            child: Builder(builder: (context) {
-              if (widget.type == AppKitIconButtonType.outlined) {
-                final Color backgroundColor = widget.backgroundColor ??
-                    theme.outlined.backgroundColor ??
-                    Colors.transparent;
-                final Color hoverColor = widget.hoverColor ??
-                    theme.outlined.hoverColor ??
-                    Colors.transparent;
-                final Color? disabledColor =
-                    widget.disabledColor ?? theme.outlined.disabledColor;
-                final Color pressedColor = widget.pressedColor ??
-                    theme.outlined.pressedColor ??
-                    Colors.transparent;
-                final Color? iconColor = (widget.color ?? iconTheme.color)
-                    ?.multiplyOpacity(enabled ? 1.0 : 0.5);
-                final padding = widget.padding ??
-                    theme.outlined.padding ??
-                    const EdgeInsets.all(8);
+            child: Builder(
+              builder: (context) {
+                if (widget.type == AppKitIconButtonType.outlined) {
+                  final Color backgroundColor =
+                      widget.backgroundColor ?? theme.outlined.backgroundColor ?? Colors.transparent;
+                  final Color hoverColor = widget.hoverColor ?? theme.outlined.hoverColor ?? Colors.transparent;
+                  final Color? disabledColor = widget.disabledColor ?? theme.outlined.disabledColor;
+                  final Color pressedColor = widget.pressedColor ?? theme.outlined.pressedColor ?? Colors.transparent;
+                  final Color? iconColor = (widget.color ?? iconTheme.color)?.multiplyOpacity(enabled ? 1.0 : 0.5);
+                  final padding = widget.padding ?? theme.outlined.padding ?? const EdgeInsets.all(8);
 
-                return _OutlinedContainer(
+                  return _OutlinedContainer(
                     widget: widget,
                     enabled: enabled,
                     disabledColor: disabledColor,
@@ -192,23 +179,16 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
                     backgroundColor: backgroundColor,
                     padding: padding,
                     iconTheme: iconTheme,
-                    iconColor: iconColor);
-              } else {
-                final Color hoverColor = widget.hoverColor ??
-                    theme.flat.hoverColor ??
-                    Colors.transparent;
-                final Color? disabledColor =
-                    widget.disabledColor ?? theme.flat.disabledColor;
-                final Color pressedColor = widget.pressedColor ??
-                    theme.flat.pressedColor ??
-                    Colors.transparent;
-                final Color? iconColor = (widget.color ?? iconTheme.color)
-                    ?.multiplyOpacity(enabled ? 1.0 : 0.5);
-                final padding = widget.padding ??
-                    theme.flat.padding ??
-                    const EdgeInsets.all(8);
+                    iconColor: iconColor,
+                  );
+                } else {
+                  final Color hoverColor = widget.hoverColor ?? theme.flat.hoverColor ?? Colors.transparent;
+                  final Color? disabledColor = widget.disabledColor ?? theme.flat.disabledColor;
+                  final Color pressedColor = widget.pressedColor ?? theme.flat.pressedColor ?? Colors.transparent;
+                  final Color? iconColor = (widget.color ?? iconTheme.color)?.multiplyOpacity(enabled ? 1.0 : 0.5);
+                  final padding = widget.padding ?? theme.flat.padding ?? const EdgeInsets.all(8);
 
-                return _PlainContainer(
+                  return _PlainContainer(
                     widget: widget,
                     enabled: enabled,
                     disabledColor: disabledColor,
@@ -218,22 +198,19 @@ class AppKitIconButtonState extends State<AppKitIconButton> {
                     hoverColor: hoverColor,
                     padding: padding,
                     iconTheme: iconTheme,
-                    iconColor: iconColor);
-              }
-            }),
+                    iconColor: iconColor,
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
     );
   }
 
-  Color getPressedBackgroundColor(
-      {required AppKitThemeData theme, required Color backgroundColor}) {
-    final blendedBackgroundColor = Color.lerp(
-      theme.canvasColor,
-      backgroundColor,
-      backgroundColor.a,
-    )!;
+  Color getPressedBackgroundColor({required AppKitThemeData theme, required Color backgroundColor}) {
+    final blendedBackgroundColor = Color.lerp(theme.canvasColor, backgroundColor, backgroundColor.a)!;
 
     final luminance = blendedBackgroundColor.computeLuminance();
     final color = luminance > 0.5
@@ -255,8 +232,8 @@ class _PlainContainer extends StatelessWidget {
     required this.padding,
     required this.iconTheme,
     required this.iconColor,
-  })  : _buttonHeldDown = buttonHeldDown,
-        _isHovered = isHovered;
+  }) : _buttonHeldDown = buttonHeldDown,
+       _isHovered = isHovered;
 
   final AppKitIconButton widget;
   final bool enabled;
@@ -271,18 +248,18 @@ class _PlainContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppKitIconThemeData iconTheme =
-        AppKitIconTheme.of(context).copyWith(color: iconColor);
+    AppKitIconThemeData iconTheme = AppKitIconTheme.of(context).copyWith(color: iconColor);
     final color = iconTheme.color;
 
     iconTheme = AppKitIconTheme.of(context).copyWith(
-        color: !enabled
-            ? disabledColor
-            : _buttonHeldDown
-                ? color?.merge(pressedColor)
-                : _isHovered
-                    ? color?.merge(hoverColor)
-                    : color);
+      color: !enabled
+          ? disabledColor
+          : _buttonHeldDown
+          ? color?.merge(pressedColor)
+          : _isHovered
+          ? color?.merge(hoverColor)
+          : color,
+    );
 
     return Padding(
       padding: padding,
@@ -292,10 +269,7 @@ class _PlainContainer extends StatelessWidget {
         heightFactor: 1.0,
         child: FittedBox(
           fit: BoxFit.scaleDown,
-          child: AppKitIconTheme(
-            data: iconTheme,
-            child: AppKitIcon(widget.icon),
-          ),
+          child: AppKitIconTheme(data: iconTheme, child: AppKitIcon(widget.icon)),
         ),
       ),
     );
@@ -315,8 +289,8 @@ class _OutlinedContainer extends StatelessWidget {
     required this.padding,
     required this.iconTheme,
     required this.iconColor,
-  })  : _buttonHeldDown = buttonHeldDown,
-        _isHovered = isHovered;
+  }) : _buttonHeldDown = buttonHeldDown,
+       _isHovered = isHovered;
 
   final AppKitIconButton widget;
   final bool enabled;
@@ -335,17 +309,16 @@ class _OutlinedContainer extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         shape: widget.shape,
-        borderRadius: widget.borderRadius ??
-            (widget.shape == BoxShape.rectangle
-                ? const BorderRadius.all(Radius.circular(6))
-                : null),
+        borderRadius:
+            widget.borderRadius ??
+            (widget.shape == BoxShape.rectangle ? const BorderRadius.all(Radius.circular(6)) : null),
         color: !enabled
             ? disabledColor
             : _buttonHeldDown
-                ? pressedColor
-                : _isHovered
-                    ? hoverColor
-                    : backgroundColor,
+            ? pressedColor
+            : _isHovered
+            ? hoverColor
+            : backgroundColor,
       ),
       child: Padding(
         padding: padding,

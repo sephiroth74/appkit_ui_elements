@@ -147,23 +147,21 @@ class AppKitSearchField extends StatefulWidget {
     this.controlSize = AppKitControlSize.regular,
     this.clearButtonMode = AppKitOverlayVisibilityMode.editing,
     this.behavior = AppKitTextFieldBehavior.editable,
-  }) : assert(contextMenuBuilder != null ? suggestions == null : true,
-            'Suggestions must be null when contextMenuBuilder is provided');
+  }) : assert(
+         contextMenuBuilder != null ? suggestions == null : true,
+         'Suggestions must be null when contextMenuBuilder is provided',
+       );
 
-  bool get hasSuggestions =>
-      (suggestions != null && suggestions!.isNotEmpty) ||
-      contextMenuBuilder != null;
+  bool get hasSuggestions => (suggestions != null && suggestions!.isNotEmpty) || contextMenuBuilder != null;
 
   AppKitContextMenu<String>? _defaultMenuBuilder(BuildContext context) {
     return contextMenuBuilder != null
         ? contextMenuBuilder?.call(context)
         : suggestions != null
-            ? AppKitContextMenu<String>(
-                entries: suggestions!
-                    .map(
-                        (e) => AppKitContextMenuItem<String>.plain(e, value: e))
-                    .toList())
-            : null;
+        ? AppKitContextMenu<String>(
+            entries: suggestions!.map((e) => AppKitContextMenuItem<String>.plain(e, value: e)).toList(),
+          )
+        : null;
   }
 
   @override
@@ -175,8 +173,7 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
   TextEditingController? _controller;
 
   MaxLengthEnforcement get _effectiveMaxLengthEnforcement =>
-      widget.maxLengthEnforcement ??
-      LengthLimitingTextInputFormatter.getDefaultMaxLengthEnforcement();
+      widget.maxLengthEnforcement ?? LengthLimitingTextInputFormatter.getDefaultMaxLengthEnforcement();
 
   bool get enabled => widget.enabled;
 
@@ -304,32 +301,36 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
           behavior: HitTestBehavior.opaque,
           excludeFromSemantics: true,
           onTap: enabled && widget.hasSuggestions ? _handlePrefixTap : null,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    CupertinoIcons.search,
-                    size: widget.controlSize.prefixIconSize,
-                    color: AppKitDynamicColor.resolve(
-                            context, AppKitColors.labelColor)
-                        .multiplyOpacity(enabled ? 1.0 : 0.5),
-                  ),
-                  if (widget.hasSuggestions) ...[
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Icon(
-                      CupertinoIcons.chevron_down,
-                      size: widget.controlSize.prefixIconSize / 2,
+                      CupertinoIcons.search,
+                      size: widget.controlSize.prefixIconSize,
                       color: AppKitDynamicColor.resolve(
-                              context, AppKitColors.labelColor)
-                          .multiplyOpacity(enabled ? 1.0 : 0.5),
+                        context,
+                        AppKitColors.labelColor,
+                      ).multiplyOpacity(enabled ? 1.0 : 0.5),
                     ),
+                    if (widget.hasSuggestions) ...[
+                      Icon(
+                        CupertinoIcons.chevron_down,
+                        size: widget.controlSize.prefixIconSize / 2,
+                        color: AppKitDynamicColor.resolve(
+                          context,
+                          AppKitColors.labelColor,
+                        ).multiplyOpacity(enabled ? 1.0 : 0.5),
+                      ),
+                    ],
                   ],
-                ],
-              ),
-            );
-          }),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -338,38 +339,25 @@ class _AppKitSearchFieldState extends State<AppKitSearchField> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(DiagnosticsProperty<FocusNode>('focusNode', widget.focusNode));
-    properties.add(DiagnosticsProperty<TextEditingController>(
-        'controller', widget.controller));
-    properties.add(IterableProperty<TextInputFormatter>(
-        'inputFormatters', widget.inputFormatters));
+    properties.add(DiagnosticsProperty<FocusNode>('focusNode', widget.focusNode));
+    properties.add(DiagnosticsProperty<TextEditingController>('controller', widget.controller));
+    properties.add(IterableProperty<TextInputFormatter>('inputFormatters', widget.inputFormatters));
     properties.add(DiagnosticsProperty<bool>('enabled', widget.enabled));
     properties.add(DiagnosticsProperty<bool>('autoFocus', widget.autofocus));
-    properties
-        .add(DiagnosticsProperty<bool>('autoCorrect', widget.autocorrect));
+    properties.add(DiagnosticsProperty<bool>('autoCorrect', widget.autocorrect));
     properties.add(DiagnosticsProperty<bool>('continuous', widget.continuous));
     properties.add(DiagnosticsProperty<int>('maxLength', widget.maxLength));
-    properties.add(DiagnosticsProperty<MaxLengthEnforcement>(
-        'maxLengthEnforcement', widget.maxLengthEnforcement));
-    properties
-        .add(DiagnosticsProperty<TextAlign>('textAlign', widget.textAlign));
+    properties.add(DiagnosticsProperty<MaxLengthEnforcement>('maxLengthEnforcement', widget.maxLengthEnforcement));
+    properties.add(DiagnosticsProperty<TextAlign>('textAlign', widget.textAlign));
     properties.add(DiagnosticsProperty<TextStyle>('style', widget.style));
-    properties.add(DiagnosticsProperty<TextStyle>(
-        'placeholderStyle', widget.placeholderStyle));
-    properties
-        .add(DiagnosticsProperty<String>('placeholder', widget.placeholder));
+    properties.add(DiagnosticsProperty<TextStyle>('placeholderStyle', widget.placeholderStyle));
+    properties.add(DiagnosticsProperty<String>('placeholder', widget.placeholder));
     properties.add(DiagnosticsProperty<EdgeInsets>('padding', widget.padding));
-    properties
-        .add(DiagnosticsProperty<TextInputType>('inputType', widget.inputType));
-    properties.add(DiagnosticsProperty<AppKitTextFieldBorderStyle>(
-        'borderStyle', widget.borderStyle));
-    properties.add(DiagnosticsProperty<AppKitControlSize>(
-        'controlSize', widget.controlSize));
-    properties.add(DiagnosticsProperty<AppKitOverlayVisibilityMode>(
-        'clearButtonMode', widget.clearButtonMode));
-    properties.add(DiagnosticsProperty<AppKitTextFieldBehavior>(
-        'behavior', widget.behavior));
+    properties.add(DiagnosticsProperty<TextInputType>('inputType', widget.inputType));
+    properties.add(DiagnosticsProperty<AppKitTextFieldBorderStyle>('borderStyle', widget.borderStyle));
+    properties.add(DiagnosticsProperty<AppKitControlSize>('controlSize', widget.controlSize));
+    properties.add(DiagnosticsProperty<AppKitOverlayVisibilityMode>('clearButtonMode', widget.clearButtonMode));
+    properties.add(DiagnosticsProperty<AppKitTextFieldBehavior>('behavior', widget.behavior));
   }
 }
 
@@ -390,17 +378,13 @@ extension _ControlSizeX on AppKitControlSize {
   EdgeInsets get prefixPadding {
     switch (this) {
       case AppKitControlSize.mini:
-        return const EdgeInsets.only(
-            left: 4.0, right: 2.0, top: 1.0, bottom: 1.0);
+        return const EdgeInsets.only(left: 4.0, right: 2.0, top: 1.0, bottom: 1.0);
       case AppKitControlSize.small:
-        return const EdgeInsets.only(
-            left: 4.0, right: 3.0, top: 1.0, bottom: 1.0);
+        return const EdgeInsets.only(left: 4.0, right: 3.0, top: 1.0, bottom: 1.0);
       case AppKitControlSize.regular:
-        return const EdgeInsets.only(
-            left: 6.0, right: 2.0, top: 1.0, bottom: 2.0);
+        return const EdgeInsets.only(left: 6.0, right: 2.0, top: 1.0, bottom: 2.0);
       case AppKitControlSize.large:
-        return const EdgeInsets.only(
-            left: 6.0, right: 2.0, top: 1.0, bottom: 2.0);
+        return const EdgeInsets.only(left: 6.0, right: 2.0, top: 1.0, bottom: 2.0);
     }
   }
 

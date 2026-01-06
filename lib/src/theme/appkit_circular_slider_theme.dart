@@ -5,8 +5,7 @@ import 'package:flutter/widgets.dart';
 class AppKitCircularSliderTheme extends InheritedTheme {
   final AppKitCircularSliderThemeData data;
 
-  const AppKitCircularSliderTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitCircularSliderTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitCircularSliderTheme oldWidget) {
@@ -19,8 +18,7 @@ class AppKitCircularSliderTheme extends InheritedTheme {
   }
 
   static AppKitCircularSliderThemeData of(BuildContext context) {
-    final AppKitCircularSliderTheme? theme =
-        context.dependOnInheritedWidgetOfExactType<AppKitCircularSliderTheme>();
+    final AppKitCircularSliderTheme? theme = context.dependOnInheritedWidgetOfExactType<AppKitCircularSliderTheme>();
     return theme?.data ?? AppKitTheme.of(context).circularSliderTheme;
   }
 }
@@ -68,13 +66,15 @@ class AppKitCircularSliderThemeData with Diagnosticable {
     properties.add(ColorProperty('thumbColorUnfocused', thumbColorUnfocused));
   }
 
-  static AppKitCircularSliderThemeData lerp(AppKitCircularSliderThemeData a,
-      AppKitCircularSliderThemeData b, double t) {
+  static AppKitCircularSliderThemeData lerp(
+    AppKitCircularSliderThemeData a,
+    AppKitCircularSliderThemeData b,
+    double t,
+  ) {
     return AppKitCircularSliderThemeData(
       backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t)!,
       thumbColor: Color.lerp(a.thumbColor, b.thumbColor, t)!,
-      thumbColorUnfocused:
-          Color.lerp(a.thumbColorUnfocused, b.thumbColorUnfocused, t)!,
+      thumbColorUnfocused: Color.lerp(a.thumbColorUnfocused, b.thumbColorUnfocused, t)!,
     );
   }
 }

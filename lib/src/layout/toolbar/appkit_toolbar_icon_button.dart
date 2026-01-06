@@ -22,16 +22,17 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
     final Color textColor;
     final Color iconColor;
 
-    textColor =
-        AppKitColors.text.opaque.secondary.resolveFromBrightness(brightness);
+    textColor = AppKitColors.text.opaque.secondary.resolveFromBrightness(brightness);
     iconColor = AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
 
-    Widget iconButton = AppKitIconTheme.toolbar(context,
-        brightness: brightness,
-        showLabel: showLabel,
-        icon: icon,
-        onPressed: onPressed,
-        color: iconColor);
+    Widget iconButton = AppKitIconTheme.toolbar(
+      context,
+      brightness: brightness,
+      showLabel: showLabel,
+      icon: icon,
+      onPressed: onPressed,
+      color: iconColor,
+    );
 
     if (showLabel) {
       iconButton = Padding(
@@ -41,13 +42,7 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
             iconButton,
             Padding(
               padding: const EdgeInsets.only(top: 3.0),
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10.0,
-                  color: textColor,
-                ),
-              ),
+              child: Text(label, style: TextStyle(fontSize: 10.0, color: textColor)),
             ),
           ],
         ),
@@ -55,10 +50,7 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
     }
 
     if (tooltipMessage != null) {
-      iconButton = AppKitTooltip.plain(
-        message: tooltipMessage!,
-        child: iconButton,
-      );
+      iconButton = AppKitTooltip.plain(message: tooltipMessage!, child: iconButton);
     }
     return iconButton;
   }
@@ -66,13 +58,7 @@ class AppKitToolBarIconButton extends AppKitToolbarItem {
   @override
   AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
     return AppKitContextMenuItem(
-      child: Row(
-        children: [
-          AppKitIcon(icon),
-          const SizedBox(width: 8.0),
-          Text(label),
-        ],
-      ),
+      child: Row(children: [AppKitIcon(icon), const SizedBox(width: 8.0), Text(label)]),
       value: label,
       onTap: () => onPressed?.call(),
     );

@@ -35,8 +35,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
               padding: const EdgeInsets.all(20),
               child: Builder(
                 builder: (context) {
-                  final isDark =
-                      AppKitTheme.of(context).brightness == Brightness.dark;
+                  final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -48,10 +47,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             const SizedBox(
-                                width: 200,
-                                child: Text('Primary',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis)),
+                                width: 200, child: Text('Primary', maxLines: 1, overflow: TextOverflow.ellipsis)),
                             const SizedBox(width: 16.0),
                             AppKitToggleButton(
                               key: const Key('button1'),
@@ -66,17 +62,12 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               childOff: Icon(
                                 CupertinoIcons.volume_off,
                                 size: 16,
-                                color: AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.primary),
+                                color: AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary),
                               ),
                               childOn: Icon(CupertinoIcons.volume_mute,
                                   size: 16,
-                                  color: AppKitDynamicColor.resolve(
-                                      context,
-                                      isDark
-                                          ? AppKitColors.text.opaque.tertiary
-                                          : AppKitColors
-                                              .text.opaque.secondary)),
+                                  color: AppKitDynamicColor.resolve(context,
+                                      isDark ? AppKitColors.text.opaque.tertiary : AppKitColors.text.opaque.secondary)),
                             ),
                           ],
                         ),
@@ -86,10 +77,7 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             const SizedBox(
-                                width: 200,
-                                child: Text('Secondary',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis)),
+                                width: 200, child: Text('Secondary', maxLines: 1, overflow: TextOverflow.ellipsis)),
                             const SizedBox(width: 16.0),
                             AppKitToggleButton(
                               key: const Key('button2'),
@@ -103,13 +91,11 @@ class _ToggleButtonPageState extends State<ToggleButtonPage> {
                               type: AppKitButtonType.secondary,
                               childOff: const Text(
                                 'Off',
-                                style: TextStyle(
-                                    fontWeight: AppKitFontWeight.w590),
+                                style: TextStyle(fontWeight: AppKitFontWeight.w590),
                               ),
                               childOn: const Text(
                                 'On',
-                                style: TextStyle(
-                                    fontWeight: AppKitFontWeight.w590),
+                                style: TextStyle(fontWeight: AppKitFontWeight.w590),
                               ),
                             ),
                           ],

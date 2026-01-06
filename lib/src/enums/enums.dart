@@ -5,22 +5,13 @@ const _kBezelBorderRadius = 1.0;
 const _kRoundedBorderRadius = 6.0;
 
 /// @see https://docs-assets.developer.apple.com/published/accf80df231061eac66e07e5377e0d31/SwiftUI-View-controlSize@2x.png
-enum AppKitControlSize {
-  mini,
-  small,
-  regular,
-  large,
-}
+enum AppKitControlSize { mini, small, regular, large }
 
 enum AppKitPushButtonType { primary, secondary, destructive }
 
 enum AppKitToggleButtonType { primary, secondary }
 
-enum AppKitSliderStyle {
-  continuous,
-  discreteFixed,
-  discreteFree,
-}
+enum AppKitSliderStyle { continuous, discreteFixed, discreteFree }
 
 enum AppKitSegmentedControlSize { regular, small, mini }
 
@@ -54,17 +45,10 @@ enum AppKitColorPickerMode {
 }
 
 /// Position of the tick marks in a level indicator.
-enum AppKitLevelIndicatorTickMarkPosition {
-  none,
-  above,
-  below,
-}
+enum AppKitLevelIndicatorTickMarkPosition { none, above, below }
 
 /// Style of a level indicator.
-enum AppKitLevelIndicatorStyle {
-  continuous,
-  discrete,
-}
+enum AppKitLevelIndicatorStyle { continuous, discrete }
 
 enum AppKitItemState {
   on,
@@ -101,31 +85,13 @@ enum AppKitMenuEdge {
   }
 }
 
-enum AppKitPopupButtonStyle {
-  push,
-  bevel,
-  plain,
-  inline,
-}
+enum AppKitPopupButtonStyle { push, bevel, plain, inline }
 
-enum AppKitPulldownButtonStyle {
-  push,
-  bevel,
-  plain,
-  inline,
-}
+enum AppKitPulldownButtonStyle { push, bevel, plain, inline }
 
-enum AppKitComboBoxStyle {
-  bordered,
-  plain,
-}
+enum AppKitComboBoxStyle { bordered, plain }
 
-enum AppKitOverlayVisibilityMode {
-  never,
-  editing,
-  notEditing,
-  always,
-}
+enum AppKitOverlayVisibilityMode { never, editing, notEditing, always }
 
 enum AppKitTextFieldBehavior {
   selectable,
@@ -134,9 +100,7 @@ enum AppKitTextFieldBehavior {
 
   bool get canRequestFocus => this != AppKitTextFieldBehavior.none;
 
-  bool get readOnly =>
-      this == AppKitTextFieldBehavior.selectable ||
-      this == AppKitTextFieldBehavior.none;
+  bool get readOnly => this == AppKitTextFieldBehavior.selectable || this == AppKitTextFieldBehavior.none;
 }
 
 enum AppKitTextFieldBorderStyle {
@@ -160,11 +124,7 @@ enum AppKitTextFieldBorderStyle {
 
 enum AppKitColorWellStyle { regular, minimal, expanded }
 
-enum AppKitDatePickerType {
-  graphical,
-  textualWithStepper,
-  textual,
-}
+enum AppKitDatePickerType { graphical, textualWithStepper, textual }
 
 enum AppKitDateElements {
   monthDayYear,
@@ -200,35 +160,12 @@ enum AppKitTimeElements {
   }
 }
 
-enum AppKitDatePickerSelectionType {
-  single,
-  range,
-}
+enum AppKitDatePickerSelectionType { single, range }
 
-enum AppKitGroupBoxStyle {
-  defaultScrollBox,
-  roundedScrollBox,
-  standardScrollBox,
-}
+enum AppKitGroupBoxStyle { defaultScrollBox, roundedScrollBox, standardScrollBox }
 
-enum AppKitAccentColor {
-  blue,
-  purple,
-  pink,
-  red,
-  orange,
-  yellow,
-  green,
-  graphite;
-}
+enum AppKitAccentColor { blue, purple, pink, red, orange, yellow, green, graphite }
 
-enum AppKitResizableSide {
-  left,
-  right,
-  top,
-}
+enum AppKitResizableSide { left, right, top }
 
-enum AppKitIconButtonType {
-  flat,
-  outlined,
-}
+enum AppKitIconButtonType { flat, outlined }

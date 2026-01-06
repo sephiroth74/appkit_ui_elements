@@ -56,11 +56,11 @@ class AppKitProgressCircle extends StatelessWidget {
     this.color,
     this.trackColor,
     this.semanticsLabel,
-  })  : _size = size ?? _kSize,
-        _strokeWidth = strokeWidth ?? _kStrokeWidth,
-        assert(value == null || (value >= 0.0 && value <= 1.0)),
-        assert(size == null || size >= 0.0),
-        assert(strokeWidth == null || strokeWidth >= 0.0);
+  }) : _size = size ?? _kSize,
+       _strokeWidth = strokeWidth ?? _kStrokeWidth,
+       assert(value == null || (value >= 0.0 && value <= 1.0)),
+       assert(size == null || size >= 0.0),
+       assert(strokeWidth == null || strokeWidth >= 0.0);
 
   bool get indeterminate => value == null;
 
@@ -76,8 +76,7 @@ class AppKitProgressCircle extends StatelessWidget {
     properties.add(ColorProperty('color', color));
     properties.add(ColorProperty('trackColor', trackColor));
     properties.add(StringProperty('semanticsLabel', semanticsLabel));
-    properties.add(FlagProperty('indeterminate',
-        value: indeterminate, ifTrue: 'indeterminate'));
+    properties.add(FlagProperty('indeterminate', value: indeterminate, ifTrue: 'indeterminate'));
   }
 
   @override
@@ -85,38 +84,36 @@ class AppKitProgressCircle extends StatelessWidget {
     if (indeterminate) {
       return Semantics(
         label: semanticsLabel,
-        child: cupertino.CupertinoActivityIndicator(
-          radius: size / 2,
-          color: color,
-        ),
+        child: cupertino.CupertinoActivityIndicator(radius: size / 2, color: color),
       );
     }
     return Semantics(
       value: value?.toStringAsFixed(2),
       label: semanticsLabel,
-      child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        final theme = AppKitTheme.of(context);
-        final progressTheme = AppKitProgressTheme.of(context);
-        final isMainWindow =
-            MainWindowStateListener.instance.isMainWindow.value;
-        final color = isMainWindow
-            ? (this.color ?? progressTheme.color ?? theme.activeColor)
-            : (progressTheme.accentColorUnfocused ?? const Color(0xFFbababa));
-        final trackColor = this.trackColor ?? progressTheme.trackColor;
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
+          final theme = AppKitTheme.of(context);
+          final progressTheme = AppKitProgressTheme.of(context);
+          final isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+          final color = isMainWindow
+              ? (this.color ?? progressTheme.color ?? theme.activeColor)
+              : (progressTheme.accentColorUnfocused ?? const Color(0xFFbababa));
+          final trackColor = this.trackColor ?? progressTheme.trackColor;
 
-        return SizedBox(
-          width: size,
-          height: size,
-          child: CustomPaint(
-            painter: _CircularProgressPainter(
-              value: value!,
-              color: color,
-              trackColor: trackColor,
-              strokeWidth: strokeWidth,
+          return SizedBox(
+            width: size,
+            height: size,
+            child: CustomPaint(
+              painter: _CircularProgressPainter(
+                value: value!,
+                color: color,
+                trackColor: trackColor,
+                strokeWidth: strokeWidth,
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }
@@ -163,13 +160,11 @@ class _CircularProgressPainter extends CustomPainter {
           darkerColor.withValues(alpha: 0.05),
         ],
         stops: [1 - stopSize * 2, 1 - stopSize, 1],
-      ).createShader(
-          Rect.fromCircle(center: center, radius: radius + strokeWidth / 2));
+      ).createShader(Rect.fromCircle(center: center, radius: radius + strokeWidth / 2));
 
     canvas.drawCircle(center, radius + strokeWidth / 2, paint);
 
-    canvas.drawCircle(
-        center, radius - strokeWidth / 2, Paint()..blendMode = BlendMode.clear);
+    canvas.drawCircle(center, radius - strokeWidth / 2, Paint()..blendMode = BlendMode.clear);
 
     // draw the progress
     paint
@@ -193,8 +188,6 @@ class _CircularProgressPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _CircularProgressPainter oldDelegate) {
-    return oldDelegate.value != value ||
-        oldDelegate.color != color ||
-        oldDelegate.trackColor != trackColor;
+    return oldDelegate.value != value || oldDelegate.color != color || oldDelegate.trackColor != trackColor;
   }
 }

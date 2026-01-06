@@ -10,11 +10,8 @@ const kAnchorHeight = 10.0;
 const kAnchorWidth = 20.0;
 
 class AppKitPopoverProvider extends InheritedNotifier<AppKitPopoverState> {
-  const AppKitPopoverProvider({
-    super.key,
-    required super.child,
-    required AppKitPopoverState state,
-  }) : super(notifier: state);
+  const AppKitPopoverProvider({super.key, required super.child, required AppKitPopoverState state})
+    : super(notifier: state);
 }
 
 class AppKitPopoverState extends ChangeNotifier {
@@ -71,9 +68,7 @@ class AppKitPopoverState extends ChangeNotifier {
   }) : _position = position;
 
   static AppKitPopoverState of(BuildContext context) {
-    final provider =
-        context.dependOnInheritedWidgetOfExactType<AppKitPopoverProvider>()!
-            as AppKitPopoverProvider?;
+    final provider = context.dependOnInheritedWidgetOfExactType<AppKitPopoverProvider>()! as AppKitPopoverProvider?;
 
     if (provider == null) {
       throw 'No PopoverProvider found in context';
@@ -106,11 +101,9 @@ class AppKitPopoverState extends ChangeNotifier {
               finalPosition += Offset(0, -childRect.height / 2);
           }
 
-          if (direction == AppKitMenuEdge.bottom ||
-              direction == AppKitMenuEdge.auto) {
+          if (direction == AppKitMenuEdge.bottom || direction == AppKitMenuEdge.auto) {
             if (itemRect!.bottom + childRect.height > safeScreenRect.bottom) {
-              finalPosition =
-                  Offset(finalPosition.dx, itemRect!.top - childRect.height);
+              finalPosition = Offset(finalPosition.dx, itemRect!.top - childRect.height);
               direction = AppKitMenuEdge.top;
               targetAnchor = Alignment.topCenter;
             }

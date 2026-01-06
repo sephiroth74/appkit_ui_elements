@@ -55,8 +55,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                               },
                               controlSize: AppKitControlSize.large,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 6.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -93,8 +92,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                               onPressed: () {
                                 debugPrint('Button pressed');
                               },
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               controlSize: AppKitControlSize.regular,
                               child: const Text('Label'),
                               menuBuilder: (context) => _comboButtonContextMenu,
@@ -106,8 +104,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                               },
                               controlSize: AppKitControlSize.small,
                               child: const Text('Label'),
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               menuBuilder: (context) => _comboButtonContextMenu,
                             ),
                             const SizedBox(width: 16.0),
@@ -115,8 +112,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                               onPressed: () {
                                 debugPrint('Button pressed');
                               },
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               controlSize: AppKitControlSize.mini,
                               child: const Text('Label'),
                             ),
@@ -133,8 +129,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                               },
                               controlSize: AppKitControlSize.large,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 6.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 6.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -150,16 +145,14 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                                   ],
                                 ),
                               ),
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               menuBuilder: (context) => _comboButtonContextMenu,
                             ),
                             const SizedBox(width: 16.0),
                             AppKitComboButton<String>(
                               style: AppKitComboButtonStyle.unified,
                               onPressed: () => debugPrint('Button pressed'),
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               controlSize: AppKitControlSize.regular,
                               child: const Text('Label'),
                               menuBuilder: (context) => _comboButtonContextMenu,
@@ -168,8 +161,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                             AppKitComboButton<String>(
                               style: AppKitComboButtonStyle.unified,
                               onPressed: () => debugPrint('Button pressed'),
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               controlSize: AppKitControlSize.small,
                               child: const Text('Label'),
                               menuBuilder: (context) => _comboButtonContextMenu,
@@ -178,8 +170,7 @@ class _ComboButtonPageState extends State<ComboButtonPage> {
                             AppKitComboButton<String>(
                               style: AppKitComboButtonStyle.unified,
                               onPressed: () => debugPrint('Button pressed'),
-                              onItemSelected: (value) =>
-                                  debugPrint('Selected: $value'),
+                              onItemSelected: (value) => debugPrint('Selected: $value'),
                               controlSize: AppKitControlSize.mini,
                               menuBuilder: (context) => _comboButtonContextMenu,
                               child: const Text('Label'),

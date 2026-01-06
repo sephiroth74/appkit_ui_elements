@@ -7,8 +7,7 @@ import 'package:flutter/widgets.dart';
 class AppKitRatingIndicatorTheme extends InheritedTheme {
   final AppKitRatingIndicatorThemeData data;
 
-  const AppKitRatingIndicatorTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitRatingIndicatorTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitRatingIndicatorTheme oldWidget) {
@@ -21,8 +20,7 @@ class AppKitRatingIndicatorTheme extends InheritedTheme {
   }
 
   static AppKitRatingIndicatorThemeData of(BuildContext context) {
-    final AppKitRatingIndicatorTheme? theme = context
-        .dependOnInheritedWidgetOfExactType<AppKitRatingIndicatorTheme>();
+    final AppKitRatingIndicatorTheme? theme = context.dependOnInheritedWidgetOfExactType<AppKitRatingIndicatorTheme>();
     return theme?.data ?? AppKitTheme.of(context).ratingIndicatorTheme;
   }
 }
@@ -73,12 +71,14 @@ class AppKitRatingIndicatorThemeData with Diagnosticable {
     );
   }
 
-  static AppKitRatingIndicatorThemeData lerp(AppKitRatingIndicatorThemeData? a,
-      AppKitRatingIndicatorThemeData? b, double t) {
+  static AppKitRatingIndicatorThemeData lerp(
+    AppKitRatingIndicatorThemeData? a,
+    AppKitRatingIndicatorThemeData? b,
+    double t,
+  ) {
     return AppKitRatingIndicatorThemeData(
       imageColor: Color.lerp(a?.imageColor, b?.imageColor, t)!,
-      placeholderOpacity:
-          lerpDouble(a?.placeholderOpacity, b?.placeholderOpacity, t)!,
+      placeholderOpacity: lerpDouble(a?.placeholderOpacity, b?.placeholderOpacity, t)!,
       icon: t < 0.5 ? a?.icon : b?.icon,
       iconsPadding: lerpDouble(a?.iconsPadding, b?.iconsPadding, t)!,
     );

@@ -68,8 +68,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   late List<String> timeFormatterSegments;
 
-  int get totalsegments =>
-      dateFormatterSegments.length + timeFormatterSegments.length;
+  int get totalsegments => dateFormatterSegments.length + timeFormatterSegments.length;
 
   late DateTime dateTime;
 
@@ -89,8 +88,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   FocusNode? _focusNode;
 
-  FocusNode get _effectiveFocusNode =>
-      _focusNode ??= FocusNode(debugLabel: 'TextualDatePicker[$hashCode]');
+  FocusNode get _effectiveFocusNode => _focusNode ??= FocusNode(debugLabel: 'TextualDatePicker[$hashCode]');
 
   String? _editedText;
 
@@ -138,10 +136,8 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
     dateFormatter = widget.dateElements.getDateFormat(languageCode);
     timeFormatter = widget.timeElements.getDateFormat(languageCode);
 
-    dateFormatterSegments =
-        hasDate ? dateFormatter.pattern!.split('/').toList() : [];
-    timeFormatterSegments =
-        hasTime ? timeFormatter.pattern!.split(':').toList() : [];
+    dateFormatterSegments = hasDate ? dateFormatter.pattern!.split('/').toList() : [];
+    timeFormatterSegments = hasTime ? timeFormatter.pattern!.split(':').toList() : [];
 
     if (_effectiveFocusNode.hasFocus &&
         widget.autofocus &&
@@ -225,8 +221,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
     final key = event.logicalKey;
     final index = _focusedIndex!;
 
-    if (key == LogicalKeyboardKey.arrowDown ||
-        key == LogicalKeyboardKey.arrowUp) {
+    if (key == LogicalKeyboardKey.arrowDown || key == LogicalKeyboardKey.arrowUp) {
       final value = int.tryParse(_getSegmentText(index)) ?? 0;
       final newValue = value + (key == LogicalKeyboardKey.arrowUp ? 1 : -1);
 
@@ -271,8 +266,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
       }
       focusedIndex = null;
     } else {
-      if (enabled &&
-          (_focusedIndex == null || _focusedIndex! >= totalsegments)) {
+      if (enabled && (_focusedIndex == null || _focusedIndex! >= totalsegments)) {
         focusedIndex = 0;
       } else {
         setState(() {});
@@ -289,25 +283,17 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   void _handleSegmentStep(int? index, bool increase) {
     if (index == null) return;
-    final segments = List.from(
-        index < dateFormatterSegments.length ? dateSegments : timeSegments);
-    final segmentIndex = index < dateFormatterSegments.length
-        ? index
-        : index - dateFormatterSegments.length;
+    final segments = List.from(index < dateFormatterSegments.length ? dateSegments : timeSegments);
+    final segmentIndex = index < dateFormatterSegments.length ? index : index - dateFormatterSegments.length;
     int newValue = segments[segmentIndex] + (increase ? 1 : -1);
     _handleSegmentChanged(index, newValue);
   }
 
   void _handleSegmentChanged(int index, int value) {
     final isTimeSegment = index >= dateFormatterSegments.length;
-    final segments = List.from(
-        index < dateFormatterSegments.length ? dateSegments : timeSegments);
-    final segmentIndex = index < dateFormatterSegments.length
-        ? index
-        : index - dateFormatterSegments.length;
-    final segmentName = isTimeSegment
-        ? timeFormatterSegments[segmentIndex]
-        : dateFormatterSegments[segmentIndex];
+    final segments = List.from(index < dateFormatterSegments.length ? dateSegments : timeSegments);
+    final segmentIndex = index < dateFormatterSegments.length ? index : index - dateFormatterSegments.length;
+    final segmentName = isTimeSegment ? timeFormatterSegments[segmentIndex] : dateFormatterSegments[segmentIndex];
 
     int newValue = value;
 
@@ -335,11 +321,16 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
       newTime = timeFormatter.parse(timeString);
     }
 
-    final newDateTime = DateTime(newDate.year, newDate.month, newDate.day,
-        newTime.hour, newTime.minute, newTime.second);
+    final newDateTime = DateTime(
+      newDate.year,
+      newDate.month,
+      newDate.day,
+      newTime.hour,
+      newTime.minute,
+      newTime.second,
+    );
 
-    widget.onChanged
-        ?.call(newDateTime.clamp(widget.minimumDate, widget.maximumDate));
+    widget.onChanged?.call(newDateTime.clamp(widget.minimumDate, widget.maximumDate));
   }
 
   double _getCharWidth(TextStyle textStyle) {
@@ -359,12 +350,8 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   String _getSegmentText(int index) {
     if (index < dateFormatterSegments.length) {
-      final segment = _focusedIndex == index && _editedText != null
-          ? _editedText!
-          : dateSegments[index].toString();
-      return dateFormatterSegments[index] == 'y'
-          ? segment.padLeft(4, '0')
-          : segment.padLeft(2, '0');
+      final segment = _focusedIndex == index && _editedText != null ? _editedText! : dateSegments[index].toString();
+      return dateFormatterSegments[index] == 'y' ? segment.padLeft(4, '0') : segment.padLeft(2, '0');
     } else {
       return (_focusedIndex == index && _editedText != null
               ? _editedText!
@@ -375,86 +362,75 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      assert(constraints.hasBoundedWidth);
-      final theme = AppKitTheme.of(context);
-      final dateTimePickerTheme = AppKitDateTimePickerTheme.of(context);
-      final isDark = theme.brightness == Brightness.dark;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        assert(constraints.hasBoundedWidth);
+        final theme = AppKitTheme.of(context);
+        final dateTimePickerTheme = AppKitDateTimePickerTheme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
 
-      final textStyle = theme.typography.body;
-      final charWidth = _getCharWidth(textStyle);
+        final textStyle = theme.typography.body;
+        final charWidth = _getCharWidth(textStyle);
 
-      final List<Widget> children = [];
+        final List<Widget> children = [];
 
-      for (var i = 0; i < dateFormatterSegments.length; i++) {
-        String segment = _getSegmentText(i);
+        for (var i = 0; i < dateFormatterSegments.length; i++) {
+          String segment = _getSegmentText(i);
 
-        // create a string filled with zeros based on the segment length
-        final child = _TextualPickerElement(
-          enabled: enabled,
-          text: segment,
-          charWidth: charWidth,
-          textStyle: textStyle,
-          index: i,
-          color: widget.color ??
-              dateTimePickerTheme.accentColor ??
-              theme.activeColor,
-          isMainWindow: isMainWindow,
-          isFocused: enabled &&
-              _focusedIndex == i &&
-              _effectiveFocusNode.hasPrimaryFocus,
-          onTap: enabled ? _handleSegmentTap : null,
-        );
+          // create a string filled with zeros based on the segment length
+          final child = _TextualPickerElement(
+            enabled: enabled,
+            text: segment,
+            charWidth: charWidth,
+            textStyle: textStyle,
+            index: i,
+            color: widget.color ?? dateTimePickerTheme.accentColor ?? theme.activeColor,
+            isMainWindow: isMainWindow,
+            isFocused: enabled && _focusedIndex == i && _effectiveFocusNode.hasPrimaryFocus,
+            onTap: enabled ? _handleSegmentTap : null,
+          );
 
-        children.add(child);
+          children.add(child);
 
-        if (i < dateSegments.length - 1) {
-          children
-              .add(DefaultTextStyle(style: textStyle, child: const Text('.')));
+          if (i < dateSegments.length - 1) {
+            children.add(DefaultTextStyle(style: textStyle, child: const Text('.')));
+          }
         }
-      }
 
-      if (children.isNotEmpty && timeFormatterSegments.isNotEmpty) {
-        children
-            .add(DefaultTextStyle(style: textStyle, child: const Text(', ')));
-      }
-
-      // now add the time segments
-
-      for (var i = 0; i < timeFormatterSegments.length; i++) {
-        String segment = _getSegmentText(i + dateFormatterSegments.length);
-
-        // create a string filled with zeros based on the segment length
-        final child = _TextualPickerElement(
-          enabled: enabled,
-          text: segment,
-          charWidth: charWidth,
-          textStyle: textStyle,
-          index: i + dateFormatterSegments.length,
-          color: widget.color ??
-              dateTimePickerTheme.accentColor ??
-              theme.activeColor,
-          isMainWindow: isMainWindow,
-          isFocused: _effectiveFocusNode.hasPrimaryFocus &&
-              enabled &&
-              _focusedIndex == i + dateFormatterSegments.length,
-          onTap: enabled ? _handleSegmentTap : null,
-        );
-
-        children.add(child);
-
-        if (i < timeSegments.length - 1) {
-          children
-              .add(DefaultTextStyle(style: textStyle, child: const Text(':')));
+        if (children.isNotEmpty && timeFormatterSegments.isNotEmpty) {
+          children.add(DefaultTextStyle(style: textStyle, child: const Text(', ')));
         }
-      }
 
-      final backgroundColor =
-          (dateTimePickerTheme.textualDatePickerBackgroundColor ??
-                  theme.controlBackgroundColor)
-              .multiplyOpacity(enabled ? 1.0 : 0.5);
+        // now add the time segments
 
-      return ConstrainedBox(
+        for (var i = 0; i < timeFormatterSegments.length; i++) {
+          String segment = _getSegmentText(i + dateFormatterSegments.length);
+
+          // create a string filled with zeros based on the segment length
+          final child = _TextualPickerElement(
+            enabled: enabled,
+            text: segment,
+            charWidth: charWidth,
+            textStyle: textStyle,
+            index: i + dateFormatterSegments.length,
+            color: widget.color ?? dateTimePickerTheme.accentColor ?? theme.activeColor,
+            isMainWindow: isMainWindow,
+            isFocused:
+                _effectiveFocusNode.hasPrimaryFocus && enabled && _focusedIndex == i + dateFormatterSegments.length,
+            onTap: enabled ? _handleSegmentTap : null,
+          );
+
+          children.add(child);
+
+          if (i < timeSegments.length - 1) {
+            children.add(DefaultTextStyle(style: textStyle, child: const Text(':')));
+          }
+        }
+
+        final backgroundColor = (dateTimePickerTheme.textualDatePickerBackgroundColor ?? theme.controlBackgroundColor)
+            .multiplyOpacity(enabled ? 1.0 : 0.5);
+
+        return ConstrainedBox(
           constraints: constraints,
           child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -463,34 +439,38 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
               Expanded(
                 child: Container(
                   clipBehavior: Clip.hardEdge,
-                  padding: const EdgeInsets.only(
-                      left: 1.0, right: 1.0, top: 2.0, bottom: 2.0),
+                  padding: const EdgeInsets.only(left: 1.0, right: 1.0, top: 2.0, bottom: 2.0),
                   decoration: BoxDecoration(
                     color: backgroundColor,
                     border: Border(
                       top: BorderSide(
-                          color: AppKitDynamicColor.resolve(
-                                  context,
-                                  isDark
-                                      ? AppKitColors.text.opaque.quaternary
-                                      : AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.65),
-                          width: 1),
+                        color: AppKitDynamicColor.resolve(
+                          context,
+                          isDark ? AppKitColors.text.opaque.quaternary : AppKitColors.text.opaque.tertiary,
+                        ).multiplyOpacity(0.65),
+                        width: 1,
+                      ),
                       left: BorderSide(
-                          color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.65),
-                          width: 1),
+                        color: AppKitDynamicColor.resolve(
+                          context,
+                          AppKitColors.text.opaque.tertiary,
+                        ).multiplyOpacity(0.65),
+                        width: 1,
+                      ),
                       right: BorderSide(
-                          color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.65),
-                          width: 1),
+                        color: AppKitDynamicColor.resolve(
+                          context,
+                          AppKitColors.text.opaque.tertiary,
+                        ).multiplyOpacity(0.65),
+                        width: 1,
+                      ),
                       bottom: BorderSide(
-                          color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.secondary)
-                              .multiplyOpacity(0.65),
-                          width: 1),
+                        color: AppKitDynamicColor.resolve(
+                          context,
+                          AppKitColors.text.opaque.secondary,
+                        ).multiplyOpacity(0.65),
+                        width: 1,
+                      ),
                     ),
                   ),
                   child: Focus(
@@ -499,10 +479,7 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                     canRequestFocus: widget.canRequestFocus,
                     onFocusChange: enabled ? _handleFocusChange : null,
                     onKeyEvent: enabled ? _handleKeyEvent : null,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: children,
-                    ),
+                    child: Row(mainAxisSize: MainAxisSize.max, children: children),
                   ),
                 ),
               ),
@@ -511,14 +488,15 @@ class _TextualDatePickerState extends State<TextualDatePicker> {
                 AppKitStepper(
                   value: 1.0,
                   onChanged: enabled && _focusNode?.hasFocus == true
-                      ? (value) =>
-                          _handleSegmentStep(_focusedIndex, value > 1.0)
+                      ? (value) => _handleSegmentStep(_focusedIndex, value > 1.0)
                       : null,
-                )
-              ]
+                ),
+              ],
             ],
-          ));
-    });
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -554,14 +532,12 @@ class _TextualPickerElement extends StatelessWidget {
     final Color textColor;
 
     if (backgroundColor != null) {
-      final blendedColor =
-          Color.lerp(theme.canvasColor, backgroundColor, backgroundColor.a)!;
+      final blendedColor = Color.lerp(theme.canvasColor, backgroundColor, backgroundColor.a)!;
       blendedColor.computeLuminance() > 0.5
           ? textColor = AppKitColors.text.opaque.primary.color
           : textColor = AppKitColors.text.opaque.primary.darkColor;
     } else {
-      textColor =
-          AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary);
+      textColor = AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary);
     }
 
     return GestureDetector(
@@ -570,10 +546,7 @@ class _TextualPickerElement extends StatelessWidget {
         width: segmentWidth + 4.0,
         padding: const EdgeInsets.only(top: 0.0, bottom: 1.0, right: 2.0),
         decoration: isFocused
-            ? BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(4.0),
-              )
+            ? BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(4.0))
             : const BoxDecoration(),
         child: DefaultTextStyle(
           style: textStyle.merge(TextStyle(color: textColor)),

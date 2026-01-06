@@ -119,15 +119,12 @@ class AppKitButton extends StatefulWidget {
     properties.add(EnumProperty<AppKitControlSize>('size', size));
     properties.add(DiagnosticsProperty<Widget>('child', child));
     properties.add(ObjectFlagProperty<VoidCallback>.has('onTap', onTap));
-    properties
-        .add(ObjectFlagProperty<VoidCallback>.has('onLongPress', onLongPress));
-    properties.add(ObjectFlagProperty<GestureLongPressEndCallback>.has(
-        'onLongPressEnd', onLongPressEnd));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onLongPress', onLongPress));
+    properties.add(ObjectFlagProperty<GestureLongPressEndCallback>.has('onLongPressEnd', onLongPressEnd));
     properties.add(ColorProperty('accentColor', accentColor));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
     properties.add(StringProperty('semanticLabel', semanticLabel));
-    properties
-        .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
+    properties.add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
     properties.add(DiagnosticsProperty<TextStyle>('textStyle', textStyle));
     properties.add(DoubleProperty('width', width));
   }
@@ -148,10 +145,7 @@ class _AppKitButtonState extends State<AppKitButton> {
     });
   }
 
-  bool get enabled =>
-      widget.onTap != null ||
-      widget.onLongPress != null ||
-      widget.onLongPressEnd != null;
+  bool get enabled => widget.onTap != null || widget.onLongPress != null || widget.onLongPressEnd != null;
 
   @override
   Widget build(BuildContext context) {
@@ -163,72 +157,68 @@ class _AppKitButtonState extends State<AppKitButton> {
       child: MouseRegion(
         onEnter: enabled ? (_) => _onMouseEnter() : null,
         onExit: enabled ? (_) => _onMouseExit() : null,
-        cursor: enabled
-            ? widget.mouseCursor ?? SystemMouseCursors.basic
-            : SystemMouseCursors.basic,
+        cursor: enabled ? widget.mouseCursor ?? SystemMouseCursors.basic : SystemMouseCursors.basic,
         hitTestBehavior: HitTestBehavior.opaque,
-        child: Consumer<MainWindowModel>(builder: (context, model, child) {
-          final isMainWindow = model.isMainWindow;
-          final theme = AppKitTheme.of(context);
-          final buttonTheme = AppKitButtonTheme.of(context);
-          if (widget.style == AppKitButtonStyle.inline) {
-            return _InlineButton(
-              hovered: _isHovered,
-              type: widget.type,
-              theme: theme,
-              buttonTheme: buttonTheme,
-              isMainWindow: isMainWindow,
-              size: widget.size,
-              onTap: widget.onTap,
-              onLongPress: widget.onLongPress,
-              onLongPressEnd: widget.onLongPressEnd,
-              accentColor: widget.accentColor,
-              padding: widget.padding,
-              textStyle: widget.textStyle,
-              width: widget.width,
-              child: widget.child,
-            );
-          } else if (widget.style == AppKitButtonStyle.flat) {
-            return _FlatButton(
-              hovered: _isHovered,
-              type: widget.type,
-              theme: theme,
-              buttonTheme: buttonTheme,
-              isMainWindow: isMainWindow,
-              size: widget.size,
-              onTap: widget.onTap,
-              onLongPress: widget.onLongPress,
-              onLongPressEnd: widget.onLongPressEnd,
-              accentColor: widget.accentColor,
-              padding: widget.padding,
-              textStyle: widget.textStyle,
-              width: widget.width,
-              child: widget.child,
-            );
-          } else if (widget.style == AppKitButtonStyle.push) {
-            return _PushButton(
-              hovered: _isHovered,
-              type: widget.type,
-              theme: theme,
-              buttonTheme: buttonTheme,
-              isMainWindow: isMainWindow,
-              size: widget.size,
-              onTap: widget.onTap,
-              onLongPress: widget.onLongPress,
-              onLongPressEnd: widget.onLongPressEnd,
-              accentColor: widget.accentColor,
-              padding: widget.padding,
-              textStyle: widget.textStyle,
-              width: widget.width,
-              child: widget.child,
-            );
-          }
-          return Container(
-            width: 100,
-            height: 24,
-            color: theme.activeColor,
-          );
-        }),
+        child: Consumer<MainWindowModel>(
+          builder: (context, model, child) {
+            final isMainWindow = model.isMainWindow;
+            final theme = AppKitTheme.of(context);
+            final buttonTheme = AppKitButtonTheme.of(context);
+            if (widget.style == AppKitButtonStyle.inline) {
+              return _InlineButton(
+                hovered: _isHovered,
+                type: widget.type,
+                theme: theme,
+                buttonTheme: buttonTheme,
+                isMainWindow: isMainWindow,
+                size: widget.size,
+                onTap: widget.onTap,
+                onLongPress: widget.onLongPress,
+                onLongPressEnd: widget.onLongPressEnd,
+                accentColor: widget.accentColor,
+                padding: widget.padding,
+                textStyle: widget.textStyle,
+                width: widget.width,
+                child: widget.child,
+              );
+            } else if (widget.style == AppKitButtonStyle.flat) {
+              return _FlatButton(
+                hovered: _isHovered,
+                type: widget.type,
+                theme: theme,
+                buttonTheme: buttonTheme,
+                isMainWindow: isMainWindow,
+                size: widget.size,
+                onTap: widget.onTap,
+                onLongPress: widget.onLongPress,
+                onLongPressEnd: widget.onLongPressEnd,
+                accentColor: widget.accentColor,
+                padding: widget.padding,
+                textStyle: widget.textStyle,
+                width: widget.width,
+                child: widget.child,
+              );
+            } else if (widget.style == AppKitButtonStyle.push) {
+              return _PushButton(
+                hovered: _isHovered,
+                type: widget.type,
+                theme: theme,
+                buttonTheme: buttonTheme,
+                isMainWindow: isMainWindow,
+                size: widget.size,
+                onTap: widget.onTap,
+                onLongPress: widget.onLongPress,
+                onLongPressEnd: widget.onLongPressEnd,
+                accentColor: widget.accentColor,
+                padding: widget.padding,
+                textStyle: widget.textStyle,
+                width: widget.width,
+                child: widget.child,
+              );
+            }
+            return Container(width: 100, height: 24, color: theme.activeColor);
+          },
+        ),
       ),
     );
   }
@@ -270,21 +260,17 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
 
   late FontWeight fontWeight = widget.size.getFontWeight(widget.style);
 
-  late EdgeInsetsGeometry padding =
-      widget.padding ?? widget.size.getPadding(widget.style);
+  late EdgeInsetsGeometry padding = widget.padding ?? widget.size.getPadding(widget.style);
 
   @override
   Widget buildButton(BuildContext context, BoxConstraints constraints) {
     Color textColor;
-    final controlBackgroundColor = Color.lerp(
-        backgroundColor, backgroundColorPressed, colorAnimation.value);
+    final controlBackgroundColor = Color.lerp(backgroundColor, backgroundColorPressed, colorAnimation.value);
 
     if (widget.type == AppKitButtonType.destructive) {
-      textColor =
-          widget.buttonTheme.push.destructiveColor ?? AppKitColors.appleRed;
+      textColor = widget.buttonTheme.push.destructiveColor ?? AppKitColors.appleRed;
     } else {
-      final blendedColor = Color.lerp(
-          widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
+      final blendedColor = Color.lerp(widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
       if (blendedColor.computeLuminance() > 0.5) {
         textColor = AppKitColors.text.opaque.primary.color;
       } else {
@@ -303,9 +289,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
     return Container(
       foregroundDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
-        gradient: widget.type == AppKitButtonType.primary &&
-                widget.isMainWindow &&
-                widget.enabled
+        gradient: widget.type == AppKitButtonType.primary && widget.isMainWindow && widget.enabled
             ? LinearGradient(
                 colors: [
                   Colors.white.withValues(alpha: isDark ? 0.05 : 0.17),
@@ -320,28 +304,23 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
-          border: widget.type != AppKitButtonType.primary ||
-                  !widget.isMainWindow ||
-                  !widget.enabled ||
-                  isDark
+          border: widget.type != AppKitButtonType.primary || !widget.isMainWindow || !widget.enabled || isDark
               ? GradientBoxBorder(
                   gradient: LinearGradient(
                     colors: isDark
                         ? [
+                            AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary).multiplyOpacity(0.5),
                             AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.primary)
-                                .multiplyOpacity(0.5),
-                            AppKitDynamicColor.resolve(context,
-                                    AppKitColors.text.opaque.quaternary)
-                                .multiplyOpacity(0.0)
+                              context,
+                              AppKitColors.text.opaque.quaternary,
+                            ).multiplyOpacity(0.0),
                           ]
                         : [
+                            AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.tertiary).multiplyOpacity(0.5),
                             AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.tertiary)
-                                .multiplyOpacity(0.5),
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.secondary)
-                                .multiplyOpacity(0.5)
+                              context,
+                              AppKitColors.text.opaque.secondary,
+                            ).multiplyOpacity(0.5),
                           ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -352,10 +331,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
               : null,
           color: controlBackgroundColor,
           boxShadow: [
-            if (widget.type == AppKitButtonType.primary &&
-                widget.isMainWindow &&
-                widget.enabled &&
-                !isDark) ...[
+            if (widget.type == AppKitButtonType.primary && widget.isMainWindow && widget.enabled && !isDark) ...[
               BoxShadow(
                 color: backgroundColor.withValues(alpha: 0.5),
                 blurRadius: 0.5,
@@ -364,8 +340,7 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
               ),
             ] else ...[
               BoxShadow(
-                color: AppKitColors.shadowColor.color
-                    .withValues(alpha: isDark ? 0.75 : 0.15),
+                color: AppKitColors.shadowColor.color.withValues(alpha: isDark ? 0.75 : 0.15),
                 blurRadius: 0.5,
                 spreadRadius: 0,
                 offset: const Offset(0, 0.5),
@@ -401,26 +376,19 @@ class _PushButtonState extends _ButtonBaseState<_PushButton> {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
-        backgroundColor = widget.accentColor ??
-            themeData.accentColor ??
-            widget.theme.activeColor;
+        backgroundColor = widget.accentColor ?? themeData.accentColor ?? widget.theme.activeColor;
       } else {
-        backgroundColor = widget.accentColor ??
-            themeData.secondaryColor ??
-            widget.theme.controlBackgroundColor;
+        backgroundColor = widget.accentColor ?? themeData.secondaryColor ?? widget.theme.controlBackgroundColor;
       }
     }
 
-    final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
+    final blendedColor = Color.lerp(widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {
-      backgroundColorPressed =
-          Color.lerp(backgroundColor, Colors.black, isDark ? 0.15 : 0.08)!;
+      backgroundColorPressed = Color.lerp(backgroundColor, Colors.black, isDark ? 0.15 : 0.08)!;
     } else {
-      backgroundColorPressed =
-          Color.lerp(backgroundColor, Colors.white, isDark ? 0.15 : 0.08)!;
+      backgroundColorPressed = Color.lerp(backgroundColor, Colors.white, isDark ? 0.15 : 0.08)!;
     }
   }
 }
@@ -461,14 +429,11 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
   @override
   Widget buildButton(BuildContext context, BoxConstraints constraints) {
     Color textColor;
-    final controlBackgroundColor = Color.lerp(
-        backgroundColor, backgroundColorPressed, colorAnimation.value);
+    final controlBackgroundColor = Color.lerp(backgroundColor, backgroundColorPressed, colorAnimation.value);
     if (widget.type == AppKitButtonType.destructive) {
-      textColor =
-          widget.buttonTheme.flat.destructiveColor ?? AppKitColors.systemRed;
+      textColor = widget.buttonTheme.flat.destructiveColor ?? AppKitColors.systemRed;
     } else {
-      final blendedColor = Color.lerp(
-          widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
+      final blendedColor = Color.lerp(widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
       if (blendedColor.computeLuminance() > 0.5) {
         textColor = AppKitColors.textColor.color;
       } else {
@@ -484,8 +449,7 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
+        borderRadius: BorderRadius.circular(widget.size.getBorderRadius(widget.style)),
         color: controlBackgroundColor,
       ),
       child: SizedBox(
@@ -514,18 +478,13 @@ class _FlatButtonState extends _ButtonBaseState<_FlatButton> {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
-        backgroundColor = widget.accentColor ??
-            themeData.accentColor ??
-            widget.theme.activeColor;
+        backgroundColor = widget.accentColor ?? themeData.accentColor ?? widget.theme.activeColor;
       } else {
-        backgroundColor = widget.accentColor ??
-            themeData.secondaryColor ??
-            widget.theme.controlBackgroundColor;
+        backgroundColor = widget.accentColor ?? themeData.secondaryColor ?? widget.theme.controlBackgroundColor;
       }
     }
 
-    final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
+    final blendedColor = Color.lerp(widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {
@@ -578,16 +537,13 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
     Color textColor;
     final bool isDown = controller.isAnimating || controller.value > 0.0;
     final controlBackgroundColor = isDown || !isHovered
-        ? Color.lerp(isHovered ? backgroundColorHovered : backgroundColor,
-            backgroundColorPressed, colorAnimation.value)
+        ? Color.lerp(isHovered ? backgroundColorHovered : backgroundColor, backgroundColorPressed, colorAnimation.value)
         : backgroundColorHovered;
 
     if (widget.type == AppKitButtonType.destructive) {
-      textColor =
-          widget.buttonTheme.inline.destructiveColor ?? AppKitColors.systemRed;
+      textColor = widget.buttonTheme.inline.destructiveColor ?? AppKitColors.systemRed;
     } else {
-      final blendedColor = Color.lerp(
-          widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
+      final blendedColor = Color.lerp(widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
       if (blendedColor.computeLuminance() > 0.5) {
         textColor = AppKitColors.textColor.color;
       } else {
@@ -632,18 +588,13 @@ class _InlineButtonState extends _ButtonBaseState<_InlineButton> {
       backgroundColor = themeData.backgroundColorDisabled;
     } else {
       if (widget.type == AppKitButtonType.primary && widget.isMainWindow) {
-        backgroundColor = widget.accentColor ??
-            themeData.accentColor ??
-            widget.theme.activeColor;
+        backgroundColor = widget.accentColor ?? themeData.accentColor ?? widget.theme.activeColor;
       } else {
-        backgroundColor = widget.accentColor ??
-            themeData.secondaryColor ??
-            widget.theme.controlBackgroundColor;
+        backgroundColor = widget.accentColor ?? themeData.secondaryColor ?? widget.theme.controlBackgroundColor;
       }
     }
 
-    final blendedColor = Color.lerp(
-        widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
+    final blendedColor = Color.lerp(widget.theme.canvasColor, backgroundColor, backgroundColor.a)!;
     final blendedColorLuminance = blendedColor.computeLuminance();
 
     if (blendedColorLuminance > 0.15) {
@@ -694,16 +645,14 @@ abstract class _ButtonBase extends StatefulWidget {
     this.hovered = false,
   });
 
-  bool get enabled =>
-      onTap != null || onLongPress != null || onLongPressEnd != null;
+  bool get enabled => onTap != null || onLongPress != null || onLongPressEnd != null;
 
   bool get tapEnabled => onTap != null;
 
   bool get longPressEnabled => onLongPress != null || onLongPressEnd != null;
 }
 
-abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
-    with SingleTickerProviderStateMixin {
+abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> colorAnimation;
 
@@ -733,15 +682,9 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
     super.initState();
     computeColors();
 
-    controller = AnimationController(
-      vsync: this,
-      duration: _kAnimationDuration,
-    );
+    controller = AnimationController(vsync: this, duration: _kAnimationDuration);
 
-    colorAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(controller)
+    colorAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(controller)
       ..addListener(() {
         setState(() {});
       });
@@ -819,23 +762,19 @@ abstract class _ButtonBaseState<T extends _ButtonBase> extends State<T>
       child: ConstrainedBox(
         constraints: constraints,
         child: GestureDetector(
-          onLongPressStart:
-              widget.longPressEnabled ? _handleLongPressStart : null,
-          onLongPressDown: !widget.tapEnabled && widget.longPressEnabled
-              ? _handleLongPressDown
-              : null,
-          onLongPressCancel: !widget.tapEnabled && widget.longPressEnabled
-              ? _handleLongPressCancel
-              : null,
+          onLongPressStart: widget.longPressEnabled ? _handleLongPressStart : null,
+          onLongPressDown: !widget.tapEnabled && widget.longPressEnabled ? _handleLongPressDown : null,
+          onLongPressCancel: !widget.tapEnabled && widget.longPressEnabled ? _handleLongPressCancel : null,
           onLongPress: widget.onLongPress != null ? _handleLongPress : null,
-          onLongPressEnd:
-              widget.onLongPressEnd != null ? _handleLongPressEnd : null,
+          onLongPressEnd: widget.onLongPressEnd != null ? _handleLongPressEnd : null,
           onTapDown: widget.tapEnabled ? _handleTapDown : null,
           onTapUp: widget.tapEnabled ? _handleTapUp : null,
           onTapCancel: widget.tapEnabled ? _handleTapCancel : null,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return buildButton(context, constraints);
-          }),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return buildButton(context, constraints);
+            },
+          ),
         ),
       ),
     );
@@ -890,45 +829,37 @@ extension _AppKitControlSizeX on AppKitControlSize {
       case AppKitControlSize.mini:
         switch (style) {
           case AppKitButtonStyle.inline:
-            return const BoxConstraints(
-                minWidth: 26, maxHeight: 13, minHeight: 13);
+            return const BoxConstraints(minWidth: 26, maxHeight: 13, minHeight: 13);
           case AppKitButtonStyle.flat:
           case AppKitButtonStyle.push:
-            return const BoxConstraints(
-                minWidth: 26, maxHeight: 12, minHeight: 12);
+            return const BoxConstraints(minWidth: 26, maxHeight: 12, minHeight: 12);
         }
 
       case AppKitControlSize.small:
         switch (style) {
           case AppKitButtonStyle.inline:
-            return const BoxConstraints(
-                minWidth: 42, maxHeight: 16, minHeight: 16);
+            return const BoxConstraints(minWidth: 42, maxHeight: 16, minHeight: 16);
           case AppKitButtonStyle.flat:
           case AppKitButtonStyle.push:
-            return const BoxConstraints(
-                minWidth: 42, maxHeight: 14, minHeight: 14);
+            return const BoxConstraints(minWidth: 42, maxHeight: 14, minHeight: 14);
         }
 
       case AppKitControlSize.regular:
         switch (style) {
           case AppKitButtonStyle.inline:
-            return const BoxConstraints(
-                minWidth: 48, maxHeight: 24, minHeight: 24);
+            return const BoxConstraints(minWidth: 48, maxHeight: 24, minHeight: 24);
           case AppKitButtonStyle.flat:
           case AppKitButtonStyle.push:
-            return const BoxConstraints(
-                minWidth: 48, maxHeight: 22, minHeight: 22);
+            return const BoxConstraints(minWidth: 48, maxHeight: 22, minHeight: 22);
         }
 
       case AppKitControlSize.large:
         switch (style) {
           case AppKitButtonStyle.inline:
-            return const BoxConstraints(
-                minWidth: 54, maxHeight: 29, minHeight: 29);
+            return const BoxConstraints(minWidth: 54, maxHeight: 29, minHeight: 29);
           case AppKitButtonStyle.flat:
           case AppKitButtonStyle.push:
-            return const BoxConstraints(
-                minWidth: 54, maxHeight: 26, minHeight: 26);
+            return const BoxConstraints(minWidth: 54, maxHeight: 26, minHeight: 26);
         }
     }
   }
@@ -1036,14 +967,6 @@ extension _AppKitControlSizeX on AppKitControlSize {
   }
 }
 
-enum AppKitButtonStyle {
-  push,
-  inline,
-  flat,
-}
+enum AppKitButtonStyle { push, inline, flat }
 
-enum AppKitButtonType {
-  primary,
-  secondary,
-  destructive,
-}
+enum AppKitButtonType { primary, secondary, destructive }

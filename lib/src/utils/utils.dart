@@ -12,8 +12,7 @@ bool debugCheckHasAppKitTheme(BuildContext context, [bool check = true]) {
           'include one, or use a widget that contains MacosTheme itself, '
           'such as MacosApp',
         ),
-        ...context.describeMissingAncestor(
-            expectedAncestorType: AppKitThemeData),
+        ...context.describeMissingAncestor(expectedAncestorType: AppKitThemeData),
       ]);
     }
     return true;
@@ -42,12 +41,7 @@ extension RenderBoxExtensions on RenderBox? {
 
 extension RectExtension on Rect {
   Rect round() {
-    return Rect.fromLTWH(
-      left.roundToDouble(),
-      top.roundToDouble(),
-      width.roundToDouble(),
-      height.roundToDouble(),
-    );
+    return Rect.fromLTWH(left.roundToDouble(), top.roundToDouble(), width.roundToDouble(), height.roundToDouble());
   }
 }
 
@@ -72,9 +66,7 @@ extension ColorX on Color {
 
   Color multiplyLuminance(double factor) {
     final hslColor = HSLColor.fromColor(this);
-    return (hslColor
-            .withLightness((hslColor.lightness * factor).clamp(0.0, 1.0)))
-        .toColor();
+    return (hslColor.withLightness((hslColor.lightness * factor).clamp(0.0, 1.0))).toColor();
   }
 
   Color withLuminance(double luminance) {
@@ -107,12 +99,7 @@ extension ColorX on Color {
 
 extension RectX on Rect {
   Rect copyWith({double? left, double? top, double? right, double? bottom}) {
-    return Rect.fromLTRB(
-      left ?? this.left,
-      top ?? this.top,
-      right ?? this.right,
-      bottom ?? this.bottom,
-    );
+    return Rect.fromLTRB(left ?? this.left, top ?? this.top, right ?? this.right, bottom ?? this.bottom);
   }
 
   /// Returns a new rectangle with horizontal edges moved outwards by the given delta.
@@ -197,8 +184,7 @@ extension DateTimeX on DateTime {
   bool isBetween(DateTime start, DateTime end, bool inclusive) {
     if (inclusive) {
       // start <= this <= end
-      return (isAfter(start) || isSameDay(start)) &&
-          (isBefore(end) || isSameDay(end));
+      return (isAfter(start) || isSameDay(start)) && (isBefore(end) || isSameDay(end));
     } else {
       // start < this < end
       return isAfter(start) && isBefore(end);
@@ -224,15 +210,11 @@ extension DateTimeX on DateTime {
 }
 
 extension EitherX<A, B> on Either<A, B> {
-  A getLeft() => fold(
-      (A value) => value, (B value) => throw UnsupportedError('Either.right'));
-  B getRight() => fold(
-      (A value) => throw UnsupportedError('Either.left'), (B value) => value);
+  A getLeft() => fold((A value) => value, (B value) => throw UnsupportedError('Either.right'));
+  B getRight() => fold((A value) => throw UnsupportedError('Either.left'), (B value) => value);
 
-  A get left => fold(
-      (A value) => value, (B value) => throw UnsupportedError('Either.right'));
-  B get right => fold(
-      (A value) => throw UnsupportedError('Either.left'), (B value) => value);
+  A get left => fold((A value) => value, (B value) => throw UnsupportedError('Either.right'));
+  B get right => fold((A value) => throw UnsupportedError('Either.left'), (B value) => value);
 }
 
 class DateTimeRange extends Equatable {
@@ -246,15 +228,11 @@ class DateTimeRange extends Equatable {
 
   DateTime get current => direction == 1 ? end : start;
 
-  DateTimeRange(
-      {required DateTime start, required DateTime end, this.direction = 1})
-      : start = start.isBefore(end) ? start : end,
-        end = start.isBefore(end) ? end : start;
+  DateTimeRange({required DateTime start, required DateTime end, this.direction = 1})
+    : start = start.isBefore(end) ? start : end,
+      end = start.isBefore(end) ? end : start;
 
-  const DateTimeRange.single(DateTime date)
-      : start = date,
-        end = date,
-        direction = 1;
+  const DateTimeRange.single(DateTime date) : start = date, end = date, direction = 1;
 
   bool contains(DateTime date) {
     return date.isBetween(start, end, true);
@@ -279,11 +257,7 @@ class DateTimeRange extends Equatable {
   Duration get duration => end.difference(start);
 
   DateTimeRange copyWith({DateTime? start, DateTime? end, int? direction}) {
-    return DateTimeRange(
-      start: start ?? this.start,
-      end: end ?? this.end,
-      direction: direction ?? this.direction,
-    );
+    return DateTimeRange(start: start ?? this.start, end: end ?? this.end, direction: direction ?? this.direction);
   }
 
   @override
@@ -291,9 +265,7 @@ class DateTimeRange extends Equatable {
 }
 
 Color textLuminance(Color backgroundColor) {
-  return backgroundColor.computeLuminance() >= 0.5
-      ? CupertinoColors.black
-      : CupertinoColors.white;
+  return backgroundColor.computeLuminance() >= 0.5 ? CupertinoColors.black : CupertinoColors.white;
 }
 
 bool hasSameFocusNodeId(String line1, String line2) {
@@ -313,18 +285,12 @@ bool hasSameFocusNodeId(String line1, String line2) {
 }
 
 Rect getScreenRect(BuildContext context) {
-  final size = MediaQueryData.fromView(
-          WidgetsBinding.instance.platformDispatcher.views.first)
-      .size;
+  final size = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size;
   return Offset.zero & size;
 }
 
-Color luminance(Color backgroundColor,
-    {required CupertinoDynamicColor textColor}) {
-  return backgroundColor.computeLuminance() >= 0.5
-      ? textColor.darkColor
-      : textColor.color;
+Color luminance(Color backgroundColor, {required CupertinoDynamicColor textColor}) {
+  return backgroundColor.computeLuminance() >= 0.5 ? textColor.darkColor : textColor.color;
 }
 
-int lerpInt(int begin, int end, double t) =>
-    (begin + (end - begin) * t).round();
+int lerpInt(int begin, int end, double t) => (begin + (end - begin) * t).round();

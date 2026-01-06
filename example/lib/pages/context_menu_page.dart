@@ -57,37 +57,25 @@ class _ContextMenuPageState extends State<ContextMenuPage> {
                     ),
                   ),
                   const AppKitContextMenuDivider(),
-                  const AppKitContextMenuItem(
-                      child: Text('Select All'), value: 'select_all'),
+                  const AppKitContextMenuItem(child: Text('Select All'), value: 'select_all'),
                   const AppKitContextMenuDivider(),
-                  AppKitContextMenuItem.submenu('Sub menu long 1',
-                      items: const [
-                        AppKitContextMenuItem(
-                            child: Text('Sub menu 1'),
-                            value: 'sub_menu_1',
-                            itemState: AppKitItemState.on),
-                        AppKitContextMenuItem(
-                            child: Text('Sub menu 2'), value: 'sub_menu_2'),
-                        AppKitContextMenuItem(
-                            child: Text('Sub menu 3'), value: 'sub_menu_3'),
-                      ]),
+                  AppKitContextMenuItem.submenu('Sub menu long 1', items: const [
+                    AppKitContextMenuItem(
+                        child: Text('Sub menu 1'), value: 'sub_menu_1', itemState: AppKitItemState.on),
+                    AppKitContextMenuItem(child: Text('Sub menu 2'), value: 'sub_menu_2'),
+                    AppKitContextMenuItem(child: Text('Sub menu 3'), value: 'sub_menu_3'),
+                  ]),
                   AppKitContextMenuItem.submenu('Sub menu 2', items: const [
-                    AppKitContextMenuItem(
-                        child: Text('Sub menu 2.1'), value: 'sub_menu2_1'),
-                    AppKitContextMenuItem(
-                        child: Text('Sub menu 2.2'), value: 'sub_menu2_2'),
-                    AppKitContextMenuItem(
-                        child: Text('Sub menu 2.3'), value: 'sub_menu2_3'),
+                    AppKitContextMenuItem(child: Text('Sub menu 2.1'), value: 'sub_menu2_1'),
+                    AppKitContextMenuItem(child: Text('Sub menu 2.2'), value: 'sub_menu2_2'),
+                    AppKitContextMenuItem(child: Text('Sub menu 2.3'), value: 'sub_menu2_3'),
                   ]),
                 ],
                 maxHeight: 300,
                 minWidth: 100,
               ),
               child: const SizedBox.expand(
-                child: Center(
-                    child: AppKitLabel(
-                        text: Text(
-                            'Rich click anywhere to open the context menu'))),
+                child: Center(child: AppKitLabel(text: Text('Rich click anywhere to open the context menu'))),
               ),
             );
           },

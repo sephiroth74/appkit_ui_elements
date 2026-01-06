@@ -69,9 +69,7 @@ class AppKitWindowUtilsConfig {
   Future<void> apply() async {
     WidgetsFlutterBinding.ensureInitialized();
     await WindowManipulator.initialize(enableWindowDelegate: true);
-    await WindowManipulator.setMaterial(
-      NSVisualEffectViewMaterial.windowBackground,
-    );
+    await WindowManipulator.setMaterial(NSVisualEffectViewMaterial.windowBackground);
     if (enableFullSizeContentView) {
       await WindowManipulator.enableFullSizeContentView();
     }
@@ -83,9 +81,7 @@ class AppKitWindowUtilsConfig {
     }
     await WindowManipulator.addToolbar();
 
-    await WindowManipulator.setToolbarStyle(
-      toolbarStyle: toolbarStyle,
-    );
+    await WindowManipulator.setToolbarStyle(toolbarStyle: toolbarStyle);
 
     if (removeMenubarInFullScreenMode) {
       final delegate = _FlutterWindowDelegate();

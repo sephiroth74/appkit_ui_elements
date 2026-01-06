@@ -42,14 +42,12 @@ class AppKitMacosApp extends c.StatefulWidget {
     super.key,
     this.navigatorKey,
     this.home,
-    Map<String, Widget Function(BuildContext)> this.routes =
-        const <String, WidgetBuilder>{},
+    Map<String, Widget Function(BuildContext)> this.routes = const <String, WidgetBuilder>{},
     this.initialRoute,
     this.onGenerateRoute,
     this.onGenerateInitialRoutes,
     this.onUnknownRoute,
-    List<NavigatorObserver> this.navigatorObservers =
-        const <NavigatorObserver>[],
+    List<NavigatorObserver> this.navigatorObservers = const <NavigatorObserver>[],
     this.builder,
     this.title = '',
     this.onGenerateTitle,
@@ -71,11 +69,11 @@ class AppKitMacosApp extends c.StatefulWidget {
     this.themeMode,
     this.theme,
     this.darkTheme,
-  })  : routeInformationProvider = null,
-        routeInformationParser = null,
-        routerDelegate = null,
-        backButtonDispatcher = null,
-        routerConfig = null;
+  }) : routeInformationProvider = null,
+       routeInformationParser = null,
+       routerDelegate = null,
+       backButtonDispatcher = null,
+       routerConfig = null;
 
   /// Creates a [AppKitMacosApp] that uses the [Router] instead of a [Navigator].
   AppKitMacosApp.router({
@@ -106,16 +104,16 @@ class AppKitMacosApp extends c.StatefulWidget {
     this.themeMode,
     this.theme,
     this.darkTheme,
-  })  : assert(routerDelegate != null || routerConfig != null),
-        assert(supportedLocales.isNotEmpty),
-        navigatorObservers = null,
-        navigatorKey = null,
-        onGenerateRoute = null,
-        home = null,
-        onGenerateInitialRoutes = null,
-        onUnknownRoute = null,
-        routes = null,
-        initialRoute = null;
+  }) : assert(routerDelegate != null || routerConfig != null),
+       assert(supportedLocales.isNotEmpty),
+       navigatorObservers = null,
+       navigatorKey = null,
+       onGenerateRoute = null,
+       home = null,
+       onGenerateInitialRoutes = null,
+       onUnknownRoute = null,
+       routes = null,
+       initialRoute = null;
 
   /// {@macro flutter.widgets.widgetsApp.navigatorKey}
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -306,36 +304,26 @@ class AppKitMacosApp extends c.StatefulWidget {
 }
 
 class _AppKitMacosAppState extends State<AppKitMacosApp> {
-  bool get _usesRouter =>
-      widget.routerDelegate != null || widget.routerConfig != null;
+  bool get _usesRouter => widget.routerDelegate != null || widget.routerConfig != null;
 
   Widget _macosBuilder(BuildContext context, Widget? child) {
-    return MainWindowProviderWidgetBuilder(builder: (context, isMainWindow) {
-      return StreamBuilder(
+    return MainWindowProviderWidgetBuilder(
+      builder: (context, isMainWindow) {
+        return StreamBuilder(
           stream: AppKitAccentColorListener.instance.onChanged,
           builder: (context, _) {
             final mode = widget.themeMode ?? ThemeMode.system;
             final platformBrightness = MediaQuery.platformBrightnessOf(context);
-            final useDarkTheme = mode == ThemeMode.dark ||
-                (mode == ThemeMode.system &&
-                    platformBrightness == Brightness.dark);
+            final useDarkTheme =
+                mode == ThemeMode.dark || (mode == ThemeMode.system && platformBrightness == Brightness.dark);
 
-            final accentColor =
-                AppKitAccentColorListener.instance.currentAccentColor;
+            final accentColor = AppKitAccentColorListener.instance.currentAccentColor;
 
             late AppKitThemeData theme;
             if (useDarkTheme) {
-              theme = widget.darkTheme ??
-                  AppKitThemeData.dark(
-                    accentColor: accentColor,
-                    isMainWindow: isMainWindow,
-                  );
+              theme = widget.darkTheme ?? AppKitThemeData.dark(accentColor: accentColor, isMainWindow: isMainWindow);
             } else {
-              theme = widget.theme ??
-                  AppKitThemeData.light(
-                    accentColor: accentColor,
-                    isMainWindow: isMainWindow,
-                  );
+              theme = widget.theme ?? AppKitThemeData.light(accentColor: accentColor, isMainWindow: isMainWindow);
             }
 
             return AppKitTheme(
@@ -350,20 +338,17 @@ class _AppKitMacosAppState extends State<AppKitMacosApp> {
                           // An Overlay is used here because MacosTooltip needs an
                           // Overlay as an ancestor in the widget tree.
                           return Overlay(
-                            initialEntries: [
-                              OverlayEntry(
-                                builder: (context) =>
-                                    widget.builder!(context, child),
-                              ),
-                            ],
+                            initialEntries: [OverlayEntry(builder: (context) => widget.builder!(context, child))],
                           );
                         },
                       )
                     : child ?? const SizedBox.shrink(),
               ),
             );
-          });
-    });
+          },
+        );
+      },
+    );
   }
 
   Widget _buildMacosApp(BuildContext context) {
@@ -473,10 +458,7 @@ class MacosScrollBehavior extends ScrollBehavior {
           case TargetPlatform.linux:
           case TargetPlatform.macOS:
           case TargetPlatform.windows:
-            return AppKitScrollbar(
-              controller: details.controller,
-              child: child,
-            );
+            return AppKitScrollbar(controller: details.controller, child: child);
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
           case TargetPlatform.iOS:

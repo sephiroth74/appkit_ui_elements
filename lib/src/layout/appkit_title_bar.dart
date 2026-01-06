@@ -71,9 +71,7 @@ class AppKitTitleBar extends StatelessWidget {
         style: theme.typography.headline.copyWith(
           fontSize: 10,
           fontWeight: FontWeight.w600,
-          color: theme.brightness.isDark
-              ? const Color(0xFFEAEAEA)
-              : const Color(0xFF4D4D4D),
+          color: theme.brightness.isDark ? const Color(0xFFEAEAEA) : const Color(0xFF4D4D4D),
         ),
         child: _title,
       );
@@ -82,37 +80,26 @@ class AppKitTitleBar extends StatelessWidget {
     final isMacOS = defaultTargetPlatform == TargetPlatform.macOS;
 
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        padding: EdgeInsets.only(
-          left: !kIsWeb && isMacOS ? 70 : 0,
-        ),
-      ),
+      data: MediaQuery.of(context).copyWith(padding: EdgeInsets.only(left: !kIsWeb && isMacOS ? 70 : 0)),
       child: ClipRect(
         child: BackdropFilter(
-          filter: decoration?.color?.a == 1.0
-              ? ImageFilter.blur()
-              : ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          filter: decoration?.color?.a == 1.0 ? ImageFilter.blur() : ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: Container(
             alignment: alignment,
             padding: padding,
-            decoration: BoxDecoration(
-              color: theme.canvasColor,
-              border: Border(
-                bottom: BorderSide(color: dividerColor ?? theme.dividerColor),
-              ),
-            ).copyWith(
-              color: decoration?.color,
-              image: decoration?.image,
-              border: decoration?.border,
-              borderRadius: decoration?.borderRadius,
-              boxShadow: decoration?.boxShadow,
-              gradient: decoration?.gradient,
-            ),
-            child: NavigationToolbar(
-              middle: _title,
-              centerMiddle: centerTitle,
-              middleSpacing: 8,
-            ),
+            decoration:
+                BoxDecoration(
+                  color: theme.canvasColor,
+                  border: Border(bottom: BorderSide(color: dividerColor ?? theme.dividerColor)),
+                ).copyWith(
+                  color: decoration?.color,
+                  image: decoration?.image,
+                  border: decoration?.border,
+                  borderRadius: decoration?.borderRadius,
+                  boxShadow: decoration?.boxShadow,
+                  gradient: decoration?.gradient,
+                ),
+            child: NavigationToolbar(middle: _title, centerMiddle: centerTitle, middleSpacing: 8),
           ),
         ),
       ),

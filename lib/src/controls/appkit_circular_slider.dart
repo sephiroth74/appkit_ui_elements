@@ -92,18 +92,17 @@ class AppKitCircularSlider extends StatefulWidget {
     this.size = _kSize,
     this.color,
     this.onChanged,
-  })  : assert(value >= min && value <= max),
-        assert(tickMarks > 0 ? tickMarks > 1 : true),
-        assert(min < max),
-        assert(size > 0);
+  }) : assert(value >= min && value <= max),
+       assert(tickMarks > 0 ? tickMarks > 1 : true),
+       assert(min < max),
+       assert(size > 0);
 
   @override
   State<AppKitCircularSlider> createState() => _AppKitCircularSliderState();
 }
 
 /// The state for an [AppKitCircularSlider] widget.
-class _AppKitCircularSliderState extends State<AppKitCircularSlider>
-    with SingleTickerProviderStateMixin {
+class _AppKitCircularSliderState extends State<AppKitCircularSlider> with SingleTickerProviderStateMixin {
   bool _handleDown = false;
 
   bool get continuous => widget.continuous;
@@ -140,11 +139,11 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
   void initState() {
     super.initState();
     positionController = AnimationController(
-        duration: const Duration(milliseconds: _kAnimationDuration),
-        vsync: this);
+      duration: const Duration(milliseconds: _kAnimationDuration),
+      vsync: this,
+    );
 
-    positionCurvedAnimation = CurvedAnimation(
-        parent: positionController, curve: Curves.easeInOutSine);
+    positionCurvedAnimation = CurvedAnimation(parent: positionController, curve: Curves.easeInOutSine);
 
     positionTween = Tween<double>(begin: value, end: value);
     animation = positionTween.animate(positionCurvedAnimation);
@@ -278,104 +277,103 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
       child: SizedBox(
         width: size,
         height: size,
-        child: Consumer<MainWindowModel>(builder: (context, model, _) {
-          final isMainWindow = model.isMainWindow;
-          final controlBackgroundColor =
-              AppKitDynamicColor.resolve(context, AppKitColors.controlColor);
-          final sliderTheme = AppKitCircularSliderTheme.of(context);
-          final thumbPosition = _thumbPosition(animationValue);
-          final enabledFactor = enabled ? 1.0 : 0.5;
-          var thumbColor = isMainWindow
-              ? widget.color ?? sliderTheme.thumbColor
-              : sliderTheme.thumbColorUnfocused;
-          var backgroundColor = enabled
-              ? sliderTheme.backgroundColor
-              : controlBackgroundColor.withValues(alpha: 0.5);
-          final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
+        child: Consumer<MainWindowModel>(
+          builder: (context, model, _) {
+            final isMainWindow = model.isMainWindow;
+            final controlBackgroundColor = AppKitDynamicColor.resolve(context, AppKitColors.controlColor);
+            final sliderTheme = AppKitCircularSliderTheme.of(context);
+            final thumbPosition = _thumbPosition(animationValue);
+            final enabledFactor = enabled ? 1.0 : 0.5;
+            var thumbColor = isMainWindow ? widget.color ?? sliderTheme.thumbColor : sliderTheme.thumbColorUnfocused;
+            var backgroundColor = enabled ? sliderTheme.backgroundColor : controlBackgroundColor.withValues(alpha: 0.5);
+            final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
 
-          if (isMainWindow) {
-            thumbColor = thumbColor.multiplyOpacity(enabledFactor);
-          }
+            if (isMainWindow) {
+              thumbColor = thumbColor.multiplyOpacity(enabledFactor);
+            }
 
-          return GestureDetector(
-            dragStartBehavior: DragStartBehavior.down,
-            behavior: HitTestBehavior.opaque,
-            onPanDown: enabled ? (details) => _onPanDown(details) : null,
-            onPanUpdate: enabled ? (details) => _onPanUpdate(details) : null,
-            onPanEnd: enabled ? (details) => _onPanEnd(details) : null,
-            onPanCancel: enabled ? () => _onPanCancel() : null,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: backgroundColor,
-                border: GradientBoxBorder(
-                  gradient: LinearGradient(
-                    colors: isDark
-                        ? [
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.primary)
-                                .multiplyOpacity(0.5),
-                            AppKitDynamicColor.resolve(context,
-                                    AppKitColors.text.opaque.quaternary)
-                                .multiplyOpacity(0.0)
-                          ]
-                        : [
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.tertiary)
-                                .multiplyOpacity(0.5),
-                            AppKitDynamicColor.resolve(
-                                    context, AppKitColors.text.opaque.secondary)
-                                .multiplyOpacity(0.5)
-                          ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+            return GestureDetector(
+              dragStartBehavior: DragStartBehavior.down,
+              behavior: HitTestBehavior.opaque,
+              onPanDown: enabled ? (details) => _onPanDown(details) : null,
+              onPanUpdate: enabled ? (details) => _onPanUpdate(details) : null,
+              onPanEnd: enabled ? (details) => _onPanEnd(details) : null,
+              onPanCancel: enabled ? () => _onPanCancel() : null,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: backgroundColor,
+                  border: GradientBoxBorder(
+                    gradient: LinearGradient(
+                      colors: isDark
+                          ? [
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.primary,
+                              ).multiplyOpacity(0.5),
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.quaternary,
+                              ).multiplyOpacity(0.0),
+                            ]
+                          : [
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.tertiary,
+                              ).multiplyOpacity(0.5),
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.secondary,
+                              ).multiplyOpacity(0.5),
+                            ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: isDark ? const [0.0, 0.5] : const [0.0, 1.0],
+                    ),
+                    width: 0.5,
                   ),
-                  width: 0.5,
-                ),
-                gradient: enabled && isDark
-                    ? LinearGradient(
-                        colors: [
-                          Colors.white.withValues(alpha: 0.05),
-                          backgroundColor,
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: const [0.0, 0.5],
-                      )
-                    : null,
-                boxShadow: const [
-                  BoxShadow(
+                  gradient: enabled && isDark
+                      ? LinearGradient(
+                          colors: [Colors.white.withValues(alpha: 0.05), backgroundColor],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [0.0, 0.5],
+                        )
+                      : null,
+                  boxShadow: const [
+                    BoxShadow(
                       color: Color(0x66000000),
                       offset: Offset(0.0, 1.0),
                       blurRadius: 0.5,
                       spreadRadius: 0.0,
-                      blurStyle: BlurStyle.outer),
-                  BoxShadow(
+                      blurStyle: BlurStyle.outer,
+                    ),
+                    BoxShadow(
                       color: Color(0x1a000000),
                       offset: Offset(0.0, 0.0),
                       blurRadius: 0.0,
                       spreadRadius: 0.5,
-                      blurStyle: BlurStyle.outer),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: thumbPosition.dx,
-                    top: thumbPosition.dy,
-                    child: Container(
-                      width: thumbSize,
-                      height: thumbSize,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: thumbColor),
+                      blurStyle: BlurStyle.outer,
                     ),
-                  )
-                ],
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: thumbPosition.dx,
+                      top: thumbPosition.dy,
+                      child: Container(
+                        width: thumbSize,
+                        height: thumbSize,
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: thumbColor),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }
@@ -387,8 +385,7 @@ class _AppKitCircularSliderState extends State<AppKitCircularSlider>
     properties.add(DoubleProperty('max', max));
     properties.add(DoubleProperty('value', value));
     properties.add(IntProperty('tickMarks', tickMarks));
-    properties.add(
-        FlagProperty('continuous', value: continuous, ifTrue: 'continuous'));
+    properties.add(FlagProperty('continuous', value: continuous, ifTrue: 'continuous'));
     properties.add(FlagProperty('enabled', value: enabled, ifTrue: 'enabled'));
     properties.add(DoubleProperty('size', size));
     properties.add(DoubleProperty('thumbSize', thumbSize));

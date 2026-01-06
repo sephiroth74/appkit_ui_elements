@@ -5,9 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-typedef OverflowHandlerChangedCallback = void Function(
-  List<int> hiddenChildren,
-);
+typedef OverflowHandlerChangedCallback = void Function(List<int> hiddenChildren);
 
 class AppKitOverflowHandler extends MultiChildRenderObjectWidget {
   AppKitOverflowHandler({
@@ -55,10 +53,7 @@ class AppKitOverflowHandler extends MultiChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(
-    BuildContext context,
-    AppKitRenderOverflowHandler renderObject,
-  ) {
+  void updateRenderObject(BuildContext context, AppKitRenderOverflowHandler renderObject) {
     renderObject
       ..alignment = alignment
       ..crossAxisAlignment = crossAxisAlignment
@@ -74,40 +69,30 @@ class AppKitOverflowHandler extends MultiChildRenderObjectWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<MainAxisAlignment>('alignment', alignment));
-    properties.add(EnumProperty<CrossAxisAlignment>(
-      'crossAxisAlignment',
-      crossAxisAlignment,
-    ));
-    properties.add(EnumProperty<TextDirection>(
-      'textDirection',
-      textDirection,
-      defaultValue: null,
-    ));
+    properties.add(EnumProperty<CrossAxisAlignment>('crossAxisAlignment', crossAxisAlignment));
+    properties.add(EnumProperty<TextDirection>('textDirection', textDirection, defaultValue: null));
     properties.add(DoubleProperty("overflowBreakpoint", overflowBreakpoint));
     properties.add(EnumProperty<Clip>('clipBehavior', clipBehavior));
-    properties.add(EnumProperty<MainAxisAlignment>(
-      'overflowWidgetAlignment',
-      overflowWidgetAlignment,
-    ));
-    properties.add(FlagProperty(
-      'alwaysDisplayOverflowWidget',
-      value: alwaysDisplayOverflowWidget,
-      ifTrue: 'always display overflow widget',
-      ifFalse: 'do not always display overflow widget',
-    ));
+    properties.add(EnumProperty<MainAxisAlignment>('overflowWidgetAlignment', overflowWidgetAlignment));
+    properties.add(
+      FlagProperty(
+        'alwaysDisplayOverflowWidget',
+        value: alwaysDisplayOverflowWidget,
+        ifTrue: 'always display overflow widget',
+        ifFalse: 'do not always display overflow widget',
+      ),
+    );
   }
 }
 
-class AppKitOverflowHandlerParentData
-    extends ContainerBoxParentData<RenderBox> {
+class AppKitOverflowHandlerParentData extends ContainerBoxParentData<RenderBox> {
   bool _isHidden = false;
 }
 
 class AppKitRenderOverflowHandler extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, AppKitOverflowHandlerParentData>,
-        RenderBoxContainerDefaultsMixin<RenderBox,
-            AppKitOverflowHandlerParentData> {
+        RenderBoxContainerDefaultsMixin<RenderBox, AppKitOverflowHandlerParentData> {
   /// {@macro renderOverflowHandler}
   AppKitRenderOverflowHandler({
     required MainAxisAlignment alignment,
@@ -118,13 +103,13 @@ class AppKitRenderOverflowHandler extends RenderBox
     required MainAxisAlignment overflowWidgetAlignment,
     required bool alwaysDisplayOverflowWidget,
     required this.overflowChangedCallback,
-  })  : _alignment = alignment,
-        _crossAxisAlignment = crossAxisAlignment,
-        _textDirection = textDirection,
-        _clipBehavior = clipBehavior,
-        _overflowBreakpoint = overflowBreakpoint,
-        _overflowWidgetAlignment = overflowWidgetAlignment,
-        _alwaysDisplayOverflowWidget = alwaysDisplayOverflowWidget;
+  }) : _alignment = alignment,
+       _crossAxisAlignment = crossAxisAlignment,
+       _textDirection = textDirection,
+       _clipBehavior = clipBehavior,
+       _overflowBreakpoint = overflowBreakpoint,
+       _overflowWidgetAlignment = overflowWidgetAlignment,
+       _alwaysDisplayOverflowWidget = alwaysDisplayOverflowWidget;
 
   double _overflowBreakpoint;
 
@@ -210,18 +195,22 @@ class AppKitRenderOverflowHandler extends RenderBox
   bool get _debugHasNecessaryDirections {
     if (firstChild != null && lastChild != firstChild) {
       // i.e. there's more than one child
-      assert(textDirection != null,
-          'Horizontal $runtimeType with multiple children has a null textDirection, so the layout order is undefined.');
+      assert(
+        textDirection != null,
+        'Horizontal $runtimeType with multiple children has a null textDirection, so the layout order is undefined.',
+      );
     }
-    if (alignment == MainAxisAlignment.start ||
-        alignment == MainAxisAlignment.end) {
-      assert(textDirection != null,
-          'Horizontal $runtimeType with alignment $alignment has a null textDirection, so the alignment cannot be resolved.');
+    if (alignment == MainAxisAlignment.start || alignment == MainAxisAlignment.end) {
+      assert(
+        textDirection != null,
+        'Horizontal $runtimeType with alignment $alignment has a null textDirection, so the alignment cannot be resolved.',
+      );
     }
-    if (crossAxisAlignment == CrossAxisAlignment.start ||
-        crossAxisAlignment == CrossAxisAlignment.end) {
-      assert(textDirection != null,
-          'Vertical $runtimeType with crossAxisAlignment $crossAxisAlignment has a null textDirection, so the alignment cannot be resolved.');
+    if (crossAxisAlignment == CrossAxisAlignment.start || crossAxisAlignment == CrossAxisAlignment.end) {
+      assert(
+        textDirection != null,
+        'Vertical $runtimeType with crossAxisAlignment $crossAxisAlignment has a null textDirection, so the alignment cannot be resolved.',
+      );
     }
     return true;
   }
@@ -293,11 +282,7 @@ class AppKitRenderOverflowHandler extends RenderBox
     return Offset(mainAxisOffset, crossAxisOffset);
   }
 
-  double _getChildCrossAxisOffset(
-    bool flipCrossAxis,
-    double crossAxisExtent,
-    double childCrossAxisExtent,
-  ) {
+  double _getChildCrossAxisOffset(bool flipCrossAxis, double crossAxisExtent, double childCrossAxisExtent) {
     final double freeSpace = crossAxisExtent - childCrossAxisExtent;
     switch (crossAxisAlignment) {
       case CrossAxisAlignment.start:
@@ -307,13 +292,9 @@ class AppKitRenderOverflowHandler extends RenderBox
       case CrossAxisAlignment.center:
         return freeSpace / 2.0;
       case CrossAxisAlignment.stretch:
-        throw UnsupportedError(
-          "CrossAxisAlignment.stretch is not supported by OverflowHandler",
-        );
+        throw UnsupportedError("CrossAxisAlignment.stretch is not supported by OverflowHandler");
       case CrossAxisAlignment.baseline:
-        throw UnsupportedError(
-          "CrossAxisAlignment.baseline is not supported by OverflowHandler",
-        );
+        throw UnsupportedError("CrossAxisAlignment.baseline is not supported by OverflowHandler");
     }
   }
 
@@ -326,10 +307,7 @@ class AppKitRenderOverflowHandler extends RenderBox
     return _computeDryLayout(constraints);
   }
 
-  Size _computeDryLayout(
-    BoxConstraints constraints, [
-    ChildLayouter layoutChild = ChildLayoutHelper.dryLayoutChild,
-  ]) {
+  Size _computeDryLayout(BoxConstraints constraints, [ChildLayouter layoutChild = ChildLayoutHelper.dryLayoutChild]) {
     final BoxConstraints childConstraints;
     double mainAxisLimit = 0.0;
     childConstraints = BoxConstraints(maxWidth: constraints.maxWidth);
@@ -357,12 +335,10 @@ class AppKitRenderOverflowHandler extends RenderBox
       // in the run limit calculation, even if it would not need to be displayed.
       // This results in the overflow item being shown a little bit sooner than
       // is needed in some cases, but that is OK.
-      if (mainAxisExtent + childMainAxisExtent + overflowItemMainAxisExtent >
-          mainAxisLimit) {
+      if (mainAxisExtent + childMainAxisExtent + overflowItemMainAxisExtent > mainAxisLimit) {
         // This child is not going to be rendered, but the overflow item is.
         mainAxisExtent += overflowItemMainAxisExtent;
-        crossAxisExtent =
-            math.max(crossAxisExtent, overflowItemCrossAxisExtent);
+        crossAxisExtent = math.max(crossAxisExtent, overflowItemCrossAxisExtent);
         overflowed = true;
         break;
       }
@@ -427,14 +403,10 @@ class AppKitRenderOverflowHandler extends RenderBox
       // is needed in some cases, but that is OK.
       if (overflowed) {
         hiddenChildren.add(childIndex);
-      } else if (mainAxisExtent +
-              childMainAxisExtent +
-              overflowItemMainAxisExtent >
-          mainAxisLimit) {
+      } else if (mainAxisExtent + childMainAxisExtent + overflowItemMainAxisExtent > mainAxisLimit) {
         // This child is not going to be rendered, but the overflow item is.
         mainAxisExtent += overflowItemMainAxisExtent;
-        crossAxisExtent =
-            math.max(crossAxisExtent, overflowItemCrossAxisExtent);
+        crossAxisExtent = math.max(crossAxisExtent, overflowItemCrossAxisExtent);
         overflowItemVisible = true;
         overflowed = true;
         hiddenChildren.add(childIndex);
@@ -447,8 +419,7 @@ class AppKitRenderOverflowHandler extends RenderBox
       }
 
       childIndex += 1;
-      final AppKitOverflowHandlerParentData childParentData =
-          child.parentData! as AppKitOverflowHandlerParentData;
+      final AppKitOverflowHandlerParentData childParentData = child.parentData! as AppKitOverflowHandlerParentData;
       childParentData._isHidden = overflowed;
       child = childParentData.nextSibling;
     }
@@ -475,8 +446,7 @@ class AppKitRenderOverflowHandler extends RenderBox
     containerMainAxisExtent = size.width;
     containerCrossAxisExtent = size.height;
 
-    _hasVisualOverflow = containerMainAxisExtent < mainAxisExtent ||
-        containerCrossAxisExtent < crossAxisExtent;
+    _hasVisualOverflow = containerMainAxisExtent < mainAxisExtent || containerCrossAxisExtent < crossAxisExtent;
 
     // Notify callback if the children we've hidden has changed
     if (!listEquals(_hiddenChildren, hiddenChildren)) {
@@ -493,8 +463,7 @@ class AppKitRenderOverflowHandler extends RenderBox
     // Calculate alignment parameters based on the axis extents.
     double crossAxisOffset = 0;
 
-    final double mainAxisFreeSpace =
-        math.max(0.0, containerMainAxisExtent - mainAxisExtent);
+    final double mainAxisFreeSpace = math.max(0.0, containerMainAxisExtent - mainAxisExtent);
     double childLeadingSpace = 0.0;
     double childBetweenSpace = 0.0;
 
@@ -508,13 +477,10 @@ class AppKitRenderOverflowHandler extends RenderBox
         childLeadingSpace = mainAxisFreeSpace / 2.0;
         break;
       case MainAxisAlignment.spaceBetween:
-        childBetweenSpace = visibleChildCount > 1
-            ? mainAxisFreeSpace / (visibleChildCount - 1)
-            : 0.0;
+        childBetweenSpace = visibleChildCount > 1 ? mainAxisFreeSpace / (visibleChildCount - 1) : 0.0;
         break;
       case MainAxisAlignment.spaceAround:
-        childBetweenSpace =
-            visibleChildCount > 0 ? mainAxisFreeSpace / visibleChildCount : 0.0;
+        childBetweenSpace = visibleChildCount > 0 ? mainAxisFreeSpace / visibleChildCount : 0.0;
         childLeadingSpace = childBetweenSpace / 2.0;
         break;
       case MainAxisAlignment.spaceEvenly:
@@ -523,25 +489,19 @@ class AppKitRenderOverflowHandler extends RenderBox
         break;
     }
 
-    double childMainPosition = flipMainAxis
-        ? containerMainAxisExtent - childLeadingSpace
-        : childLeadingSpace;
+    double childMainPosition = flipMainAxis ? containerMainAxisExtent - childLeadingSpace : childLeadingSpace;
 
     // Enumerate through all items again and calculate their position,
     // now that we know the actual main and cross axis extents and can
     // calculate proper positions given the desired alignment parameters.
     child = firstChild;
     while (child != null) {
-      final AppKitOverflowHandlerParentData childParentData =
-          child.parentData! as AppKitOverflowHandlerParentData;
+      final AppKitOverflowHandlerParentData childParentData = child.parentData! as AppKitOverflowHandlerParentData;
 
       if (childParentData._isHidden) {
         // Hide the widget by setting its offset to outside of the
         // container's extent, so it will be guaranteed to be cropped...
-        childParentData.offset = _getOffset(
-          containerMainAxisExtent + 100,
-          containerCrossAxisExtent + 100,
-        );
+        childParentData.offset = _getOffset(containerMainAxisExtent + 100, containerCrossAxisExtent + 100);
       } else {
         final double childMainAxisExtent = _getMainAxisExtent(child.size);
         final double childCrossAxisExtent = _getCrossAxisExtent(child.size);
@@ -558,31 +518,23 @@ class AppKitRenderOverflowHandler extends RenderBox
           // it to be aligned at the "opposite side" as this looks visually
           // more consistent
           late double overflowChildMainPosition;
-          double endAlignedMainAxisPosition =
-              flipMainAxis ? 0 : containerMainAxisExtent - childMainAxisExtent;
+          double endAlignedMainAxisPosition = flipMainAxis ? 0 : containerMainAxisExtent - childMainAxisExtent;
           switch (_overflowWidgetAlignment) {
             case MainAxisAlignment.start:
               // we're already in the right spot
               overflowChildMainPosition = childMainPosition;
               break;
             case MainAxisAlignment.center:
-              overflowChildMainPosition =
-                  (childMainPosition + endAlignedMainAxisPosition) / 2;
+              overflowChildMainPosition = (childMainPosition + endAlignedMainAxisPosition) / 2;
               break;
             case MainAxisAlignment.end:
             default:
               overflowChildMainPosition = endAlignedMainAxisPosition;
               break;
           }
-          childParentData.offset = _getOffset(
-            overflowChildMainPosition,
-            crossAxisOffset + childCrossAxisOffset,
-          );
+          childParentData.offset = _getOffset(overflowChildMainPosition, crossAxisOffset + childCrossAxisOffset);
         } else {
-          childParentData.offset = _getOffset(
-            childMainPosition,
-            crossAxisOffset + childCrossAxisOffset,
-          );
+          childParentData.offset = _getOffset(childMainPosition, crossAxisOffset + childCrossAxisOffset);
         }
         if (flipMainAxis) {
           childMainPosition -= childBetweenSpace;
@@ -598,8 +550,7 @@ class AppKitRenderOverflowHandler extends RenderBox
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
     RenderBox? child = lastChild;
     while (child != null) {
-      final AppKitOverflowHandlerParentData childParentData =
-          child.parentData! as AppKitOverflowHandlerParentData;
+      final AppKitOverflowHandlerParentData childParentData = child.parentData! as AppKitOverflowHandlerParentData;
       // Hidden children cannot generate a hit
       if (!childParentData._isHidden) {
         // The x, y parameters have the top left of the node's box as the origin.
@@ -638,8 +589,7 @@ class AppKitRenderOverflowHandler extends RenderBox
   void _paintSkipHiddenChildren(PaintingContext context, Offset offset) {
     RenderBox? child = firstChild;
     while (child != null) {
-      final AppKitOverflowHandlerParentData childParentData =
-          child.parentData! as AppKitOverflowHandlerParentData;
+      final AppKitOverflowHandlerParentData childParentData = child.parentData! as AppKitOverflowHandlerParentData;
       if (!childParentData._isHidden) {
         context.paintChild(child, childParentData.offset + offset);
       }
@@ -647,8 +597,7 @@ class AppKitRenderOverflowHandler extends RenderBox
     }
   }
 
-  final LayerHandle<ClipRectLayer> _clipRectLayer =
-      LayerHandle<ClipRectLayer>();
+  final LayerHandle<ClipRectLayer> _clipRectLayer = LayerHandle<ClipRectLayer>();
 
   @override
   void dispose() {
@@ -660,26 +609,18 @@ class AppKitRenderOverflowHandler extends RenderBox
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<MainAxisAlignment>('alignment', alignment));
-    properties.add(EnumProperty<CrossAxisAlignment>(
-      'crossAxisAlignment',
-      crossAxisAlignment,
-    ));
-    properties.add(EnumProperty<TextDirection>(
-      'textDirection',
-      textDirection,
-      defaultValue: null,
-    ));
+    properties.add(EnumProperty<CrossAxisAlignment>('crossAxisAlignment', crossAxisAlignment));
+    properties.add(EnumProperty<TextDirection>('textDirection', textDirection, defaultValue: null));
     properties.add(EnumProperty<Clip>('clipBehavior', clipBehavior));
     properties.add(DoubleProperty('overflowBreakpoint', overflowBreakpoint));
-    properties.add(EnumProperty<MainAxisAlignment>(
-      'overflowWidgetAlignment',
-      overflowWidgetAlignment,
-    ));
-    properties.add(FlagProperty(
-      'alwaysDisplayOverflowWidget',
-      value: alwaysDisplayOverflowWidget,
-      ifTrue: 'always display overflow widget',
-      ifFalse: 'do not always display overflow widget',
-    ));
+    properties.add(EnumProperty<MainAxisAlignment>('overflowWidgetAlignment', overflowWidgetAlignment));
+    properties.add(
+      FlagProperty(
+        'alwaysDisplayOverflowWidget',
+        value: alwaysDisplayOverflowWidget,
+        ifTrue: 'always display overflow widget',
+        ifFalse: 'do not always display overflow widget',
+      ),
+    );
   }
 }

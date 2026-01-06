@@ -26,35 +26,30 @@ String _getTime() {
 
 void logDebug(dynamic className, String message) {
   if (_kLoggerLevel <= Level.CONFIG) {
-    debugPrint(
-        '${_getTime()} $_kBaseTag ${_getTag(className)} [DEBUG]: $message');
+    debugPrint('${_getTime()} $_kBaseTag ${_getTag(className)} [DEBUG]: $message');
   }
 }
 
 void logInfo(dynamic className, String message) {
   if (_kLoggerLevel <= Level.INFO) {
-    debugPrint(
-        '${_getTime()} $_kBaseTag ${_getTag(className)} [INFO]: $message');
+    debugPrint('${_getTime()} $_kBaseTag ${_getTag(className)} [INFO]: $message');
   }
 }
 
 void logWarning(dynamic className, String message) {
   if (_kLoggerLevel <= Level.WARNING) {
-    debugPrint(
-        '${_getTime()} $_kBaseTag ${_getTag(className)} [WARNING]: $message');
+    debugPrint('${_getTime()} $_kBaseTag ${_getTag(className)} [WARNING]: $message');
   }
 }
 
 void logError(dynamic className, String message) {
   if (_kLoggerLevel <= Level.SEVERE) {
-    debugPrint(
-        '${_getTime()} $_kBaseTag ${_getTag(className)} [ERROR]: $message');
+    debugPrint('${_getTime()} $_kBaseTag ${_getTag(className)} [ERROR]: $message');
   }
 }
 
 void logVerbose(dynamic className, String message) {
   if (_kLoggerLevel <= Level.FINE) {
-    debugPrint(
-        '${_getTime()} $_kBaseTag ${_getTag(className)} [VERBOSE]: $message');
+    debugPrint('${_getTime()} $_kBaseTag ${_getTag(className)} [VERBOSE]: $message');
   }
 }

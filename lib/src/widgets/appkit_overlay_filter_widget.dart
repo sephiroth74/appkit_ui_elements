@@ -34,41 +34,37 @@ class AppKitOverlayFilterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppKitWallpaperTintingOverride(
       enabled: enableWallpaperTinting,
-      child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        return VisualEffectSubviewContainer(
-          cornerRadius: borderRadius.topLeft.x,
-          material: NSVisualEffectViewMaterial.menu,
-          child: Container(
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: borderRadius,
-              border: Border.all(
-                color: AppKitColors.shadowColor.withValues(alpha: 0.35),
-                width: 0.5,
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
+          return VisualEffectSubviewContainer(
+            cornerRadius: borderRadius.topLeft.x,
+            material: NSVisualEffectViewMaterial.menu,
+            child: Container(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: borderRadius,
+                border: Border.all(color: AppKitColors.shadowColor.withValues(alpha: 0.35), width: 0.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppKitColors.shadowColor.withValues(alpha: 0.25),
+                    offset: const Offset(0, 3.5),
+                    blurRadius: 11.0,
+                    spreadRadius: 0.0,
+                  ),
+                ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppKitColors.shadowColor.withValues(alpha: 0.25),
-                  offset: const Offset(0, 3.5),
-                  blurRadius: 11.0,
-                  spreadRadius: 0.0,
+              child: ClipRRect(
+                borderRadius: borderRadius,
+                child: BackdropFilter(
+                  blendMode: BlendMode.srcOver,
+                  filter: ImageFilter.blur(sigmaX: backgroundBlur, sigmaY: backgroundBlur, tileMode: TileMode.clamp),
+                  child: child,
                 ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: borderRadius,
-              child: BackdropFilter(
-                blendMode: BlendMode.srcOver,
-                filter: ImageFilter.blur(
-                    sigmaX: backgroundBlur,
-                    sigmaY: backgroundBlur,
-                    tileMode: TileMode.clamp),
-                child: child,
               ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

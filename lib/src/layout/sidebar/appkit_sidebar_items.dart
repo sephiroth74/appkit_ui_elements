@@ -4,19 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
-const ShapeBorder _defaultShape = RoundedRectangleBorder(
-  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-);
+const ShapeBorder _defaultShape = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4.0)));
 
 enum AppKitSidebarItemSize {
   small(24.0, 12.0),
   medium(29.0, 16.0),
   large(36.0, 18.0);
 
-  const AppKitSidebarItemSize(
-    this.height,
-    this.iconSize,
-  );
+  const AppKitSidebarItemSize(this.height, this.iconSize);
 
   final double height;
 
@@ -80,54 +75,56 @@ class AppKitSidebarItems extends StatelessWidget {
     if (items.isEmpty) return const SizedBox.shrink();
     assert(debugCheckHasAppKitTheme(context));
     assert(currentIndex < _allItems.length);
-    return Consumer<MainWindowModel>(builder: (context, model, _) {
-      return AppKitIconTheme.merge(
-        data: const AppKitIconThemeData(size: 20),
-        child: Builder(
-          builder: (context) {
-            final theme = AppKitTheme.of(context);
-            return _SidebarItemsConfiguration(
-              selectedColor: selectedColor ?? theme.activeColor,
-              unselectedColor: unselectedColor ?? Colors.transparent,
-              shape: shape ?? _defaultShape,
-              itemSize: itemSize,
-              textColor: textColor,
-              iconColor: iconColor,
-              selectedIconColor: selectedIconColor,
-              selectedTextColor: selectedTextColor,
-              child: ListView(
-                controller: scrollController,
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.all(10.0 - theme.visualDensity.horizontal),
-                children: List.generate(items.length, (index) {
-                  final item = items[index];
-                  if (item.disclosureItems != null) {
+    return Consumer<MainWindowModel>(
+      builder: (context, model, _) {
+        return AppKitIconTheme.merge(
+          data: const AppKitIconThemeData(size: 20),
+          child: Builder(
+            builder: (context) {
+              final theme = AppKitTheme.of(context);
+              return _SidebarItemsConfiguration(
+                selectedColor: selectedColor ?? theme.activeColor,
+                unselectedColor: unselectedColor ?? Colors.transparent,
+                shape: shape ?? _defaultShape,
+                itemSize: itemSize,
+                textColor: textColor,
+                iconColor: iconColor,
+                selectedIconColor: selectedIconColor,
+                selectedTextColor: selectedTextColor,
+                child: ListView(
+                  controller: scrollController,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.all(10.0 - theme.visualDensity.horizontal),
+                  children: List.generate(items.length, (index) {
+                    final item = items[index];
+                    if (item.disclosureItems != null) {
+                      return MouseRegion(
+                        cursor: cursor!,
+                        child: _DisclosureSidebarItem(
+                          item: item,
+                          selectedItem: _allItems[currentIndex],
+                          onChanged: (item) {
+                            onChanged(_allItems.indexOf(item));
+                          },
+                        ),
+                      );
+                    }
                     return MouseRegion(
                       cursor: cursor!,
-                      child: _DisclosureSidebarItem(
+                      child: _SidebarItem(
                         item: item,
-                        selectedItem: _allItems[currentIndex],
-                        onChanged: (item) {
-                          onChanged(_allItems.indexOf(item));
-                        },
+                        selected: _allItems[currentIndex] == item,
+                        onClick: () => onChanged(_allItems.indexOf(item)),
                       ),
                     );
-                  }
-                  return MouseRegion(
-                    cursor: cursor!,
-                    child: _SidebarItem(
-                      item: item,
-                      selected: _allItems[currentIndex] == item,
-                      onClick: () => onChanged(_allItems.indexOf(item)),
-                    ),
-                  );
-                }),
-              ),
-            );
-          },
-        ),
-      );
-    });
+                  }),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -156,8 +153,7 @@ class _SidebarItemsConfiguration extends InheritedWidget {
   final AppKitSidebarItemSize itemSize;
 
   static _SidebarItemsConfiguration of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<_SidebarItemsConfiguration>()!;
+    return context.dependOnInheritedWidgetOfExactType<_SidebarItemsConfiguration>()!;
   }
 
   @override
@@ -169,12 +165,7 @@ class _SidebarItemsConfiguration extends InheritedWidget {
 class _SidebarItem extends StatelessWidget {
   /// Builds a [_SidebarItem].
   // ignore: use_super_parameters
-  const _SidebarItem({
-    Key? key,
-    required this.item,
-    required this.onClick,
-    required this.selected,
-  }) : super(key: key);
+  const _SidebarItem({Key? key, required this.item, required this.onClick, required this.selected}) : super(key: key);
 
   final AppKitSidebarItem item;
 
@@ -185,13 +176,11 @@ class _SidebarItem extends StatelessWidget {
   void _handleActionTap() => onClick?.call();
 
   Map<Type, Action<Intent>> get _actionMap => <Type, Action<Intent>>{
-        ActivateIntent: CallbackAction<ActivateIntent>(
-          onInvoke: (ActivateIntent intent) => _handleActionTap(),
-        ),
-        ButtonActivateIntent: CallbackAction<ButtonActivateIntent>(
-          onInvoke: (ButtonActivateIntent intent) => _handleActionTap(),
-        ),
-      };
+    ActivateIntent: CallbackAction<ActivateIntent>(onInvoke: (ActivateIntent intent) => _handleActionTap()),
+    ButtonActivateIntent: CallbackAction<ButtonActivateIntent>(
+      onInvoke: (ButtonActivateIntent intent) => _handleActionTap(),
+    ),
+  };
 
   bool get hasLeading => item.leading != null;
   bool get hasTrailing => item.trailing != null;
@@ -201,20 +190,14 @@ class _SidebarItem extends StatelessWidget {
     assert(debugCheckHasAppKitTheme(context));
     final theme = AppKitTheme.of(context);
 
-    final selectedColor = item.selectedColor ??
-        _SidebarItemsConfiguration.of(context).selectedColor;
-    final unselectedColor = item.unselectedColor ??
-        _SidebarItemsConfiguration.of(context).unselectedColor;
+    final selectedColor = item.selectedColor ?? _SidebarItemsConfiguration.of(context).selectedColor;
+    final unselectedColor = item.unselectedColor ?? _SidebarItemsConfiguration.of(context).unselectedColor;
 
-    final selectedTextColor = item.selectedTextColor ??
-        _SidebarItemsConfiguration.of(context).selectedTextColor;
-    final unselectedTextColor =
-        item.textColor ?? _SidebarItemsConfiguration.of(context).textColor;
+    final selectedTextColor = item.selectedTextColor ?? _SidebarItemsConfiguration.of(context).selectedTextColor;
+    final unselectedTextColor = item.textColor ?? _SidebarItemsConfiguration.of(context).textColor;
 
-    final selectedIconColor = item.selectedIconColor ??
-        _SidebarItemsConfiguration.of(context).selectedIconColor;
-    final unselectedIconColor =
-        item.iconColor ?? _SidebarItemsConfiguration.of(context).iconColor;
+    final selectedIconColor = item.selectedIconColor ?? _SidebarItemsConfiguration.of(context).selectedIconColor;
+    final unselectedIconColor = item.iconColor ?? _SidebarItemsConfiguration.of(context).iconColor;
 
     final double spacing = 10.0 + theme.visualDensity.horizontal;
     final itemSize = _SidebarItemsConfiguration.of(context).itemSize;
@@ -233,17 +216,14 @@ class _SidebarItem extends StatelessWidget {
 
     final Color? iconColor;
     if (selected) {
-      iconColor = selectedIconColor ??
-          (selectedColor.computeLuminance() >= 0.5
-              ? CupertinoColors.black
-              : CupertinoColors.white);
+      iconColor =
+          selectedIconColor ??
+          (selectedColor.computeLuminance() >= 0.5 ? CupertinoColors.black : CupertinoColors.white);
     } else {
       iconColor = unselectedIconColor ?? theme.activeColor;
     }
 
-    final Color? textColor = selected
-        ? selectedTextColor ?? textLuminance(selectedColor)
-        : unselectedTextColor;
+    final Color? textColor = selected ? selectedTextColor ?? textLuminance(selectedColor) : unselectedTextColor;
 
     return Semantics(
       label: item.semanticLabel,
@@ -267,38 +247,27 @@ class _SidebarItem extends StatelessWidget {
               color: selected ? selectedColor : unselectedColor,
               shape: item.shape ?? _SidebarItemsConfiguration.of(context).shape,
             ),
-            padding: EdgeInsets.symmetric(
-              vertical: 7 + theme.visualDensity.horizontal,
-              horizontal: spacing,
-            ),
+            padding: EdgeInsets.symmetric(vertical: 7 + theme.visualDensity.horizontal, horizontal: spacing),
             child: Row(
               children: [
                 if (hasLeading)
                   Padding(
                     padding: EdgeInsets.only(right: spacing),
                     child: AppKitIconTheme.merge(
-                      data: AppKitIconThemeData(
-                        color: iconColor,
-                        size: itemSize.iconSize,
-                      ),
+                      data: AppKitIconThemeData(color: iconColor, size: itemSize.iconSize),
                       child: item.leading!,
                     ),
                   ),
                 Expanded(
                   child: DefaultTextStyle(
-                    style: labelStyle.copyWith(
-                      color: textColor,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    style: labelStyle.copyWith(color: textColor, overflow: TextOverflow.ellipsis),
                     child: item.label,
                   ),
                 ),
                 if (hasTrailing) ...[
                   const Spacer(),
                   DefaultTextStyle(
-                    style: labelStyle.copyWith(
-                      color: textColor,
-                    ),
+                    style: labelStyle.copyWith(color: textColor),
                     child: item.trailing!,
                   ),
                 ],
@@ -313,13 +282,9 @@ class _SidebarItem extends StatelessWidget {
 
 class _DisclosureSidebarItem extends StatefulWidget {
   // ignore: use_super_parameters
-  _DisclosureSidebarItem({
-    Key? key,
-    required this.item,
-    this.selectedItem,
-    this.onChanged,
-  })  : assert(item.disclosureItems != null),
-        super(key: key);
+  _DisclosureSidebarItem({Key? key, required this.item, this.selectedItem, this.onChanged})
+    : assert(item.disclosureItems != null),
+      super(key: key);
 
   final AppKitSidebarItem item;
 
@@ -331,12 +296,9 @@ class _DisclosureSidebarItem extends StatefulWidget {
   __DisclosureSidebarItemState createState() => __DisclosureSidebarItemState();
 }
 
-class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem>
-    with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeInTween =
-      CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.25);
+class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem> with SingleTickerProviderStateMixin {
+  static final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.25);
 
   late AnimationController _controller;
   late Animation<double> _iconTurns;
@@ -410,9 +372,7 @@ class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem>
                     child: Icon(
                       CupertinoIcons.chevron_right,
                       size: 12.0,
-                      color: theme.brightness == Brightness.light
-                          ? Colors.black
-                          : Colors.white,
+                      color: theme.brightness == Brightness.light ? Colors.black : Colors.white,
                     ),
                   ),
                   if (hasLeading)
@@ -438,11 +398,7 @@ class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem>
         ClipRect(
           child: DefaultTextStyle(
             style: labelStyle,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              heightFactor: _heightFactor.value,
-              child: child,
-            ),
+            child: Align(alignment: Alignment.centerLeft, heightFactor: _heightFactor.value, child: child),
           ),
         ),
       ],
@@ -470,9 +426,7 @@ class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: widget.item.disclosureItems!.map((item) {
             return Padding(
-              padding: EdgeInsets.only(
-                left: 24.0 + theme.visualDensity.horizontal,
-              ),
+              padding: EdgeInsets.only(left: 24.0 + theme.visualDensity.horizontal),
               child: SizedBox(
                 width: double.infinity,
                 child: _SidebarItem(
@@ -487,10 +441,6 @@ class __DisclosureSidebarItemState extends State<_DisclosureSidebarItem>
       ),
     );
 
-    return AnimatedBuilder(
-      animation: _controller.view,
-      builder: _buildChildren,
-      child: closed ? null : result,
-    );
+    return AnimatedBuilder(animation: _controller.view, builder: _buildChildren, child: closed ? null : result);
   }
 }

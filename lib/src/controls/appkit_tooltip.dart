@@ -128,8 +128,7 @@ class AppKitTooltip extends StatefulWidget {
   State<AppKitTooltip> createState() => _AppKitTooltipState();
 }
 
-class _AppKitTooltipState extends State<AppKitTooltip>
-    with SingleTickerProviderStateMixin {
+class _AppKitTooltipState extends State<AppKitTooltip> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late AppKitTooltipThemeData themeData = AppKitTooltipTheme.of(context);
 
@@ -155,14 +154,10 @@ class _AppKitTooltipState extends State<AppKitTooltip>
 
     _mouseIsConnected = RendererBinding.instance.mouseTracker.mouseIsConnected;
 
-    _controller = AnimationController(
-      duration: _fadeInDuration,
-      reverseDuration: _fadeOutDuration,
-      vsync: this,
-    )..addStatusListener(_handleStatusChanged);
+    _controller = AnimationController(duration: _fadeInDuration, reverseDuration: _fadeOutDuration, vsync: this)
+      ..addStatusListener(_handleStatusChanged);
 
-    RendererBinding.instance.mouseTracker
-        .addListener(_handleMouseTrackerChange);
+    RendererBinding.instance.mouseTracker.addListener(_handleMouseTrackerChange);
 
     GestureBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
   }
@@ -203,27 +198,17 @@ class _AppKitTooltipState extends State<AppKitTooltip>
   }
 
   void _createNewEntry() {
-    final OverlayState overlayState = Overlay.of(
-      context,
-      debugRequiredFor: widget,
-    );
+    final OverlayState overlayState = Overlay.of(context, debugRequiredFor: widget);
 
     final RenderBox box = context.findRenderObject()! as RenderBox;
-    Offset target = box.localToGlobal(
-      box.size.center(Offset.zero),
-      ancestor: overlayState.context.findRenderObject(),
-    );
+    Offset target = box.localToGlobal(box.size.center(Offset.zero), ancestor: overlayState.context.findRenderObject());
     if (_mouseIsConnected && widget.useMousePosition && mousePosition != null) {
       target = mousePosition!;
     }
 
     final message = DefaultTextStyle(
       style: textStyle,
-      child: Text.rich(
-        widget.message,
-        overflow: TextOverflow.ellipsis,
-        softWrap: widget.softWrap,
-      ),
+      child: Text.rich(widget.message, overflow: TextOverflow.ellipsis, softWrap: widget.softWrap),
     );
 
     final Widget overlay = Directionality(
@@ -235,10 +220,7 @@ class _AppKitTooltipState extends State<AppKitTooltip>
         margin: margin,
         decoration: decoration,
         textStyle: textStyle,
-        animation: CurvedAnimation(
-          parent: _controller,
-          curve: Curves.fastOutSlowIn,
-        ),
+        animation: CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
         target: target,
         verticalOffset: verticalOffset,
         preferBelow: preferBelow,
@@ -262,8 +244,7 @@ class _AppKitTooltipState extends State<AppKitTooltip>
     if (!mounted) {
       return;
     }
-    final bool mouseIsConnected =
-        RendererBinding.instance.mouseTracker.mouseIsConnected;
+    final bool mouseIsConnected = RendererBinding.instance.mouseTracker.mouseIsConnected;
 
     if (mouseIsConnected != _mouseIsConnected) {
       setState(() {
@@ -301,10 +282,8 @@ class _AppKitTooltipState extends State<AppKitTooltip>
 
   @override
   void dispose() {
-    GestureBinding.instance.pointerRouter
-        .removeGlobalRoute(_handlePointerEvent);
-    RendererBinding.instance.mouseTracker
-        .removeListener(_handleMouseTrackerChange);
+    GestureBinding.instance.pointerRouter.removeGlobalRoute(_handlePointerEvent);
+    RendererBinding.instance.mouseTracker.removeListener(_handleMouseTrackerChange);
     if (_entry != null) _removeEntry();
     _controller.dispose();
     super.dispose();
@@ -314,10 +293,11 @@ class _AppKitTooltipState extends State<AppKitTooltip>
   Widget build(BuildContext context) {
     debugCheckHasAppKitTheme(context);
 
-    Widget result =
-        Consumer<MainWindowModel>(builder: (context, isMainWindow, _) {
-      return widget.child;
-    });
+    Widget result = Consumer<MainWindowModel>(
+      builder: (context, isMainWindow, _) {
+        return widget.child;
+      },
+    );
 
     if (_mouseIsConnected) {
       result = MouseRegion(
@@ -364,11 +344,7 @@ class _TooltipOverlay extends StatelessWidget {
     return Positioned.fill(
       child: IgnorePointer(
         child: CustomSingleChildLayout(
-          delegate: _TooltipPositionDelegate(
-            target: target,
-            verticalOffset: verticalOffset,
-            preferBelow: preferBelow,
-          ),
+          delegate: _TooltipPositionDelegate(target: target, verticalOffset: verticalOffset, preferBelow: preferBelow),
           child: FadeTransition(
             opacity: animation,
             child: ConstrainedBox(
@@ -377,11 +353,7 @@ class _TooltipOverlay extends StatelessWidget {
                 decoration: decoration,
                 padding: padding,
                 margin: margin,
-                child: Center(
-                  widthFactor: 1.0,
-                  heightFactor: 1.0,
-                  child: message,
-                ),
+                child: Center(widthFactor: 1.0, heightFactor: 1.0, child: message),
               ),
             ),
           ),
@@ -392,19 +364,14 @@ class _TooltipOverlay extends StatelessWidget {
 }
 
 class _TooltipPositionDelegate extends SingleChildLayoutDelegate {
-  const _TooltipPositionDelegate({
-    required this.target,
-    required this.verticalOffset,
-    required this.preferBelow,
-  });
+  const _TooltipPositionDelegate({required this.target, required this.verticalOffset, required this.preferBelow});
 
   final Offset target;
   final double verticalOffset;
   final bool preferBelow;
 
   @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
-      constraints.loosen();
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) => constraints.loosen();
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {

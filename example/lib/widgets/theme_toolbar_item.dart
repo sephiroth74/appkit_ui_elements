@@ -18,25 +18,18 @@ class ThemeSwitcherToolbarItem {
             onTap: () => context.read<AppTheme>().mode = ThemeMode.light,
             child: titleWithIconMenuItem('Light theme', Icons.light_mode),
             value: 'light',
-            itemState: context.watch<AppTheme>().mode == ThemeMode.light
-                ? AppKitItemState.on
-                : AppKitItemState.off),
+            itemState: context.watch<AppTheme>().mode == ThemeMode.light ? AppKitItemState.on : AppKitItemState.off),
         AppKitContextMenuItem(
             onTap: () => context.read<AppTheme>().mode = ThemeMode.dark,
             child: titleWithIconMenuItem('Dark theme', Icons.dark_mode),
             value: 'dark',
-            itemState: context.watch<AppTheme>().mode == ThemeMode.dark
-                ? AppKitItemState.on
-                : AppKitItemState.off),
+            itemState: context.watch<AppTheme>().mode == ThemeMode.dark ? AppKitItemState.on : AppKitItemState.off),
         const AppKitContextMenuDivider(),
         AppKitContextMenuItem(
             onTap: () => context.read<AppTheme>().mode = ThemeMode.system,
-            child:
-                titleWithIconMenuItem('System theme', Icons.mode_night_rounded),
+            child: titleWithIconMenuItem('System theme', Icons.mode_night_rounded),
             value: 'system',
-            itemState: context.watch<AppTheme>().mode == ThemeMode.system
-                ? AppKitItemState.on
-                : AppKitItemState.off),
+            itemState: context.watch<AppTheme>().mode == ThemeMode.system ? AppKitItemState.on : AppKitItemState.off),
       ],
     );
   }

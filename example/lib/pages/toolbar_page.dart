@@ -21,10 +21,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
     return AppKitScaffold(
       toolBar: AppKitToolBar(
         isDark: !isDark,
-        decoration: BoxDecoration(
-            color: isDark
-                ? AppKitColors.systemMint.darkColor
-                : AppKitColors.systemIndigo.color),
+        decoration: BoxDecoration(color: isDark ? AppKitColors.systemMint.darkColor : AppKitColors.systemIndigo.color),
         title: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,8 +31,7 @@ class _ToolbarPageState extends State<ToolbarPage> {
             const SizedBox(
               height: 2.0,
             ),
-            Text('Subtitle',
-                style: TextStyle(fontSize: theme.typography.caption1.fontSize)),
+            Text('Subtitle', style: TextStyle(fontSize: theme.typography.caption1.fontSize)),
           ],
         ),
         titleWidth: 200,
@@ -64,25 +60,19 @@ class _ToolbarPageState extends State<ToolbarPage> {
             icon: CupertinoIcons.ellipsis_circle,
             tooltipMessage: 'Perform tasks with the selected items',
             items: [
-              AppKitContextMenuItem.plain('New Folder',
-                  onTap: () => debugPrint('onPressed: New Folder')),
-              AppKitContextMenuItem.plain('Open',
-                  onTap: () => debugPrint('onPressed: Open')),
+              AppKitContextMenuItem.plain('New Folder', onTap: () => debugPrint('onPressed: New Folder')),
+              AppKitContextMenuItem.plain('Open', onTap: () => debugPrint('onPressed: Open')),
               AppKitContextMenuItem.plain(
                 'Open with...',
-                onTap: () =>
-                    debugPrint('[toolbar_page] Selected: Open with...'),
+                onTap: () => debugPrint('[toolbar_page] Selected: Open with...'),
               ),
               AppKitContextMenuItem.plain('Import from iPhone...',
                   onTap: () => debugPrint('onPressed: Import from iPhone...')),
               const AppKitContextMenuDivider(),
-              AppKitContextMenuItem.plain('Remove',
-                  onTap: () => debugPrint('onPressed: Remove')),
-              AppKitContextMenuItem.plain('Move to Bin',
-                  onTap: () => debugPrint('onPressed: Move to Bin')),
+              AppKitContextMenuItem.plain('Remove', onTap: () => debugPrint('onPressed: Remove')),
+              AppKitContextMenuItem.plain('Move to Bin', onTap: () => debugPrint('onPressed: Move to Bin')),
               const AppKitContextMenuDivider(),
-              AppKitContextMenuItem.plain('Tags...',
-                  onTap: () => debugPrint('onPressed: Tags...')),
+              AppKitContextMenuItem.plain('Tags...', onTap: () => debugPrint('onPressed: Tags...')),
             ],
           ),
           const AppKitToolBarDivider(color: Colors.white24),

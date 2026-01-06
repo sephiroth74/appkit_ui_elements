@@ -18,21 +18,13 @@ class _FieldsPageState extends State<FieldsPage> {
 
   final textFieldController = TextEditingController(text: '');
 
-  final List<String> _searchResults = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5'
-  ];
+  final List<String> _searchResults = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
 
   AppKitControlSize textFieldSize = AppKitControlSize.regular;
 
-  AppKitOverlayVisibilityMode clearButtonMode =
-      AppKitOverlayVisibilityMode.always;
+  AppKitOverlayVisibilityMode clearButtonMode = AppKitOverlayVisibilityMode.always;
 
-  AppKitTextFieldBorderStyle textFieldBorderStyle =
-      AppKitTextFieldBorderStyle.rounded;
+  AppKitTextFieldBorderStyle textFieldBorderStyle = AppKitTextFieldBorderStyle.rounded;
 
   // ignore: prefer_function_declarations_over_variables
   ContextMenuBuilder<String> get searchFieldMenuBuilder => (context) {
@@ -110,18 +102,15 @@ class _FieldsPageState extends State<FieldsPage> {
                         clearButtonMode: clearButtonMode,
                         behavior: AppKitTextFieldBehavior.editable,
                         onChanged: (value) => debugPrint('on changed: $value'),
-                        onEditingComplete: () =>
-                            debugPrint('on editing complete'),
-                        onSubmitted: (value) =>
-                            debugPrint('on submitted: $value'),
+                        onEditingComplete: () => debugPrint('on editing complete'),
+                        onSubmitted: (value) => debugPrint('on submitted: $value'),
                         onTap: () => debugPrint('on tap'),
                       )),
                       const SizedBox(height: 16.0),
                       // 2
                       Flexible(
                           child: AppKitTextField(
-                        backgroundColor:
-                            AppKitColors.systemCyan.withValues(alpha: 0.1),
+                        backgroundColor: AppKitColors.systemCyan.withValues(alpha: 0.1),
                         controller: textFieldController,
                         padding: const EdgeInsets.all(8.0),
                         enabled: textFieldEnabled,
@@ -196,15 +185,11 @@ class _FieldsPageState extends State<FieldsPage> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(
-                                width: _kLabelSize,
-                                child:
-                                    AppKitLabel(text: Text('Enable Fields'))),
+                            const SizedBox(width: _kLabelSize, child: AppKitLabel(text: Text('Enable Fields'))),
                             const SizedBox(width: 16.0),
                             AppKitSwitch(
                                 checked: textFieldEnabled,
-                                onChanged: (value) =>
-                                    setState(() => textFieldEnabled = value)),
+                                onChanged: (value) => setState(() => textFieldEnabled = value)),
                           ],
                         ),
                       ),
@@ -226,18 +211,14 @@ class _FieldsPageState extends State<FieldsPage> {
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
-                              return AppKitContextMenu<
-                                      AppKitOverlayVisibilityMode>(
-                                  minWidth: 150,
-                                  entries: [
-                                    for (final mode
-                                        in AppKitOverlayVisibilityMode.values)
-                                      AppKitContextMenuItem.plain(
-                                        mode.name,
-                                        value: mode,
-                                        enabled: true,
-                                      ),
-                                  ]);
+                              return AppKitContextMenu<AppKitOverlayVisibilityMode>(minWidth: 150, entries: [
+                                for (final mode in AppKitOverlayVisibilityMode.values)
+                                  AppKitContextMenuItem.plain(
+                                    mode.name,
+                                    value: mode,
+                                    enabled: true,
+                                  ),
+                              ]);
                             },
                             onItemSelected: (value) {
                               setState(() {
@@ -267,18 +248,14 @@ class _FieldsPageState extends State<FieldsPage> {
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
-                              return AppKitContextMenu<
-                                      AppKitTextFieldBorderStyle>(
-                                  minWidth: 150,
-                                  entries: [
-                                    for (final size
-                                        in AppKitTextFieldBorderStyle.values)
-                                      AppKitContextMenuItem.plain(
-                                        size.name,
-                                        value: size,
-                                        enabled: true,
-                                      ),
-                                  ]);
+                              return AppKitContextMenu<AppKitTextFieldBorderStyle>(minWidth: 150, entries: [
+                                for (final size in AppKitTextFieldBorderStyle.values)
+                                  AppKitContextMenuItem.plain(
+                                    size.name,
+                                    value: size,
+                                    enabled: true,
+                                  ),
+                              ]);
                             },
                             onItemSelected: (value) {
                               setState(() {
@@ -309,16 +286,14 @@ class _FieldsPageState extends State<FieldsPage> {
                             controlSize: AppKitControlSize.regular,
                             menuEdge: AppKitMenuEdge.bottom,
                             menuBuilder: (context) {
-                              return AppKitContextMenu<AppKitControlSize>(
-                                  minWidth: 150,
-                                  entries: [
-                                    for (final size in AppKitControlSize.values)
-                                      AppKitContextMenuItem.plain(
-                                        size.name,
-                                        value: size,
-                                        enabled: true,
-                                      ),
-                                  ]);
+                              return AppKitContextMenu<AppKitControlSize>(minWidth: 150, entries: [
+                                for (final size in AppKitControlSize.values)
+                                  AppKitContextMenuItem.plain(
+                                    size.name,
+                                    value: size,
+                                    enabled: true,
+                                  ),
+                              ]);
                             },
                             onItemSelected: (value) {
                               setState(() {

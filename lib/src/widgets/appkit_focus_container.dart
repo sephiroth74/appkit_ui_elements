@@ -48,24 +48,23 @@ class AppKitFocusContainer extends StatefulWidget {
     bool? textField,
     bool? readOnly,
   }) : semanticsProperties = SemanticsProperties(
-          label: label,
-          enabled: enabled,
-          checked: checked,
-          mixed: mixed,
-          selected: selected,
-          toggled: toggled,
-          button: button,
-          slider: slider,
-          textField: textField,
-          readOnly: readOnly,
-        );
+         label: label,
+         enabled: enabled,
+         checked: checked,
+         mixed: mixed,
+         selected: selected,
+         toggled: toggled,
+         button: button,
+         slider: slider,
+         textField: textField,
+         readOnly: readOnly,
+       );
 
   @override
   State<AppKitFocusContainer> createState() => _AppKitFocusContainerState();
 }
 
-class _AppKitFocusContainerState extends State<AppKitFocusContainer>
-    with SingleTickerProviderStateMixin {
+class _AppKitFocusContainerState extends State<AppKitFocusContainer> with SingleTickerProviderStateMixin {
   FocusNode? _focusNode;
 
   late bool _isMainWindow;
@@ -85,14 +84,12 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
   late StreamSubscription<bool> _mainWindowListener;
 
   FocusNode get _effectiveFocusNode =>
-      widget.focusNode ??
-      (_focusNode ??= FocusNode()..canRequestFocus = widget.canRequestFocus);
+      widget.focusNode ?? (_focusNode ??= FocusNode()..canRequestFocus = widget.canRequestFocus);
 
   bool get enabled => _effectiveFocusNode.canRequestFocus && widget.enabled;
 
   bool isFocusNodeFocused(FocusNode node) {
-    return node
-        .hasFocus; // && node.children.isEmpty ? true : node.children.any((e) => isFocusNodeFocused(e));
+    return node.hasFocus; // && node.children.isEmpty ? true : node.children.any((e) => isFocusNodeFocused(e));
   }
 
   @override
@@ -104,28 +101,34 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
       _effectiveFocusNode.addListener(_handleFocusChanged);
     }
 
-    _mainWindowListener = MainWindowStateListener.instance.isMainWindow
-        .listen((value) => _handleFocusChanged());
+    _mainWindowListener = MainWindowStateListener.instance.isMainWindow.listen((value) => _handleFocusChanged());
     _isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
     _isFocused = isFocusNodeFocused(_effectiveFocusNode);
 
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: _kFocusAnimationDuration),
-      vsync: this,
-    )..addListener(() {
-        setState(() {});
-      });
+    _animationController =
+        AnimationController(
+          duration: const Duration(milliseconds: _kFocusAnimationDuration),
+          vsync: this,
+        )..addListener(() {
+          setState(() {});
+        });
 
     _sizeTween = Tween<double>(begin: 0.0, end: 0.0);
     _alphaTween = Tween<double>(begin: 0.0, end: 0.0);
 
-    _sizeAnimation = _sizeTween.animate(CurvedAnimation(
+    _sizeAnimation = _sizeTween.animate(
+      CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 1.0, curve: Curves.easeInOutCubic)));
+        curve: const Interval(0.0, 1.0, curve: Curves.easeInOutCubic),
+      ),
+    );
 
-    _alphaAnimation = _alphaTween.animate(CurvedAnimation(
+    _alphaAnimation = _alphaTween.animate(
+      CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.0, 1.0, curve: Curves.easeIn)));
+        curve: const Interval(0.0, 1.0, curve: Curves.easeIn),
+      ),
+    );
   }
 
   @override
@@ -158,8 +161,7 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
 
     final bool isFocused = isFocusNodeFocused(_effectiveFocusNode);
 
-    final bool isMainWindow =
-        MainWindowStateListener.instance.isMainWindow.value;
+    final bool isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
 
     if (isFocused != _isFocused || isMainWindow != _isMainWindow) {
       final bool mainWindowChanged = isMainWindow != _isMainWindow;
@@ -172,8 +174,7 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
       _alphaTween.begin = isFocused ? 0.0 : 1.0;
       _alphaTween.end = isFocused ? 1.0 : 0.0;
 
-      _sizeTween.begin =
-          isFocused ? widget.focusRingSize + _kFocusRingSize : 0.0;
+      _sizeTween.begin = isFocused ? widget.focusRingSize + _kFocusRingSize : 0.0;
       _sizeTween.end = isFocused ? widget.focusRingSize : 0.0;
 
       if (mainWindowChanged) _animationController.value = 1.0;
@@ -210,30 +211,27 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
       mixed: widget.semanticsProperties.mixed,
       onFocus: enabled
           ? () {
-              if (_effectiveFocusNode.canRequestFocus &&
-                  !_effectiveFocusNode.hasFocus) {
+              if (_effectiveFocusNode.canRequestFocus && !_effectiveFocusNode.hasFocus) {
                 _effectiveFocusNode.requestFocus();
               }
             }
           : () {},
-      onDidGainAccessibilityFocus:
-          enabled ? _handleDidGainAccessibilityFocus : null,
-      onDidLoseAccessibilityFocus:
-          enabled ? _handleDidLoseAccessibilityFocus : null,
-      child: Builder(builder: (context) {
-        if (!enabled) {
-          return widget.child;
-        }
+      onDidGainAccessibilityFocus: enabled ? _handleDidGainAccessibilityFocus : null,
+      onDidLoseAccessibilityFocus: enabled ? _handleDidLoseAccessibilityFocus : null,
+      child: Builder(
+        builder: (context) {
+          if (!enabled) {
+            return widget.child;
+          }
 
-        final focusRingColor = theme.keyboardFocusIndicatorColor
-            .multiplyOpacity(_alphaAnimation.value);
+          final focusRingColor = theme.keyboardFocusIndicatorColor.multiplyOpacity(_alphaAnimation.value);
 
-        // return Container(decoration: BoxDecoration(
-        //   borderRadius: widget.borderRadius,
-        //   border: Border.all(color: focusRingColor, width: 3),
-        // ), child: widget.child);
+          // return Container(decoration: BoxDecoration(
+          //   borderRadius: widget.borderRadius,
+          //   border: Border.all(color: focusRingColor, width: 3),
+          // ), child: widget.child);
 
-        return CustomPaint(
+          return CustomPaint(
             isComplex: false,
             painter: _FocusRingPainter(
               textDirection: Directionality.of(context),
@@ -243,8 +241,10 @@ class _AppKitFocusContainerState extends State<AppKitFocusContainer>
               // radius: widget.borderRadius,
               borderRadius: widget.borderRadius,
             ),
-            child: widget.child);
-      }),
+            child: widget.child,
+          );
+        },
+      ),
     );
   }
 }
@@ -270,8 +270,8 @@ class _FocusRingPainter extends CustomPainter {
     required this.borderRadius,
     required this.textDirection,
   }) : _paint = Paint()
-          ..color = color
-          ..style = PaintingStyle.fill;
+         ..color = color
+         ..style = PaintingStyle.fill;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -281,8 +281,7 @@ class _FocusRingPainter extends CustomPainter {
 
     // create the rect with the border radius
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = borderRadius?.resolve(textDirection).toRRect(rect) ??
-        RRect.fromRectAndRadius(rect, Radius.zero);
+    final rrect = borderRadius?.resolve(textDirection).toRRect(rect) ?? RRect.fromRectAndRadius(rect, Radius.zero);
 
     final inflatedRect = rrect.inflate(delta);
     final saveCount = canvas.getSaveCount();

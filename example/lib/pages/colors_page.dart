@@ -133,10 +133,7 @@ class _ColorsPageState extends State<ColorsPage> {
                       const SizedBox(height: 16.0),
                       Row(
                         children: [
-                          AppKitSwitch(
-                              checked: isDark,
-                              onChanged: (value) =>
-                                  setState(() => isDark = value)),
+                          AppKitSwitch(checked: isDark, onChanged: (value) => setState(() => isDark = value)),
                           const SizedBox(width: 8.0),
                           Text(isDark ? 'Light Mode' : 'Dark Mode'),
                         ],
@@ -205,64 +202,38 @@ class _ColorsPageState extends State<ColorsPage> {
                               isDark: isDark,
                             ),
                             ColorBox(
-                                color: AppKitColors
-                                    .alternateSelectedControlTextColor,
+                                color: AppKitColors.alternateSelectedControlTextColor,
                                 colorName: 'Alternate Selected Control Text',
                                 isDark: isDark),
                             ColorBox(
                                 color: CupertinoDynamicColor.withBrightness(
                                     color: theme.selectedContentBackgroundColor,
-                                    darkColor:
-                                        theme.selectedContentBackgroundColor),
+                                    darkColor: theme.selectedContentBackgroundColor),
                                 colorName: 'Selected Content Background',
                                 isDark: isDark),
                             ColorBox(
                                 color: CupertinoDynamicColor.withBrightness(
                                     color: theme.keyboardFocusIndicatorColor,
-                                    darkColor:
-                                        theme.keyboardFocusIndicatorColor),
+                                    darkColor: theme.keyboardFocusIndicatorColor),
                                 colorName: 'Keyboard Focus Indicator',
                                 isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.controlBackgroundColor,
                                 colorName: 'Control Background',
                                 isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.controlColor,
-                                colorName: 'Control',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.controlTextColor,
-                                colorName: 'Control Text',
-                                isDark: isDark),
+                            ColorBox(color: AppKitColors.controlColor, colorName: 'Control', isDark: isDark),
+                            ColorBox(color: AppKitColors.controlTextColor, colorName: 'Control Text', isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.disabledControlTextColor,
                                 colorName: 'Disabled Control Text',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.findHighlightColor,
-                                colorName: 'Find Highlight',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.gridColor,
-                                colorName: 'Grid',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.headerTextColor,
-                                colorName: 'Header Text',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.highlightColor,
-                                colorName: 'Highlight',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.labelColor,
-                                colorName: 'Label',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.linkColor,
-                                colorName: 'Link',
-                                isDark: isDark),
+                                color: AppKitColors.findHighlightColor, colorName: 'Find Highlight', isDark: isDark),
+                            ColorBox(color: AppKitColors.gridColor, colorName: 'Grid', isDark: isDark),
+                            ColorBox(color: AppKitColors.headerTextColor, colorName: 'Header Text', isDark: isDark),
+                            ColorBox(color: AppKitColors.highlightColor, colorName: 'Highlight', isDark: isDark),
+                            ColorBox(color: AppKitColors.labelColor, colorName: 'Label', isDark: isDark),
+                            ColorBox(color: AppKitColors.linkColor, colorName: 'Link', isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.placeholderTextColor,
                                 colorName: 'PlaceHolder Text',
@@ -271,18 +242,12 @@ class _ColorsPageState extends State<ColorsPage> {
                                 color: AppKitColors.quaternaryLabelColor,
                                 colorName: 'Quaternary Label',
                                 isDark: isDark),
+                            ColorBox(color: AppKitColors.scrollbarColor, colorName: 'Scrollbar', isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.scrollbarColor,
-                                colorName: 'Scrollbar',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.secondaryLabelColor,
-                                colorName: 'Secondary Label',
-                                isDark: isDark),
+                                color: AppKitColors.secondaryLabelColor, colorName: 'Secondary Label', isDark: isDark),
                             ColorBox(
                                 color: CupertinoDynamicColor.withBrightness(
-                                    color: theme.selectedControlColor,
-                                    darkColor: theme.selectedControlColor),
+                                    color: theme.selectedControlColor, darkColor: theme.selectedControlColor),
                                 colorName: 'Selected Control',
                                 isDark: isDark),
                             ColorBox(
@@ -296,79 +261,47 @@ class _ColorsPageState extends State<ColorsPage> {
                             ColorBox(
                                 color: CupertinoDynamicColor.withBrightness(
                                     color: theme.selectedTextBackgroundColor,
-                                    darkColor:
-                                        theme.selectedTextBackgroundColor),
+                                    darkColor: theme.selectedTextBackgroundColor),
                                 colorName: 'Selected Text Background',
                                 isDark: isDark),
+                            ColorBox(color: AppKitColors.selectedTextColor, colorName: 'Selected Text', isDark: isDark),
+                            ColorBox(color: AppKitColors.separatorColor, colorName: 'Separator', isDark: isDark),
+                            ColorBox(color: AppKitColors.shadowColor, colorName: 'Shadow', isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.selectedTextColor,
-                                colorName: 'Selected Text',
-                                isDark: isDark),
+                                color: AppKitColors.tertiaryLabelColor, colorName: 'Tertiary Label', isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.separatorColor,
-                                colorName: 'Separator',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.shadowColor,
-                                colorName: 'Shadow',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.tertiaryLabelColor,
-                                colorName: 'Tertiary Label',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.textBackgroundColor,
-                                colorName: 'Text Background',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.textColor,
-                                colorName: 'Text',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.toolbarIconColor,
-                                colorName: 'Toolbar Icon',
-                                isDark: isDark),
+                                color: AppKitColors.textBackgroundColor, colorName: 'Text Background', isDark: isDark),
+                            ColorBox(color: AppKitColors.textColor, colorName: 'Text', isDark: isDark),
+                            ColorBox(color: AppKitColors.toolbarIconColor, colorName: 'Toolbar Icon', isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.underPageBackgroundColor,
                                 colorName: 'Under Page Background',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors
-                                    .unemphasizedSelectedContentBackgroundColor,
-                                colorName:
-                                    'Unemphasized Selected Content Background',
+                                color: AppKitColors.unemphasizedSelectedContentBackgroundColor,
+                                colorName: 'Unemphasized Selected Content Background',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors
-                                    .unemphasizedSelectedTextBackgroundColor,
-                                colorName:
-                                    'Unemphasized Selected Text Background',
+                                color: AppKitColors.unemphasizedSelectedTextBackgroundColor,
+                                colorName: 'Unemphasized Selected Text Background',
                                 isDark: isDark),
                             ColorBox(
-                                color:
-                                    AppKitColors.unemphasizedSelectedTextColor,
+                                color: AppKitColors.unemphasizedSelectedTextColor,
                                 colorName: 'Unemphasized Selected Text',
                                 isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.windowBackgroundColor,
                                 colorName: 'Window Background',
                                 isDark: isDark),
+                            ColorBox(color: AppKitColors.canvasColor, colorName: 'Canvas', isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.canvasColor,
-                                colorName: 'Canvas',
-                                isDark: isDark),
+                                color: AppKitColors.windowFrameTextColor, colorName: 'Window Frame', isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.windowFrameTextColor,
-                                colorName: 'Window Frame',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors
-                                    .alternatingContentBackgroundColors[0],
+                                color: AppKitColors.alternatingContentBackgroundColors[0],
                                 colorName: 'Alternating Content Background 0',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors
-                                    .alternatingContentBackgroundColors[1],
+                                color: AppKitColors.alternatingContentBackgroundColors[1],
                                 colorName: 'Alternating Content Background 1',
                                 isDark: isDark),
                             ColorBox(
@@ -452,17 +385,9 @@ class _ColorsPageState extends State<ColorsPage> {
                                 colorName: 'Fills Vibrant Quinary',
                                 isDark: isDark),
                             ColorBox(
-                                color: AppKitColors.materials.medium,
-                                colorName: 'Material Medium',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.materials.thick,
-                                colorName: 'Material Thick',
-                                isDark: isDark),
-                            ColorBox(
-                                color: AppKitColors.materials.thin,
-                                colorName: 'Material Thin',
-                                isDark: isDark),
+                                color: AppKitColors.materials.medium, colorName: 'Material Medium', isDark: isDark),
+                            ColorBox(color: AppKitColors.materials.thick, colorName: 'Material Thick', isDark: isDark),
+                            ColorBox(color: AppKitColors.materials.thin, colorName: 'Material Thin', isDark: isDark),
                             ColorBox(
                                 color: AppKitColors.materials.ultraThick,
                                 colorName: 'Material Ultra Thick',
@@ -525,16 +450,14 @@ class ColorBox extends StatelessWidget {
                 flex: 1,
                 child: DefaultTextStyle(
                     style: AppKitTheme.of(context).typography.callout,
-                    child: Text(
-                        '$colorName ${isDark ? 'Dark' : 'Light'}\n${c.toHex()}')),
+                    child: Text('$colorName ${isDark ? 'Dark' : 'Light'}\n${c.toHex()}')),
               ),
             ],
           ),
           if (!isLast) ...[
             const SizedBox(height: 8.0),
             Divider(
-              color: AppKitDynamicColor.resolve(
-                  context, AppKitColors.separatorColor),
+              color: AppKitDynamicColor.resolve(context, AppKitColors.separatorColor),
               height: 0.5,
               thickness: 0.5,
               indent: 12,

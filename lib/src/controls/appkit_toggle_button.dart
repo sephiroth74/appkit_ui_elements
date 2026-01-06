@@ -106,10 +106,8 @@ class AppKitToggleButton extends StatefulWidget {
     properties.add(EnumProperty<AppKitControlSize>('controlSize', size));
     properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
     properties.add(StringProperty('semanticLabel', semanticLabel));
-    properties
-        .add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
-    properties
-        .add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
+    properties.add(DiagnosticsProperty<MouseCursor>('mouseCursor', mouseCursor));
+    properties.add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'));
     properties.add(DiagnosticsProperty<Color>('color', color));
     properties.add(EnumProperty<AppKitButtonType>('type', type));
     properties.add(EnumProperty<AppKitButtonStyle>('style', style));
@@ -137,31 +135,25 @@ class _AppKitToggleButtonState extends State<AppKitToggleButton> {
     final buttonTheme = AppKitButtonTheme.of(context);
 
     return AppKitButtonTheme(
-        data: buttonTheme.copyWith(
-          push: buttonTheme.push.copyWith(
-            accentColor: widget.type == AppKitButtonType.primary && isOn
-                ? null
-                : buttonTheme.push.secondaryColor,
-          ),
+      data: buttonTheme.copyWith(
+        push: buttonTheme.push.copyWith(
+          accentColor: widget.type == AppKitButtonType.primary && isOn ? null : buttonTheme.push.secondaryColor,
         ),
-        child: AppKitButton(
-          accentColor: widget.color,
-          mouseCursor: widget.mouseCursor,
-          onTap: enabled ? _handleOnPressed : null,
-          padding: widget.padding,
-          semanticLabel: widget.semanticLabel,
-          size: widget.size,
-          style: widget.style,
-          type: widget.type == AppKitButtonType.primary && isOn
-              ? widget.type
-              : AppKitButtonType.secondary,
-          textStyle: isOn && widget.type != AppKitButtonType.primary
-              ? TextStyle(
-                  color: widget.color ??
-                      buttonTheme.push.accentColor ??
-                      theme.activeColor)
-              : null,
-          child: isOn ? widget.childOn : widget.childOff,
-        ));
+      ),
+      child: AppKitButton(
+        accentColor: widget.color,
+        mouseCursor: widget.mouseCursor,
+        onTap: enabled ? _handleOnPressed : null,
+        padding: widget.padding,
+        semanticLabel: widget.semanticLabel,
+        size: widget.size,
+        style: widget.style,
+        type: widget.type == AppKitButtonType.primary && isOn ? widget.type : AppKitButtonType.secondary,
+        textStyle: isOn && widget.type != AppKitButtonType.primary
+            ? TextStyle(color: widget.color ?? buttonTheme.push.accentColor ?? theme.activeColor)
+            : null,
+        child: isOn ? widget.childOn : widget.childOff,
+      ),
+    );
   }
 }

@@ -4,8 +4,7 @@ import 'package:flutter/foundation.dart';
 class AppKitSwitchTheme extends InheritedTheme {
   final AppKitSwitchThemeData data;
 
-  const AppKitSwitchTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitSwitchTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitSwitchTheme oldWidget) {
@@ -18,8 +17,7 @@ class AppKitSwitchTheme extends InheritedTheme {
   }
 
   static AppKitSwitchThemeData of(BuildContext context) {
-    final AppKitSwitchTheme? theme =
-        context.dependOnInheritedWidgetOfExactType<AppKitSwitchTheme>();
+    final AppKitSwitchTheme? theme = context.dependOnInheritedWidgetOfExactType<AppKitSwitchTheme>();
     return theme?.data ?? AppKitTheme.of(context).switchTheme;
   }
 }
@@ -39,20 +37,14 @@ class AppKitSwitchThemeData with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('uncheckedColor', uncheckedColor));
-    properties
-        .add(ColorProperty('uncheckedColorDisabled', uncheckedColorDisabled));
+    properties.add(ColorProperty('uncheckedColorDisabled', uncheckedColorDisabled));
     properties.add(ColorProperty('checkedColor', checkedColor));
   }
 
-  AppKitSwitchThemeData copyWith({
-    Color? uncheckedColor,
-    Color? uncheckedColorDisabled,
-    Color? checkedColor,
-  }) {
+  AppKitSwitchThemeData copyWith({Color? uncheckedColor, Color? uncheckedColorDisabled, Color? checkedColor}) {
     return AppKitSwitchThemeData(
       uncheckedColor: uncheckedColor ?? this.uncheckedColor,
-      uncheckedColorDisabled:
-          uncheckedColorDisabled ?? this.uncheckedColorDisabled,
+      uncheckedColorDisabled: uncheckedColorDisabled ?? this.uncheckedColorDisabled,
       checkedColor: checkedColor ?? this.checkedColor,
     );
   }
@@ -66,12 +58,10 @@ class AppKitSwitchThemeData with Diagnosticable {
     );
   }
 
-  static AppKitSwitchThemeData lerp(
-      AppKitSwitchThemeData a, AppKitSwitchThemeData b, double t) {
+  static AppKitSwitchThemeData lerp(AppKitSwitchThemeData a, AppKitSwitchThemeData b, double t) {
     return AppKitSwitchThemeData(
       uncheckedColor: Color.lerp(a.uncheckedColor, b.uncheckedColor, t)!,
-      uncheckedColorDisabled:
-          Color.lerp(a.uncheckedColorDisabled, b.uncheckedColorDisabled, t)!,
+      uncheckedColorDisabled: Color.lerp(a.uncheckedColorDisabled, b.uncheckedColorDisabled, t)!,
       checkedColor: Color.lerp(a.checkedColor, b.checkedColor, t)!,
     );
   }

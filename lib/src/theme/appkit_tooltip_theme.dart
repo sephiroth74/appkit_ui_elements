@@ -7,28 +7,19 @@ import 'package:flutter/widgets.dart';
 class AppKitTooltipTheme extends InheritedTheme {
   final AppKitTooltipThemeData data;
 
-  const AppKitTooltipTheme({
-    super.key,
-    required super.child,
-    required this.data,
-  });
+  const AppKitTooltipTheme({super.key, required super.child, required this.data});
 
   @override
   Widget wrap(BuildContext context, Widget child) {
-    final AppKitTooltipTheme? ancestorTheme =
-        context.findAncestorWidgetOfExactType<AppKitTooltipTheme>();
-    return identical(this, ancestorTheme)
-        ? child
-        : AppKitTooltipTheme(data: data, child: child);
+    final AppKitTooltipTheme? ancestorTheme = context.findAncestorWidgetOfExactType<AppKitTooltipTheme>();
+    return identical(this, ancestorTheme) ? child : AppKitTooltipTheme(data: data, child: child);
   }
 
   @override
-  bool updateShouldNotify(AppKitTooltipTheme oldWidget) =>
-      data != oldWidget.data;
+  bool updateShouldNotify(AppKitTooltipTheme oldWidget) => data != oldWidget.data;
 
   static AppKitTooltipThemeData of(BuildContext context) {
-    final AppKitTooltipTheme? tooltipTheme =
-        context.dependOnInheritedWidgetOfExactType<AppKitTooltipTheme>();
+    final AppKitTooltipTheme? tooltipTheme = context.dependOnInheritedWidgetOfExactType<AppKitTooltipTheme>();
     return tooltipTheme?.data ?? AppKitTheme.of(context).tooltipTheme;
   }
 }
@@ -86,8 +77,7 @@ class AppKitTooltipThemeData with Diagnosticable {
     properties.add(DoubleProperty('verticalOffset', verticalOffset));
     properties.add(DiagnosticsProperty('padding', padding));
     properties.add(DiagnosticsProperty('margin', margin));
-    properties.add(FlagProperty('preferBelow',
-        value: preferBelow, ifTrue: 'below', ifFalse: 'above', showName: true));
+    properties.add(FlagProperty('preferBelow', value: preferBelow, ifTrue: 'below', ifFalse: 'above', showName: true));
     properties.add(DiagnosticsProperty('decoration', decoration));
     properties.add(DiagnosticsProperty('waitDuration', waitDuration));
     properties.add(DiagnosticsProperty('showDuration', showDuration));
@@ -95,8 +85,7 @@ class AppKitTooltipThemeData with Diagnosticable {
     properties.add(DoubleProperty('minHeight', minHeight));
   }
 
-  static AppKitTooltipThemeData lerp(
-      AppKitTooltipThemeData a, AppKitTooltipThemeData b, double t) {
+  static AppKitTooltipThemeData lerp(AppKitTooltipThemeData a, AppKitTooltipThemeData b, double t) {
     return AppKitTooltipThemeData(
       verticalOffset: lerpDouble(a.verticalOffset, b.verticalOffset, t)!,
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t)!,

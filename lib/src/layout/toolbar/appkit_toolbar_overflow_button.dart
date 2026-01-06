@@ -16,20 +16,17 @@ class AppKitToolbarOverflowButton extends StatefulWidget {
   final bool isDense;
 
   @override
-  State<AppKitToolbarOverflowButton> createState() =>
-      _AppKitToolbarOverflowButtonState();
+  State<AppKitToolbarOverflowButton> createState() => _AppKitToolbarOverflowButtonState();
 }
 
-class _AppKitToolbarOverflowButtonState
-    extends State<AppKitToolbarOverflowButton> {
+class _AppKitToolbarOverflowButtonState extends State<AppKitToolbarOverflowButton> {
   void _showOverflowMenu() async {
     final itemRect = context.getWidgetBounds();
     const menuEdge = AppKitMenuEdge.bottom;
     final contextMenu = widget.overflowContentBuilder(context);
 
     if (null != itemRect) {
-      final menu = contextMenu.copyWith(
-          position: contextMenu.position ?? menuEdge.getRectPosition(itemRect));
+      final menu = contextMenu.copyWith(position: contextMenu.position ?? menuEdge.getRectPosition(itemRect));
       setState(() {});
 
       final _ = await showContextMenu<String>(

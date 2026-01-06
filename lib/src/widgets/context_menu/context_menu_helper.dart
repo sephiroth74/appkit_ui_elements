@@ -8,8 +8,7 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
 /// menu and the position of the parent menu. To prevent the menu from
 /// extending beyond the screen boundaries.
 @protected
-({Offset pos, Size? size, AlignmentGeometry alignment, bool scrollbarsRequired})
-    calculateContextMenuBoundaries({
+({Offset pos, Size? size, AlignmentGeometry alignment, bool scrollbarsRequired}) calculateContextMenuBoundaries({
   required BuildContext context,
   required AppKitContextMenu menu,
   Rect? parentRect,
@@ -27,8 +26,7 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
   // debugPrint('maxHeight: $maxHeight');
 
   final screenSize = MediaQuery.of(context).size;
-  final safeScreenRect =
-      (Offset.zero & screenSize).deflateVertical(24).deflateHorizontal(8);
+  final safeScreenRect = (Offset.zero & screenSize).deflateVertical(24).deflateHorizontal(8);
   Rect menuRect = context.getWidgetBounds()!;
   AlignmentGeometry nextSpawnAlignment = spawnAlignment;
   bool scrollbarsRequired = false;
@@ -38,8 +36,7 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
   // debugPrint('safeScreenRect: $safeScreenRect');
 
   if (maxHeight != null) {
-    menuRect = menuRect.copyWith(
-        bottom: min(menuRect.bottom, menuRect.top + maxHeight));
+    menuRect = menuRect.copyWith(bottom: min(menuRect.bottom, menuRect.top + maxHeight));
   }
 
   // debugPrint('menuRect: $menuRect');
@@ -57,8 +54,7 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
 
   if (menuRect.height > safeScreenRect.height) {
     // debugPrint('menuRect.height > safeScreenRect.height');
-    menuRect = menuRect.copyWith(
-        top: safeScreenRect.top, bottom: safeScreenRect.bottom);
+    menuRect = menuRect.copyWith(top: safeScreenRect.top, bottom: safeScreenRect.bottom);
     scrollbarsRequired = true;
   } else if (menuRect.bottom > safeScreenRect.bottom) {
     // debugPrint('menuRect.bottom > safeScreenRect.bottom');
@@ -72,8 +68,7 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
     final heightRatio = menuRect.height / currentMenuRect.height;
 
     if (isSubmenu || heightRatio < _kContextMenuMaxScrollHeightRatio) {
-      menuRect = currentMenuRect
-          .shift(Offset(0, -(currentMenuRect.bottom - safeScreenRect.bottom)));
+      menuRect = currentMenuRect.shift(Offset(0, -(currentMenuRect.bottom - safeScreenRect.bottom)));
       scrollbarsRequired = false;
     }
   } else if (menuRect.top < safeScreenRect.top) {
@@ -87,8 +82,7 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
     final heightRatio = menuRect.height / currentMenuRect.height;
 
     if (isSubmenu || heightRatio < _kContextMenuMaxScrollHeightRatio) {
-      menuRect = currentMenuRect
-          .shift(Offset(0, safeScreenRect.top - currentMenuRect.top));
+      menuRect = currentMenuRect.shift(Offset(0, safeScreenRect.top - currentMenuRect.top));
       scrollbarsRequired = false;
     }
     scrollbarsRequired = true;
@@ -98,61 +92,49 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
 
     if (menuRect.width > safeScreenRect.width) {
       // debugPrint('menuRect.width > safeScreenRect.width');
-      menuRect = menuRect.copyWith(
-          left: safeScreenRect.left, right: safeScreenRect.right);
+      menuRect = menuRect.copyWith(left: safeScreenRect.left, right: safeScreenRect.right);
     } else if (menuRect.right > safeScreenRect.right) {
       // debugPrint('menuRect.right > safeScreenRect.right');
-      menuRect = currentMenuRect
-          .shift(Offset(-(currentMenuRect.right - safeScreenRect.right), 0));
+      menuRect = currentMenuRect.shift(Offset(-(currentMenuRect.right - safeScreenRect.right), 0));
     } else if (menuRect.left < safeScreenRect.left) {
       // debugPrint('menuRect.left < safeScreenRect.left');
-      menuRect = currentMenuRect
-          .shift(Offset(safeScreenRect.left - currentMenuRect.left, 0));
+      menuRect = currentMenuRect.shift(Offset(safeScreenRect.left - currentMenuRect.left, 0));
     }
   } else {
     // is submenu
     if (spawnAlignment == AlignmentDirectional.topStart) {
-      menuRect =
-          menuRect.shift(Offset(-currentMenuRect.width - parentRect!.width, 0));
+      menuRect = menuRect.shift(Offset(-currentMenuRect.width - parentRect!.width, 0));
       currentMenuRect = menuRect.copyWith();
     }
 
-    if (menuRect.right > safeScreenRect.right ||
-        menuRect.left < safeScreenRect.left) {
+    if (menuRect.right > safeScreenRect.right || menuRect.left < safeScreenRect.left) {
       if (spawnAlignment == AlignmentDirectional.topEnd) {
         if (menuRect.width > safeScreenRect.width) {
           // debugPrint('menuRect.width > safeScreenRect.width');
-          menuRect = menuRect.copyWith(
-              left: safeScreenRect.left, right: safeScreenRect.right);
+          menuRect = menuRect.copyWith(left: safeScreenRect.left, right: safeScreenRect.right);
         } else if (menuRect.right > safeScreenRect.right) {
           // debugPrint('menuRect.right > safeScreenRect.right');
           // check if we have enough space to the left
           (parentRect!.left - menuRect.width) < safeScreenRect.left
-              ? menuRect = currentMenuRect.shift(
-                  Offset(currentMenuRect.right - safeScreenRect.right, 0))
-              : menuRect = menuRect
-                  .shift(Offset(-currentMenuRect.width - parentRect.width, 0));
+              ? menuRect = currentMenuRect.shift(Offset(currentMenuRect.right - safeScreenRect.right, 0))
+              : menuRect = menuRect.shift(Offset(-currentMenuRect.width - parentRect.width, 0));
         } else if (menuRect.left < safeScreenRect.left) {
           // debugPrint('menuRect.left < safeScreenRect.left');
           // check if we have enough space to the right
           (parentRect!.right + menuRect.width) > safeScreenRect.right
-              ? menuRect = currentMenuRect.shift(
-                  Offset(safeScreenRect.right - currentMenuRect.right, 0))
+              ? menuRect = currentMenuRect.shift(Offset(safeScreenRect.right - currentMenuRect.right, 0))
               : menuRect = menuRect.shift(Offset(parentRect.width, 0));
         }
       } else if (spawnAlignment == AlignmentDirectional.topStart) {
         if (menuRect.width > safeScreenRect.width) {
           // debugPrint('menuRect.width > safeScreenRect.width');
-          menuRect = menuRect.copyWith(
-              left: safeScreenRect.left, right: safeScreenRect.right);
+          menuRect = menuRect.copyWith(left: safeScreenRect.left, right: safeScreenRect.right);
         } else if (menuRect.right > safeScreenRect.right) {
           // debugPrint('menuRect.right > safeScreenRect.right');
-          menuRect = currentMenuRect
-              .shift(Offset(currentMenuRect.right - safeScreenRect.right, 0));
+          menuRect = currentMenuRect.shift(Offset(currentMenuRect.right - safeScreenRect.right, 0));
         } else if (menuRect.left < safeScreenRect.left) {
           // debugPrint('menuRect.left < safeScreenRect.left');
-          menuRect = currentMenuRect
-              .shift(Offset(safeScreenRect.left - currentMenuRect.left, 0));
+          menuRect = currentMenuRect.shift(Offset(safeScreenRect.left - currentMenuRect.left, 0));
         }
       }
     }
@@ -254,10 +236,5 @@ const _kContextMenuMaxScrollHeightRatio = 0.6;
     }
   }
 
-  return (
-    pos: Offset(x, y),
-    size: menuSize,
-    alignment: nextSpawnAlignment,
-    scrollbarsRequired: scrollbarsRequired
-  );
+  return (pos: Offset(x, y), size: menuSize, alignment: nextSpawnAlignment, scrollbarsRequired: scrollbarsRequired);
 }

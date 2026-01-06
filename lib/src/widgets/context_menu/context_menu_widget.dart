@@ -8,12 +8,8 @@ import 'package:flutter/scheduler.dart';
 class AppKitContextMenuWidget extends StatelessWidget {
   final AppKitContextMenuState menuState;
   final Duration transitionDuration;
-  const AppKitContextMenuWidget({
-    super.key,
-    required this.menuState,
-    Duration? transitionDuration,
-  }) : transitionDuration =
-            transitionDuration ?? const Duration(milliseconds: 200);
+  const AppKitContextMenuWidget({super.key, required this.menuState, Duration? transitionDuration})
+    : transitionDuration = transitionDuration ?? const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +29,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
               child: FocusScope(
                 autofocus: true,
                 node: state.focusScopeNode,
-                child: Opacity(
-                  opacity: state.isPositionVerified ? 1.0 : 0.0,
-                  child: _buildMenuView(context, state),
-                ),
+                child: Opacity(opacity: state.isPositionVerified ? 1.0 : 0.0, child: _buildMenuView(context, state)),
               ),
             ),
           );
@@ -53,8 +46,8 @@ class AppKitContextMenuWidget extends StatelessWidget {
       builder: (context, value, child) {
         final theme = AppKitContextMenuTheme.of(context);
         final isDark = AppKitTheme.of(context).brightness == Brightness.dark;
-        final backgroundColor = theme.backgroundColor ??
-            AppKitDynamicColor.resolve(context, AppKitColors.materials.medium);
+        final backgroundColor =
+            theme.backgroundColor ?? AppKitDynamicColor.resolve(context, AppKitColors.materials.medium);
         final borderRadius = theme.borderRadius;
 
         return AppKitOverlayFilterWidget(
@@ -66,21 +59,16 @@ class AppKitContextMenuWidget extends StatelessWidget {
             opacity: value,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: isDark ? Colors.white54 : Colors.white,
-                  width: 0.5,
-                ),
+                border: Border.all(color: isDark ? Colors.white54 : Colors.white, width: 0.5),
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
               child: Container(
                 constraints: BoxConstraints(
-                    maxWidth: state.maxWidth,
-                    minWidth: state.minWidth,
-                    maxHeight: state.size?.height.abs() ?? double.infinity),
-                child: _InnerMenu(
-                    menuState: menuState,
-                    backgroundColor: backgroundColor,
-                    borderRadius: borderRadius),
+                  maxWidth: state.maxWidth,
+                  minWidth: state.minWidth,
+                  maxHeight: state.size?.height.abs() ?? double.infinity,
+                ),
+                child: _InnerMenu(menuState: menuState, backgroundColor: backgroundColor, borderRadius: borderRadius),
               ),
             ),
           ),
@@ -91,11 +79,7 @@ class AppKitContextMenuWidget extends StatelessWidget {
 }
 
 class _InnerMenu extends StatefulWidget {
-  const _InnerMenu({
-    required this.menuState,
-    required this.backgroundColor,
-    required this.borderRadius,
-  });
+  const _InnerMenu({required this.menuState, required this.backgroundColor, required this.borderRadius});
 
   final AppKitContextMenuState menuState;
   final Color backgroundColor;
@@ -113,11 +97,9 @@ class _InnerMenuState extends State<_InnerMenu> {
   bool _arrowDownVisible = false;
   bool _isScrollVerified = false;
 
-  double get paddingRight =>
-      (widget.menuState.scrollbarsRequired ?? false) ? 12.0 : 4.0;
+  double get paddingRight => (widget.menuState.scrollbarsRequired ?? false) ? 12.0 : 4.0;
 
-  EdgeInsetsGeometry get padding =>
-      EdgeInsets.only(top: 4.0, left: 4.0, right: paddingRight, bottom: 4.0);
+  EdgeInsetsGeometry get padding => EdgeInsets.only(top: 4.0, left: 4.0, right: paddingRight, bottom: 4.0);
 
   @override
   void initState() {
@@ -132,9 +114,7 @@ class _InnerMenuState extends State<_InnerMenu> {
   }
 
   void _verifyScroll() {
-    if (widget.menuState.isPositionVerified &&
-        !_isScrollVerified &&
-        (widget.menuState.scrollbarsRequired ?? false)) {
+    if (widget.menuState.isPositionVerified && !_isScrollVerified && (widget.menuState.scrollbarsRequired ?? false)) {
       _isScrollVerified = true;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         _onScroll();
@@ -150,12 +130,12 @@ class _InnerMenuState extends State<_InnerMenu> {
 
   void _updateScrollVariables() {
     if (widget.menuState.isPositionVerified) {
-      _arrowUpVisible = widget.menuState.scrollController.hasClients &&
-          widget.menuState.scrollController.offset > _kScrollThreshold;
-      _arrowDownVisible = widget.menuState.scrollController.hasClients &&
+      _arrowUpVisible =
+          widget.menuState.scrollController.hasClients && widget.menuState.scrollController.offset > _kScrollThreshold;
+      _arrowDownVisible =
+          widget.menuState.scrollController.hasClients &&
           widget.menuState.scrollController.offset <
-              widget.menuState.scrollController.position.maxScrollExtent -
-                  _kScrollThreshold;
+              widget.menuState.scrollController.position.maxScrollExtent - _kScrollThreshold;
     }
   }
 
@@ -166,11 +146,8 @@ class _InnerMenuState extends State<_InnerMenu> {
     final menuSize = widget.menuState.size;
     // debugPrint('menu size: $menuSize');
 
-    final arrowsColor =
-        AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
-    final arrowWidth = widget.menuState.size != null
-        ? max(menuSize!.width.abs() - 2, 0.0)
-        : 0.0;
+    final arrowsColor = AppKitDynamicColor.resolve(context, AppKitColors.labelColor);
+    final arrowWidth = widget.menuState.size != null ? max(menuSize!.width.abs() - 2, 0.0) : 0.0;
 
     final child = SingleChildScrollView(
       clipBehavior: Clip.hardEdge,
@@ -182,9 +159,10 @@ class _InnerMenuState extends State<_InnerMenu> {
             children: [
               for (final item in widget.menuState.entries)
                 AppKitMenuEntryWidget(
-                    enabled: widget.menuState.isVerified,
-                    entry: item,
-                    focused: widget.menuState.focusedEntry == item),
+                  enabled: widget.menuState.isVerified,
+                  entry: item,
+                  focused: widget.menuState.focusedEntry == item,
+                ),
             ],
           ),
         ),
@@ -200,12 +178,8 @@ class _InnerMenuState extends State<_InnerMenu> {
       fit: StackFit.passthrough,
       children: [
         ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context)
-              .copyWith(scrollbars: widget.menuState.scrollbarsRequired),
-          child: PrimaryScrollController(
-            controller: widget.menuState.scrollController,
-            child: child,
-          ),
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: widget.menuState.scrollbarsRequired),
+          child: PrimaryScrollController(controller: widget.menuState.scrollController, child: child),
         ),
         if (_arrowUpVisible) ...[
           Positioned(
@@ -213,23 +187,21 @@ class _InnerMenuState extends State<_InnerMenu> {
             child: Padding(
               padding: const EdgeInsets.only(left: 1.0, right: 1.0),
               child: Container(
-                  decoration: BoxDecoration(
-                    color: widget.backgroundColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius - 1),
-                    ),
-                  ),
-                  width: arrowWidth,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      AppKitIcon(CupertinoIcons.chevron_compact_up,
-                          size: _kScrollArrowSize, color: arrowsColor),
-                    ],
-                  )),
+                decoration: BoxDecoration(
+                  color: widget.backgroundColor,
+                  borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius - 1)),
+                ),
+                width: arrowWidth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    AppKitIcon(CupertinoIcons.chevron_compact_up, size: _kScrollArrowSize, color: arrowsColor),
+                  ],
+                ),
+              ),
             ),
-          )
+          ),
         ],
         if (_arrowDownVisible) ...[
           Positioned(
@@ -237,22 +209,20 @@ class _InnerMenuState extends State<_InnerMenu> {
             child: Padding(
               padding: const EdgeInsets.only(left: 1.0, right: 1.0),
               child: Container(
-                  decoration: BoxDecoration(
-                    color: widget.backgroundColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius - 1),
-                    ),
-                  ),
-                  width: arrowWidth,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppKitIcon(CupertinoIcons.chevron_compact_down,
-                          size: _kScrollArrowSize, color: arrowsColor),
-                    ],
-                  )),
+                decoration: BoxDecoration(
+                  color: widget.backgroundColor,
+                  borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius - 1)),
+                ),
+                width: arrowWidth,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppKitIcon(CupertinoIcons.chevron_compact_down, size: _kScrollArrowSize, color: arrowsColor),
+                  ],
+                ),
+              ),
             ),
-          )
+          ),
         ],
       ],
     );

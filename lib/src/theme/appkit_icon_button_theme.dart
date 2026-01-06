@@ -3,75 +3,51 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AppKitIconButtonTheme extends InheritedTheme {
-  const AppKitIconButtonTheme({
-    super.key,
-    required this.data,
-    required super.child,
-  });
+  const AppKitIconButtonTheme({super.key, required this.data, required super.child});
 
   final AppKitIconButtonThemeData data;
 
   static AppKitIconButtonThemeData of(BuildContext context) {
-    final AppKitIconButtonTheme? buttonTheme =
-        context.dependOnInheritedWidgetOfExactType<AppKitIconButtonTheme>();
+    final AppKitIconButtonTheme? buttonTheme = context.dependOnInheritedWidgetOfExactType<AppKitIconButtonTheme>();
     return buttonTheme?.data ?? AppKitTheme.of(context).iconButtonTheme;
   }
 
   static AppKitIconButtonThemeData lightOpaque() {
     return AppKitIconButtonThemeData(
-        outlined: AppKitIconButtonOutlinedThemeData(
-          backgroundColor: Colors.transparent,
-          disabledColor: const Color(0xffE5E5E5),
-          hoverColor: Colors.black.withValues(alpha: 0.05),
-          pressedColor: Colors.black.withValues(alpha: 0.2),
-          shape: BoxShape.rectangle,
-          boxConstraints: const BoxConstraints(
-            minHeight: 22,
-            minWidth: 22,
-            maxWidth: 30,
-            maxHeight: 30,
-          ),
-        ),
-        flat: AppKitIconButtonFlatThemeData(
-          disabledColor: AppKitColors.disabledControlTextColor.color,
-          hoverColor: AppKitColors.white.withValues(alpha: 0.4),
-          pressedColor: AppKitColors.labelColor.color,
-          boxConstraints: const BoxConstraints(
-            minHeight: 22,
-            minWidth: 22,
-            maxWidth: 30,
-            maxHeight: 30,
-          ),
-        ));
+      outlined: AppKitIconButtonOutlinedThemeData(
+        backgroundColor: Colors.transparent,
+        disabledColor: const Color(0xffE5E5E5),
+        hoverColor: Colors.black.withValues(alpha: 0.05),
+        pressedColor: Colors.black.withValues(alpha: 0.2),
+        shape: BoxShape.rectangle,
+        boxConstraints: const BoxConstraints(minHeight: 22, minWidth: 22, maxWidth: 30, maxHeight: 30),
+      ),
+      flat: AppKitIconButtonFlatThemeData(
+        disabledColor: AppKitColors.disabledControlTextColor.color,
+        hoverColor: AppKitColors.white.withValues(alpha: 0.4),
+        pressedColor: AppKitColors.labelColor.color,
+        boxConstraints: const BoxConstraints(minHeight: 22, minWidth: 22, maxWidth: 30, maxHeight: 30),
+      ),
+    );
   }
 
   static AppKitIconButtonThemeData darkOpaque() {
     return AppKitIconButtonThemeData(
-        outlined: AppKitIconButtonOutlinedThemeData(
-          backgroundColor: Colors.transparent,
-          disabledColor: const Color(0xff353535),
-          hoverColor: Colors.white.withValues(alpha: 0.06),
-          pressedColor: Colors.white.withValues(alpha: 0.2),
-          shape: BoxShape.rectangle,
-          boxConstraints: const BoxConstraints(
-            minHeight: 22,
-            minWidth: 22,
-            maxWidth: 30,
-            maxHeight: 30,
-          ),
-        ),
-        flat: AppKitIconButtonFlatThemeData(
-          disabledColor: AppKitColors.disabledControlTextColor.darkColor,
-          hoverColor: AppKitColors.black.withValues(alpha: 0.2),
-          pressedColor:
-              AppKitColors.labelColor.darkColor.withValues(alpha: 0.5),
-          boxConstraints: const BoxConstraints(
-            minHeight: 22,
-            minWidth: 22,
-            maxWidth: 30,
-            maxHeight: 30,
-          ),
-        ));
+      outlined: AppKitIconButtonOutlinedThemeData(
+        backgroundColor: Colors.transparent,
+        disabledColor: const Color(0xff353535),
+        hoverColor: Colors.white.withValues(alpha: 0.06),
+        pressedColor: Colors.white.withValues(alpha: 0.2),
+        shape: BoxShape.rectangle,
+        boxConstraints: const BoxConstraints(minHeight: 22, minWidth: 22, maxWidth: 30, maxHeight: 30),
+      ),
+      flat: AppKitIconButtonFlatThemeData(
+        disabledColor: AppKitColors.disabledControlTextColor.darkColor,
+        hoverColor: AppKitColors.black.withValues(alpha: 0.2),
+        pressedColor: AppKitColors.labelColor.darkColor.withValues(alpha: 0.5),
+        boxConstraints: const BoxConstraints(minHeight: 22, minWidth: 22, maxWidth: 30, maxHeight: 30),
+      ),
+    );
   }
 
   static AppKitIconButtonThemeData fallback(Brightness brightness) {
@@ -84,8 +60,7 @@ class AppKitIconButtonTheme extends InheritedTheme {
   }
 
   @override
-  bool updateShouldNotify(AppKitIconButtonTheme oldWidget) =>
-      data != oldWidget.data;
+  bool updateShouldNotify(AppKitIconButtonTheme oldWidget) => data != oldWidget.data;
 }
 
 class AppKitIconButtonThemeData with Diagnosticable {
@@ -98,30 +73,19 @@ class AppKitIconButtonThemeData with Diagnosticable {
     AppKitIconButtonOutlinedThemeData? outlined,
     AppKitIconButtonFlatThemeData? flat,
   }) {
-    return AppKitIconButtonThemeData(
-      outlined: outlined ?? this.outlined,
-      flat: flat ?? this.flat,
-    );
+    return AppKitIconButtonThemeData(outlined: outlined ?? this.outlined, flat: flat ?? this.flat);
   }
 
-  static AppKitIconButtonThemeData lerp(
-    AppKitIconButtonThemeData a,
-    AppKitIconButtonThemeData b,
-    double t,
-  ) {
+  static AppKitIconButtonThemeData lerp(AppKitIconButtonThemeData a, AppKitIconButtonThemeData b, double t) {
     return AppKitIconButtonThemeData(
-      outlined:
-          AppKitIconButtonOutlinedThemeData.lerp(a.outlined, b.outlined, t),
+      outlined: AppKitIconButtonOutlinedThemeData.lerp(a.outlined, b.outlined, t),
       flat: AppKitIconButtonFlatThemeData.lerp(a.flat, b.flat, t),
     );
   }
 
   AppKitIconButtonThemeData merge(AppKitIconButtonThemeData? other) {
     if (other == null) return this;
-    return copyWith(
-      outlined: other.outlined,
-      flat: other.flat,
-    );
+    return copyWith(outlined: other.outlined, flat: other.flat);
   }
 
   @override
@@ -138,10 +102,8 @@ class AppKitIconButtonThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<AppKitIconButtonOutlinedThemeData>(
-        'outlined', outlined));
-    properties
-        .add(DiagnosticsProperty<AppKitIconButtonFlatThemeData>('flat', flat));
+    properties.add(DiagnosticsProperty<AppKitIconButtonOutlinedThemeData>('outlined', outlined));
+    properties.add(DiagnosticsProperty<AppKitIconButtonFlatThemeData>('flat', flat));
   }
 }
 
@@ -196,8 +158,7 @@ class AppKitIconButtonFlatThemeData with Diagnosticable {
       disabledColor: Color.lerp(a.disabledColor, b.disabledColor, t),
       hoverColor: Color.lerp(a.hoverColor, b.hoverColor, t),
       borderRadius: BorderRadius.lerp(a.borderRadius, b.borderRadius, t),
-      boxConstraints:
-          BoxConstraints.lerp(a.boxConstraints, b.boxConstraints, t),
+      boxConstraints: BoxConstraints.lerp(a.boxConstraints, b.boxConstraints, t),
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t),
       pressedColor: Color.lerp(a.pressedColor, b.pressedColor, t),
     );
@@ -241,14 +202,9 @@ class AppKitIconButtonFlatThemeData with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('disabledColor', disabledColor));
     properties.add(ColorProperty('hoverColor', hoverColor));
-    properties
-        .add(DiagnosticsProperty<BorderRadius?>('borderRadius', borderRadius));
-    properties.add(
-      DiagnosticsProperty<BoxConstraints?>('boxConstraints', boxConstraints),
-    );
-    properties.add(
-      DiagnosticsProperty<EdgeInsetsGeometry?>('padding', padding),
-    );
+    properties.add(DiagnosticsProperty<BorderRadius?>('borderRadius', borderRadius));
+    properties.add(DiagnosticsProperty<BoxConstraints?>('boxConstraints', boxConstraints));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry?>('padding', padding));
     properties.add(ColorProperty('pressedColor', pressedColor));
   }
 }
@@ -314,15 +270,13 @@ class AppKitIconButtonOutlinedThemeData with Diagnosticable {
       hoverColor: Color.lerp(a.hoverColor, b.hoverColor, t),
       shape: b.shape,
       borderRadius: BorderRadius.lerp(a.borderRadius, b.borderRadius, t),
-      boxConstraints:
-          BoxConstraints.lerp(a.boxConstraints, b.boxConstraints, t),
+      boxConstraints: BoxConstraints.lerp(a.boxConstraints, b.boxConstraints, t),
       padding: EdgeInsetsGeometry.lerp(a.padding, b.padding, t),
       pressedColor: Color.lerp(a.pressedColor, b.pressedColor, t),
     );
   }
 
-  AppKitIconButtonOutlinedThemeData merge(
-      AppKitIconButtonOutlinedThemeData? other) {
+  AppKitIconButtonOutlinedThemeData merge(AppKitIconButtonOutlinedThemeData? other) {
     if (other == null) return this;
     return copyWith(
       backgroundColor: other.backgroundColor,
@@ -368,14 +322,9 @@ class AppKitIconButtonOutlinedThemeData with Diagnosticable {
     properties.add(ColorProperty('disabledColor', disabledColor));
     properties.add(ColorProperty('hoverColor', hoverColor));
     properties.add(EnumProperty<BoxShape?>('shape', shape));
-    properties
-        .add(DiagnosticsProperty<BorderRadius?>('borderRadius', borderRadius));
-    properties.add(
-      DiagnosticsProperty<BoxConstraints?>('boxConstraints', boxConstraints),
-    );
-    properties.add(
-      DiagnosticsProperty<EdgeInsetsGeometry?>('padding', padding),
-    );
+    properties.add(DiagnosticsProperty<BorderRadius?>('borderRadius', borderRadius));
+    properties.add(DiagnosticsProperty<BoxConstraints?>('boxConstraints', boxConstraints));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry?>('padding', padding));
     properties.add(ColorProperty('pressedColor', pressedColor));
   }
 }

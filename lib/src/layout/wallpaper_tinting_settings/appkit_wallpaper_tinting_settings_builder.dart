@@ -1,11 +1,9 @@
 import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 
 class AppKitWallpaperTintingSettingsBuilder extends StatelessWidget {
-  const AppKitWallpaperTintingSettingsBuilder(
-      {super.key, required this.builder});
+  const AppKitWallpaperTintingSettingsBuilder({super.key, required this.builder});
 
-  final Widget Function(BuildContext, AppKitWallpaperTintingSettingsData)
-      builder;
+  final Widget Function(BuildContext, AppKitWallpaperTintingSettingsData) builder;
 
   @override
   Widget build(BuildContext context) {

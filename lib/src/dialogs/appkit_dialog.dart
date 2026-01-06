@@ -5,10 +5,7 @@ import 'package:flutter/physics.dart';
 import 'package:provider/provider.dart';
 
 const _kDialogBorderRadius = BorderRadius.all(Radius.circular(10.0));
-const _kDefaultDialogConstraints = BoxConstraints(
-  minWidth: 260,
-  maxWidth: 260,
-);
+const _kDefaultDialogConstraints = BoxConstraints(minWidth: 260, maxWidth: 260);
 
 class AppKitDialog extends StatelessWidget {
   const AppKitDialog({
@@ -57,161 +54,121 @@ class AppKitDialog extends StatelessWidget {
       Colors.white.withValues(alpha: 0.15),
     );
 
-    return Consumer<MainWindowModel>(builder: (context, model, _) {
-      final theme = AppKitTheme.of(context);
-      final isHeightConstrained = constraints?.hasBoundedHeight ?? false;
-      return Dialog(
-        elevation: 20,
-        shadowColor: AppKitColors.shadowColor,
-        backgroundColor: brightness.resolve(
-          CupertinoColors.systemGrey6.color,
-          theme.controlBackgroundColor,
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: _kDialogBorderRadius,
-        ),
-        child: Container(
-          constraints: constraints ?? _kDefaultDialogConstraints,
-          padding: const EdgeInsets.only(
-              left: 16.0, right: 16.0, bottom: 16.0, top: 20.0),
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 2,
-              color: innerBorderColor,
+    return Consumer<MainWindowModel>(
+      builder: (context, model, _) {
+        final theme = AppKitTheme.of(context);
+        final isHeightConstrained = constraints?.hasBoundedHeight ?? false;
+        return Dialog(
+          elevation: 20,
+          shadowColor: AppKitColors.shadowColor,
+          backgroundColor: brightness.resolve(CupertinoColors.systemGrey6.color, theme.controlBackgroundColor),
+          shape: const RoundedRectangleBorder(borderRadius: _kDialogBorderRadius),
+          child: Container(
+            constraints: constraints ?? _kDefaultDialogConstraints,
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0, top: 20.0),
+            decoration: BoxDecoration(
+              border: Border.all(width: 2, color: innerBorderColor),
+              borderRadius: _kDialogBorderRadius,
             ),
-            borderRadius: _kDialogBorderRadius,
-          ),
-          foregroundDecoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: outerBorderColor,
+            foregroundDecoration: BoxDecoration(
+              border: Border.all(width: 1, color: outerBorderColor),
+              borderRadius: _kDialogBorderRadius,
             ),
-            borderRadius: _kDialogBorderRadius,
-          ),
-          child: LayoutBuilder(builder: (context, constraints) {
-            return ConstrainedBox(
-              constraints: constraints,
-              child: Column(
-                mainAxisSize:
-                    isHeightConstrained ? MainAxisSize.max : MainAxisSize.min,
-                children: [
-                  if (icon != null) ...[
-                    Flexible(
-                      flex: 0,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 64,
-                          maxWidth: 64,
-                        ),
-                        child: SizedBox(
-                          width: 64,
-                          height: 64,
-                          child: AppKitIconTheme(
-                              data: AppKitTheme.of(context)
-                                  .iconTheme
-                                  .copyWith(size: 64),
-                              child: icon!),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                  Flexible(
-                    flex: 0,
-                    child: DefaultTextStyle(
-                      style: theme.typography.headline,
-                      textAlign: TextAlign.center,
-                      child: title,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    flex: isHeightConstrained ? 1 : 0,
-                    child: DefaultTextStyle(
-                      textAlign: TextAlign.center,
-                      style: theme.typography.subheadline,
-                      child: message.call(context),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (horizontalActions) ...[
-                    Flexible(
-                      flex: 0,
-                      child: Row(
-                        children: [
-                          if (tertiaryButton != null) ...[
-                            Expanded(flex: 4, child: tertiaryButton!),
-                            const SizedBox(width: 16.0),
-                            const Spacer(
-                              flex: 1,
-                            )
-                          ],
-                          if (secondaryButton != null) ...[
-                            Expanded(
-                              flex: 4,
-                              child: secondaryButton!,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return ConstrainedBox(
+                  constraints: constraints,
+                  child: Column(
+                    mainAxisSize: isHeightConstrained ? MainAxisSize.max : MainAxisSize.min,
+                    children: [
+                      if (icon != null) ...[
+                        Flexible(
+                          flex: 0,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 64, maxWidth: 64),
+                            child: SizedBox(
+                              width: 64,
+                              height: 64,
+                              child: AppKitIconTheme(
+                                data: AppKitTheme.of(context).iconTheme.copyWith(size: 64),
+                                child: icon!,
+                              ),
                             ),
-                            const SizedBox(width: 8.0),
-                          ],
-                          Expanded(
-                            flex: 4,
-                            child: primaryButton,
                           ),
-                        ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      Flexible(
+                        flex: 0,
+                        child: DefaultTextStyle(
+                          style: theme.typography.headline,
+                          textAlign: TextAlign.center,
+                          child: title,
+                        ),
                       ),
-                    ),
-                  ] else ...[
-                    Flexible(
-                      flex: 0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
+                      const SizedBox(height: 10),
+                      Expanded(
+                        flex: isHeightConstrained ? 1 : 0,
+                        child: DefaultTextStyle(
+                          textAlign: TextAlign.center,
+                          style: theme.typography.subheadline,
+                          child: message.call(context),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (horizontalActions) ...[
+                        Flexible(
+                          flex: 0,
+                          child: Row(
                             children: [
-                              Expanded(child: primaryButton),
+                              if (tertiaryButton != null) ...[
+                                Expanded(flex: 4, child: tertiaryButton!),
+                                const SizedBox(width: 16.0),
+                                const Spacer(flex: 1),
+                              ],
+                              if (secondaryButton != null) ...[
+                                Expanded(flex: 4, child: secondaryButton!),
+                                const SizedBox(width: 8.0),
+                              ],
+                              Expanded(flex: 4, child: primaryButton),
                             ],
                           ),
-                          if (secondaryButton != null) ...[
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: secondaryButton!,
-                                ),
+                        ),
+                      ] else ...[
+                        Flexible(
+                          flex: 0,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(children: [Expanded(child: primaryButton)]),
+                              if (secondaryButton != null) ...[
+                                const SizedBox(height: 8.0),
+                                Row(children: [Expanded(child: secondaryButton!)]),
                               ],
-                            ),
-                          ],
-                          if (tertiaryButton != null) ...[
-                            const SizedBox(height: 8.0),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: tertiaryButton!,
-                                ),
+                              if (tertiaryButton != null) ...[
+                                const SizedBox(height: 8.0),
+                                Row(children: [Expanded(child: tertiaryButton!)]),
                               ],
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ],
-                  if (suppress != null) ...[
-                    const SizedBox(height: 16),
-                    Flexible(
-                      flex: 0,
-                      child: DefaultTextStyle(
-                        style: theme.typography.headline,
-                        child: suppress!,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            );
-          }),
-        ),
-      );
-    });
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (suppress != null) ...[
+                        const SizedBox(height: 16),
+                        Flexible(
+                          flex: 0,
+                          child: DefaultTextStyle(style: theme.typography.headline, child: suppress!),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -230,9 +187,7 @@ Future<T?> showAppKitDialog<T>({
   final stream = provider.isMainWindow;
 
   // combine the two streams and return the first value
-  return Stream.fromFutures([initialData.first, stream.first])
-      .first
-      .then((data) {
+  return Stream.fromFutures([initialData.first, stream.first]).first.then((data) {
     if (!context.mounted) {
       return null;
     }
@@ -256,10 +211,8 @@ Future<T?> showAppKitDialog<T>({
           to: navigator.context,
         ),
         barrierDismissible: barrierDismissible,
-        barrierColor:
-            barrierColor ?? theme.controlBackgroundColor.multiplyOpacity(0.5),
-        barrierLabel: barrierLabel ??
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: barrierColor ?? theme.controlBackgroundColor.multiplyOpacity(0.5),
+        barrierLabel: barrierLabel ?? MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ),
     );
   });
@@ -273,10 +226,10 @@ class _AppKitDialogRoute<T> extends PopupRoute<T> {
     Color? barrierColor = const Color(0x80000000),
     String? barrierLabel,
     super.settings,
-  })  : _pageBuilder = pageBuilder,
-        _barrierDismissible = barrierDismissible,
-        _barrierLabel = barrierLabel,
-        _barrierColor = barrierColor;
+  }) : _pageBuilder = pageBuilder,
+       _barrierDismissible = barrierDismissible,
+       _barrierLabel = barrierLabel,
+       _barrierColor = barrierColor;
 
   final RoutePageBuilder _pageBuilder;
 
@@ -304,16 +257,11 @@ class _AppKitDialogRoute<T> extends PopupRoute<T> {
   Duration get reverseTransitionDuration => const Duration(milliseconds: 120);
 
   @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
-      child: capturedThemes
-          .wrap(_pageBuilder(context, animation, secondaryAnimation)),
+      child: capturedThemes.wrap(_pageBuilder(context, animation, secondaryAnimation)),
     );
   }
 
@@ -326,23 +274,14 @@ class _AppKitDialogRoute<T> extends PopupRoute<T> {
   ) {
     if (animation.status == AnimationStatus.reverse) {
       return FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutSine,
-        ),
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutSine),
         child: child,
       );
     }
     return ScaleTransition(
-      scale: CurvedAnimation(
-        parent: animation,
-        curve: const SubtleBounceCurve(),
-      ),
+      scale: CurvedAnimation(parent: animation, curve: const SubtleBounceCurve()),
       child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.fastLinearToSlowEaseIn,
-        ),
+        opacity: CurvedAnimation(parent: animation, curve: Curves.fastLinearToSlowEaseIn),
         child: child,
       ),
     );
@@ -355,16 +294,7 @@ class SubtleBounceCurve extends Curve {
 
   @override
   double transform(double t) {
-    final simulation = SpringSimulation(
-      const SpringDescription(
-        damping: 14,
-        mass: 1.4,
-        stiffness: 180,
-      ),
-      0.0,
-      1.0,
-      0.1,
-    );
+    final simulation = SpringSimulation(const SpringDescription(damping: 14, mass: 1.4, stiffness: 180), 0.0, 1.0, 0.1);
     return simulation.x(t) + t * (1 - simulation.x(1.0));
   }
 }

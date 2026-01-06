@@ -28,10 +28,8 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
   final Color? iconColor;
 
   get menuBuilder => (context) {
-        return AppKitContextMenu<String>(
-          entries: items,
-        );
-      };
+    return AppKitContextMenu<String>(entries: items);
+  };
 
   @override
   Widget build(BuildContext context, {required Brightness brightness}) {
@@ -44,32 +42,30 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
     final Color arrowsColor;
 
     textColor = AppKitColors.textColor.resolveFromBrightness(brightness);
-    iconColor = this.iconColor ??
-        AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
-    inlineHoveredBackgroundColor = isDark
-        ? Colors.white.withValues(alpha: 0.06)
-        : Colors.black.withValues(alpha: 0.05);
+    iconColor = this.iconColor ?? AppKitColors.toolbarIconColor.resolveFromBrightness(brightness);
+    inlineHoveredBackgroundColor = isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.05);
     arrowsColor = AppKitColors.labelColor.resolveFromBrightness(brightness);
 
     Widget pulldownButton = Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: AppKitPopupButtonTheme(
-        data: AppKitPopupButtonTheme.of(context)
-            .copyWith(arrowsColor: arrowsColor, sizeData: {
-          AppKitControlSize.regular: AppKitPopupThemeSizeData(
-            arrowsButtonSize: 19,
-            inlineIconsSize: 16,
-            textStyle: theme.typography.body.copyWith(color: textColor),
-            inlineTextStyle: theme.typography.body.copyWith(color: textColor),
-            inlineChildPadding: const EdgeInsets.only(bottom: 0.0, right: 0.0),
-            inlineContainerPadding:
-                const EdgeInsets.only(left: 3.0, top: 0, right: 1, bottom: 0),
-            inlineHeight: 28.0,
-            inlineBorderRadius: 6.0,
-            inlineBackgroundColor: Colors.transparent,
-            inlineHoveredBackgroundColor: inlineHoveredBackgroundColor,
-          ),
-        }),
+        data: AppKitPopupButtonTheme.of(context).copyWith(
+          arrowsColor: arrowsColor,
+          sizeData: {
+            AppKitControlSize.regular: AppKitPopupThemeSizeData(
+              arrowsButtonSize: 19,
+              inlineIconsSize: 16,
+              textStyle: theme.typography.body.copyWith(color: textColor),
+              inlineTextStyle: theme.typography.body.copyWith(color: textColor),
+              inlineChildPadding: const EdgeInsets.only(bottom: 0.0, right: 0.0),
+              inlineContainerPadding: const EdgeInsets.only(left: 3.0, top: 0, right: 1, bottom: 0),
+              inlineHeight: 28.0,
+              inlineBorderRadius: 6.0,
+              inlineBackgroundColor: Colors.transparent,
+              inlineHoveredBackgroundColor: inlineHoveredBackgroundColor,
+            ),
+          },
+        ),
         child: AppKitPulldownButton(
           iconColor: iconColor,
           canRequestFocus: false,
@@ -87,19 +83,13 @@ class AppKitToolBarPullDownButton extends AppKitToolbarItem {
     );
 
     if (tooltipMessage != null) {
-      pulldownButton = AppKitTooltip.plain(
-        message: tooltipMessage!,
-        child: pulldownButton,
-      );
+      pulldownButton = AppKitTooltip.plain(message: tooltipMessage!, child: pulldownButton);
     }
     return pulldownButton;
   }
 
   @override
   AppKitContextMenuEntry<String>? toContextMenuEntry<T>(BuildContext context) {
-    return AppKitContextMenuItem(
-      child: Text(label),
-      items: items.map((e) => e).toList(),
-    );
+    return AppKitContextMenuItem(child: Text(label), items: items.map((e) => e).toList());
   }
 }

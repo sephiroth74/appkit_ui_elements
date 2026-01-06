@@ -29,10 +29,7 @@ class AppKitPopoverRegion extends StatelessWidget {
       onPointerDown: (event) {
         mousePosition = event.position;
       },
-      child: GestureDetector(
-        onTap: () => _showPopover(context, mousePosition),
-        child: child,
-      ),
+      child: GestureDetector(onTap: () => _showPopover(context, mousePosition), child: child),
     );
   }
 

@@ -82,13 +82,16 @@ class AppKitCheckbox extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty(
+    properties.add(
+      StringProperty(
         'state',
         isIndeterminate
             ? 'indeterminate'
             : value!
-                ? 'checked'
-                : 'unchecked'));
+            ? 'checked'
+            : 'unchecked',
+      ),
+    );
     properties.add(ColorProperty('color', color));
     properties.add(FlagProperty('enabled', value: enabled, ifTrue: 'enabled'));
     properties.add(StringProperty('semanticLabel', semanticLabel));
@@ -142,8 +145,7 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
             final isMainWindow = model.isMainWindow;
             final isDark = theme.brightness == Brightness.dark;
             final controlBackgroundColor = theme.controlColor;
-            final Color accentColor =
-                widget.color ?? theme.selectedContentBackgroundColor;
+            final Color accentColor = widget.color ?? theme.selectedContentBackgroundColor;
 
             return Container(
               width: widget.size,
@@ -151,8 +153,7 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
               alignment: Alignment.center,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(widget.size / _kCornerRadiusRatio),
+                borderRadius: BorderRadius.circular(widget.size / _kCornerRadiusRatio),
                 boxShadow: [
                   if (isDark) ...[
                     const BoxShadow(
@@ -161,8 +162,8 @@ class _AppKitCheckboxState extends State<AppKitCheckbox> {
                       blurRadius: 0.5,
                       spreadRadius: 0.0,
                       blurStyle: BlurStyle.outer,
-                    )
-                  ]
+                    ),
+                  ],
                 ],
               ),
               child: SizedBox.expand(
@@ -212,17 +213,15 @@ class _DecoratedContainer extends StatelessWidget {
     final controlBackgroundColor = theme.controlColor;
     final iconColor = enabled && isMainWindow
         ? color.computeLuminance() > 0.5
-            ? Colors.black
-            : Colors.white
+              ? Colors.black
+              : Colors.white
         : !isMainWindow && enabled
-            ? Colors.black
-            : Colors.black.withValues(alpha: 0.5);
+        ? Colors.black
+        : Colors.black.withValues(alpha: 0.5);
 
     return Container(
       foregroundDecoration: isDown
-          ? BoxDecoration(
-              color: AppKitDynamicColor.resolve(
-                  context, AppKitColors.controlBackgroundPressedColor))
+          ? BoxDecoration(color: AppKitDynamicColor.resolve(context, AppKitColors.controlBackgroundPressedColor))
           : null,
       child: Stack(
         fit: StackFit.expand,
@@ -243,22 +242,17 @@ class _DecoratedContainer extends StatelessWidget {
             decoration: BoxDecoration(
               color: !enabled
                   ? isDark
-                      ? AppKitColors.controlBackgroundColor.color
-                          .withValues(alpha: 0.2)
-                      : AppKitColors.controlBackgroundColor.darkColor
-                          .withValues(alpha: 0.1)
+                        ? AppKitColors.controlBackgroundColor.color.withValues(alpha: 0.2)
+                        : AppKitColors.controlBackgroundColor.darkColor.withValues(alpha: 0.1)
                   : value != false
-                      ? color
-                      : null,
+                  ? color
+                  : null,
             ),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: value != false && isMainWindow && enabled
                     ? LinearGradient(
-                        colors: [
-                          Colors.white.withValues(alpha: 0.17),
-                          Colors.white.withValues(alpha: 0),
-                        ],
+                        colors: [Colors.white.withValues(alpha: 0.17), Colors.white.withValues(alpha: 0)],
                         transform: const GradientRotation(pi / 2),
                       )
                     : null,
@@ -268,9 +262,7 @@ class _DecoratedContainer extends StatelessWidget {
                       child: CustomPaint(
                         size: Size.square(size * 0.9),
                         painter: _CheckboxIconPainter(
-                          type: value == null
-                              ? _IconType.indeterminate
-                              : _IconType.check,
+                          type: value == null ? _IconType.indeterminate : _IconType.check,
                           color: iconColor,
                         ),
                       ),
@@ -289,14 +281,12 @@ class _CheckboxIconPainter extends CustomPainter {
   final Color color;
   final Paint painter;
 
-  _CheckboxIconPainter({
-    required this.type,
-    required this.color,
-  }) : painter = Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeJoin = StrokeJoin.round
-          ..strokeCap = StrokeCap.round;
+  _CheckboxIconPainter({required this.type, required this.color})
+    : painter = Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeJoin = StrokeJoin.round
+        ..strokeCap = StrokeCap.round;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -331,7 +321,4 @@ class _CheckboxIconPainter extends CustomPainter {
   }
 }
 
-enum _IconType {
-  check,
-  indeterminate,
-}
+enum _IconType { check, indeterminate }

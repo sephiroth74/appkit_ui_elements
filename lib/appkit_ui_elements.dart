@@ -20,10 +20,8 @@ class AppKitUiElements {
     await windowManager.ensureInitialized();
   }
 
-  static Future<void> ensureInitialized(
-      {bool debug = false, bool useWindowManager = false}) async {
-    debugPrint(
-        'AppKitUiElements::ensureInitialized(debug: $debug, useWindowManager: $useWindowManager)');
+  static Future<void> ensureInitialized({bool debug = false, bool useWindowManager = false}) async {
+    debugPrint('AppKitUiElements::ensureInitialized(debug: $debug, useWindowManager: $useWindowManager)');
 
     AppKitUiElements.useWindowManager = useWindowManager;
 

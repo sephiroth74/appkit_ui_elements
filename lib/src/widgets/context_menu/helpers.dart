@@ -34,18 +34,10 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
     _AppKitContextMenuPageRoute<AppKitContextMenuItem<T>>(
       pageBuilder: (context, animation, secondaryAnimation) {
         return Stack(
-          children: [
-            AppKitContextMenuWidget(
-              menuState: menuState,
-              transitionDuration: transitionDuration,
-            )
-          ],
+          children: [AppKitContextMenuWidget(menuState: menuState, transitionDuration: transitionDuration)],
         );
       },
-      capturedThemes: InheritedTheme.capture(
-        from: context,
-        to: navigator.context,
-      ),
+      capturedThemes: InheritedTheme.capture(from: context, to: navigator.context),
       settings: routeSettings ?? const RouteSettings(name: "context-menu"),
       fullscreenDialog: true,
       barrierDismissible: barrierDismissible ?? true,
@@ -61,8 +53,7 @@ Future<AppKitContextMenuItem<T>?> showContextMenu<T>(
   );
 }
 
-Widget _defaultTransitionsBuilder(
-    context, animation, secondaryAnimation, child) {
+Widget _defaultTransitionsBuilder(context, animation, secondaryAnimation, child) {
   return child;
 }
 
@@ -108,24 +99,29 @@ class _AppKitContextMenuPageRoute<T> extends PageRoute<T> {
   });
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
       removeBottom: true,
       removeLeft: true,
       removeRight: true,
-      child: capturedThemes.wrap(LayoutBuilder(builder: (context, constraints) {
-        return Consumer<MainWindowModel>(builder: (context, model, _) {
-          if (!model.isMainWindow) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.removeRoute(context, this);
-            });
-          }
-          return pageBuilder(context, animation, secondaryAnimation);
-        });
-      })),
+      child: capturedThemes.wrap(
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Consumer<MainWindowModel>(
+              builder: (context, model, _) {
+                if (!model.isMainWindow) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
+                    Navigator.removeRoute(context, this);
+                  });
+                }
+                return pageBuilder(context, animation, secondaryAnimation);
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

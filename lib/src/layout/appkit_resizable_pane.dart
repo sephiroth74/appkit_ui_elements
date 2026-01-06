@@ -37,16 +37,13 @@ class AppKitResizablePane extends StatefulWidget {
     required this.resizableSide,
     this.windowBreakpoint,
     required this.startSize,
-  })  : child = null,
-        useScrollBar = true,
-        assert(
-          maxSize >= minSize,
-          'minSize should not be more than maxSize.',
-        ),
-        assert(
-          (startSize >= minSize) && (startSize <= maxSize),
-          'startSize must not be less than minSize or more than maxWidth',
-        );
+  }) : child = null,
+       useScrollBar = true,
+       assert(maxSize >= minSize, 'minSize should not be more than maxSize.'),
+       assert(
+         (startSize >= minSize) && (startSize <= maxSize),
+         'startSize must not be less than minSize or more than maxWidth',
+       );
 
   const AppKitResizablePane.noScrollBar({
     super.key,
@@ -58,16 +55,13 @@ class AppKitResizablePane extends StatefulWidget {
     required this.resizableSide,
     this.windowBreakpoint,
     required this.startSize,
-  })  : builder = null,
-        useScrollBar = false,
-        assert(
-          maxSize >= minSize,
-          'minSize should not be more than maxSize.',
-        ),
-        assert(
-          (startSize >= minSize) && (startSize <= maxSize),
-          'startSize must not be less than minSize or more than maxWidth',
-        );
+  }) : builder = null,
+       useScrollBar = false,
+       assert(maxSize >= minSize, 'minSize should not be more than maxSize.'),
+       assert(
+         (startSize >= minSize) && (startSize <= maxSize),
+         'startSize must not be less than minSize or more than maxWidth',
+       );
 
   final ScrollableWidgetBuilder? builder;
 
@@ -111,9 +105,7 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
     final right = Border(right: borderSide);
     final left = Border(left: borderSide);
     final top = Border(top: borderSide);
-    return BoxDecoration(
-      border: _resizeOnTop ? top : (_resizeOnRight ? right : left),
-    ).copyWith(
+    return BoxDecoration(border: _resizeOnTop ? top : (_resizeOnRight ? right : left)).copyWith(
       color: widget.decoration?.color,
       border: widget.decoration?.border,
       borderRadius: widget.decoration?.borderRadius,
@@ -127,15 +119,9 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
 
   BoxConstraints get _boxConstraint {
     if (_resizeOnTop) {
-      return BoxConstraints(
-        maxHeight: widget.maxSize,
-        minHeight: widget.minSize,
-      ).normalize();
+      return BoxConstraints(maxHeight: widget.maxSize, minHeight: widget.minSize).normalize();
     }
-    return BoxConstraints(
-      maxWidth: widget.maxSize,
-      minWidth: widget.minSize,
-    ).normalize();
+    return BoxConstraints(maxWidth: widget.maxSize, minWidth: widget.minSize).normalize();
   }
 
   Widget get _resizeArea {
@@ -152,15 +138,8 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
             },
             onVerticalDragUpdate: (details) {
               setState(() {
-                final newHeight = _dragStartSize +
-                    (_dragStartPosition - details.globalPosition.dy);
-                _size = math.max(
-                  widget.minSize,
-                  math.min(
-                    widget.maxSize,
-                    newHeight,
-                  ),
-                );
+                final newHeight = _dragStartSize + (_dragStartPosition - details.globalPosition.dy);
+                _size = math.max(widget.minSize, math.min(widget.maxSize, newHeight));
                 if (_size == widget.minSize) {
                   _cursor = SystemMouseCursors.resizeUp;
                 } else if (_size == widget.maxSize) {
@@ -184,25 +163,13 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
             onHorizontalDragUpdate: (details) {
               setState(() {
                 final newWidth = _resizeOnRight
-                    ? _dragStartSize -
-                        (_dragStartPosition - details.globalPosition.dx)
-                    : _dragStartSize +
-                        (_dragStartPosition - details.globalPosition.dx);
-                _size = math.max(
-                  widget.minSize,
-                  math.min(
-                    widget.maxSize,
-                    newWidth,
-                  ),
-                );
+                    ? _dragStartSize - (_dragStartPosition - details.globalPosition.dx)
+                    : _dragStartSize + (_dragStartPosition - details.globalPosition.dx);
+                _size = math.max(widget.minSize, math.min(widget.maxSize, newWidth));
                 if (_size == widget.minSize) {
-                  _cursor = _resizeOnRight
-                      ? SystemMouseCursors.resizeRight
-                      : SystemMouseCursors.resizeLeft;
+                  _cursor = _resizeOnRight ? SystemMouseCursors.resizeRight : SystemMouseCursors.resizeLeft;
                 } else if (_size == widget.maxSize) {
-                  _cursor = _resizeOnRight
-                      ? SystemMouseCursors.resizeLeft
-                      : SystemMouseCursors.resizeRight;
+                  _cursor = _resizeOnRight ? SystemMouseCursors.resizeLeft : SystemMouseCursors.resizeRight;
                 } else {
                   _cursor = SystemMouseCursors.resizeColumn;
                 }
@@ -214,9 +181,7 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
   @override
   void initState() {
     super.initState();
-    _cursor = _resizeOnTop
-        ? SystemMouseCursors.resizeRow
-        : SystemMouseCursors.resizeColumn;
+    _cursor = _resizeOnTop ? SystemMouseCursors.resizeRow : SystemMouseCursors.resizeColumn;
     _size = widget.startSize;
     _scrollController.addListener(() => setState(() {}));
   }
@@ -246,13 +211,11 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
     final maxWidth = media.size.width;
 
     if (_resizeOnTop) {
-      if (widget.windowBreakpoint != null &&
-          maxHeight <= widget.windowBreakpoint!) {
+      if (widget.windowBreakpoint != null && maxHeight <= widget.windowBreakpoint!) {
         return const SizedBox.shrink();
       }
     } else {
-      if (widget.windowBreakpoint != null &&
-          maxWidth <= widget.windowBreakpoint!) {
+      if (widget.windowBreakpoint != null && maxWidth <= widget.windowBreakpoint!) {
         return const SizedBox.shrink();
       }
     }
@@ -268,33 +231,15 @@ class _AppKitResizablePaneState extends State<AppKitResizablePane> {
             left: false,
             right: false,
             child: widget.useScrollBar
-                ? AppKitScrollbar(
-                    controller: _scrollController,
-                    child: widget.builder!(context, _scrollController),
-                  )
+                ? AppKitScrollbar(controller: _scrollController, child: widget.builder!(context, _scrollController))
                 : widget.child!,
           ),
           if (widget.isResizable && !_resizeOnRight && !_resizeOnTop)
-            Positioned(
-              left: 0,
-              width: _kResizeThresholdSize,
-              height: maxHeight,
-              child: _resizeArea,
-            ),
+            Positioned(left: 0, width: _kResizeThresholdSize, height: maxHeight, child: _resizeArea),
           if (widget.isResizable && _resizeOnRight)
-            Positioned(
-              right: 0,
-              width: _kResizeThresholdSize,
-              height: maxHeight,
-              child: _resizeArea,
-            ),
+            Positioned(right: 0, width: _kResizeThresholdSize, height: maxHeight, child: _resizeArea),
           if (widget.isResizable && _resizeOnTop)
-            Positioned(
-              top: 0,
-              width: maxWidth,
-              height: _kResizeThresholdSize,
-              child: _resizeArea,
-            ),
+            Positioned(top: 0, width: maxWidth, height: _kResizeThresholdSize, child: _resizeArea),
         ],
       ),
     );

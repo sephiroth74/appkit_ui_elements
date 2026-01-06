@@ -8,18 +8,15 @@ abstract base class AppKitContextMenuEntry<T> extends Equatable {
   final bool enabled;
   final String? _debugLabel;
 
-  const AppKitContextMenuEntry({required this.enabled, String? debugLabel})
-      : _debugLabel = debugLabel;
+  const AppKitContextMenuEntry({required this.enabled, String? debugLabel}) : _debugLabel = debugLabel;
 
   Widget builder(BuildContext context, AppKitContextMenuState menuState);
 
-  void onMouseEnter(
-      PointerEnterEvent event, AppKitContextMenuState menuState) {}
+  void onMouseEnter(PointerEnterEvent event, AppKitContextMenuState menuState) {}
 
   void onMouseExit(PointerExitEvent event, AppKitContextMenuState menuState) {}
 
-  void onMouseHover(
-      PointerHoverEvent event, AppKitContextMenuState menuState) {}
+  void onMouseHover(PointerHoverEvent event, AppKitContextMenuState menuState) {}
 
   bool get hasSubmenu => false;
 

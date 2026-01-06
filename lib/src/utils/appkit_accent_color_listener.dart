@@ -8,11 +8,10 @@ import 'package:flutter/foundation.dart';
 
 class AppKitAccentColorStreamBuilder extends StreamBuilder {
   AppKitAccentColorStreamBuilder({super.key, required super.builder})
-      : super(stream: AppKitAccentColorListener.instance.onChanged);
+    : super(stream: AppKitAccentColorListener.instance.onChanged);
 }
 
-typedef AppKitAccentColorWidgetBuilder = Widget Function(
-    BuildContext context, AppKitAccentColor? accentColor);
+typedef AppKitAccentColorWidgetBuilder = Widget Function(BuildContext context, AppKitAccentColor? accentColor);
 
 class AppKitAccentColorBuilder extends StatelessWidget {
   final AppKitAccentColorWidgetBuilder builder;
@@ -21,11 +20,12 @@ class AppKitAccentColorBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppKitAccentColorStreamBuilder(builder: (context, snapshot) {
-      final accentColor =
-          snapshot.hasData ? snapshot.data as AppKitAccentColor : null;
-      return builder(context, accentColor);
-    });
+    return AppKitAccentColorStreamBuilder(
+      builder: (context, snapshot) {
+        final accentColor = snapshot.hasData ? snapshot.data as AppKitAccentColor : null;
+        return builder(context, accentColor);
+      },
+    );
   }
 }
 
@@ -51,11 +51,9 @@ class AppKitAccentColorListener {
 
   AppKitAccentColor? get currentAccentColor => _currentAccentColor;
 
-  final _accentColorStreamController =
-      StreamController<AppKitAccentColor?>.broadcast();
+  final _accentColorStreamController = StreamController<AppKitAccentColor?>.broadcast();
 
-  Stream<AppKitAccentColor?> get onChanged =>
-      _accentColorStreamController.stream;
+  Stream<AppKitAccentColor?> get onChanged => _accentColorStreamController.stream;
 
   StreamSubscription<void>? _systemColorObserverStreamSubscription;
 
@@ -79,8 +77,7 @@ class AppKitAccentColorListener {
 
   void _initSystemColorObserver() {
     assert(_systemColorObserverStreamSubscription == null);
-    _systemColorObserverStreamSubscription =
-        AppkitUiElementColors.systemColorObserver.stream.listen((_) {
+    _systemColorObserverStreamSubscription = AppkitUiElementColors.systemColorObserver.stream.listen((_) {
       _accentColorStreamController.add(null);
       _initCurrentAccentColor();
     });
@@ -89,9 +86,7 @@ class AppKitAccentColorListener {
   Future<double> _getHueComponent() async {
     final color = await AppkitUiElementColors.getColorComponents(
       uiElementColor: UiElementColor.controlAccentColor,
-      components: const {
-        NSColorComponent.hueComponent,
-      },
+      components: const {NSColorComponent.hueComponent},
       colorSpace: NSColorSpace.genericRGB,
       appearance: NSAppearanceName.aqua,
     );
@@ -116,8 +111,7 @@ class AppKitAccentColorListener {
     return _slowlyResolveAccentColorFromHueComponent(hueComponent);
   }
 
-  AppKitAccentColor _slowlyResolveAccentColorFromHueComponent(
-      double hueComponent) {
+  AppKitAccentColor _slowlyResolveAccentColorFromHueComponent(double hueComponent) {
     final entries = hueComponentToAccentColor.entries;
     var lowestDistance = double.maxFinite;
     var toBeReturnedAccentColor = AppKitAccentColor.values.first;

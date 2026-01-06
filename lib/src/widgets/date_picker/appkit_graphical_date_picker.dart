@@ -51,9 +51,8 @@ class GraphicalDatePicker extends StatefulWidget {
 class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
   FocusNode? _focusNode;
 
-  FocusNode get _effectiveFocusNode => _focusNode ??= FocusNode(
-      debugLabel: 'GraphicalDatePicker[$hashCode]',
-      canRequestFocus: widget.canRequestFocus);
+  FocusNode get _effectiveFocusNode =>
+      _focusNode ??= FocusNode(debugLabel: 'GraphicalDatePicker[$hashCode]', canRequestFocus: widget.canRequestFocus);
 
   late final FocusNode _childFocusNode = FocusNode();
 
@@ -117,102 +116,106 @@ class _GraphicalDatePickerState extends State<GraphicalDatePicker> {
         canRequestFocus: true,
         enabled: enabled,
         focusNode: _effectiveFocusNode,
-        child: Builder(builder: (context) {
-          final AppKitThemeData theme = AppKitTheme.of(context);
-          final AppKitDateTimePickerThemeData dateTimePickerTheme =
-              AppKitDateTimePickerTheme.of(context);
+        child: Builder(
+          builder: (context) {
+            final AppKitThemeData theme = AppKitTheme.of(context);
+            final AppKitDateTimePickerThemeData dateTimePickerTheme = AppKitDateTimePickerTheme.of(context);
 
-          final bool isDark = theme.brightness == Brightness.dark;
-          final Color accentColor = widget.color ??
-              dateTimePickerTheme.accentColor ??
-              theme.activeColor.multiplyLuminance(0.85);
+            final bool isDark = theme.brightness == Brightness.dark;
+            final Color accentColor =
+                widget.color ?? dateTimePickerTheme.accentColor ?? theme.activeColor.multiplyLuminance(0.85);
 
-          return Container(
-            constraints: const BoxConstraints(
-              minWidth: _kGrahpicalDatePickerWidth,
-              maxWidth: _kGrahpicalDatePickerWidth,
-              minHeight: _kGrahpicalDatePickerHeight,
-              maxHeight: _kGrahpicalDatePickerHeight,
-            ),
-            decoration: BoxDecoration(
-              color: widget.drawBackground
-                  ? dateTimePickerTheme.graphicalDatePickerBackgroundColor ??
-                      theme.controlColor.multiplyOpacity(0.5)
-                  : null,
-              border: widget.drawBorder
-                  ? Border(
-                      top: BorderSide(
+            return Container(
+              constraints: const BoxConstraints(
+                minWidth: _kGrahpicalDatePickerWidth,
+                maxWidth: _kGrahpicalDatePickerWidth,
+                minHeight: _kGrahpicalDatePickerHeight,
+                maxHeight: _kGrahpicalDatePickerHeight,
+              ),
+              decoration: BoxDecoration(
+                color: widget.drawBackground
+                    ? dateTimePickerTheme.graphicalDatePickerBackgroundColor ?? theme.controlColor.multiplyOpacity(0.5)
+                    : null,
+                border: widget.drawBorder
+                    ? Border(
+                        top: BorderSide(
                           color: AppKitDynamicColor.resolve(
-                                  context,
-                                  isDark
-                                      ? AppKitColors.text.opaque.quaternary
-                                      : AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.65),
-                          width: _kGraphicalDatePickerBorderWidth),
-                      left: BorderSide(
+                            context,
+                            isDark ? AppKitColors.text.opaque.quaternary : AppKitColors.text.opaque.tertiary,
+                          ).multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth,
+                        ),
+                        left: BorderSide(
                           color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.65),
-                          width: _kGraphicalDatePickerBorderWidth),
-                      right: BorderSide(
+                            context,
+                            AppKitColors.text.opaque.tertiary,
+                          ).multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth,
+                        ),
+                        right: BorderSide(
                           color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.65),
-                          width: _kGraphicalDatePickerBorderWidth),
-                      bottom: BorderSide(
+                            context,
+                            AppKitColors.text.opaque.tertiary,
+                          ).multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth,
+                        ),
+                        bottom: BorderSide(
                           color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.secondary)
-                              .multiplyOpacity(0.65),
-                          width: _kGraphicalDatePickerBorderWidth),
-                    )
-                  : Border.all(
-                      color: Colors.transparent,
-                      width: _kGraphicalDatePickerBorderWidth),
-            ),
-            child: LayoutBuilder(builder: (context, constraints) {
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(
-                    height: _kGraphicalDatePickerHeaderHeight,
-                    child: _GraphicalDatePickerHeader(
-                      currentDate: _initialDateTime,
-                      isMainWindow: widget.isMainWindow,
-                      languageCode: widget.languageCode,
-                      onDateChanged: enabled ? _handleUpdateCalendarView : null,
-                      theme: theme,
-                    ),
-                  ),
-                  const SizedBox(height: _kGraphicalDatePickerDividerHeight),
-                  SizedBox(
-                    height: constraints.maxHeight -
-                        _kGraphicalDatePickerHeaderHeight -
-                        _kGraphicalDatePickerDividerHeight,
-                    width: constraints.maxWidth,
-                    child: FocusScope(
-                      child: _GraphicalDatePickerContent(
-                        focusNode: _effectiveFocusNode,
-                        childFocusNode: _childFocusNode,
-                        initialDateTime: _initialDateTime,
-                        currentDateTime: _currentDateTime,
-                        minimumDate: widget.minimumDate,
-                        maximumDate: widget.maximumDate,
-                        accentColor: accentColor,
-                        theme: theme,
-                        isMainWindow: widget.isMainWindow,
-                        languageCode: widget.languageCode,
-                        selectionType: widget.selectionType,
-                        onUpdateCalendarView:
-                            enabled ? _handleUpdateCalendarView : null,
-                        onChanged: enabled ? _handleChanged : null,
+                            context,
+                            AppKitColors.text.opaque.secondary,
+                          ).multiplyOpacity(0.65),
+                          width: _kGraphicalDatePickerBorderWidth,
+                        ),
+                      )
+                    : Border.all(color: Colors.transparent, width: _kGraphicalDatePickerBorderWidth),
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      SizedBox(
+                        height: _kGraphicalDatePickerHeaderHeight,
+                        child: _GraphicalDatePickerHeader(
+                          currentDate: _initialDateTime,
+                          isMainWindow: widget.isMainWindow,
+                          languageCode: widget.languageCode,
+                          onDateChanged: enabled ? _handleUpdateCalendarView : null,
+                          theme: theme,
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              );
-            }),
-          );
-        }),
+                      const SizedBox(height: _kGraphicalDatePickerDividerHeight),
+                      SizedBox(
+                        height:
+                            constraints.maxHeight -
+                            _kGraphicalDatePickerHeaderHeight -
+                            _kGraphicalDatePickerDividerHeight,
+                        width: constraints.maxWidth,
+                        child: FocusScope(
+                          child: _GraphicalDatePickerContent(
+                            focusNode: _effectiveFocusNode,
+                            childFocusNode: _childFocusNode,
+                            initialDateTime: _initialDateTime,
+                            currentDateTime: _currentDateTime,
+                            minimumDate: widget.minimumDate,
+                            maximumDate: widget.maximumDate,
+                            accentColor: accentColor,
+                            theme: theme,
+                            isMainWindow: widget.isMainWindow,
+                            languageCode: widget.languageCode,
+                            selectionType: widget.selectionType,
+                            onUpdateCalendarView: enabled ? _handleUpdateCalendarView : null,
+                            onChanged: enabled ? _handleChanged : null,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -250,32 +253,27 @@ class _GraphicalDatePickerHeader extends StatelessWidget {
             Opacity(
               opacity: isEnabled ? 1.0 : 0.5,
               child: DefaultTextStyle(
-                  style: theme.typography.callout.copyWith(
-                      fontWeight: AppKitFontWeight.w600, fontSize: 12.0),
-                  child: Text(dateString)),
+                style: theme.typography.callout.copyWith(fontWeight: AppKitFontWeight.w600, fontSize: 12.0),
+                child: Text(dateString),
+              ),
             ),
             const Spacer(),
             _GraphicalDatePickerHeaderButton(
               type: _HeaderButtonType.left,
               isMainWindow: isMainWindow,
-              onPressed: isEnabled
-                  ? () => onDateChanged?.call(currentDate.previousMonth())
-                  : null,
+              onPressed: isEnabled ? () => onDateChanged?.call(currentDate.previousMonth()) : null,
             ),
             const SizedBox(width: 5.0),
             _GraphicalDatePickerHeaderButton(
               type: _HeaderButtonType.center,
               isMainWindow: isMainWindow,
-              onPressed:
-                  isEnabled ? () => onDateChanged?.call(DateTime.now()) : null,
+              onPressed: isEnabled ? () => onDateChanged?.call(DateTime.now()) : null,
             ),
             const SizedBox(width: 5.0),
             _GraphicalDatePickerHeaderButton(
               type: _HeaderButtonType.right,
               isMainWindow: isMainWindow,
-              onPressed: isEnabled
-                  ? () => onDateChanged?.call(currentDate.nextMonth())
-                  : null,
+              onPressed: isEnabled ? () => onDateChanged?.call(currentDate.nextMonth()) : null,
             ),
           ],
         ),
@@ -319,9 +317,12 @@ class _GraphicalDatePickerContent extends StatelessWidget {
     final now = DateTime.now();
     final firstDayOfWeek = now.subtract(Duration(days: now.weekday - 1));
     return List.generate(7, (index) => index)
-        .map((value) => DateFormat(DateFormat.ABBR_WEEKDAY, locale)
-            .format(firstDayOfWeek.add(Duration(days: value)))
-            .substring(0, 2))
+        .map(
+          (value) => DateFormat(
+            DateFormat.ABBR_WEEKDAY,
+            locale,
+          ).format(firstDayOfWeek.add(Duration(days: value))).substring(0, 2),
+        )
         .toList();
   }
 
@@ -339,70 +340,74 @@ class _GraphicalDatePickerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppKitTheme.of(context);
-    final weekDayTextColor =
-        AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.secondary)
-            .multiplyOpacity(enabled ? 0.9 : 0.5);
+    final weekDayTextColor = AppKitDynamicColor.resolve(
+      context,
+      AppKitColors.text.opaque.secondary,
+    ).multiplyOpacity(enabled ? 0.9 : 0.5);
 
-    return LayoutBuilder(builder: (context, constrains) {
-      return Container(
-        constraints: constrains,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Flexible(
-              flex: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 1.0, right: 2.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: daysOfWeek.map((day) {
-                    return Container(
-                      padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
-                      alignment: Alignment.center,
-                      child: DefaultTextStyle(
-                        style: theme.typography.callout.copyWith(
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        return Container(
+          constraints: constrains,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                flex: 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 1.0, right: 2.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: daysOfWeek.map((day) {
+                      return Container(
+                        padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+                        alignment: Alignment.center,
+                        child: DefaultTextStyle(
+                          style: theme.typography.callout.copyWith(
                             fontWeight: AppKitFontWeight.w600,
                             fontSize: 10.0,
-                            color: weekDayTextColor),
-                        child: Text(day),
-                      ),
-                    );
-                  }).toList(),
+                            color: weekDayTextColor,
+                          ),
+                          child: Text(day),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-            ),
-            Divider(
-              height: 1.0,
-              thickness: 1.0,
-              indent: 2.0,
-              endIndent: 2.0,
-              color: AppKitColors.systemGray.color.multiplyOpacity(0.35),
-            ),
-            Flexible(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 1.0, right: 2.0, top: 1.0),
-                child: _GraphicalDatePickerMonthView(
-                  focusNode: focusNode,
-                  childFocusNode: childFocusNode,
-                  initialDateTime: initialDateTime,
-                  currentDateTime: currentDateTime,
-                  minimumDate: minimumDate,
-                  maximumDate: maximumDate,
-                  isMainWindow: isMainWindow,
-                  languageCode: languageCode,
-                  accentColor: accentColor,
-                  theme: theme,
-                  selectionType: selectionType,
-                  onUpdateCalendarView: onUpdateCalendarView,
-                  onChanged: onChanged,
+              Divider(
+                height: 1.0,
+                thickness: 1.0,
+                indent: 2.0,
+                endIndent: 2.0,
+                color: AppKitColors.systemGray.color.multiplyOpacity(0.35),
+              ),
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 1.0, right: 2.0, top: 1.0),
+                  child: _GraphicalDatePickerMonthView(
+                    focusNode: focusNode,
+                    childFocusNode: childFocusNode,
+                    initialDateTime: initialDateTime,
+                    currentDateTime: currentDateTime,
+                    minimumDate: minimumDate,
+                    maximumDate: maximumDate,
+                    isMainWindow: isMainWindow,
+                    languageCode: languageCode,
+                    accentColor: accentColor,
+                    theme: theme,
+                    selectionType: selectionType,
+                    onUpdateCalendarView: onUpdateCalendarView,
+                    onChanged: onChanged,
+                  ),
                 ),
               ),
-            )
-          ],
-        ),
-      );
-    });
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -438,12 +443,10 @@ class _GraphicalDatePickerMonthView extends StatefulWidget {
   });
 
   @override
-  State<_GraphicalDatePickerMonthView> createState() =>
-      _GraphicalDatePickerMonthViewState();
+  State<_GraphicalDatePickerMonthView> createState() => _GraphicalDatePickerMonthViewState();
 }
 
-class _GraphicalDatePickerMonthViewState
-    extends State<_GraphicalDatePickerMonthView> {
+class _GraphicalDatePickerMonthViewState extends State<_GraphicalDatePickerMonthView> {
   static const rowsCount = 7;
   static const columnsCount = 6;
   static const totalDays = rowsCount * columnsCount;
@@ -456,22 +459,17 @@ class _GraphicalDatePickerMonthViewState
 
   DateTime? _hoveredDateTime;
 
-  bool get isRangeSelection =>
-      widget.selectionType == AppKitDatePickerSelectionType.range;
+  bool get isRangeSelection => widget.selectionType == AppKitDatePickerSelectionType.range;
 
-  DateTime get firstDayOfMonth =>
-      DateTime(_initialDateTime.year, _initialDateTime.month, 1);
+  DateTime get firstDayOfMonth => DateTime(_initialDateTime.year, _initialDateTime.month, 1);
 
-  DateTime get firstDayOfWeek => firstDayOfMonth
-      .subtract(Duration(days: firstDayOfMonth.weekday - 1))
-      .copyWith(hour: 0, minute: 0, second: 0);
+  DateTime get firstDayOfWeek =>
+      firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1)).copyWith(hour: 0, minute: 0, second: 0);
 
-  DateTime get lastDayOfMonth => DateTime(
-      _initialDateTime.year, _initialDateTime.month + 1, 0, 23, 59, 59);
+  DateTime get lastDayOfMonth => DateTime(_initialDateTime.year, _initialDateTime.month + 1, 0, 23, 59, 59);
 
-  DateTime get lastDayOfWeek => firstDayOfWeek
-      .add(const Duration(days: totalDays - 1))
-      .copyWith(hour: 23, minute: 59, second: 59);
+  DateTime get lastDayOfWeek =>
+      firstDayOfWeek.add(const Duration(days: totalDays - 1)).copyWith(hour: 23, minute: 59, second: 59);
 
   late DateTime today = DateTime.now();
 
@@ -484,8 +482,7 @@ class _GraphicalDatePickerMonthViewState
     if (oldWidget.currentDateTime != widget.currentDateTime) {
       _currentDateTime = widget.currentDateTime;
 
-      if (widget.currentDateTime.start != _pointerDownDate &&
-          widget.currentDateTime.end != _pointerDownDate) {
+      if (widget.currentDateTime.start != _pointerDownDate && widget.currentDateTime.end != _pointerDownDate) {
         _pointerDownDate = widget.currentDateTime.start;
       }
     }
@@ -496,22 +493,19 @@ class _GraphicalDatePickerMonthViewState
   }
 
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
-    final bool isShiftPressed =
-        isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
+    final bool isShiftPressed = isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
 
     if (event is KeyDownEvent || event is KeyRepeatEvent) {
       /// -->
-      if (event.logicalKey == LogicalKeyboardKey.arrowRight ||
-          event.logicalKey == LogicalKeyboardKey.arrowDown) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowRight || event.logicalKey == LogicalKeyboardKey.arrowDown) {
         _pointerDownDate ??= _currentDateTime.start;
 
-        final nextDay = _currentDateTime.end.add(Duration(
-            days: event.logicalKey == LogicalKeyboardKey.arrowRight ? 1 : 7));
+        final nextDay = _currentDateTime.end.add(
+          Duration(days: event.logicalKey == LogicalKeyboardKey.arrowRight ? 1 : 7),
+        );
 
-        final isBeforeMinimumDate =
-            widget.minimumDate != null && nextDay.isBefore(widget.minimumDate!);
-        final isAfterMaximumDate =
-            widget.maximumDate != null && nextDay.isAfter(widget.maximumDate!);
+        final isBeforeMinimumDate = widget.minimumDate != null && nextDay.isBefore(widget.minimumDate!);
+        final isAfterMaximumDate = widget.maximumDate != null && nextDay.isAfter(widget.maximumDate!);
         final isWithinValidRange = !isBeforeMinimumDate && !isAfterMaximumDate;
 
         if (!nextDay.isSameMonth(firstDayOfMonth)) {
@@ -526,8 +520,7 @@ class _GraphicalDatePickerMonthViewState
 
             if (isRangeSelection) {
               if (isShiftPressed) {
-                _currentDateTime =
-                    DateTimeRange(start: _pointerDownDate!, end: nextDay);
+                _currentDateTime = DateTimeRange(start: _pointerDownDate!, end: nextDay);
               } else {
                 widget.onChanged?.call(right(DateTimeRange.single(nextDay)));
               }
@@ -537,17 +530,15 @@ class _GraphicalDatePickerMonthViewState
           });
         }
         return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
-          event.logicalKey == LogicalKeyboardKey.arrowUp) {
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft || event.logicalKey == LogicalKeyboardKey.arrowUp) {
         _pointerDownDate ??= _currentDateTime.end;
 
-        final nextDay = _currentDateTime.start.subtract(Duration(
-            days: event.logicalKey == LogicalKeyboardKey.arrowLeft ? 1 : 7));
+        final nextDay = _currentDateTime.start.subtract(
+          Duration(days: event.logicalKey == LogicalKeyboardKey.arrowLeft ? 1 : 7),
+        );
 
-        final isBeforeMinimumDate =
-            widget.minimumDate != null && nextDay.isBefore(widget.minimumDate!);
-        final isAfterMaximumDate =
-            widget.maximumDate != null && nextDay.isAfter(widget.maximumDate!);
+        final isBeforeMinimumDate = widget.minimumDate != null && nextDay.isBefore(widget.minimumDate!);
+        final isAfterMaximumDate = widget.maximumDate != null && nextDay.isAfter(widget.maximumDate!);
         final isWithinValidRange = !isBeforeMinimumDate && !isAfterMaximumDate;
 
         if (!nextDay.isSameMonth(firstDayOfMonth)) {
@@ -562,8 +553,7 @@ class _GraphicalDatePickerMonthViewState
 
             if (isRangeSelection) {
               if (isShiftPressed) {
-                _currentDateTime =
-                    DateTimeRange(start: _pointerDownDate!, end: nextDay);
+                _currentDateTime = DateTimeRange(start: _pointerDownDate!, end: nextDay);
               } else {
                 widget.onChanged?.call(right(DateTimeRange.single(nextDay)));
               }
@@ -594,13 +584,10 @@ class _GraphicalDatePickerMonthViewState
       return;
     }
     final day = _hoveredDateTime!;
-    final isBeforeCurrentMonth =
-        day.isBefore(firstDayOfMonth.copyWith(hour: 0, minute: 0, second: 0));
+    final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth.copyWith(hour: 0, minute: 0, second: 0));
     final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
-    final isBeforeMinimumDate =
-        widget.minimumDate != null && day.isBefore(widget.minimumDate!);
-    final isAfterMaximumDate =
-        widget.maximumDate != null && day.isAfter(widget.maximumDate!);
+    final isBeforeMinimumDate = widget.minimumDate != null && day.isBefore(widget.minimumDate!);
+    final isAfterMaximumDate = widget.maximumDate != null && day.isAfter(widget.maximumDate!);
     final isWithinValidRange = !isBeforeMinimumDate && !isAfterMaximumDate;
 
     FocusScope.of(context).requestFocus(widget.childFocusNode);
@@ -609,8 +596,7 @@ class _GraphicalDatePickerMonthViewState
       // do nothing
     } else if (isWithinValidRange) {
       // final bool isShiftPressed = isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
-      final isShiftPressed =
-          isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
+      final isShiftPressed = isRangeSelection && HardwareKeyboard.instance.isShiftPressed;
 
       setState(() {
         _pointerDownDate = day;
@@ -634,20 +620,15 @@ class _GraphicalDatePickerMonthViewState
   }
 
   void _handlePanUpdate() {
-    if (_hoveredDateTime == null ||
-        !_isMousePressed ||
-        _pointerDownDate == null) {
+    if (_hoveredDateTime == null || !_isMousePressed || _pointerDownDate == null) {
       return;
     }
 
     final day = _hoveredDateTime!;
-    final isBeforeCurrentMonth =
-        day.isBefore(firstDayOfMonth.copyWith(hour: 0, minute: 0, second: 0));
+    final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth.copyWith(hour: 0, minute: 0, second: 0));
     final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
-    final isBeforeMinimumDate =
-        widget.minimumDate != null && day.isBefore(widget.minimumDate!);
-    final isAfterMaximumDate =
-        widget.maximumDate != null && day.isAfter(widget.maximumDate!);
+    final isBeforeMinimumDate = widget.minimumDate != null && day.isBefore(widget.minimumDate!);
+    final isAfterMaximumDate = widget.maximumDate != null && day.isAfter(widget.maximumDate!);
     final isWithinValidRange = !isBeforeMinimumDate && !isAfterMaximumDate;
 
     if (isBeforeCurrentMonth) {
@@ -660,13 +641,11 @@ class _GraphicalDatePickerMonthViewState
 
     if (day.isBefore(_pointerDownDate!)) {
       setState(() {
-        _currentDateTime =
-            DateTimeRange(start: day, end: _pointerDownDate!, direction: -1);
+        _currentDateTime = DateTimeRange(start: day, end: _pointerDownDate!, direction: -1);
       });
     } else if (day.isAfter(_pointerDownDate!)) {
       setState(() {
-        _currentDateTime =
-            DateTimeRange(start: _pointerDownDate!, end: day, direction: 1);
+        _currentDateTime = DateTimeRange(start: _pointerDownDate!, end: day, direction: 1);
       });
     }
   }
@@ -682,10 +661,8 @@ class _GraphicalDatePickerMonthViewState
   void _handleTap(DateTime day) {
     final isBeforeCurrentMonth = day.isBefore(firstDayOfMonth);
     final isAfterCurrentMonth = day.isAfter(lastDayOfMonth);
-    final isBeforeMinimumDate =
-        widget.minimumDate != null && day.isBefore(widget.minimumDate!);
-    final isAfterMaximumDate =
-        widget.maximumDate != null && day.isAfter(widget.maximumDate!);
+    final isBeforeMinimumDate = widget.minimumDate != null && day.isBefore(widget.minimumDate!);
+    final isAfterMaximumDate = widget.maximumDate != null && day.isAfter(widget.maximumDate!);
     final isWithinValidRange = !isBeforeMinimumDate && !isAfterMaximumDate;
 
     setState(() {
@@ -743,156 +720,132 @@ class _GraphicalDatePickerMonthViewState
     return Padding(
       // padding: const EdgeInsets.only(left: 1.0, right: 3.0, bottom: 4.0, top: 2.0),
       padding: EdgeInsets.zero,
-      child: LayoutBuilder(builder: (context, constraints) {
-        // now create a grid displaying all the days, starting from the firstDayOfWeek to the lastDayOfWeek
-        final totalWidth = constraints.maxWidth;
-        final totalHeight = constraints.maxHeight;
-        final days = <List<Widget>>[];
-        List<Widget> currentRow = <Widget>[];
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // now create a grid displaying all the days, starting from the firstDayOfWeek to the lastDayOfWeek
+          final totalWidth = constraints.maxWidth;
+          final totalHeight = constraints.maxHeight;
+          final days = <List<Widget>>[];
+          List<Widget> currentRow = <Widget>[];
 
-        for (var i = 0; i < totalDays; i++) {
-          final day = firstDayOfWeek.add(Duration(days: i));
-          final isCurrentMonth = day.month == _initialDateTime.month;
-          final isToday = day.day == today.day &&
-              day.month == today.month &&
-              day.year == today.year;
-          final isBeforeMinimumDate =
-              widget.minimumDate != null && day.isBefore(widget.minimumDate!);
-          final isAfterMaximumDate =
-              widget.maximumDate != null && day.isAfter(widget.maximumDate!);
-          final isSelected = _currentDateTime.contains(day);
+          for (var i = 0; i < totalDays; i++) {
+            final day = firstDayOfWeek.add(Duration(days: i));
+            final isCurrentMonth = day.month == _initialDateTime.month;
+            final isToday = day.day == today.day && day.month == today.month && day.year == today.year;
+            final isBeforeMinimumDate = widget.minimumDate != null && day.isBefore(widget.minimumDate!);
+            final isAfterMaximumDate = widget.maximumDate != null && day.isAfter(widget.maximumDate!);
+            final isSelected = _currentDateTime.contains(day);
 
-          final isPreviousDaySelected =
-              day.weekday != 0 && _currentDateTime.isBefore(day);
-          final isNextDaySelected =
-              day.weekday != 7 && _currentDateTime.isAfter(day);
+            final isPreviousDaySelected = day.weekday != 0 && _currentDateTime.isBefore(day);
+            final isNextDaySelected = day.weekday != 7 && _currentDateTime.isAfter(day);
 
-          final backgroundColor = enabled && isSelected
-              ? widget.isMainWindow && isFocused
-                  ? widget.accentColor
-                  : AppKitColors.systemGray.withLuminance(0.85)
-              : null;
+            final backgroundColor = enabled && isSelected
+                ? widget.isMainWindow && isFocused
+                      ? widget.accentColor
+                      : AppKitColors.systemGray.withLuminance(0.85)
+                : null;
 
-          double dayTextOpacity = 1.0;
+            double dayTextOpacity = 1.0;
 
-          if (!enabled) {
-            dayTextOpacity *= 0.5;
-          }
+            if (!enabled) {
+              dayTextOpacity *= 0.5;
+            }
 
-          if (!isCurrentMonth) {
-            dayTextOpacity *= 0.5;
-          }
+            if (!isCurrentMonth) {
+              dayTextOpacity *= 0.5;
+            }
 
-          if (isBeforeMinimumDate || isAfterMaximumDate) {
-            dayTextOpacity *= 0.4;
-          }
+            if (isBeforeMinimumDate || isAfterMaximumDate) {
+              dayTextOpacity *= 0.4;
+            }
 
-          Color dayTextColor = backgroundColor != null
-              ? backgroundColor.computeLuminance() >= 0.5
-                  ? AppKitColors.text.opaque.primary
-                  : AppKitColors.text.opaque.primary.darkColor
-              : isToday && widget.isMainWindow && isFocused
-                  ? widget.accentColor
-                  : AppKitColors.text.opaque.primary;
+            Color dayTextColor = backgroundColor != null
+                ? backgroundColor.computeLuminance() >= 0.5
+                      ? AppKitColors.text.opaque.primary
+                      : AppKitColors.text.opaque.primary.darkColor
+                : isToday && widget.isMainWindow && isFocused
+                ? widget.accentColor
+                : AppKitColors.text.opaque.primary;
 
-          dayTextColor = dayTextColor.multiplyOpacity(dayTextOpacity);
+            dayTextColor = dayTextColor.multiplyOpacity(dayTextOpacity);
 
-          final textStyle = dayTextStyle.copyWith(
-              color: dayTextColor,
-              fontWeight: isToday ? FontWeight.bold : null);
+            final textStyle = dayTextStyle.copyWith(color: dayTextColor, fontWeight: isToday ? FontWeight.bold : null);
 
-          final dayWidget = Padding(
-            padding: const EdgeInsets.only(bottom: 2.0),
-            child: MouseRegion(
-              onEnter: enabled && isRangeSelection
-                  ? (_) => _handleMouseEnter(day)
-                  : null,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: enabled ? () => _handleTap(day) : null,
-                child: SizedBox(
-                  width: (totalWidth / rowsCount) - 0, // see padding
-                  height: (totalHeight / columnsCount) - 2, // see paddings
-                  child: DecoratedBox(
-                    decoration: isSelected &&
-                            (isPreviousDaySelected && isNextDaySelected)
-                        ? BoxDecoration(color: backgroundColor)
-                        : isSelected &&
-                                (!isPreviousDaySelected && isNextDaySelected)
-                            ? BoxDecoration(
-                                color: backgroundColor,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(3.0),
-                                    bottomLeft: Radius.circular(3.0)))
-                            : isSelected &&
-                                    (!isNextDaySelected &&
-                                        isPreviousDaySelected)
-                                ? BoxDecoration(
-                                    color: backgroundColor,
-                                    borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(3.0),
-                                        bottomRight: Radius.circular(3.0)))
-                                : isSelected
-                                    ? BoxDecoration(
-                                        color: backgroundColor,
-                                        borderRadius:
-                                            BorderRadius.circular(3.0))
-                                    : const BoxDecoration(),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 2.0, bottom: 2),
-                        child: Text(
-                          day.day.toString(),
-                          style: textStyle,
-                          textAlign: TextAlign.end,
+            final dayWidget = Padding(
+              padding: const EdgeInsets.only(bottom: 2.0),
+              child: MouseRegion(
+                onEnter: enabled && isRangeSelection ? (_) => _handleMouseEnter(day) : null,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: enabled ? () => _handleTap(day) : null,
+                  child: SizedBox(
+                    width: (totalWidth / rowsCount) - 0, // see padding
+                    height: (totalHeight / columnsCount) - 2, // see paddings
+                    child: DecoratedBox(
+                      decoration: isSelected && (isPreviousDaySelected && isNextDaySelected)
+                          ? BoxDecoration(color: backgroundColor)
+                          : isSelected && (!isPreviousDaySelected && isNextDaySelected)
+                          ? BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(3.0),
+                                bottomLeft: Radius.circular(3.0),
+                              ),
+                            )
+                          : isSelected && (!isNextDaySelected && isPreviousDaySelected)
+                          ? BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(3.0),
+                                bottomRight: Radius.circular(3.0),
+                              ),
+                            )
+                          : isSelected
+                          ? BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(3.0))
+                          : const BoxDecoration(),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 2.0, bottom: 2),
+                          child: Text(day.day.toString(), style: textStyle, textAlign: TextAlign.end),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
+            );
+            currentRow.add(dayWidget);
+
+            if (currentRow.length == 7) {
+              days.add(currentRow);
+              currentRow = <Widget>[];
+            }
+          }
+
+          if (currentRow.isNotEmpty) {
+            days.add(currentRow);
+          }
+
+          return Focus(
+            focusNode: widget.childFocusNode,
+            canRequestFocus: true,
+            onKeyEvent: enabled && widget.isMainWindow ? (node, event) => _handleKeyEvent(node, event) : null,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: enabled && isRangeSelection ? (_) => _handlePanDown() : null,
+              onPanEnd: enabled && isRangeSelection ? (_) => _handlePanEnd() : null,
+              onPanUpdate: enabled && isRangeSelection ? (_) => _handlePanUpdate() : null,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  for (var row in days) ...[Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: row)],
+                ],
+              ),
             ),
           );
-          currentRow.add(dayWidget);
-
-          if (currentRow.length == 7) {
-            days.add(currentRow);
-            currentRow = <Widget>[];
-          }
-        }
-
-        if (currentRow.isNotEmpty) {
-          days.add(currentRow);
-        }
-
-        return Focus(
-          focusNode: widget.childFocusNode,
-          canRequestFocus: true,
-          onKeyEvent: enabled && widget.isMainWindow
-              ? (node, event) => _handleKeyEvent(node, event)
-              : null,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onPanDown:
-                enabled && isRangeSelection ? (_) => _handlePanDown() : null,
-            onPanEnd:
-                enabled && isRangeSelection ? (_) => _handlePanEnd() : null,
-            onPanUpdate:
-                enabled && isRangeSelection ? (_) => _handlePanUpdate() : null,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                for (var row in days) ...[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: row),
-                ]
-              ],
-            ),
-          ),
-        );
-      }),
+        },
+      ),
     );
   }
 }
@@ -902,19 +855,13 @@ class _GraphicalDatePickerHeaderButton extends StatefulWidget {
   final bool isMainWindow;
   final VoidCallback? onPressed;
 
-  const _GraphicalDatePickerHeaderButton({
-    required this.type,
-    required this.isMainWindow,
-    this.onPressed,
-  });
+  const _GraphicalDatePickerHeaderButton({required this.type, required this.isMainWindow, this.onPressed});
 
   @override
-  State<_GraphicalDatePickerHeaderButton> createState() =>
-      _GraphicalDatePickerHeaderButtonState();
+  State<_GraphicalDatePickerHeaderButton> createState() => _GraphicalDatePickerHeaderButtonState();
 }
 
-class _GraphicalDatePickerHeaderButtonState
-    extends State<_GraphicalDatePickerHeaderButton> {
+class _GraphicalDatePickerHeaderButtonState extends State<_GraphicalDatePickerHeaderButton> {
   bool _isPressed = false;
   Timer? _timer;
 
@@ -994,8 +941,7 @@ class _GraphicalDatePickerHeaderButtonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final color =
-        AppKitColors.systemGray.color.multiplyOpacity(enabled ? 1.0 : 0.5);
+    final color = AppKitColors.systemGray.color.multiplyOpacity(enabled ? 1.0 : 0.5);
     const pressedColor = Colors.black;
 
     final Paint paint = Paint()
@@ -1086,59 +1032,52 @@ class _GrahpicalTimePickerState extends State<GrahpicalTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      return SizedBox(
-        width: _kGrahpicalTimePickerWidth,
-        height: _kGrahpicalTimePickerWidth,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            CustomPaint(
-              painter: _GrahicalTimePickerBackgroundPainter(
-                initialDateTime: time,
-                languageCode: widget.languageCode,
+    return Builder(
+      builder: (context) {
+        return SizedBox(
+          width: _kGrahpicalTimePickerWidth,
+          height: _kGrahpicalTimePickerWidth,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CustomPaint(
+                painter: _GrahicalTimePickerBackgroundPainter(initialDateTime: time, languageCode: widget.languageCode),
               ),
-            ),
-            _GraphicalTimerPickerHandle(
-              initialDateTime: time,
-              element: _GrahicalTimePickerHourPainterElement.hour,
-              onChanged: enabled ? _handleTimeChanged : null,
-            ),
-            _GraphicalTimerPickerHandle(
-              initialDateTime: time,
-              element: _GrahicalTimePickerHourPainterElement.minute,
-              onChanged: enabled ? _handleTimeChanged : null,
-            ),
-            _GraphicalTimerPickerHandle(
-              initialDateTime: time,
-              element: _GrahicalTimePickerHourPainterElement.second,
-              onChanged: enabled ? _handleTimeChanged : null,
-            ),
-          ],
-        ),
-      );
-    });
+              _GraphicalTimerPickerHandle(
+                initialDateTime: time,
+                element: _GrahicalTimePickerHourPainterElement.hour,
+                onChanged: enabled ? _handleTimeChanged : null,
+              ),
+              _GraphicalTimerPickerHandle(
+                initialDateTime: time,
+                element: _GrahicalTimePickerHourPainterElement.minute,
+                onChanged: enabled ? _handleTimeChanged : null,
+              ),
+              _GraphicalTimerPickerHandle(
+                initialDateTime: time,
+                element: _GrahicalTimePickerHourPainterElement.second,
+                onChanged: enabled ? _handleTimeChanged : null,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
 class _GraphicalTimerPickerHandle extends StatefulWidget {
-  const _GraphicalTimerPickerHandle({
-    required this.initialDateTime,
-    required this.element,
-    this.onChanged,
-  });
+  const _GraphicalTimerPickerHandle({required this.initialDateTime, required this.element, this.onChanged});
 
   final DateTime initialDateTime;
   final _GrahicalTimePickerHourPainterElement element;
   final ValueChanged<DateTime>? onChanged;
 
   @override
-  State<_GraphicalTimerPickerHandle> createState() =>
-      _GraphicalTimerPickerHandleState();
+  State<_GraphicalTimerPickerHandle> createState() => _GraphicalTimerPickerHandleState();
 }
 
-class _GraphicalTimerPickerHandleState
-    extends State<_GraphicalTimerPickerHandle> {
+class _GraphicalTimerPickerHandleState extends State<_GraphicalTimerPickerHandle> {
   _GrahicalTimePickerHourPainterElement get element => widget.element;
 
   Size _widgetSize = Size.zero;
@@ -1161,21 +1100,17 @@ class _GraphicalTimerPickerHandleState
 
   bool get enabled => widget.onChanged != null;
 
-  Color get color => element == _GrahicalTimePickerHourPainterElement.second
-      ? Colors.red
-      : Colors.black;
+  Color get color => element == _GrahicalTimePickerHourPainterElement.second ? Colors.red : Colors.black;
 
   double get radius => _widgetSize.shortestSide / 2;
 
-  double get strokeWidth =>
-      element == _GrahicalTimePickerHourPainterElement.second ? 1.25 : 3.0;
+  double get strokeWidth => element == _GrahicalTimePickerHourPainterElement.second ? 1.25 : 3.0;
 
-  double get widthRatio =>
-      element == _GrahicalTimePickerHourPainterElement.second
-          ? 0.85
-          : element == _GrahicalTimePickerHourPainterElement.minute
-              ? 0.85
-              : 0.6;
+  double get widthRatio => element == _GrahicalTimePickerHourPainterElement.second
+      ? 0.85
+      : element == _GrahicalTimePickerHourPainterElement.minute
+      ? 0.85
+      : 0.6;
 
   set currentDateTime(DateTime value) {
     setState(() {
@@ -1189,9 +1124,7 @@ class _GraphicalTimerPickerHandleState
   }
 
   void _handlePanDown(DragDownDetails details) {
-    _thumbAngle = atan2(details.localPosition.dy - radius,
-            details.localPosition.dx - radius) +
-        pi / 2;
+    _thumbAngle = atan2(details.localPosition.dy - radius, details.localPosition.dx - radius) + pi / 2;
     panStarted = true;
   }
 
@@ -1200,9 +1133,7 @@ class _GraphicalTimerPickerHandleState
   }
 
   void _handleThumbPan(DragUpdateDetails details) {
-    final angle = atan2(details.localPosition.dy - radius,
-            details.localPosition.dx - radius) +
-        pi / 2;
+    final angle = atan2(details.localPosition.dy - radius, details.localPosition.dx - radius) + pi / 2;
     double deltaAngle = angle - _thumbAngle;
 
     if (deltaAngle < -pi) {
@@ -1220,9 +1151,10 @@ class _GraphicalTimerPickerHandleState
         final seconds = deltaDegrees ~/ 6;
 
         final newDateTime = _currentDateTime.add(
-            element == _GrahicalTimePickerHourPainterElement.second
-                ? Duration(seconds: seconds)
-                : Duration(minutes: seconds));
+          element == _GrahicalTimePickerHourPainterElement.second
+              ? Duration(seconds: seconds)
+              : Duration(minutes: seconds),
+        );
         currentDateTime = newDateTime;
         _thumbAngle = angle;
       }
@@ -1277,8 +1209,7 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
   static const dayPeriodTextColor = Color(0xFFAAAAAA);
   static const clockViewBackgroundColor = Colors.white;
   static const double handPinHoleSize = 3.0;
-  static const TextStyle style =
-      TextStyle(color: dayPeriodTextColor, fontSize: 13.0);
+  static const TextStyle style = TextStyle(color: dayPeriodTextColor, fontSize: 13.0);
 
   final DateTime initialDateTime;
 
@@ -1286,10 +1217,7 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
 
   late String dayPeriod;
 
-  _GrahicalTimePickerBackgroundPainter({
-    required this.initialDateTime,
-    required this.languageCode,
-  }) {
+  _GrahicalTimePickerBackgroundPainter({required this.initialDateTime, required this.languageCode}) {
     dayPeriod = DateFormat('a', languageCode).format(initialDateTime);
   }
 
@@ -1312,13 +1240,7 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
     final shader = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      colors: [
-        clockViewBorderColor,
-        Color.alphaBlend(
-          const Color(0xFF767574),
-          clockViewBorderColor,
-        ),
-      ],
+      colors: [clockViewBorderColor, Color.alphaBlend(const Color(0xFF767574), clockViewBorderColor)],
     ).createShader(rect1);
 
     // Draw the border
@@ -1329,49 +1251,25 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
     // Inner shadow
     const blurRadius = 3.0;
     final shadowPainter = Paint()
-      ..maskFilter = const MaskFilter.blur(
-        BlurStyle.normal,
-        blurRadius,
-      )
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, blurRadius)
       ..color = AppKitColors.shadowColor.withValues(alpha: 0.9);
     final path = Path()
       ..fillType = PathFillType.evenOdd
-      ..addRect(
-        const EdgeInsets.all(blurRadius)
-            .copyWith(bottom: -rect2.height / 2)
-            .inflateRect(rect2),
-      )
-      ..addArc(
-        const EdgeInsets.symmetric(horizontal: blurRadius).inflateRect(rect2),
-        pi,
-        pi,
-      );
+      ..addRect(const EdgeInsets.all(blurRadius).copyWith(bottom: -rect2.height / 2).inflateRect(rect2))
+      ..addArc(const EdgeInsets.symmetric(horizontal: blurRadius).inflateRect(rect2), pi, pi);
     canvas.clipPath(Path()..addOval(rect2));
     canvas.drawPath(path, shadowPainter);
   }
 
   void _paintAmPm(Canvas canvas, Size size) {
     TextSpan span = TextSpan(style: style, text: dayPeriod);
-    TextPainter periodPainter = TextPainter(
-        text: span,
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr);
+    TextPainter periodPainter = TextPainter(text: span, textAlign: TextAlign.center, textDirection: TextDirection.ltr);
     periodPainter.layout();
-    periodPainter.paint(
-      canvas,
-      size.center(
-        const Offset(0.0, 20.0) - periodPainter.size.center(Offset.zero),
-      ),
-    );
+    periodPainter.paint(canvas, size.center(const Offset(0.0, 20.0) - periodPainter.size.center(Offset.zero)));
   }
 
-  void _paintHours(
-    Canvas canvas,
-    Size size,
-    double scaleFactor,
-  ) {
-    TextStyle style = const TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w300, fontSize: 13.0);
+  void _paintHours(Canvas canvas, Size size, double scaleFactor) {
+    TextStyle style = const TextStyle(color: Colors.black, fontWeight: FontWeight.w300, fontSize: 13.0);
     double distanceFromBorder = 16.0;
 
     double radius = size.shortestSide / 2;
@@ -1379,16 +1277,9 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
 
     for (var hour = 1; hour <= 12; hour++) {
       double angle = (hour * pi / 6) - pi / 2;
-      Offset offset = Offset(
-        longHandLength * cos(angle),
-        longHandLength * sin(angle),
-      );
+      Offset offset = Offset(longHandLength * cos(angle), longHandLength * sin(angle));
       TextSpan span = TextSpan(style: style, text: hour.toString());
-      TextPainter tp = TextPainter(
-        text: span,
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      );
+      TextPainter tp = TextPainter(text: span, textAlign: TextAlign.center, textDirection: TextDirection.ltr);
       tp.layout();
       tp.paint(canvas, size.center(offset - tp.size.center(Offset.zero)));
     }
@@ -1400,18 +1291,13 @@ class _GrahicalTimePickerBackgroundPainter extends CustomPainter {
       ..isAntiAlias = true
       ..style = PaintingStyle.fill;
 
-    canvas.drawCircle(
-      size.center(Offset.zero),
-      handPinHoleSize,
-      pinHolePainter,
-    );
+    canvas.drawCircle(size.center(Offset.zero), handPinHoleSize, pinHolePainter);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return oldDelegate is _GrahicalTimePickerBackgroundPainter &&
-        (oldDelegate.initialDateTime != initialDateTime ||
-            oldDelegate.languageCode != languageCode);
+        (oldDelegate.initialDateTime != initialDateTime || oldDelegate.languageCode != languageCode);
   }
 }
 
@@ -1453,29 +1339,28 @@ class _GrahicalTimePickerHandlePainter extends CustomPainter {
     Offset center = size.center(Offset.zero);
 
     final rect = Rect.fromLTRB(
-        element == _GrahicalTimePickerHourPainterElement.second
-            ? -(shortestSide * 0.05833333333)
-            : 0,
-        -strokeWidth / 2,
-        hourHandLength,
-        strokeWidth / 2);
+      element == _GrahicalTimePickerHourPainterElement.second ? -(shortestSide * 0.05833333333) : 0,
+      -strokeWidth / 2,
+      hourHandLength,
+      strokeWidth / 2,
+    );
 
-    final rrect =
-        RRect.fromRectAndRadius(rect, Radius.circular(strokeWidth / 2));
+    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(strokeWidth / 2));
 
     // rotate the rect
     Path path = Path()
       ..addRRect(rrect)
       ..close();
 
-    final radians = -pi / 2 +
+    final radians =
+        -pi / 2 +
         2 *
             pi *
             (element == _GrahicalTimePickerHourPainterElement.hour
                 ? hour
                 : element == _GrahicalTimePickerHourPainterElement.minute
-                    ? minutes
-                    : seconds);
+                ? minutes
+                : seconds);
 
     path = path.transform(Matrix4.rotationZ(radians).storage);
     path = path.shift(center);
@@ -1485,10 +1370,7 @@ class _GrahicalTimePickerHandlePainter extends CustomPainter {
       ..addRect(hitTestRect)
       ..close();
 
-    _hitTestPath = Path()
-      ..addPath(
-          hitPath.transform(Matrix4.rotationZ(radians).storage).shift(center),
-          Offset.zero);
+    _hitTestPath = Path()..addPath(hitPath.transform(Matrix4.rotationZ(radians).storage).shift(center), Offset.zero);
 
     if (element == _GrahicalTimePickerHourPainterElement.second) {
       canvas.drawCircle(center, 2, handPaint);

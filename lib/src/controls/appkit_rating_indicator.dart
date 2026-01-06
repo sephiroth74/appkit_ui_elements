@@ -100,8 +100,8 @@ class AppKitRatingIndicator extends StatefulWidget {
     this.onChanged,
     this.size,
     this.iconsPadding,
-  })  : assert(min <= max),
-        assert(value >= min && value <= max);
+  }) : assert(min <= max),
+       assert(value >= min && value <= max);
 
   @override
   State<AppKitRatingIndicator> createState() => _AppKitRatingIndicatorState();
@@ -118,8 +118,7 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
 
   late int _currentValue = widget.value;
 
-  late AppKitRatingIndicatorThemeData theme =
-      AppKitRatingIndicatorTheme.of(context);
+  late AppKitRatingIndicatorThemeData theme = AppKitRatingIndicatorTheme.of(context);
 
   late double iconsPadding = widget.iconsPadding ?? theme.iconsPadding;
 
@@ -199,27 +198,27 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
     debugCheckHasAppKitTheme(context);
 
     return Semantics(
-        label: widget.semanticLabel,
-        slider: true,
-        value: widget.value.toString(),
-        child: Consumer<MainWindowModel>(builder: (context, model, _) {
+      label: widget.semanticLabel,
+      slider: true,
+      value: widget.value.toString(),
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
           final placeholderOpacity = theme.placeholderOpacity;
           final fillColor = widget.imageColor ?? theme.imageColor;
           final placeholderColor = placeholderAlwaysVisible || _handleDown
               ? hasCustomPlaceholder
-                  ? widget.imageColor
-                  : widget.imageColor?.withValues(alpha: placeholderOpacity) ??
-                      AppKitColors.secondaryLabelColor
-                          .withValues(alpha: placeholderOpacity)
+                    ? widget.imageColor
+                    : widget.imageColor?.withValues(alpha: placeholderOpacity) ??
+                          AppKitColors.secondaryLabelColor.withValues(alpha: placeholderOpacity)
               : Colors.transparent;
           final fillIcon = widget.icon ?? theme.icon ?? Icons.star_sharp;
-          final placeholderIcon =
-              widget.placeholderIcon ?? widget.icon ?? fillIcon;
+          final placeholderIcon = widget.placeholderIcon ?? widget.icon ?? fillIcon;
 
           return SizedBox(
-              width: width,
-              height: size,
-              child: Builder(builder: (context) {
+            width: width,
+            height: size,
+            child: Builder(
+              builder: (context) {
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onPanDown: enabled ? _onPanDown : null,
@@ -229,20 +228,19 @@ class _AppKitRatingIndicatorState extends State<AppKitRatingIndicator> {
                     children: List.generate(widget.max, (index) {
                       final isPlaceholder = index >= value;
                       final icon = isPlaceholder ? placeholderIcon : fillIcon;
-                      final iconColor =
-                          isPlaceholder ? placeholderColor : fillColor;
+                      final iconColor = isPlaceholder ? placeholderColor : fillColor;
                       return Positioned(
                         left: index * (size + iconsPadding),
-                        child: Icon(
-                          icon,
-                          color: iconColor,
-                          size: size,
-                        ),
+                        child: Icon(icon, color: iconColor, size: size),
                       );
                     }),
                   ),
                 );
-              }));
-        }));
+              },
+            ),
+          );
+        },
+      ),
+    );
   }
 }

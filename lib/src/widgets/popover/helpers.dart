@@ -22,13 +22,14 @@ extension PopoverX on BuildContext {
     assert(link == null || itemRect == null);
 
     final state = AppKitPopoverState(
-        itemRect: itemRect,
-        link: link,
-        child: child,
-        targetAnchor: targetAnchor,
-        direction: direction,
-        position: position,
-        showArrow: showArrow);
+      itemRect: itemRect,
+      link: link,
+      child: child,
+      targetAnchor: targetAnchor,
+      direction: direction,
+      position: position,
+      showArrow: showArrow,
+    );
 
     final navigator = Navigator.of(this);
     return await Navigator.push<dynamic>(
@@ -36,18 +37,10 @@ extension PopoverX on BuildContext {
       _AppKitPopOverPageRoute<dynamic>(
         pageBuilder: (context, animation, secondaryAnimation) {
           return Stack(
-            children: [
-              AppKitPopoverWidget(
-                popoverState: state,
-                transitionDuration: transitionDuration,
-              )
-            ],
+            children: [AppKitPopoverWidget(popoverState: state, transitionDuration: transitionDuration)],
           );
         },
-        capturedThemes: InheritedTheme.capture(
-          from: context,
-          to: navigator.context,
-        ),
+        capturedThemes: InheritedTheme.capture(from: context, to: navigator.context),
         settings: RouteSettings(name: "popover-menu", arguments: uuid),
         fullscreenDialog: true,
         barrierDismissible: true,
@@ -61,16 +54,16 @@ extension PopoverX on BuildContext {
   }
 
   bool isPopoverVisible(String uuid) {
-    return ModalRoute.of(this)!.settings.name == "popover-menu" &&
-        ModalRoute.of(this)!.settings.arguments == uuid;
+    return ModalRoute.of(this)!.settings.name == "popover-menu" && ModalRoute.of(this)!.settings.arguments == uuid;
   }
 }
 
 Widget _defaultTransitionsBuilder(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child) {
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
   return child;
 }
 
@@ -116,29 +109,33 @@ class _AppKitPopOverPageRoute<T> extends PageRoute<T> {
   });
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
       removeBottom: true,
       removeLeft: true,
       removeRight: true,
-      child: capturedThemes.wrap(LayoutBuilder(builder: (context, constraints) {
-        return Consumer<MainWindowModel>(builder: (context, model, _) {
-          if (!model.isMainWindow) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              // remove the navigator overlay, if it's a AppKitPopOverPageRoute
-              final navigator = Navigator.of(context);
-              if (navigator.canPop()) {
-                Navigator.of(context)
-                    .popUntil((route) => route is! _AppKitPopOverPageRoute);
-              }
-            });
-          }
-          return pageBuilder(context, animation, secondaryAnimation);
-        });
-      })),
+      child: capturedThemes.wrap(
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Consumer<MainWindowModel>(
+              builder: (context, model, _) {
+                if (!model.isMainWindow) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
+                    // remove the navigator overlay, if it's a AppKitPopOverPageRoute
+                    final navigator = Navigator.of(context);
+                    if (navigator.canPop()) {
+                      Navigator.of(context).popUntil((route) => route is! _AppKitPopOverPageRoute);
+                    }
+                  });
+                }
+                return pageBuilder(context, animation, secondaryAnimation);
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

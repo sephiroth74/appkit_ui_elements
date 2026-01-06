@@ -90,8 +90,8 @@ class AppKitLevelIndicator extends StatefulWidget {
     this.majorTickMarks = 0,
     this.minorTickMarks = 0,
     this.style = AppKitLevelIndicatorStyle.continuous,
-  })  : assert(min <= max),
-        assert(value >= min && value <= max);
+  }) : assert(min <= max),
+       assert(value >= min && value <= max);
 
   @override
   State<AppKitLevelIndicator> createState() => _AppKitLevelIndicatorState();
@@ -112,8 +112,7 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
 
   bool get hasTickMarks =>
       widget.majorTickMarks > 0 ||
-      widget.minorTickMarks > 0 &&
-          widget.tickMarkPosition != AppKitLevelIndicatorTickMarkPosition.none;
+      widget.minorTickMarks > 0 && widget.tickMarkPosition != AppKitLevelIndicatorTickMarkPosition.none;
 
   set animatedValue(double? value) {
     if (value != _animatedValue) {
@@ -125,8 +124,7 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
 
   bool get discrete => widget.style == AppKitLevelIndicatorStyle.discrete;
 
-  double get sanitizedValue =>
-      discrete ? widget.value.floor().toDouble() : widget.value;
+  double get sanitizedValue => discrete ? widget.value.floor().toDouble() : widget.value;
 
   double get value => _animatedValue ?? sanitizedValue;
 
@@ -134,15 +132,13 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
     final RenderBox box = context.findRenderObject() as RenderBox;
     final Offset localOffset = box.globalToLocal(details.globalPosition);
     final double value = localOffset.dx / box.size.width; // 0 to 1
-    double valueInRange =
-        value * (widget.max - widget.min) + widget.min; // min to max
+    double valueInRange = value * (widget.max - widget.min) + widget.min; // min to max
 
     if (discrete) {
       valueInRange = valueInRange.ceilToDouble();
     }
 
-    final double clampedValue =
-        valueInRange.clamp(widget.min.toDouble(), widget.max.toDouble());
+    final double clampedValue = valueInRange.clamp(widget.min.toDouble(), widget.max.toDouble());
 
     if (continuous) {
       widget.onChanged?.call(clampedValue);
@@ -155,15 +151,13 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
     final RenderBox box = context.findRenderObject() as RenderBox;
     final Offset localOffset = box.globalToLocal(details.globalPosition);
     final double value = localOffset.dx / box.size.width;
-    double valueInRange =
-        value * (widget.max - widget.min) + widget.min; // min to max
+    double valueInRange = value * (widget.max - widget.min) + widget.min; // min to max
 
     if (discrete) {
       valueInRange = valueInRange.ceilToDouble();
     }
 
-    final double clampedValue =
-        valueInRange.clamp(widget.min.toDouble(), widget.max.toDouble());
+    final double clampedValue = valueInRange.clamp(widget.min.toDouble(), widget.max.toDouble());
 
     if (continuous) {
       widget.onChanged?.call(clampedValue);
@@ -195,56 +189,51 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
       label: widget.semanticLabel,
       slider: true,
       value: widget.value.toStringAsFixed(2),
-      child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        return LayoutBuilder(builder: (context, constraints) {
-          final levelIndicatorsTheme = AppKitLevelIndicatorsTheme.of(context);
-          final normalColor =
-              widget.normalColor ?? levelIndicatorsTheme.normalColor;
-          final warningColor =
-              widget.warningColor ?? levelIndicatorsTheme.warningColor;
-          final criticalColor =
-              widget.criticalColor ?? levelIndicatorsTheme.criticalColor;
-          final borderRadius = levelIndicatorsTheme.borderRadius;
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final levelIndicatorsTheme = AppKitLevelIndicatorsTheme.of(context);
+              final normalColor = widget.normalColor ?? levelIndicatorsTheme.normalColor;
+              final warningColor = widget.warningColor ?? levelIndicatorsTheme.warningColor;
+              final criticalColor = widget.criticalColor ?? levelIndicatorsTheme.criticalColor;
+              final borderRadius = levelIndicatorsTheme.borderRadius;
 
-          final color = drawsTieredCapacityLevels
-              ? normalColor
-              : value < widget.warningValue
+              final color = drawsTieredCapacityLevels
+                  ? normalColor
+                  : value < widget.warningValue
                   ? normalColor
                   : value < widget.criticalValue
-                      ? warningColor
-                      : criticalColor;
+                  ? warningColor
+                  : criticalColor;
 
-          final strokeColor = levelIndicatorsTheme.strokeColor;
-          final backgroundColor = levelIndicatorsTheme.backgroundColor;
-          final totalHeight = _kHeight +
-              (hasTickMarks ? _kTickMarkHeightMajor + _kTickMarkPadding : 0);
-          final boxConstraints = BoxConstraints.loose(Size(
-            constraints.maxWidth.isFinite ? constraints.maxWidth : _kWidth,
-            totalHeight,
-          ));
+              final strokeColor = levelIndicatorsTheme.strokeColor;
+              final backgroundColor = levelIndicatorsTheme.backgroundColor;
+              final totalHeight = _kHeight + (hasTickMarks ? _kTickMarkHeightMajor + _kTickMarkPadding : 0);
+              final boxConstraints = BoxConstraints.loose(
+                Size(constraints.maxWidth.isFinite ? constraints.maxWidth : _kWidth, totalHeight),
+              );
 
-          return ConstrainedBox(
-              constraints: boxConstraints,
-              child: Column(
-                children: [
-                  if (hasTickMarks &&
-                      widget.tickMarkPosition ==
-                          AppKitLevelIndicatorTickMarkPosition.above) ...[
-                    CustomPaint(
-                      size: Size(constraints.maxWidth, _kTickMarkHeightMajor),
-                      painter: _LevelIndicatorTickMarksPainter(
-                        majorTickMarks: widget.majorTickMarks,
-                        minorTickMarks: widget.minorTickMarks,
-                        position: widget.tickMarkPosition,
-                        color: strokeColor,
-                        width: _kTickMarkWidth,
-                        heightMajor: _kTickMarkHeightMajor,
-                        heightMinor: _kTickMarkHeightMinor,
+              return ConstrainedBox(
+                constraints: boxConstraints,
+                child: Column(
+                  children: [
+                    if (hasTickMarks && widget.tickMarkPosition == AppKitLevelIndicatorTickMarkPosition.above) ...[
+                      CustomPaint(
+                        size: Size(constraints.maxWidth, _kTickMarkHeightMajor),
+                        painter: _LevelIndicatorTickMarksPainter(
+                          majorTickMarks: widget.majorTickMarks,
+                          minorTickMarks: widget.minorTickMarks,
+                          position: widget.tickMarkPosition,
+                          color: strokeColor,
+                          width: _kTickMarkWidth,
+                          heightMajor: _kTickMarkHeightMajor,
+                          heightMinor: _kTickMarkHeightMinor,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: _kTickMarkPadding),
-                  ],
-                  GestureDetector(
+                      const SizedBox(height: _kTickMarkPadding),
+                    ],
+                    GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onPanDown: enabled ? _onPanDown : null,
                       onPanUpdate: enabled ? _onPanUpdate : null,
@@ -252,64 +241,64 @@ class _AppKitLevelIndicatorState extends State<AppKitLevelIndicator> {
                       child: SizedBox(
                         width: boxConstraints.maxWidth,
                         height: _kHeight,
-                        child:
-                            widget.style == AppKitLevelIndicatorStyle.continuous
-                                ? _AnimatedIndicator(
-                                    drawsTieredCapacityLevels:
-                                        drawsTieredCapacityLevels,
-                                    style: widget.style,
-                                    value: value,
-                                    min: min,
-                                    max: max,
-                                    warningValue: widget.warningValue,
-                                    criticalValue: widget.criticalValue,
-                                    normalColor: color,
-                                    warningColor: warningColor,
-                                    criticalColor: criticalColor,
-                                    strokeWidth: _kStrokeWidth,
-                                    strokeColor: strokeColor,
-                                    backgroundColor: backgroundColor,
-                                    borderRadius: borderRadius,
-                                  )
-                                : CustomPaint(
-                                    painter: _DiscreteIndicatorPainter(
-                                    value: value,
-                                    min: min,
-                                    max: max,
-                                    warningValue: widget.warningValue,
-                                    criticalValue: widget.criticalValue,
-                                    normalColor: normalColor,
-                                    warningColor: warningColor,
-                                    criticalColor: criticalColor,
-                                    strokeWidth: _kStrokeWidth,
-                                    strokeColor: strokeColor,
-                                    backgroundColor: backgroundColor,
-                                    borderRadius: borderRadius,
-                                    drawsTieredCapacityLevels:
-                                        drawsTieredCapacityLevels,
-                                  )),
-                      )),
-                  if (hasTickMarks &&
-                      widget.tickMarkPosition ==
-                          AppKitLevelIndicatorTickMarkPosition.below) ...[
-                    const SizedBox(height: _kTickMarkPadding),
-                    CustomPaint(
-                      size: Size(constraints.maxWidth, _kTickMarkHeightMajor),
-                      painter: _LevelIndicatorTickMarksPainter(
-                        majorTickMarks: widget.majorTickMarks,
-                        minorTickMarks: widget.minorTickMarks,
-                        position: widget.tickMarkPosition,
-                        color: strokeColor,
-                        width: _kTickMarkWidth,
-                        heightMajor: _kTickMarkHeightMajor,
-                        heightMinor: _kTickMarkHeightMinor,
+                        child: widget.style == AppKitLevelIndicatorStyle.continuous
+                            ? _AnimatedIndicator(
+                                drawsTieredCapacityLevels: drawsTieredCapacityLevels,
+                                style: widget.style,
+                                value: value,
+                                min: min,
+                                max: max,
+                                warningValue: widget.warningValue,
+                                criticalValue: widget.criticalValue,
+                                normalColor: color,
+                                warningColor: warningColor,
+                                criticalColor: criticalColor,
+                                strokeWidth: _kStrokeWidth,
+                                strokeColor: strokeColor,
+                                backgroundColor: backgroundColor,
+                                borderRadius: borderRadius,
+                              )
+                            : CustomPaint(
+                                painter: _DiscreteIndicatorPainter(
+                                  value: value,
+                                  min: min,
+                                  max: max,
+                                  warningValue: widget.warningValue,
+                                  criticalValue: widget.criticalValue,
+                                  normalColor: normalColor,
+                                  warningColor: warningColor,
+                                  criticalColor: criticalColor,
+                                  strokeWidth: _kStrokeWidth,
+                                  strokeColor: strokeColor,
+                                  backgroundColor: backgroundColor,
+                                  borderRadius: borderRadius,
+                                  drawsTieredCapacityLevels: drawsTieredCapacityLevels,
+                                ),
+                              ),
                       ),
                     ),
-                  ]
-                ],
-              ));
-        });
-      }),
+                    if (hasTickMarks && widget.tickMarkPosition == AppKitLevelIndicatorTickMarkPosition.below) ...[
+                      const SizedBox(height: _kTickMarkPadding),
+                      CustomPaint(
+                        size: Size(constraints.maxWidth, _kTickMarkHeightMajor),
+                        painter: _LevelIndicatorTickMarksPainter(
+                          majorTickMarks: widget.majorTickMarks,
+                          minorTickMarks: widget.minorTickMarks,
+                          position: widget.tickMarkPosition,
+                          color: strokeColor,
+                          width: _kTickMarkWidth,
+                          heightMajor: _kTickMarkHeightMajor,
+                          heightMinor: _kTickMarkHeightMinor,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -351,23 +340,20 @@ class _AnimatedIndicator extends StatefulWidget {
   State<_AnimatedIndicator> createState() => _AnimatedIndicatorState();
 }
 
-class _AnimatedIndicatorState extends State<_AnimatedIndicator>
-    with SingleTickerProviderStateMixin {
+class _AnimatedIndicatorState extends State<_AnimatedIndicator> with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: _kAnimationDuration),
     vsync: this,
   );
 
-  late final CurvedAnimation _curvedAnimation =
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+  late final CurvedAnimation _curvedAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
 
   late ColorTween _colorTween;
 
   @override
   void initState() {
     super.initState();
-    _colorTween =
-        ColorTween(begin: widget.normalColor, end: widget.normalColor);
+    _colorTween = ColorTween(begin: widget.normalColor, end: widget.normalColor);
     _colorTween.animate(_curvedAnimation).addListener(() => setState(() {}));
     _controller.forward();
   }
@@ -465,8 +451,7 @@ class _ContinuosoIndicatorPainter extends CustomPainter {
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
 
-    final RRect rrect = RRect.fromLTRBR(
-        0, 0, size.width, size.height, Radius.circular(borderRadius));
+    final RRect rrect = RRect.fromLTRBR(0, 0, size.width, size.height, Radius.circular(borderRadius));
     canvas.drawRRect(rrect, paint);
 
     canvas.clipRRect(rrect);
@@ -479,8 +464,7 @@ class _ContinuosoIndicatorPainter extends CustomPainter {
         ..color = normalColor
         ..style = PaintingStyle.fill;
 
-      final RRect normalRRect = RRect.fromLTRBR(
-          0, 0, size.width * valuePercent, size.height, Radius.zero);
+      final RRect normalRRect = RRect.fromLTRBR(0, 0, size.width * valuePercent, size.height, Radius.zero);
       canvas.drawRRect(normalRRect, paint);
 
       // now draw the warning color (if necessary)
@@ -489,8 +473,13 @@ class _ContinuosoIndicatorPainter extends CustomPainter {
           ..color = warningColor
           ..style = PaintingStyle.fill;
 
-        final RRect warningRRect = RRect.fromLTRBR(size.width * warningPercent,
-            0, size.width * valuePercent, size.height, Radius.zero);
+        final RRect warningRRect = RRect.fromLTRBR(
+          size.width * warningPercent,
+          0,
+          size.width * valuePercent,
+          size.height,
+          Radius.zero,
+        );
         canvas.drawRRect(warningRRect, paint);
       }
 
@@ -501,11 +490,12 @@ class _ContinuosoIndicatorPainter extends CustomPainter {
           ..style = PaintingStyle.fill;
 
         final RRect criticalRRect = RRect.fromLTRBR(
-            size.width * criticalPercent,
-            0,
-            size.width * valuePercent,
-            size.height,
-            Radius.zero);
+          size.width * criticalPercent,
+          0,
+          size.width * valuePercent,
+          size.height,
+          Radius.zero,
+        );
         canvas.drawRRect(criticalRRect, paint);
       }
     } else {
@@ -514,8 +504,7 @@ class _ContinuosoIndicatorPainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       final double valuePercent = (value - min) / (max - min);
 
-      final RRect fillRRect = RRect.fromLTRBR(
-          0, 0, size.width * valuePercent, size.height, Radius.zero);
+      final RRect fillRRect = RRect.fromLTRBR(0, 0, size.width * valuePercent, size.height, Radius.zero);
       canvas.drawRRect(fillRRect, paint);
     }
 
@@ -528,11 +517,12 @@ class _ContinuosoIndicatorPainter extends CustomPainter {
       ..color = strokeColor;
 
     final RRect strokeRRect = RRect.fromLTRBR(
-        strokeWidth / 2,
-        strokeWidth / 2,
-        size.width - strokeWidth / 2,
-        size.height - strokeWidth / 2,
-        Radius.circular(borderRadius));
+      strokeWidth / 2,
+      strokeWidth / 2,
+      size.width - strokeWidth / 2,
+      size.height - strokeWidth / 2,
+      Radius.circular(borderRadius),
+    );
     canvas.drawRRect(strokeRRect, paint);
   }
 
@@ -600,21 +590,20 @@ class _DiscreteIndicatorPainter extends CustomPainter {
 
     for (int i = 0; i < totalRects; i++) {
       final double x = i * discreteRectWidth;
-      final RRect rrect =
-          RRect.fromLTRBR(x, 0, x + discreteRectWidth, size.height, radius);
+      final RRect rrect = RRect.fromLTRBR(x, 0, x + discreteRectWidth, size.height, radius);
 
       final color = i < value
           ? (drawsTieredCapacityLevels
-              ? i < warningValue
-                  ? normalColor
-                  : i < criticalValue
+                ? i < warningValue
+                      ? normalColor
+                      : i < criticalValue
                       ? warningColor
                       : criticalColor
-              : i < warningValue
-                  ? normalColor
-                  : i < criticalValue
-                      ? warningColor
-                      : criticalColor)
+                : i < warningValue
+                ? normalColor
+                : i < criticalValue
+                ? warningColor
+                : criticalColor)
           : backgroundColor;
 
       paint
@@ -632,8 +621,7 @@ class _DiscreteIndicatorPainter extends CustomPainter {
 
     for (int i = 0; i < totalRects; i++) {
       final double x = i * discreteRectWidth;
-      final RRect rrect =
-          RRect.fromLTRBR(x, 0, x + discreteRectWidth, size.height, radius);
+      final RRect rrect = RRect.fromLTRBR(x, 0, x + discreteRectWidth, size.height, radius);
       canvas.drawRRect(rrect, paint);
     }
 
@@ -685,10 +673,9 @@ class _LevelIndicatorTickMarksPainter extends CustomPainter {
       ..strokeWidth = width
       ..strokeCap = StrokeCap.round;
 
-    final double tickMarkMinorY =
-        position == AppKitLevelIndicatorTickMarkPosition.above
-            ? size.height - heightMinor
-            : 0;
+    final double tickMarkMinorY = position == AppKitLevelIndicatorTickMarkPosition.above
+        ? size.height - heightMinor
+        : 0;
 
     final double tickMarkPadding = size.width / (majorTickMarks - 1);
 

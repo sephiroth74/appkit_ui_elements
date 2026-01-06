@@ -47,8 +47,7 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
     assert(
-      widget.children
-          .every((e) => e is AppKitContentArea || e is AppKitResizablePane),
+      widget.children.every((e) => e is AppKitContentArea || e is AppKitResizablePane),
       'AppKitScaffold children must either be AppKitResizablePane or AppKitContentArea',
     );
     assert(
@@ -57,8 +56,8 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
     );
 
     // final AppKitThemeData theme = AppKitTheme.of(context);
-    Color backgroundColor = widget.backgroundColor ??
-        AppKitDynamicColor.resolve(context, AppKitColors.windowBackgroundColor);
+    Color backgroundColor =
+        widget.backgroundColor ?? AppKitDynamicColor.resolve(context, AppKitColors.windowBackgroundColor);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -81,9 +80,7 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
                 material: widget.material,
                 insertRepaintBoundary: true,
                 child: MediaQuery(
-                  data: mediaQuery.copyWith(
-                    padding: EdgeInsets.only(top: topPadding),
-                  ),
+                  data: mediaQuery.copyWith(padding: EdgeInsets.only(top: topPadding)),
                   child: _ScaffoldBody(children: children),
                 ),
               ),
@@ -91,11 +88,7 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
 
             // Toolbar
             if (widget.toolBar != null)
-              Positioned(
-                width: width,
-                height: widget.toolBar!.height,
-                child: widget.toolBar!,
-              ),
+              Positioned(width: width, height: widget.toolBar!.height, child: widget.toolBar!),
           ],
         );
       },
@@ -104,24 +97,17 @@ class _AppKitScaffoldState extends State<AppKitScaffold> {
 }
 
 class _ScaffoldBody extends MultiChildRenderObjectWidget {
-  const _ScaffoldBody({
-    super.children,
-  });
+  const _ScaffoldBody({super.children});
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    final index = children
-        .indexWhere((e) => e.key == const Key('appkit_scaffold_content_area'));
+    final index = children.indexWhere((e) => e.key == const Key('appkit_scaffold_content_area'));
     return _RenderScaffoldBody(contentAreaIndex: index > -1 ? index : null);
   }
 
   @override
-  void updateRenderObject(
-    BuildContext context,
-    _RenderScaffoldBody renderObject,
-  ) {
-    final index = children
-        .indexWhere((e) => e.key == const Key('appkit_scaffold_content_area'));
+  void updateRenderObject(BuildContext context, _RenderScaffoldBody renderObject) {
+    final index = children.indexWhere((e) => e.key == const Key('appkit_scaffold_content_area'));
     renderObject.contentAreaIndex = index > -1 ? index : null;
   }
 }
@@ -132,13 +118,8 @@ class _ParentData extends ContainerBoxParentData<RenderBox> {
 }
 
 class _RenderScaffoldBody extends RenderBox
-    with
-        ContainerRenderObjectMixin<RenderBox, _ParentData>,
-        RenderBoxContainerDefaultsMixin<RenderBox, _ParentData> {
-  _RenderScaffoldBody({
-    List<RenderBox> children = const <RenderBox>[],
-    this.contentAreaIndex,
-  }) {
+    with ContainerRenderObjectMixin<RenderBox, _ParentData>, RenderBoxContainerDefaultsMixin<RenderBox, _ParentData> {
+  _RenderScaffoldBody({List<RenderBox> children = const <RenderBox>[], this.contentAreaIndex}) {
     addAll(children);
   }
 
@@ -182,11 +163,7 @@ class _RenderScaffoldBody extends RenderBox
       if (isContentArea) {
         double contentAreaWidth = math.max(300, fullWidth - sum);
         child.layout(
-          BoxConstraints(
-            maxWidth: contentAreaWidth,
-            maxHeight: fullHeight,
-            minHeight: fullHeight,
-          ).normalize(),
+          BoxConstraints(maxWidth: contentAreaWidth, maxHeight: fullHeight, minHeight: fullHeight).normalize(),
           parentUsesSize: true,
         );
       } else {
@@ -196,8 +173,7 @@ class _RenderScaffoldBody extends RenderBox
       final _ParentData childParentData = child.parentData! as _ParentData;
       childParentData.width = childSize.width;
       if (childParentData.previousSibling != null) {
-        width +=
-            (childParentData.previousSibling?.parentData as _ParentData).width;
+        width += (childParentData.previousSibling?.parentData as _ParentData).width;
       }
       childParentData.offset = Offset(width, 0);
       childParentData.index = childCount;

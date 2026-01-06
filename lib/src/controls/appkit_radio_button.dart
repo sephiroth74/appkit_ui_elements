@@ -115,13 +115,16 @@ class AppKitRadioButton<T> extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(StringProperty(
+    properties.add(
+      StringProperty(
         'state',
         isIndeterminate
             ? 'indeterminate'
             : isSelected
-                ? 'selected'
-                : 'unselected'));
+            ? 'selected'
+            : 'unselected',
+      ),
+    );
     properties.add(ColorProperty('color', color));
     properties.add(FlagProperty('enabled', value: enabled, ifTrue: 'enabled'));
     properties.add(StringProperty('semanticLabel', semanticLabel));
@@ -158,9 +161,7 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
       onTapDown: widget.enabled ? _handleTapDown : null,
       onTapUp: widget.enabled ? _handleTapUp : null,
       onTapCancel: widget.enabled ? _handleTapCancel : null,
-      onTap: widget.onChanged != null
-          ? () => widget.onChanged!.call(widget.value)
-          : null,
+      onTap: widget.onChanged != null ? () => widget.onChanged!.call(widget.value) : null,
       child: Semantics(
         checked: widget.isSelected,
         label: widget.semanticLabel,
@@ -170,8 +171,7 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
             final theme = AppKitTheme.of(context);
             final isDark = theme.brightness == Brightness.dark;
             final controlBackgroundColor = theme.controlColor;
-            final Color accentColor =
-                widget.color ?? theme.selectedContentBackgroundColor;
+            final Color accentColor = widget.color ?? theme.selectedContentBackgroundColor;
             return Container(
               width: widget.size,
               height: widget.size,
@@ -180,10 +180,7 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 boxShadow: [
-                  if ((widget.isSelected || widget.isIndeterminate) &&
-                      isMainWindow &&
-                      widget.enabled &&
-                      !isDark) ...[
+                  if ((widget.isSelected || widget.isIndeterminate) && isMainWindow && widget.enabled && !isDark) ...[
                     BoxShadow(
                       color: accentColor.withValues(alpha: 0.12),
                       offset: const Offset(0, 0.5),
@@ -192,23 +189,20 @@ class _AppKitRadioButtonState<T> extends State<AppKitRadioButton<T>> {
                     ),
                   ] else if (isDark) ...[
                     BoxShadow(
-                      color: AppKitColors.shadowColor.color
-                          .withValues(alpha: isDark ? 0.75 : 0.15),
+                      color: AppKitColors.shadowColor.color.withValues(alpha: isDark ? 0.75 : 0.15),
                       blurRadius: 0.25,
                       spreadRadius: 0,
                       offset: const Offset(0, 0.25),
                       blurStyle: BlurStyle.outer,
                     ),
-                  ]
+                  ],
                 ],
               ),
               child: SizedBox.expand(
                 child: _DecoratedContainer(
                   isDown: buttonHeldDown,
                   color: isMainWindow ? accentColor : controlBackgroundColor,
-                  value: widget.groupValue == null
-                      ? null
-                      : widget.groupValue == widget.value,
+                  value: widget.groupValue == null ? null : widget.groupValue == widget.value,
                   enabled: widget.enabled,
                   theme: theme,
                   size: widget.size,
@@ -253,44 +247,34 @@ class _DecoratedContainer extends StatelessWidget {
     final shadowSpread = size / _kBoxShadowSpreadRatio;
     final iconColor = enabled
         ? color.computeLuminance() > 0.5
-            ? Colors.black
-            : Colors.white
+              ? Colors.black
+              : Colors.white
         : !isMainWindow && enabled
-            ? Colors.white
-            : Colors.black.withValues(alpha: 0.5);
+        ? Colors.white
+        : Colors.black.withValues(alpha: 0.5);
 
     return Container(
       foregroundDecoration: isDown
-          ? BoxDecoration(
-              color: AppKitDynamicColor.resolve(
-                  context, AppKitColors.controlBackgroundPressedColor))
+          ? BoxDecoration(color: AppKitDynamicColor.resolve(context, AppKitColors.controlBackgroundPressedColor))
           : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: !isDark && enabled && (value == false)
-              ? Border.all(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  width: size / _kBorderWidthRatio,
-                )
+              ? Border.all(color: Colors.black.withValues(alpha: 0.2), width: size / _kBorderWidthRatio)
               : null,
           color: !enabled
               ? isDark
-                  ? AppKitColors.controlBackgroundColor.color
-                      .withValues(alpha: 0.2)
-                  : AppKitColors.controlBackgroundColor.darkColor
-                      .withValues(alpha: 0.1)
+                    ? AppKitColors.controlBackgroundColor.color.withValues(alpha: 0.2)
+                    : AppKitColors.controlBackgroundColor.darkColor.withValues(alpha: 0.1)
               : value != false && isMainWindow
-                  ? color
-                  : controlBackgroundColor.withValues(alpha: 0.5),
+              ? color
+              : controlBackgroundColor.withValues(alpha: 0.5),
           boxShadow: [
             if (!isDark && enabled && (value == false || !isMainWindow)) ...[
+              BoxShadow(color: Colors.black.withValues(alpha: 0.3)),
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-              ),
-              BoxShadow(
-                color:
-                    controlBackgroundColor.withValues(alpha: enabled ? 1 : 0.1),
+                color: controlBackgroundColor.withValues(alpha: enabled ? 1 : 0.1),
                 spreadRadius: -shadowSpread,
                 blurRadius: shadowSpread,
                 offset: Offset(0, size / _kBoxShadowOffsetRatio),
@@ -307,19 +291,23 @@ class _DecoratedContainer extends StatelessWidget {
                       colors: isDark
                           ? [
                               AppKitDynamicColor.resolve(
-                                      context, AppKitColors.text.opaque.primary)
-                                  .multiplyOpacity(0.75),
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.quaternary)
-                                  .multiplyOpacity(0.0)
+                                context,
+                                AppKitColors.text.opaque.primary,
+                              ).multiplyOpacity(0.75),
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.quaternary,
+                              ).multiplyOpacity(0.0),
                             ]
                           : [
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.tertiary)
-                                  .multiplyOpacity(0.75),
-                              AppKitDynamicColor.resolve(context,
-                                      AppKitColors.text.opaque.secondary)
-                                  .multiplyOpacity(0.5)
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.tertiary,
+                              ).multiplyOpacity(0.75),
+                              AppKitDynamicColor.resolve(
+                                context,
+                                AppKitColors.text.opaque.secondary,
+                              ).multiplyOpacity(0.5),
                             ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -337,27 +325,21 @@ class _DecoratedContainer extends StatelessWidget {
                     transform: const GradientRotation(pi / 2),
                   )
                 : value == false && enabled
-                    ? LinearGradient(
-                        colors: [
-                          isDark
-                              ? Colors.black.withValues(alpha: 0.5)
-                              : Colors.white.withValues(alpha: 0.5),
-                          isDark
-                              ? Colors.black.withValues(alpha: 0.0)
-                              : Colors.white.withValues(alpha: 0.0),
-                        ],
-                        transform: const GradientRotation(pi / 2),
-                      )
-                    : null,
+                ? LinearGradient(
+                    colors: [
+                      isDark ? Colors.black.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.5),
+                      isDark ? Colors.black.withValues(alpha: 0.0) : Colors.white.withValues(alpha: 0.0),
+                    ],
+                    transform: const GradientRotation(pi / 2),
+                  )
+                : null,
           ),
           child: (value != false)
               ? Center(
                   child: CustomPaint(
                     size: Size.square(size * 0.9),
                     painter: _RadioButtonIconPainter(
-                      type: value == null
-                          ? _IconType.indeterminate
-                          : _IconType.check,
+                      type: value == null ? _IconType.indeterminate : _IconType.check,
                       color: iconColor,
                     ),
                   ),
@@ -374,16 +356,12 @@ class _RadioButtonIconPainter extends CustomPainter {
   final Color color;
   final Paint painter;
 
-  _RadioButtonIconPainter({
-    required this.type,
-    required this.color,
-  }) : painter = Paint()
-          ..color = color
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round
-          ..style = type == _IconType.check
-              ? PaintingStyle.fill
-              : PaintingStyle.stroke;
+  _RadioButtonIconPainter({required this.type, required this.color})
+    : painter = Paint()
+        ..color = color
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..style = type == _IconType.check ? PaintingStyle.fill : PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -395,9 +373,7 @@ class _RadioButtonIconPainter extends CustomPainter {
         {
           path
             ..moveTo(size.width / 2, size.height / 2)
-            ..addOval(Rect.fromCircle(
-                center: Offset(size.width / 2, size.height / 2),
-                radius: size.width / 4.25));
+            ..addOval(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 4.25));
           break;
         }
 
@@ -419,7 +395,4 @@ class _RadioButtonIconPainter extends CustomPainter {
   }
 }
 
-enum _IconType {
-  check,
-  indeterminate,
-}
+enum _IconType { check, indeterminate }

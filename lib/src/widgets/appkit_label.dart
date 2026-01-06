@@ -34,34 +34,33 @@ class AppKitLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
-    return Consumer<MainWindowModel>(builder: (context, model, _) {
-      final theme = AppKitTheme.of(context);
-      final text = DefaultTextStyle(
-        style: (theme.typography.body).copyWith(
-          color: AppKitDynamicColor.resolve(context, AppKitColors.labelColor),
-          fontWeight: FontWeight.w500,
-        ),
-        child: this.text,
-      );
-      return Row(
-        crossAxisAlignment: crossAxisAlignment,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null)
-            Padding(
-              padding: const EdgeInsets.only(right: 6),
-              child: AppKitIconTheme(
-                data: AppKitIconThemeData(
-                  size: theme.typography.body.fontSize ?? 24,
-                  color: theme.activeColor,
+    return Consumer<MainWindowModel>(
+      builder: (context, model, _) {
+        final theme = AppKitTheme.of(context);
+        final text = DefaultTextStyle(
+          style: (theme.typography.body).copyWith(
+            color: AppKitDynamicColor.resolve(context, AppKitColors.labelColor),
+            fontWeight: FontWeight.w500,
+          ),
+          child: this.text,
+        );
+        return Row(
+          crossAxisAlignment: crossAxisAlignment,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: AppKitIconTheme(
+                  data: AppKitIconThemeData(size: theme.typography.body.fontSize ?? 24, color: theme.activeColor),
+                  child: icon!,
                 ),
-                child: icon!,
               ),
-            ),
-          text,
-          if (child != null) child!,
-        ],
-      );
-    });
+            text,
+            if (child != null) child!,
+          ],
+        );
+      },
+    );
   }
 }

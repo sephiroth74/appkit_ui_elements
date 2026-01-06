@@ -19,8 +19,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
   AppKitSegmentedController multipleController2 =
       AppKitSegmentedController.multiple(length: 5, initialSelection: {3, 4});
 
-  AppKitSegmentedController singleController1 =
-      AppKitSegmentedController.single(length: 5, initialSelection: 0);
+  AppKitSegmentedController singleController1 = AppKitSegmentedController.single(length: 5, initialSelection: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +51,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const SizedBox(
-                                  width: 100, child: Text('Regular Size: ')),
+                              const SizedBox(width: 100, child: Text('Regular Size: ')),
                               Flexible(
                                 flex: 1,
                                 child: AppKitSegmentedControl(
@@ -69,8 +67,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                                     CupertinoIcons.star_fill,
                                   ],
                                   onSelectionChanged: (selection, index) {
-                                    debugPrint(
-                                        'Multiple Selection: $selection, $index');
+                                    debugPrint('Multiple Selection: $selection, $index');
                                   },
                                 ),
                               ),
@@ -80,8 +77,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const SizedBox(
-                                  width: 100, child: Text('Small Size: ')),
+                              const SizedBox(width: 100, child: Text('Small Size: ')),
                               Flexible(
                                 flex: 1,
                                 child: AppKitSegmentedControl(
@@ -107,8 +103,7 @@ class _SegmentedControlsPageState extends State<SegmentedControlsPage> {
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const SizedBox(
-                                  width: 100, child: Text('Mini Size: ')),
+                              const SizedBox(width: 100, child: Text('Mini Size: ')),
                               Flexible(
                                 flex: 1,
                                 child: AppKitSegmentedControl(

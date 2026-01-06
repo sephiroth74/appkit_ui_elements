@@ -1,17 +1,14 @@
 import 'dart:async';
 
 class AppKitGlobalWallpaperTintingSettings {
-  static final AppKitWallpaperTintingSettingsData data =
-      AppKitWallpaperTintingSettingsData();
+  static final AppKitWallpaperTintingSettingsData data = AppKitWallpaperTintingSettingsData();
 
   /// The [StreamController] for an event stream that is triggered when [data]
   /// changes.
-  static final _onDataChangedStreamController =
-      StreamController<AppKitWallpaperTintingSettingsData>.broadcast();
+  static final _onDataChangedStreamController = StreamController<AppKitWallpaperTintingSettingsData>.broadcast();
 
   /// A stream that can be used to listen to [data] changes.
-  static Stream<AppKitWallpaperTintingSettingsData> get onDataChangedStream =>
-      _onDataChangedStreamController.stream;
+  static Stream<AppKitWallpaperTintingSettingsData> get onDataChangedStream => _onDataChangedStreamController.stream;
 
   /// Gets whether wallpaper tinting should be enabled.
   static bool get isWallpaperTintingEnabled => data.isWallpaperTintingEnabled;
@@ -52,13 +49,10 @@ class AppKitWallpaperTintingSettingsData {
   bool _isWallpaperTintingDisabledByWindow = false;
 
   /// Gets whether wallpaper tinting should be enabled.
-  bool get isWallpaperTintingEnabled =>
-      !_isWallpaperTintingDisabledByWindow &&
-      _numberOfWallpaperTintingOverrides == 0;
+  bool get isWallpaperTintingEnabled => !_isWallpaperTintingDisabledByWindow && _numberOfWallpaperTintingOverrides == 0;
 
   /// Gets whether wallpaper tinting is disabled by the application's window.
-  bool get isWallpaperTintingDisabledByWindow =>
-      _isWallpaperTintingDisabledByWindow;
+  bool get isWallpaperTintingDisabledByWindow => _isWallpaperTintingDisabledByWindow;
 
   /// Increments the number of active overrides.
   void addOverride() => _numberOfWallpaperTintingOverrides += 1;

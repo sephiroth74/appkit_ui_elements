@@ -2,25 +2,23 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/cupertino.dart';
 
 class AppKitToolBarDivider extends AppKitToolbarItem {
-  const AppKitToolBarDivider({
-    super.key,
-    this.padding = const EdgeInsets.all(6.0),
-    this.color,
-  });
+  const AppKitToolBarDivider({super.key, this.padding = const EdgeInsets.all(6.0), this.color});
 
   final EdgeInsets? padding;
   final Color? color;
 
   @override
   Widget build(BuildContext context, {required Brightness brightness}) {
-    final dividerColor =
-        color ?? AppKitColors.separatorColor.resolveFromBrightness(brightness);
+    final dividerColor = color ?? AppKitColors.separatorColor.resolveFromBrightness(brightness);
 
     return SizedBox(
-        width: (padding?.horizontal ?? 0) + 1,
-        height: 28,
-        child:
-            Padding(padding: padding!, child: Container(color: dividerColor)));
+      width: (padding?.horizontal ?? 0) + 1,
+      height: 28,
+      child: Padding(
+        padding: padding!,
+        child: Container(color: dividerColor),
+      ),
+    );
   }
 
   @override

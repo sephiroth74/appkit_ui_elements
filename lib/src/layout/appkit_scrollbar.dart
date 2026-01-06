@@ -50,8 +50,7 @@ class AppKitScrollbar extends StatelessWidget {
       controller: controller,
       thumbVisibility: thumbVisibility ?? scrollbarTheme.thumbVisibility,
       thickness: thickness ?? scrollbarTheme.thickness,
-      thicknessWhileHovering:
-          thicknessWhileHovering ?? scrollbarTheme.thicknessWhileHovering!,
+      thicknessWhileHovering: thicknessWhileHovering ?? scrollbarTheme.thicknessWhileHovering!,
       notificationPredicate: notificationPredicate,
       scrollbarOrientation: scrollbarOrientation,
       effectiveThumbColor: scrollbarTheme.thumbColor!,
@@ -72,22 +71,20 @@ class _RawMacosScrollBar extends RawScrollbar {
     super.scrollbarOrientation,
     required this.effectiveThumbColor,
     super.radius,
-  })  : assert(thickness != null && thickness < double.infinity),
-        assert(thicknessWhileHovering < double.infinity),
-        super(
-          thumbVisibility: thumbVisibility ?? false,
-          fadeDuration: _kScrollbarFadeDuration,
-          timeToFade: _kScrollbarTimeToFade,
-          notificationPredicate:
-              notificationPredicate ?? defaultScrollNotificationPredicate,
-        );
+  }) : assert(thickness != null && thickness < double.infinity),
+       assert(thicknessWhileHovering < double.infinity),
+       super(
+         thumbVisibility: thumbVisibility ?? false,
+         fadeDuration: _kScrollbarFadeDuration,
+         timeToFade: _kScrollbarTimeToFade,
+         notificationPredicate: notificationPredicate ?? defaultScrollNotificationPredicate,
+       );
 
   final double thicknessWhileHovering;
   final Color effectiveThumbColor;
 
   @override
-  RawScrollbarState<_RawMacosScrollBar> createState() =>
-      _RawMacosScrollBarState();
+  RawScrollbarState<_RawMacosScrollBar> createState() => _RawMacosScrollBarState();
 }
 
 class _RawMacosScrollBarState extends RawScrollbarState<_RawMacosScrollBar> {
@@ -98,21 +95,14 @@ class _RawMacosScrollBarState extends RawScrollbarState<_RawMacosScrollBar> {
 
   double get _thickness {
     return widget.thickness! +
-        _thumbThicknessAnimationController.value *
-            (widget.thicknessWhileHovering - widget.thickness!);
+        _thumbThicknessAnimationController.value * (widget.thicknessWhileHovering - widget.thickness!);
   }
 
   @override
   void initState() {
     super.initState();
-    _thumbThicknessAnimationController = AnimationController(
-      vsync: this,
-      duration: _kScrollbarResizeDuration,
-    );
-    _trackColorAnimationController = AnimationController(
-      vsync: this,
-      duration: _kScrollbarResizeDuration,
-    );
+    _thumbThicknessAnimationController = AnimationController(vsync: this, duration: _kScrollbarResizeDuration);
+    _trackColorAnimationController = AnimationController(vsync: this, duration: _kScrollbarResizeDuration);
     _trackColorTween = ColorTween(
       begin: Colors.transparent,
       end: widget.effectiveThumbColor.withValues(alpha: 0.15),

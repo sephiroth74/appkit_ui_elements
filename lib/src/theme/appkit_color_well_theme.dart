@@ -6,8 +6,7 @@ import 'package:flutter/foundation.dart';
 class AppKitColorWellTheme extends InheritedTheme {
   final AppKitColorWellThemeData data;
 
-  const AppKitColorWellTheme(
-      {super.key, required super.child, required this.data});
+  const AppKitColorWellTheme({super.key, required super.child, required this.data});
 
   @override
   bool updateShouldNotify(covariant AppKitColorWellTheme oldWidget) {
@@ -20,8 +19,7 @@ class AppKitColorWellTheme extends InheritedTheme {
   }
 
   static AppKitColorWellThemeData of(BuildContext context) {
-    final AppKitColorWellTheme? theme =
-        context.dependOnInheritedWidgetOfExactType<AppKitColorWellTheme>();
+    final AppKitColorWellTheme? theme = context.dependOnInheritedWidgetOfExactType<AppKitColorWellTheme>();
     return theme?.data ?? AppKitTheme.of(context).colorWellTheme;
   }
 }
@@ -39,17 +37,12 @@ class AppKitColorWellThemeData with Diagnosticable {
     required this.borderRadiusRegularInner,
   });
 
-  static AppKitColorWellThemeData lerp(
-      AppKitColorWellThemeData? a, AppKitColorWellThemeData? b, double t) {
+  static AppKitColorWellThemeData lerp(AppKitColorWellThemeData? a, AppKitColorWellThemeData? b, double t) {
     return AppKitColorWellThemeData(
-      borderRadiusMinimal:
-          lerpDouble(a?.borderRadiusMinimal, b?.borderRadiusMinimal, t)!,
-      borderRadiusExpanded:
-          lerpDouble(a?.borderRadiusExpanded, b?.borderRadiusExpanded, t)!,
-      borderRadiusRegular:
-          lerpDouble(a?.borderRadiusRegular, b?.borderRadiusRegular, t)!,
-      borderRadiusRegularInner: lerpDouble(
-          a?.borderRadiusRegularInner, b?.borderRadiusRegularInner, t)!,
+      borderRadiusMinimal: lerpDouble(a?.borderRadiusMinimal, b?.borderRadiusMinimal, t)!,
+      borderRadiusExpanded: lerpDouble(a?.borderRadiusExpanded, b?.borderRadiusExpanded, t)!,
+      borderRadiusRegular: lerpDouble(a?.borderRadiusRegular, b?.borderRadiusRegular, t)!,
+      borderRadiusRegularInner: lerpDouble(a?.borderRadiusRegularInner, b?.borderRadiusRegularInner, t)!,
     );
   }
 
@@ -73,21 +66,16 @@ class AppKitColorWellThemeData with Diagnosticable {
       borderRadiusMinimal: borderRadiusMinimal ?? this.borderRadiusMinimal,
       borderRadiusExpanded: borderRadiusExpanded ?? this.borderRadiusExpanded,
       borderRadiusRegular: borderRadiusRegular ?? this.borderRadiusRegular,
-      borderRadiusRegularInner:
-          borderRadiusRegularInner ?? this.borderRadiusRegularInner,
+      borderRadiusRegularInner: borderRadiusRegularInner ?? this.borderRadiusRegularInner,
     );
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<double>(
-        'borderRadiusMinimal', borderRadiusMinimal));
-    properties.add(DiagnosticsProperty<double>(
-        'borderRadiusExpanded', borderRadiusExpanded));
-    properties.add(DiagnosticsProperty<double>(
-        'borderRadiusRegular', borderRadiusRegular));
-    properties.add(DiagnosticsProperty<double>(
-        'borderRadiusRegularInner', borderRadiusRegularInner));
+    properties.add(DiagnosticsProperty<double>('borderRadiusMinimal', borderRadiusMinimal));
+    properties.add(DiagnosticsProperty<double>('borderRadiusExpanded', borderRadiusExpanded));
+    properties.add(DiagnosticsProperty<double>('borderRadiusRegular', borderRadiusRegular));
+    properties.add(DiagnosticsProperty<double>('borderRadiusRegularInner', borderRadiusRegularInner));
   }
 }

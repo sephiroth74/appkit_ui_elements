@@ -64,12 +64,7 @@ class AppKitTypography extends Equatable with Diagnosticable {
       letterSpacing: 0.06,
       color: color,
     );
-    callout ??= TextStyle(
-      fontFamily: _kDefaultFontFamily,
-      fontWeight: FontWeight.w400,
-      fontSize: 12,
-      color: color,
-    );
+    callout ??= TextStyle(fontFamily: _kDefaultFontFamily, fontWeight: FontWeight.w400, fontSize: 12, color: color);
     tooltip ??= const TextStyle(
       fontFamily: _kDefaultFontFamily,
       fontWeight: FontWeight.w400,
@@ -137,10 +132,8 @@ class AppKitTypography extends Equatable with Diagnosticable {
     required this.caption2,
   });
 
-  factory AppKitTypography.darkOpaque() =>
-      AppKitTypography(color: AppKitColors.labelColor.color);
-  factory AppKitTypography.lightOpaque() =>
-      AppKitTypography(color: AppKitColors.labelColor.darkColor);
+  factory AppKitTypography.darkOpaque() => AppKitTypography(color: AppKitColors.labelColor.color);
+  factory AppKitTypography.lightOpaque() => AppKitTypography(color: AppKitColors.labelColor.darkColor);
 
   final Color color;
 
@@ -199,8 +192,7 @@ class AppKitTypography extends Equatable with Diagnosticable {
   }
 
   /// Linearly interpolate between two typographies.
-  static AppKitTypography lerp(
-      AppKitTypography a, AppKitTypography b, double t) {
+  static AppKitTypography lerp(AppKitTypography a, AppKitTypography b, double t) {
     return AppKitTypography.raw(
       color: Color.lerp(a.color, b.color, t)!,
       largeTitle: TextStyle.lerp(a.largeTitle, b.largeTitle, t)!,
@@ -227,86 +219,37 @@ class AppKitTypography extends Equatable with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     final defaultStyle = AppKitTypography.darkOpaque();
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'largeTitle',
-      largeTitle,
-      defaultValue: defaultStyle.largeTitle,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'title1',
-      title1,
-      defaultValue: defaultStyle.title1,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'title2',
-      title2,
-      defaultValue: defaultStyle.title2,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'title3',
-      title3,
-      defaultValue: defaultStyle.title3,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'headline',
-      headline,
-      defaultValue: defaultStyle.headline,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'subheadline',
-      subheadline,
-      defaultValue: defaultStyle.subheadline,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'body',
-      body,
-      defaultValue: defaultStyle.body,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'callout',
-      callout,
-      defaultValue: defaultStyle.callout,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'tooltip',
-      tooltip,
-      defaultValue: defaultStyle.tooltip,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'footnote',
-      footnote,
-      defaultValue: defaultStyle.footnote,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'caption1',
-      caption1,
-      defaultValue: defaultStyle.caption1,
-    ));
-    properties.add(DiagnosticsProperty<TextStyle>(
-      'caption2',
-      caption2,
-      defaultValue: defaultStyle.caption2,
-    ));
-    properties
-        .add(ColorProperty('color', color, defaultValue: defaultStyle.color));
+    properties.add(DiagnosticsProperty<TextStyle>('largeTitle', largeTitle, defaultValue: defaultStyle.largeTitle));
+    properties.add(DiagnosticsProperty<TextStyle>('title1', title1, defaultValue: defaultStyle.title1));
+    properties.add(DiagnosticsProperty<TextStyle>('title2', title2, defaultValue: defaultStyle.title2));
+    properties.add(DiagnosticsProperty<TextStyle>('title3', title3, defaultValue: defaultStyle.title3));
+    properties.add(DiagnosticsProperty<TextStyle>('headline', headline, defaultValue: defaultStyle.headline));
+    properties.add(DiagnosticsProperty<TextStyle>('subheadline', subheadline, defaultValue: defaultStyle.subheadline));
+    properties.add(DiagnosticsProperty<TextStyle>('body', body, defaultValue: defaultStyle.body));
+    properties.add(DiagnosticsProperty<TextStyle>('callout', callout, defaultValue: defaultStyle.callout));
+    properties.add(DiagnosticsProperty<TextStyle>('tooltip', tooltip, defaultValue: defaultStyle.tooltip));
+    properties.add(DiagnosticsProperty<TextStyle>('footnote', footnote, defaultValue: defaultStyle.footnote));
+    properties.add(DiagnosticsProperty<TextStyle>('caption1', caption1, defaultValue: defaultStyle.caption1));
+    properties.add(DiagnosticsProperty<TextStyle>('caption2', caption2, defaultValue: defaultStyle.caption2));
+    properties.add(ColorProperty('color', color, defaultValue: defaultStyle.color));
   }
 
   @override
   List<Object?> get props => [
-        color,
-        body,
-        callout,
-        tooltip,
-        caption1,
-        caption2,
-        footnote,
-        headline,
-        largeTitle,
-        subheadline,
-        title1,
-        title2,
-        title3,
-      ];
+    color,
+    body,
+    callout,
+    tooltip,
+    caption1,
+    caption2,
+    footnote,
+    headline,
+    largeTitle,
+    subheadline,
+    title1,
+    title2,
+    title3,
+  ];
 }
 
 /// The thickness of the glyphs used to draw the text.
@@ -396,17 +339,11 @@ class AppKitFontWeight implements FontWeight {
     w900,
   ];
 
-  static AppKitFontWeight? lerp(
-    AppKitFontWeight? a,
-    AppKitFontWeight? b,
-    double t,
-  ) {
+  static AppKitFontWeight? lerp(AppKitFontWeight? a, AppKitFontWeight? b, double t) {
     if (a == null && b == null) {
       return null;
     }
-    return values[_lerpInt((a ?? normal).index, (b ?? normal).index, t)
-        .round()
-        .clamp(0, 8)];
+    return values[_lerpInt((a ?? normal).index, (b ?? normal).index, t).round().clamp(0, 8)];
   }
 
   @override

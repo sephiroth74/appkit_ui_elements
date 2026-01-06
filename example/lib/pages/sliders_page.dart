@@ -41,8 +41,7 @@ class _SlidersPageState extends State<SlidersPage> {
                       const WidgetTitle(label: 'Level Indicators'),
                       const SizedBox(height: 20.0),
                       AppKitLevelIndicator(
-                        tickMarkPosition:
-                            AppKitLevelIndicatorTickMarkPosition.below,
+                        tickMarkPosition: AppKitLevelIndicatorTickMarkPosition.below,
                         majorTickMarks: 11,
                         minorTickMarks: 21,
                         drawsTieredCapacityLevels: false,
@@ -58,8 +57,7 @@ class _SlidersPageState extends State<SlidersPage> {
                       ),
                       const SizedBox(height: 20.0),
                       AppKitLevelIndicator(
-                        tickMarkPosition:
-                            AppKitLevelIndicatorTickMarkPosition.none,
+                        tickMarkPosition: AppKitLevelIndicatorTickMarkPosition.none,
                         majorTickMarks: 3,
                         minorTickMarks: 21,
                         drawsTieredCapacityLevels: false,
@@ -137,19 +135,7 @@ class _SlidersPageState extends State<SlidersPage> {
                             style: AppKitSliderStyle.discreteFree,
                             min: 0.0,
                             max: 1.0,
-                            stops: const [
-                              0,
-                              .1,
-                              .2,
-                              .3,
-                              .4,
-                              .5,
-                              .6,
-                              .7,
-                              .8,
-                              .9,
-                              1.0
-                            ],
+                            stops: const [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.0],
                             value: slider1Value,
                             onChanged: (value) {
                               debugPrint('Slider 2: $value');
@@ -210,16 +196,12 @@ class _SlidersPageState extends State<SlidersPage> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text('${(slider1Value * 100).toInt()}',
-                                      style: AppKitTheme.of(context)
-                                          .typography
-                                          .body
-                                          .copyWith(fontSize: 10)),
+                                      style: AppKitTheme.of(context).typography.body.copyWith(fontSize: 10)),
                                 ),
                                 AppKitArcSlider(
                                   size: 48,
                                   value: slider1Value,
-                                  onChanged: (value) =>
-                                      setState(() => slider1Value = value),
+                                  onChanged: (value) => setState(() => slider1Value = value),
                                 ),
                               ],
                             ),
@@ -232,15 +214,10 @@ class _SlidersPageState extends State<SlidersPage> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text('${(slider1Value * 100).toInt()}',
-                                      style: AppKitTheme.of(context)
-                                          .typography
-                                          .body
-                                          .copyWith(
-                                              fontSize: 16,
-                                              color: AppKitDynamicColor.resolve(
-                                                  context,
-                                                  AppKitColors
-                                                      .text.opaque.tertiary))),
+                                      style: AppKitTheme.of(context).typography.body.copyWith(
+                                          fontSize: 16,
+                                          color:
+                                              AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.tertiary))),
                                 ),
                                 AppKitArcSlider(
                                   sweepAngle: 40,
@@ -248,12 +225,10 @@ class _SlidersPageState extends State<SlidersPage> {
                                   progressWidth: 4,
                                   thumbRadius: 7,
                                   trackWidth: 0.5,
-                                  trackColor: AppKitColors.systemGray
-                                      .withValues(alpha: 0.3),
+                                  trackColor: AppKitColors.systemGray.withValues(alpha: 0.3),
                                   progressColor: AppKitColors.appleGreen,
                                   value: slider1Value,
-                                  onChanged: (value) =>
-                                      setState(() => slider1Value = value),
+                                  onChanged: (value) => setState(() => slider1Value = value),
                                 ),
                               ],
                             ),
@@ -266,10 +241,7 @@ class _SlidersPageState extends State<SlidersPage> {
                       const SizedBox(height: 20.0),
                       Row(
                         children: [
-                          SizedBox(
-                              width: 100,
-                              child: Text(
-                                  'Value: ${(slider1Value * 100).floor()}')),
+                          SizedBox(width: 100, child: Text('Value: ${(slider1Value * 100).floor()}')),
                           const SizedBox(width: 16.0),
                           AppKitStepper(
                             controlSize: AppKitControlSize.regular,

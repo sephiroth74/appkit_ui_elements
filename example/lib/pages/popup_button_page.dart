@@ -35,9 +35,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                   child: Text(i < 5 ? 'Item $i' : 'Another item $i'),
                   enabled: i != 4,
                   value: '$i',
-                  itemState: popupSelectedItem == '$i'
-                      ? AppKitItemState.on
-                      : AppKitItemState.off,
+                  itemState: popupSelectedItem == '$i' ? AppKitItemState.on : AppKitItemState.off,
                 ),
           ],
         );
@@ -47,63 +45,37 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
         return AppKitContextMenu<int>(
           maxWidth: 200,
           entries: [
-            AppKitContextMenuItem(
-                child: titleWithIconMenuItem('Cut', Icons.cut),
-                value: 0,
-                enabled: true),
-            AppKitContextMenuItem(
-                child: titleWithIconMenuItem('Copy', Icons.copy),
-                value: 1,
-                enabled: true),
-            AppKitContextMenuItem(
-                child: titleWithIconMenuItem('Paste', Icons.paste),
-                value: 2,
-                enabled: true),
+            AppKitContextMenuItem(child: titleWithIconMenuItem('Cut', Icons.cut), value: 0, enabled: true),
+            AppKitContextMenuItem(child: titleWithIconMenuItem('Copy', Icons.copy), value: 1, enabled: true),
+            AppKitContextMenuItem(child: titleWithIconMenuItem('Paste', Icons.paste), value: 2, enabled: true),
             const AppKitContextMenuDivider(),
             AppKitContextMenuItem.plain('Select All', value: 3, enabled: true),
             AppKitContextMenuItem.plain('Select None', value: 3, enabled: true),
             const AppKitContextMenuDivider(),
-            AppKitContextMenuItem.plain('Other...',
-                value: 6,
+            AppKitContextMenuItem.plain('Other...', value: 6, enabled: true, items: [
+              AppKitContextMenuItem.plain(
+                'Submenu Item 1',
+                value: 7,
                 enabled: true,
-                items: [
-                  AppKitContextMenuItem.plain(
-                    'Submenu Item 1',
-                    value: 7,
-                    enabled: true,
-                    onTap: () {
-                      debugPrint('Selected: Submenu Item 1');
-                    },
-                  ),
-                  AppKitContextMenuItem.plain('Submenu Item 2',
-                      value: 12, enabled: true),
-                  AppKitContextMenuItem.plain('Submenu Item 3',
-                      value: 13, enabled: true),
-                  AppKitContextMenuItem.plain('Submenu Item 4',
-                      value: 14, enabled: true),
-                  AppKitContextMenuItem.plain('Submenu Item 5',
-                      value: 15, enabled: true),
-                  AppKitContextMenuItem.plain('Submenu Item 6',
-                      value: 16, enabled: true),
-                  AppKitContextMenuItem.plain('Submenu Item 7',
-                      value: 17, enabled: true),
-                  AppKitContextMenuItem.plain('Submenu Item 8',
-                      value: 18, enabled: true),
-                  AppKitContextMenuItem.submenu('Submenu Item 9',
-                      value: 19,
-                      enabled: true,
-                      items: [
-                        AppKitContextMenuItem.plain('Submenu Item 9.1',
-                            value: 21, enabled: true),
-                        AppKitContextMenuItem.plain('Submenu Item 9.2',
-                            value: 22, enabled: true),
-                        AppKitContextMenuItem.plain('Submenu Item 9.3',
-                            value: 23, enabled: true),
-                      ]),
-                  const AppKitContextMenuDivider(),
-                  AppKitContextMenuItem.plain('Submenu Item 10',
-                      value: 20, enabled: false),
-                ]),
+                onTap: () {
+                  debugPrint('Selected: Submenu Item 1');
+                },
+              ),
+              AppKitContextMenuItem.plain('Submenu Item 2', value: 12, enabled: true),
+              AppKitContextMenuItem.plain('Submenu Item 3', value: 13, enabled: true),
+              AppKitContextMenuItem.plain('Submenu Item 4', value: 14, enabled: true),
+              AppKitContextMenuItem.plain('Submenu Item 5', value: 15, enabled: true),
+              AppKitContextMenuItem.plain('Submenu Item 6', value: 16, enabled: true),
+              AppKitContextMenuItem.plain('Submenu Item 7', value: 17, enabled: true),
+              AppKitContextMenuItem.plain('Submenu Item 8', value: 18, enabled: true),
+              AppKitContextMenuItem.submenu('Submenu Item 9', value: 19, enabled: true, items: [
+                AppKitContextMenuItem.plain('Submenu Item 9.1', value: 21, enabled: true),
+                AppKitContextMenuItem.plain('Submenu Item 9.2', value: 22, enabled: true),
+                AppKitContextMenuItem.plain('Submenu Item 9.3', value: 23, enabled: true),
+              ]),
+              const AppKitContextMenuDivider(),
+              AppKitContextMenuItem.plain('Submenu Item 10', value: 20, enabled: false),
+            ]),
           ],
         );
       };
@@ -111,8 +83,7 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
   void _onPopupItemSelected(String? value) {
     setState(() {
       if (value != null) {
-        popupSelectedItem =
-            popupMenuBuilder(context).findItemByValue(value)?.value;
+        popupSelectedItem = popupMenuBuilder(context).findItemByValue(value)?.value;
       }
     });
   }
@@ -153,20 +124,16 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                     children: [
                       const WidgetTitle(label: 'Popup Button'),
                       const SizedBox(height: 20.0),
-                      for (AppKitPopupButtonStyle style
-                          in AppKitPopupButtonStyle.values) ...[
+                      for (AppKitPopupButtonStyle style in AppKitPopupButtonStyle.values) ...[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SizedBox(
-                                  width: 75,
-                                  child: AppKitLabel(text: Text(style.name))),
+                              SizedBox(width: 75, child: AppKitLabel(text: Text(style.name))),
                               const SizedBox(width: 16.0),
                               Container(
-                                  constraints: const BoxConstraints(
-                                      minWidth: 125, maxWidth: 200),
+                                  constraints: const BoxConstraints(minWidth: 125, maxWidth: 200),
                                   child: AppKitPopupButton(
                                     canRequestFocus: true,
                                     hint: 'Select...',
@@ -186,26 +153,21 @@ class _PopupButtonPageState extends State<PopupButtonPage> {
                       ),
                       const WidgetTitle(label: 'Pull Down Button'),
                       const SizedBox(height: 20.0),
-                      for (AppKitPulldownButtonStyle style
-                          in AppKitPulldownButtonStyle.values) ...[
+                      for (AppKitPulldownButtonStyle style in AppKitPulldownButtonStyle.values) ...[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              SizedBox(
-                                  width: 75,
-                                  child: AppKitLabel(text: Text(style.name))),
+                              SizedBox(width: 75, child: AppKitLabel(text: Text(style.name))),
                               const SizedBox(width: 16.0),
                               Container(
-                                  constraints: const BoxConstraints(
-                                      minWidth: 125, maxWidth: 200),
+                                  constraints: const BoxConstraints(minWidth: 125, maxWidth: 200),
                                   child: AppKitPulldownButton(
                                     canRequestFocus: true,
                                     title: 'Open...',
                                     textAlign: TextAlign.start,
-                                    imageAlignment:
-                                        AppKitMenuImageAlignment.leading,
+                                    imageAlignment: AppKitMenuImageAlignment.leading,
                                     icon: Icons.open_in_new,
                                     minWidth: 100,
                                     controlSize: AppKitControlSize.regular,

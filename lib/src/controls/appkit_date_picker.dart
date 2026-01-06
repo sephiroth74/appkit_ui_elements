@@ -105,31 +105,27 @@ class AppKitDatePicker extends StatefulWidget {
     this.drawBorder = true,
     this.selectionType = AppKitDatePickerSelectionType.single,
     Either<DateTime, DateTimeRange>? date,
-  }) : initialDateTime = date ??
-            (selectionType == AppKitDatePickerSelectionType.single
-                ? Left(DateTime.now())
-                : Right(DateTimeRange(
-                    start: DateTime.now(), end: DateTime.now()))) {
+  }) : initialDateTime =
+           date ??
+           (selectionType == AppKitDatePickerSelectionType.single
+               ? Left(DateTime.now())
+               : Right(DateTimeRange(start: DateTime.now(), end: DateTime.now()))) {
     assert(
-        dateElements != AppKitDateElements.none ||
-            timeElements != AppKitTimeElements.none,
-        'At least one of dateElements or timeElements must be non-none');
+      dateElements != AppKitDateElements.none || timeElements != AppKitTimeElements.none,
+      'At least one of dateElements or timeElements must be non-none',
+    );
 
     assert(
-        minimumDate != null
-            ? initialDateTime.isSameOrAfter(minimumDate!)
-            : true,
-        'initialDateTime [$initialDateTime] must be after minimumDate [$minimumDate] (if set)');
+      minimumDate != null ? initialDateTime.isSameOrAfter(minimumDate!) : true,
+      'initialDateTime [$initialDateTime] must be after minimumDate [$minimumDate] (if set)',
+    );
 
     assert(
-        maximumDate != null
-            ? initialDateTime.isSameOrBefore(maximumDate!)
-            : true,
-        'initialDateTime [$initialDateTime] must be before maximumDate [$maximumDate] (if set)');
+      maximumDate != null ? initialDateTime.isSameOrBefore(maximumDate!) : true,
+      'initialDateTime [$initialDateTime] must be before maximumDate [$maximumDate] (if set)',
+    );
 
-    assert(minimumDate == null ||
-        maximumDate == null ||
-        minimumDate!.isSameOrBefore(maximumDate!));
+    assert(minimumDate == null || maximumDate == null || minimumDate!.isSameOrBefore(maximumDate!));
 
     if (selectionType == AppKitDatePickerSelectionType.single) {
       assert(initialDateTime.isLeft(), 'initialDateTime must be a single date');
@@ -159,59 +155,56 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
     return Semantics(
       label: widget.semanticLabel,
       container: true,
-      child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        final isMainWindow = model.isMainWindow;
-        if (widget.type == AppKitDatePickerType.textual ||
-            widget.type == AppKitDatePickerType.textualWithStepper) {
-          return TextualDatePicker(
-            type: widget.type,
-            dateElements: widget.dateElements,
-            timeElements: widget.timeElements,
-            initialDateTime:
-                widget.initialDateTime.fold((d) => d, (r) => r.start),
-            minimumDate: widget.minimumDate,
-            maximumDate: widget.maximumDate,
-            textStyle: widget.textStyle,
-            color: widget.color,
-            drawBackground: widget.drawBackground,
-            drawBorder: widget.drawBorder,
-            onChanged: enabled ? (d) => widget.onChanged?.call(left(d)) : null,
-            languageCode: languageCode,
-            isMainWindow: isMainWindow,
-            autofocus: widget.autofocus,
-            canRequestFocus: widget.canRequestFocus,
-          );
-        } else {
-          if (widget.dateElements != AppKitDateElements.none) {
-            return GraphicalDatePicker(
-              initialDateTime: widget.initialDateTime
-                  .fold((d) => DateTimeRange(start: d, end: d), (r) => r),
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
+          final isMainWindow = model.isMainWindow;
+          if (widget.type == AppKitDatePickerType.textual || widget.type == AppKitDatePickerType.textualWithStepper) {
+            return TextualDatePicker(
+              type: widget.type,
+              dateElements: widget.dateElements,
+              timeElements: widget.timeElements,
+              initialDateTime: widget.initialDateTime.fold((d) => d, (r) => r.start),
               minimumDate: widget.minimumDate,
               maximumDate: widget.maximumDate,
+              textStyle: widget.textStyle,
+              color: widget.color,
               drawBackground: widget.drawBackground,
               drawBorder: widget.drawBorder,
-              color: widget.color,
+              onChanged: enabled ? (d) => widget.onChanged?.call(left(d)) : null,
               languageCode: languageCode,
               isMainWindow: isMainWindow,
-              onChanged: widget.onChanged != null ? _handleChanged : null,
-              selectionType: widget.selectionType,
               autofocus: widget.autofocus,
               canRequestFocus: widget.canRequestFocus,
             );
           } else {
-            return GrahpicalTimePicker(
-              initialDateTime:
-                  widget.initialDateTime.fold((d) => d, (r) => r.start),
-              minimumDate: widget.minimumDate,
-              maximumDate: widget.maximumDate,
-              languageCode: languageCode,
-              isMainWindow: isMainWindow,
-              onChanged:
-                  enabled ? (d) => widget.onChanged?.call(left(d)) : null,
-            );
+            if (widget.dateElements != AppKitDateElements.none) {
+              return GraphicalDatePicker(
+                initialDateTime: widget.initialDateTime.fold((d) => DateTimeRange(start: d, end: d), (r) => r),
+                minimumDate: widget.minimumDate,
+                maximumDate: widget.maximumDate,
+                drawBackground: widget.drawBackground,
+                drawBorder: widget.drawBorder,
+                color: widget.color,
+                languageCode: languageCode,
+                isMainWindow: isMainWindow,
+                onChanged: widget.onChanged != null ? _handleChanged : null,
+                selectionType: widget.selectionType,
+                autofocus: widget.autofocus,
+                canRequestFocus: widget.canRequestFocus,
+              );
+            } else {
+              return GrahpicalTimePicker(
+                initialDateTime: widget.initialDateTime.fold((d) => d, (r) => r.start),
+                minimumDate: widget.minimumDate,
+                maximumDate: widget.maximumDate,
+                languageCode: languageCode,
+                isMainWindow: isMainWindow,
+                onChanged: enabled ? (d) => widget.onChanged?.call(left(d)) : null,
+              );
+            }
           }
-        }
-      }),
+        },
+      ),
     );
   }
 
@@ -219,35 +212,25 @@ class _AppKitDatePickerState extends State<AppKitDatePicker> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(EnumProperty<AppKitDatePickerType>('type', widget.type));
-    properties.add(
-        EnumProperty<AppKitDateElements>('dateElements', widget.dateElements));
-    properties.add(
-        EnumProperty<AppKitTimeElements>('timeElements', widget.timeElements));
-    properties.add(DiagnosticsProperty<Either<DateTime, DateTimeRange>>(
-        'initialDateTime', widget.initialDateTime));
-    properties
-        .add(DiagnosticsProperty<DateTime>('minimumDate', widget.minimumDate));
-    properties
-        .add(DiagnosticsProperty<DateTime>('maximumDate', widget.maximumDate));
+    properties.add(EnumProperty<AppKitDateElements>('dateElements', widget.dateElements));
+    properties.add(EnumProperty<AppKitTimeElements>('timeElements', widget.timeElements));
+    properties.add(DiagnosticsProperty<Either<DateTime, DateTimeRange>>('initialDateTime', widget.initialDateTime));
+    properties.add(DiagnosticsProperty<DateTime>('minimumDate', widget.minimumDate));
+    properties.add(DiagnosticsProperty<DateTime>('maximumDate', widget.maximumDate));
     properties.add(StringProperty('semanticLabel', widget.semanticLabel));
-    properties
-        .add(DiagnosticsProperty<TextStyle>('textStyle', widget.textStyle));
+    properties.add(DiagnosticsProperty<TextStyle>('textStyle', widget.textStyle));
     properties.add(ColorProperty('color', widget.color));
-    properties.add(FlagProperty('drawBackground',
-        value: widget.drawBackground, ifTrue: 'drawBackground'));
-    properties.add(FlagProperty('drawBorder',
-        value: widget.drawBorder, ifTrue: 'drawBorder'));
+    properties.add(FlagProperty('drawBackground', value: widget.drawBackground, ifTrue: 'drawBackground'));
+    properties.add(FlagProperty('drawBorder', value: widget.drawBorder, ifTrue: 'drawBorder'));
   }
 }
 
 extension _EitherX on Either<DateTime, DateTimeRange> {
   bool isSameOrBefore(DateTime date) {
-    return fold((DateTime value) => value.isSameOrBefore(date),
-        (DateTimeRange value) => value.isSameOrBefore(date));
+    return fold((DateTime value) => value.isSameOrBefore(date), (DateTimeRange value) => value.isSameOrBefore(date));
   }
 
   bool isSameOrAfter(DateTime date) {
-    return fold((DateTime value) => value.isSameOrAfter(date),
-        (DateTimeRange value) => value.isSameOrAfter(date));
+    return fold((DateTime value) => value.isSameOrAfter(date), (DateTimeRange value) => value.isSameOrAfter(date));
   }
 }

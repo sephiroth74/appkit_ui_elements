@@ -7,10 +7,6 @@ final class AppKitContextMenuDivider<T> extends AppKitContextMenuEntry<T> {
 
   @override
   Widget builder(BuildContext context, AppKitContextMenuState menuState) {
-    return const Divider(
-      thickness: 0.5,
-      indent: 6,
-      endIndent: 6,
-    );
+    return const Divider(thickness: 0.5, indent: 6, endIndent: 6);
   }
 }

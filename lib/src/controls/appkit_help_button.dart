@@ -76,8 +76,7 @@ class AppKitHelpButton extends StatefulWidget {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('color', color));
     properties.add(ColorProperty('disabledColor', disabledColor));
-    properties.add(ObjectFlagProperty<VoidCallback>('onPressed', onPressed,
-        ifNull: 'disabled', ifPresent: 'enabled'));
+    properties.add(ObjectFlagProperty<VoidCallback>('onPressed', onPressed, ifNull: 'disabled', ifPresent: 'enabled'));
     properties.add(StringProperty('semanticLabel', semanticLabel));
     properties.add(DiagnosticsProperty<MouseCursor>('cursor', cursor));
     properties.add(DoubleProperty('size', size));
@@ -122,37 +121,35 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
           button: true,
           child: Container(
             constraints: BoxConstraints(
-                minWidth: widget.size,
-                minHeight: widget.size,
-                maxWidth: widget.size,
-                maxHeight: widget.size),
+              minWidth: widget.size,
+              minHeight: widget.size,
+              maxWidth: widget.size,
+              maxHeight: widget.size,
+            ),
             child: Builder(
               builder: (context) {
                 final theme = AppKitTheme.of(context);
                 final isDark = theme.brightness == Brightness.dark;
                 final color = widget.enabled
                     ? (widget.color ?? theme.controlColor)
-                    : (widget.disabledColor ??
-                        theme.controlColor.withValues(alpha: 0.25));
+                    : (widget.disabledColor ?? theme.controlColor.withValues(alpha: 0.25));
 
                 final colorLuminance = color.computeLuminance();
                 final iconColor = colorLuminance >= 0.5
                     ? widget.enabled
-                        ? isDark
-                            ? AppKitColors.labelColor.darkColor
-                            : AppKitColors.labelColor.color
-                        : (isDark
+                          ? isDark
                                 ? AppKitColors.labelColor.darkColor
-                                : AppKitColors.labelColor.color)
-                            .withValues(alpha: 0.35)
+                                : AppKitColors.labelColor.color
+                          : (isDark ? AppKitColors.labelColor.darkColor : AppKitColors.labelColor.color).withValues(
+                              alpha: 0.35,
+                            )
                     : widget.enabled
-                        ? isDark
-                            ? AppKitColors.labelColor.darkColor
-                            : AppKitColors.labelColor.color
-                        : (isDark
-                                ? AppKitColors.labelColor.color
-                                : AppKitColors.labelColor.darkColor)
-                            .withValues(alpha: 0.35);
+                    ? isDark
+                          ? AppKitColors.labelColor.darkColor
+                          : AppKitColors.labelColor.color
+                    : (isDark ? AppKitColors.labelColor.color : AppKitColors.labelColor.darkColor).withValues(
+                        alpha: 0.35,
+                      );
 
                 final foregroundColor = colorLuminance > 0.5
                     ? Colors.black.withValues(alpha: 0.1)
@@ -160,30 +157,25 @@ class _AppKitHelpButtonState extends State<AppKitHelpButton> {
 
                 return Container(
                   foregroundDecoration: buttonHeldDown
-                      ? BoxDecoration(
-                          color: foregroundColor, shape: BoxShape.circle)
+                      ? BoxDecoration(color: foregroundColor, shape: BoxShape.circle)
                       : null,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: color,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppKitColors.shadowColor.color
-                                .withValues(alpha: 0.75),
-                            blurRadius: 0.5,
-                            spreadRadius: 0,
-                            offset: const Offset(0, 0.5),
-                            blurStyle: BlurStyle.outer,
-                          ),
-                        ]),
+                      shape: BoxShape.circle,
+                      color: color,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppKitColors.shadowColor.color.withValues(alpha: 0.75),
+                          blurRadius: 0.5,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 0.5),
+                          blurStyle: BlurStyle.outer,
+                        ),
+                      ],
+                    ),
                     child: Align(
                       alignment: Alignment.center,
-                      child: Icon(
-                        CupertinoIcons.question,
-                        size: widget.size * _kSizeIconRatio,
-                        color: iconColor,
-                      ),
+                      child: Icon(CupertinoIcons.question, size: widget.size * _kSizeIconRatio, color: iconColor),
                     ),
                   ),
                 );

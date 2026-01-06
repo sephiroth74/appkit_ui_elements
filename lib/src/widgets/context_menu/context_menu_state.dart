@@ -58,11 +58,11 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     this.enableWallpaperTinting = true,
     T? focusedEntry,
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
-  })  : _parentItemRect = null,
-        _focusedEntry = menu.findItemByValue(focusedEntry),
-        selfClose = null,
-        scrollbarsRequired = menu.scrollbars,
-        _menuEdge = menuEdge;
+  }) : _parentItemRect = null,
+       _focusedEntry = menu.findItemByValue(focusedEntry),
+       selfClose = null,
+       scrollbarsRequired = menu.scrollbars,
+       _menuEdge = menuEdge;
 
   AppKitContextMenuState.submenu({
     required this.menu,
@@ -73,19 +73,16 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     AlignmentGeometry? spawnAlignmen,
     Rect? parentItemRect,
     AppKitMenuEdge menuEdge = AppKitMenuEdge.auto,
-  })  : _spawnAlignment = spawnAlignmen ?? AlignmentDirectional.topEnd,
-        _parentItemRect = parentItemRect,
-        scrollbarsRequired = menu.scrollbars,
-        _menuEdge = menuEdge;
+  }) : _spawnAlignment = spawnAlignmen ?? AlignmentDirectional.topEnd,
+       _parentItemRect = parentItemRect,
+       scrollbarsRequired = menu.scrollbars,
+       _menuEdge = menuEdge;
 
   List<AppKitContextMenuEntry<T>> get entries => menu.entries;
 
   bool get statusIconRequired => menu.entries
-      .where((e) =>
-          e is AppKitContextMenuItem &&
-          (e as AppKitContextMenuItem).itemState != null)
-      .any(
-          (e) => (e as AppKitContextMenuItem).itemState != AppKitItemState.off);
+      .where((e) => e is AppKitContextMenuItem && (e as AppKitContextMenuItem).itemState != null)
+      .any((e) => (e as AppKitContextMenuItem).itemState != AppKitItemState.off);
 
   Offset get position => menu.position ?? Offset.zero;
 
@@ -123,8 +120,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   static AppKitContextMenuState of(BuildContext context) {
     final provider =
-        context.dependOnInheritedWidgetOfExactType<AppKitContextMenuProvider>()!
-            as AppKitContextMenuProvider?;
+        context.dependOnInheritedWidgetOfExactType<AppKitContextMenuProvider>()! as AppKitContextMenuProvider?;
 
     if (provider == null) {
       throw 'No ContextMenuProvider found in context';
@@ -140,16 +136,14 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     notifyListeners();
   }
 
-  void handleItemSelection(
-      BuildContext? context, AppKitContextMenuEntry<T>? item) {
+  void handleItemSelection(BuildContext? context, AppKitContextMenuEntry<T>? item) {
     logDebug(this, 'handleItemSelection: $item');
     if (null == item || null == context) return;
     if (item is! AppKitContextMenuItem<T>) return;
     item.handleItemSelection(context);
   }
 
-  void animateSelectedItem(
-      AppKitContextMenuItem<T>? value, VoidCallback? action) {
+  void animateSelectedItem(AppKitContextMenuItem<T>? value, VoidCallback? action) {
     logDebug(this, 'animateSelectedItem: $value');
     if (_futureSelectedEntry != null) return;
 
@@ -172,8 +166,7 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
   void setSelectedItem(AppKitContextMenuItem<T>? value) {
     logDebug(this, 'setSelectedItem: $value');
-    if (value == _selectedItem ||
-        (_futureSelectedEntry != null && _futureSelectedEntry != value)) {
+    if (value == _selectedItem || (_futureSelectedEntry != null && _futureSelectedEntry != value)) {
       return;
     }
     _selectedItem = value;
@@ -194,20 +187,14 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
   /// Determines whether the entry is opened as a submenu.
   bool isOpened(AppKitContextMenuItem<T> item) => item == selectedItem;
 
-  Offset _calculateSubmenuPosition(
-    Rect parentRect,
-    AlignmentGeometry? spawnAlignmen,
-  ) {
+  Offset _calculateSubmenuPosition(Rect parentRect, AlignmentGeometry? spawnAlignmen) {
     double left = parentRect.left + parentRect.width;
     double top = parentRect.top;
     return Offset(left, top);
   }
 
   /// Shows the submenu at the specified position.
-  void showSubmenu({
-    required BuildContext context,
-    required AppKitContextMenuItem<T> parent,
-  }) {
+  void showSubmenu({required BuildContext context, required AppKitContextMenuItem<T> parent}) {
     closeSubmenu();
 
     logInfo(this, 'showSubmenu: $parent');
@@ -216,16 +203,11 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
     final submenuParentRect = context.getWidgetBounds();
     if (submenuParentRect == null) return;
 
-    final submenuPosition =
-        _calculateSubmenuPosition(submenuParentRect, spawnAlignment);
+    final submenuPosition = _calculateSubmenuPosition(submenuParentRect, spawnAlignment);
 
     submenuBuilder = (BuildContext context) {
       final subMenuState = AppKitContextMenuState.submenu(
-        menu: menu.copyWith(
-          entries: items,
-          position: submenuPosition,
-          size: Size.infinite,
-        ),
+        menu: menu.copyWith(entries: items, position: submenuPosition, size: Size.infinite),
         parent: this,
         spawnAlignmen: spawnAlignment,
         parentItemRect: submenuParentRect,
@@ -247,13 +229,14 @@ class AppKitContextMenuState<T> extends ChangeNotifier {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final boundaries = calculateContextMenuBoundaries(
-          context: context,
-          menu: menu,
-          parentRect: parentItemRect,
-          spawnAlignment: _spawnAlignment,
-          isSubmenu: isSubmenu,
-          menuEdge: _menuEdge,
-          maxHeight: maxHeight);
+        context: context,
+        menu: menu,
+        parentRect: parentItemRect,
+        spawnAlignment: _spawnAlignment,
+        isSubmenu: isSubmenu,
+        menuEdge: _menuEdge,
+        maxHeight: maxHeight,
+      );
 
       menu.position = boundaries.pos;
       menu.size = boundaries.size;

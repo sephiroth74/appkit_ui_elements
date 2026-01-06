@@ -40,12 +40,10 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               context: context,
                               builder: (context) {
                                 return AppKitDialog(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 400, maxHeight: 300),
+                                  constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
                                   suppress: const DoNotNotifyRow(),
                                   title: const Text('Dialog'),
-                                  message: (context) =>
-                                      const Text(dialogMessage),
+                                  message: (context) => const Text(dialogMessage),
                                   primaryButton: AppKitButton(
                                       onTap: () {
                                         Navigator.of(context).pop();
@@ -70,8 +68,7 @@ class _DialogsViewPageState extends State<DialogsViewPage> {
                               context: context,
                               builder: (context) {
                                 return AppKitDialog(
-                                  constraints: const BoxConstraints(
-                                      minWidth: 350, maxWidth: 350),
+                                  constraints: const BoxConstraints(minWidth: 350, maxWidth: 350),
                                   suppress: const DoNotNotifyRow(),
                                   icon: const AppKitIcon(CupertinoIcons.news),
                                   title: const Text('Dialog'),
@@ -200,18 +197,13 @@ class DemoSheet extends StatelessWidget {
               const SizedBox(height: 50),
               Text(
                 'Welcome to appkit_ui_elements',
-                style: AppKitTheme.of(context)
-                    .typography
-                    .largeTitle
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: AppKitTheme.of(context).typography.largeTitle.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
               const AppKitListTile(
                 leading: Icon(CupertinoIcons.lightbulb),
-                title:
-                    Text('A complete library of Flutter components for AppKit'),
-                subtitle: Text(
-                    'Create native looking AppKit applications using Flutter'),
+                title: Text('A complete library of Flutter components for AppKit'),
+                subtitle: Text('Create native looking AppKit applications using Flutter'),
               ),
               const SizedBox(height: 16),
               const AppKitListTile(

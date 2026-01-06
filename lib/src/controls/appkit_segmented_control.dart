@@ -62,9 +62,9 @@ class AppKitSegmentedControl extends StatefulWidget {
     this.color,
     this.onSelectionChanged,
     this.size = AppKitSegmentedControlSize.regular,
-  })  : assert(icons != null ? labels == null : labels != null),
-        assert(icons == null || icons.length == controller.length),
-        assert(labels == null || labels.length == controller.length);
+  }) : assert(icons != null ? labels == null : labels != null),
+       assert(icons == null || icons.length == controller.length),
+       assert(labels == null || labels.length == controller.length);
 
   @override
   State<AppKitSegmentedControl> createState() => _AppKitSegmentedControlState();
@@ -122,12 +122,9 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty('controller', widget.controller));
-    properties.add(ObjectFlagProperty(
-        'onSelectionChanged', widget.onSelectionChanged,
-        ifNull: 'disabled'));
+    properties.add(ObjectFlagProperty('onSelectionChanged', widget.onSelectionChanged, ifNull: 'disabled'));
     properties.add(IterableProperty('icons', widget.icons, defaultValue: null));
-    properties
-        .add(IterableProperty('labels', widget.labels, defaultValue: null));
+    properties.add(IterableProperty('labels', widget.labels, defaultValue: null));
   }
 
   @override
@@ -150,21 +147,15 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
         final isMainWindow = model.isMainWindow;
         final AppKitThemeData theme = AppKitTheme.of(context);
         final segmentedControlTheme = AppKitSegmentedControlTheme.of(context);
-        final accentColor = widget.color ??
-            segmentedControlTheme.accentColor ??
-            theme.activeColor;
+        final accentColor = widget.color ?? segmentedControlTheme.accentColor ?? theme.activeColor;
         final isDark = theme.brightness == Brightness.dark;
 
-        final backgroundColor = multiSelectionStyle
-            ? theme.controlColor
-            : AppKitColors.fills.opaque.quinaryInverted;
+        final backgroundColor = multiSelectionStyle ? theme.controlColor : AppKitColors.fills.opaque.quinaryInverted;
 
         final borderRadius = widget.size.getborderRadius(singleSelectionStyle);
         final constraints = widget.size.constraints;
         return Container(
-          padding: multiSelectionStyle
-              ? const EdgeInsets.symmetric(vertical: 1)
-              : EdgeInsets.zero,
+          padding: multiSelectionStyle ? const EdgeInsets.symmetric(vertical: 1) : EdgeInsets.zero,
           constraints: constraints,
           child: DecoratedBox(
             decoration: BoxDecoration(
@@ -174,12 +165,8 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                   ? GradientBoxBorder(
                       gradient: LinearGradient(
                         colors: [
-                          AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.tertiary)
-                              .multiplyOpacity(0.35),
-                          AppKitDynamicColor.resolve(
-                                  context, AppKitColors.text.opaque.primary)
-                              .multiplyOpacity(0.5),
+                          AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.tertiary).multiplyOpacity(0.35),
+                          AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary).multiplyOpacity(0.5),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -205,14 +192,10 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
                     offset: const Offset(0, 0),
                   ),
                 ] else ...[
-                  BoxShadow(
-                    color: AppKitColors.shadowColor.withValues(alpha: 0.125),
-                  ),
+                  BoxShadow(color: AppKitColors.shadowColor.withValues(alpha: 0.125)),
                   BoxShadow(
                     color: (isDark
-                        ? theme.controlColor
-                            .withLuminance(0.35)
-                            .withValues(alpha: 0.475)
+                        ? theme.controlColor.withLuminance(0.35).withValues(alpha: 0.475)
                         : backgroundColor.withValues(alpha: 0.5)),
                     spreadRadius: -0.5,
                     blurRadius: 0.5,
@@ -231,78 +214,75 @@ class _AppKitSegmentedControlState extends State<AppKitSegmentedControl> {
               ],
             ),
             child: SizedBox.expand(
-                child: LayoutBuilder(builder: (context, layoutConstraints) {
-              assert(layoutConstraints.hasBoundedWidth);
-              final tabSize = (layoutConstraints.maxWidth -
-                      (singleSelectionStyle ? 1 : 0)) /
-                  widget.controller.length;
-              return Padding(
-                padding: singleSelectionStyle
-                    ? const EdgeInsets.all(0.5)
-                    : const EdgeInsets.all(0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: List.generate(widget.controller.length, (index) {
-                    final bool isSelected = _isTabSelected(index);
-                    final bool isDown = _isTabDown(index);
+              child: LayoutBuilder(
+                builder: (context, layoutConstraints) {
+                  assert(layoutConstraints.hasBoundedWidth);
+                  final tabSize =
+                      (layoutConstraints.maxWidth - (singleSelectionStyle ? 1 : 0)) / widget.controller.length;
+                  return Padding(
+                    padding: singleSelectionStyle ? const EdgeInsets.all(0.5) : const EdgeInsets.all(0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: List.generate(widget.controller.length, (index) {
+                        final bool isSelected = _isTabSelected(index);
+                        final bool isDown = _isTabDown(index);
 
-                    Widget? child;
+                        Widget? child;
 
-                    if (multiSelectionStyle) {
-                      // multiple selection style
-                      child = _MultipleSegmentedChild(
-                          isSelected: isSelected,
-                          isDown: isDown,
-                          index: index,
-                          constraints: constraints,
-                          size: widget.size,
-                          labels: widget.labels,
-                          icons: widget.icons,
-                          segmentedControlTheme: segmentedControlTheme,
-                          borderRadius: borderRadius,
-                          accentColor: accentColor,
-                          controller: widget.controller,
-                          isDark: isDark,
-                          isMainWindow: isMainWindow,
-                          isTabSelected: _isTabSelected);
-                    } else {
-                      // single selection style
-                      child = _SingleSegmentedChild(
-                        isSelected: isSelected,
-                        isDown: isDown,
-                        index: index,
-                        constraints: constraints,
-                        size: widget.size,
-                        theme: theme,
-                        segmentedControlTheme: segmentedControlTheme,
-                        borderRadius: borderRadius,
-                        labels: widget.labels!,
-                        isDark: isDark,
-                        isMainWindow: isMainWindow,
-                        isTabSelected: _isTabSelected,
-                        isTabDown: _isTabDown,
-                      );
-                    }
+                        if (multiSelectionStyle) {
+                          // multiple selection style
+                          child = _MultipleSegmentedChild(
+                            isSelected: isSelected,
+                            isDown: isDown,
+                            index: index,
+                            constraints: constraints,
+                            size: widget.size,
+                            labels: widget.labels,
+                            icons: widget.icons,
+                            segmentedControlTheme: segmentedControlTheme,
+                            borderRadius: borderRadius,
+                            accentColor: accentColor,
+                            controller: widget.controller,
+                            isDark: isDark,
+                            isMainWindow: isMainWindow,
+                            isTabSelected: _isTabSelected,
+                          );
+                        } else {
+                          // single selection style
+                          child = _SingleSegmentedChild(
+                            isSelected: isSelected,
+                            isDown: isDown,
+                            index: index,
+                            constraints: constraints,
+                            size: widget.size,
+                            theme: theme,
+                            segmentedControlTheme: segmentedControlTheme,
+                            borderRadius: borderRadius,
+                            labels: widget.labels!,
+                            isDark: isDark,
+                            isMainWindow: isMainWindow,
+                            isTabSelected: _isTabSelected,
+                            isTabDown: _isTabDown,
+                          );
+                        }
 
-                    return MouseRegion(
-                      hitTestBehavior: HitTestBehavior.opaque,
-                      onExit: (_) => _handleTapCancel(),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTapDown:
-                            enabled ? (_) => _handleTapDown(index) : null,
-                        onTapUp: enabled ? (_) => _handleTapUp(index) : null,
-                        onTap: enabled ? () => _handleTap(index) : null,
-                        child: SizedBox(
-                            width: tabSize,
-                            height: layoutConstraints.maxHeight,
-                            child: child),
-                      ),
-                    );
-                  }),
-                ),
-              );
-            })),
+                        return MouseRegion(
+                          hitTestBehavior: HitTestBehavior.opaque,
+                          onExit: (_) => _handleTapCancel(),
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTapDown: enabled ? (_) => _handleTapDown(index) : null,
+                            onTapUp: enabled ? (_) => _handleTapUp(index) : null,
+                            onTap: enabled ? () => _handleTap(index) : null,
+                            child: SizedBox(width: tabSize, height: layoutConstraints.maxHeight, child: child),
+                          ),
+                        );
+                      }),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         );
       },
@@ -365,77 +345,76 @@ class _MultipleSegmentedChild extends StatelessWidget {
                   borderRadius: index == 0
                       ? BorderRadius.only(
                           topLeft: Radius.circular(borderRadius),
-                          bottomLeft: Radius.circular(borderRadius))
+                          bottomLeft: Radius.circular(borderRadius),
+                        )
                       : index == controller.length - 1
-                          ? BorderRadius.only(
-                              topRight: Radius.circular(borderRadius),
-                              bottomRight: Radius.circular(borderRadius))
-                          : const BorderRadius.all(Radius.zero),
+                      ? BorderRadius.only(
+                          topRight: Radius.circular(borderRadius),
+                          bottomRight: Radius.circular(borderRadius),
+                        )
+                      : const BorderRadius.all(Radius.zero),
                 )
               : const BoxDecoration(),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: isDown
                   ? isDark
-                      ? Colors.white.withValues(alpha: 0.1)
-                      : Colors.black.withValues(alpha: 0.1)
+                        ? Colors.white.withValues(alpha: 0.1)
+                        : Colors.black.withValues(alpha: 0.1)
                   : null,
               gradient: isDown
                   ? null
                   : isSelected
-                      ? LinearGradient(
-                          colors: [
-                            Colors.white.withValues(alpha: 0.17),
-                            Colors.white.withValues(alpha: 0.0),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: const [0.0, 0.75])
-                      : null,
+                  ? LinearGradient(
+                      colors: [Colors.white.withValues(alpha: 0.17), Colors.white.withValues(alpha: 0.0)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: const [0.0, 0.75],
+                    )
+                  : null,
               borderRadius: (!isDown || !isSelected)
                   ? null
                   : index == 0
-                      ? BorderRadius.only(
-                          topLeft: Radius.circular(borderRadius),
-                          bottomLeft: Radius.circular(borderRadius))
-                      : index == controller.length - 1
-                          ? BorderRadius.only(
-                              topRight: Radius.circular(borderRadius),
-                              bottomRight: Radius.circular(borderRadius))
-                          : const BorderRadius.all(Radius.zero),
+                  ? BorderRadius.only(topLeft: Radius.circular(borderRadius), bottomLeft: Radius.circular(borderRadius))
+                  : index == controller.length - 1
+                  ? BorderRadius.only(
+                      topRight: Radius.circular(borderRadius),
+                      bottomRight: Radius.circular(borderRadius),
+                    )
+                  : const BorderRadius.all(Radius.zero),
             ),
             child: Center(
-                child: icons != null
-                    ? Icon(
-                        icons![index],
-                        size: size.iconSize,
-                        color: isSelected
-                            ? (accentColorLuminance > 0.5
+              child: icons != null
+                  ? Icon(
+                      icons![index],
+                      size: size.iconSize,
+                      color: isSelected
+                          ? (accentColorLuminance > 0.5
                                 ? AppKitColors.text.opaque.primary.color
                                 : AppKitColors.text.opaque.primary.darkColor)
-                            : isDark
-                                ? AppKitColors.text.opaque.primary.darkColor
-                                : AppKitColors.text.opaque.primary.color,
-                      )
-                    : Padding(
-                        padding: size.getLabelPaddings(false),
-                        child: Text(
-                          labels![index],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: size.textSize,
-                              color: isSelected
-                                  ? (accentColorLuminance > 0.5
-                                      ? AppKitColors.text.opaque.primary.color
-                                      : AppKitColors
-                                          .text.opaque.primary.darkColor)
-                                  : isDark
-                                      ? AppKitColors
-                                          .text.opaque.primary.darkColor
-                                      : AppKitColors.text.opaque.primary.color),
+                          : isDark
+                          ? AppKitColors.text.opaque.primary.darkColor
+                          : AppKitColors.text.opaque.primary.color,
+                    )
+                  : Padding(
+                      padding: size.getLabelPaddings(false),
+                      child: Text(
+                        labels![index],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: size.textSize,
+                          color: isSelected
+                              ? (accentColorLuminance > 0.5
+                                    ? AppKitColors.text.opaque.primary.color
+                                    : AppKitColors.text.opaque.primary.darkColor)
+                              : isDark
+                              ? AppKitColors.text.opaque.primary.darkColor
+                              : AppKitColors.text.opaque.primary.color,
                         ),
-                      )),
+                      ),
+                    ),
+            ),
           ),
         ),
       ],
@@ -479,11 +458,7 @@ class _SingleSegmentedChild extends StatelessWidget {
     final dividerIndent = size.dividerIndent;
     return Stack(
       children: [
-        if (index > 0 &&
-            !isTabSelected(index - 1) &&
-            !isTabDown(index - 1) &&
-            !isTabDown(index) &&
-            !isSelected) ...[
+        if (index > 0 && !isTabSelected(index - 1) && !isTabDown(index - 1) && !isTabDown(index) && !isSelected) ...[
           VerticalDivider(
             indent: dividerIndent,
             endIndent: dividerIndent,
@@ -501,20 +476,24 @@ class _SingleSegmentedChild extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: isDark
                             ? [
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.primary)
-                                    .multiplyOpacity(0.5),
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.quaternary)
-                                    .multiplyOpacity(0.0)
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.primary,
+                                ).multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.quaternary,
+                                ).multiplyOpacity(0.0),
                               ]
                             : [
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.tertiary)
-                                    .multiplyOpacity(0.6),
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.secondary)
-                                    .multiplyOpacity(0.6)
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.tertiary,
+                                ).multiplyOpacity(0.6),
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.secondary,
+                                ).multiplyOpacity(0.6),
                               ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -524,32 +503,29 @@ class _SingleSegmentedChild extends StatelessWidget {
                     ),
                     color: segmentedControlTheme.singleSelectionColor,
                     boxShadow: [
-                        BoxShadow(
-                          color:
-                              AppKitColors.shadowColor.withValues(alpha: 0.1),
-                          blurRadius: 0.25,
-                          spreadRadius: 0.0,
-                          offset: const Offset(0, 0.25),
-                        ),
-                        BoxShadow(
-                          color:
-                              AppKitColors.shadowColor.withValues(alpha: 0.1),
-                          blurRadius: 0.75,
-                          spreadRadius: 0.0,
-                          offset: const Offset(0, 0.5),
-                        ),
-                      ])
+                      BoxShadow(
+                        color: AppKitColors.shadowColor.withValues(alpha: 0.1),
+                        blurRadius: 0.25,
+                        spreadRadius: 0.0,
+                        offset: const Offset(0, 0.25),
+                      ),
+                      BoxShadow(
+                        color: AppKitColors.shadowColor.withValues(alpha: 0.1),
+                        blurRadius: 0.75,
+                        spreadRadius: 0.0,
+                        offset: const Offset(0, 0.5),
+                      ),
+                    ],
+                  )
                 : const BoxDecoration(),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: isDown
                     ? isDark
-                        ? Colors.white.withValues(alpha: 0.07)
-                        : Colors.black.withValues(alpha: 0.035)
+                          ? Colors.white.withValues(alpha: 0.07)
+                          : Colors.black.withValues(alpha: 0.035)
                     : null,
-                borderRadius: (!isDown || !isSelected)
-                    ? null
-                    : BorderRadius.circular(borderRadius),
+                borderRadius: (!isDown || !isSelected) ? null : BorderRadius.circular(borderRadius),
               ),
               child: Center(
                 child: Padding(
@@ -559,9 +535,9 @@ class _SingleSegmentedChild extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: size.textSize,
-                        color: AppKitDynamicColor.resolve(
-                            context, AppKitColors.text.opaque.primary)),
+                      fontSize: size.textSize,
+                      color: AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.primary),
+                    ),
                   ),
                 ),
               ),
@@ -636,20 +612,16 @@ abstract class AppKitSegmentedController extends ChangeNotifier {
   ///
   /// This factory constructor returns an instance of [SegmentedControllerSingle]
   /// which allows only one segment to be selected at a time.
-  static SegmentedControllerSingle single(
-      {int initialSelection = 0, required int length}) {
-    return SegmentedControllerSingle(
-        initialIndex: initialSelection, length: length);
+  static SegmentedControllerSingle single({int initialSelection = 0, required int length}) {
+    return SegmentedControllerSingle(initialIndex: initialSelection, length: length);
   }
 
   /// Creates a [SegmentedControllerMultiple] instance.
   ///
   /// This factory constructor is used to create a segmented controller
   /// that allows multiple selections.
-  static SegmentedControllerMultiple multiple(
-      {Set<int>? initialSelection, required int length}) {
-    return SegmentedControllerMultiple(
-        initialSelection: initialSelection, length: length);
+  static SegmentedControllerMultiple multiple({Set<int>? initialSelection, required int length}) {
+    return SegmentedControllerMultiple(initialSelection: initialSelection, length: length);
   }
 }
 
@@ -659,9 +631,9 @@ abstract class AppKitSegmentedController extends ChangeNotifier {
 /// specific to single selection segmented controls.
 class SegmentedControllerSingle extends AppKitSegmentedController {
   SegmentedControllerSingle({int initialIndex = 0, required super.length})
-      : _index = initialIndex,
-        _previousIndex = initialIndex,
-        assert(initialIndex >= 0 && initialIndex < length);
+    : _index = initialIndex,
+      _previousIndex = initialIndex,
+      assert(initialIndex >= 0 && initialIndex < length);
 
   void setIndex(int index) {
     assert(index >= 0 && index < length);
@@ -728,17 +700,14 @@ class SegmentedControllerSingle extends AppKitSegmentedController {
 class SegmentedControllerMultiple extends AppKitSegmentedController {
   final Set<int> _selectedIndexes;
 
-  SegmentedControllerMultiple(
-      {Set<int>? initialSelection, required super.length})
-      : _selectedIndexes = initialSelection ?? <int>{},
-        assert(initialSelection == null || initialSelection.length <= length);
+  SegmentedControllerMultiple({Set<int>? initialSelection, required super.length})
+    : _selectedIndexes = initialSelection ?? <int>{},
+      assert(initialSelection == null || initialSelection.length <= length);
 
   @override
   void toggleIndex(int index) {
     assert(index >= 0 && index < length);
-    _selectedIndexes.contains(index)
-        ? _selectedIndexes.remove(index)
-        : _selectedIndexes.add(index);
+    _selectedIndexes.contains(index) ? _selectedIndexes.remove(index) : _selectedIndexes.add(index);
     notifyListeners();
   }
 
@@ -783,14 +752,11 @@ extension ControlSizeX on AppKitSegmentedControlSize {
   BoxConstraints get constraints {
     switch (this) {
       case AppKitSegmentedControlSize.mini:
-        return const BoxConstraints(
-            minHeight: 14, maxHeight: 14, minWidth: 100);
+        return const BoxConstraints(minHeight: 14, maxHeight: 14, minWidth: 100);
       case AppKitSegmentedControlSize.small:
-        return const BoxConstraints(
-            minHeight: 18, maxHeight: 18, minWidth: 100);
+        return const BoxConstraints(minHeight: 18, maxHeight: 18, minWidth: 100);
       case AppKitSegmentedControlSize.regular:
-        return const BoxConstraints(
-            minHeight: 22, maxHeight: 22, minWidth: 100);
+        return const BoxConstraints(minHeight: 22, maxHeight: 22, minWidth: 100);
     }
   }
 

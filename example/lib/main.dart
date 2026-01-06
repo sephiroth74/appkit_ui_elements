@@ -38,8 +38,7 @@ Future<void> _configureMacosWindowUtils() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  assert(Platform.isMacOS && !kIsWeb,
-      'This example is intended to run on macOS desktop only.');
+  assert(Platform.isMacOS && !kIsWeb, 'This example is intended to run on macOS desktop only.');
   await _configureMacosWindowUtils();
   await AppKitUiElements.ensureInitialized(debug: true, useWindowManager: true);
   runApp(const MyApp());
@@ -152,17 +151,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   scrollController: scrollController,
                   itemSize: AppKitSidebarItemSize.large,
                   items: const [
-                    AppKitSidebarItem(
-                        label: Text('Buttons'),
-                        expandDisclosureItems: true,
-                        disclosureItems: [
-                          AppKitSidebarItem(label: Text('Push Button')),
-                          AppKitSidebarItem(label: Text('Toggle Button')),
-                          AppKitSidebarItem(label: Text('Combo Button')),
-                          AppKitSidebarItem(label: Text('ComboBox Button')),
-                          AppKitSidebarItem(
-                              label: Text('Popup/Pulldown Button')),
-                        ]),
+                    AppKitSidebarItem(label: Text('Buttons'), expandDisclosureItems: true, disclosureItems: [
+                      AppKitSidebarItem(label: Text('Push Button')),
+                      AppKitSidebarItem(label: Text('Toggle Button')),
+                      AppKitSidebarItem(label: Text('Combo Button')),
+                      AppKitSidebarItem(label: Text('ComboBox Button')),
+                      AppKitSidebarItem(label: Text('Popup/Pulldown Button')),
+                    ]),
                     AppKitSidebarItem(
                       label: Text('Controls'),
                     ),

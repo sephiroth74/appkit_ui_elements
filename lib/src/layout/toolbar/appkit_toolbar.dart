@@ -77,36 +77,28 @@ class AppKitToolBar extends StatefulWidget with Diagnosticable {
     properties.add(DiagnosticsProperty<Alignment>('alignment', alignment));
     properties.add(DiagnosticsProperty<Widget>('title', title));
     properties.add(DoubleProperty('titleWidth', titleWidth));
-    properties
-        .add(DiagnosticsProperty<BoxDecoration>('decoration', decoration));
+    properties.add(DiagnosticsProperty<BoxDecoration>('decoration', decoration));
     properties.add(DiagnosticsProperty<EdgeInsets>('padding', padding));
     properties.add(DiagnosticsProperty<Widget>('leading', leading));
-    properties.add(FlagProperty(
-      'automaticallyImplyLeading',
-      value: automaticallyImplyLeading,
-      ifTrue: 'automatically imply leading',
-    ));
-    properties
-        .add(DiagnosticsProperty<List<AppKitToolbarItem>>('actions', actions));
-    properties.add(FlagProperty(
-      'centerTitle',
-      value: centerTitle,
-      ifTrue: 'center title',
-    ));
+    properties.add(
+      FlagProperty(
+        'automaticallyImplyLeading',
+        value: automaticallyImplyLeading,
+        ifTrue: 'automatically imply leading',
+      ),
+    );
+    properties.add(DiagnosticsProperty<List<AppKitToolbarItem>>('actions', actions));
+    properties.add(FlagProperty('centerTitle', value: centerTitle, ifTrue: 'center title'));
     properties.add(DiagnosticsProperty<Color>('dividerColor', dividerColor));
-    properties.add(FlagProperty(
-      'allowWallpaperTintingOverrides',
-      value: allowWallpaperTintingOverrides,
-      ifTrue: 'allow wallpaper tinting overrides',
-    ));
-    properties.add(FlagProperty(
-      'enableBlur',
-      value: enableBlur,
-      ifTrue: 'enable blur',
-    ));
-    properties.add(EnumProperty<NSVisualEffectViewMaterial>(
-        'material', material,
-        defaultValue: null));
+    properties.add(
+      FlagProperty(
+        'allowWallpaperTintingOverrides',
+        value: allowWallpaperTintingOverrides,
+        ifTrue: 'allow wallpaper tinting overrides',
+      ),
+    );
+    properties.add(FlagProperty('enableBlur', value: enableBlur, ifTrue: 'enable blur'));
+    properties.add(EnumProperty<NSVisualEffectViewMaterial>('material', material, defaultValue: null));
   }
 
   @override
@@ -136,10 +128,8 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
     final AppKitThemeData theme = AppKitTheme.of(context);
     final isDark = widget.isDark(context);
     final Brightness brightness = widget.brightness(context);
-    Color dividerColor = widget.dividerColor ??
-        (isDark
-            ? AppKitColors.separatorColor.darkColor
-            : AppKitColors.separatorColor.color);
+    Color dividerColor =
+        widget.dividerColor ?? (isDark ? AppKitColors.separatorColor.darkColor : AppKitColors.separatorColor.color);
     final route = ModalRoute.of(context);
     double overflowBreakpoint = 0.0;
 
@@ -149,10 +139,12 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
         leading = Container(
           width: _kLeadingWidth,
           alignment: Alignment.centerLeft,
-          child: AppKitIconButton.toolbar(context,
-              brightness: brightness,
-              icon: CupertinoIcons.chevron_back,
-              onPressed: () => Navigator.maybePop(context)),
+          child: AppKitIconButton.toolbar(
+            context,
+            brightness: brightness,
+            icon: CupertinoIcons.chevron_back,
+            onPressed: () => Navigator.maybePop(context),
+          ),
         );
       }
     }
@@ -161,19 +153,14 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
       overflowBreakpoint += _kLeadingWidth;
     }
 
-    final textColor = AppKitColors.labelColor
-        .resolveFromBrightness(widget.brightness(context));
+    final textColor = AppKitColors.labelColor.resolveFromBrightness(widget.brightness(context));
 
     Widget? title = widget.title;
     if (title != null) {
       title = SizedBox(
         width: widget.titleWidth,
         child: DefaultTextStyle(
-          style: theme.typography.title3.copyWith(
-            color: textColor,
-            fontSize: 15,
-            fontWeight: AppKitFontWeight.w590,
-          ),
+          style: theme.typography.title3.copyWith(color: textColor, fontSize: 15, fontWeight: AppKitFontWeight.w590),
           child: title,
         ),
       );
@@ -187,9 +174,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
     bool doAllItemsShowLabel = true;
     if (widget.actions != null && widget.actions!.isNotEmpty) {
       inToolbarActions = widget.actions ?? [];
-      overflowedActions = inToolbarActions
-          .sublist(inToolbarActions.length - overflowedActionsCount)
-          .toList();
+      overflowedActions = inToolbarActions.sublist(inToolbarActions.length - overflowedActionsCount).toList();
 
       if (overflowedActions.firstOrNull is AppKitToolBarDivider) {
         overflowedActions.removeAt(0);
@@ -207,11 +192,7 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
     }
 
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        padding: const EdgeInsets.only(
-          left: 70,
-        ),
-      ),
+      data: MediaQuery.of(context).copyWith(padding: const EdgeInsets.only(left: 70)),
       child: _WallpaperTintedAreaOrBlurFilter(
         enableWallpaperTintedArea: !widget.enableBlur,
         isWidgetVisible: widget.allowWallpaperTintingOverrides,
@@ -221,36 +202,32 @@ class _AppKitToolBarState extends State<AppKitToolBar> {
         child: Container(
           alignment: widget.alignment,
           padding: widget.padding,
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: dividerColor)),
-          ).copyWith(
-            color: widget.decoration?.color,
-            image: widget.decoration?.image,
-            border: widget.decoration?.border,
-            borderRadius: widget.decoration?.borderRadius,
-            boxShadow: widget.decoration?.boxShadow,
-            gradient: widget.decoration?.gradient,
-          ),
+          decoration:
+              BoxDecoration(
+                border: Border(bottom: BorderSide(color: dividerColor)),
+              ).copyWith(
+                color: widget.decoration?.color,
+                image: widget.decoration?.image,
+                border: widget.decoration?.border,
+                borderRadius: widget.decoration?.borderRadius,
+                boxShadow: widget.decoration?.boxShadow,
+                gradient: widget.decoration?.gradient,
+              ),
           child: NavigationToolbar(
             middle: title,
             centerMiddle: widget.centerTitle,
             trailing: AppKitOverflowHandler(
               overflowBreakpoint: overflowBreakpoint,
               overflowWidget: AppKitToolbarOverflowButton(
-                  brightness: brightness,
-                  isDense: doAllItemsShowLabel,
-                  overflowContentBuilder: (context) {
-                    return AppKitContextMenu(
-                        entries: overflowedActions
-                            .map((action) => action.toContextMenuEntry(context))
-                            .nonNulls
-                            .toList());
-                  }),
-              children: inToolbarActions
-                  .map(
-                    (e) => e.build(context, brightness: brightness),
-                  )
-                  .toList(),
+                brightness: brightness,
+                isDense: doAllItemsShowLabel,
+                overflowContentBuilder: (context) {
+                  return AppKitContextMenu(
+                    entries: overflowedActions.map((action) => action.toContextMenuEntry(context)).nonNulls.toList(),
+                  );
+                },
+              ),
+              children: inToolbarActions.map((e) => e.build(context, brightness: brightness)).toList(),
               overflowChangedCallback: (hiddenItems) {
                 setState(() => overflowedActionsCount = hiddenItems.length);
               },
@@ -315,12 +292,7 @@ class _WallpaperTintedAreaOrBlurFilter extends StatelessWidget {
     return AppKitWallpaperTintingOverride(
       child: ClipRect(
         child: BackdropFilter(
-          filter: widgetOpacity == 1.0
-              ? ImageFilter.blur()
-              : ImageFilter.blur(
-                  sigmaX: 5.0,
-                  sigmaY: 5.0,
-                ),
+          filter: widgetOpacity == 1.0 ? ImageFilter.blur() : ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: child,
         ),
       ),

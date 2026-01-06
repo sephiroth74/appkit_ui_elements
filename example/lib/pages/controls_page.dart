@@ -52,13 +52,10 @@ class _ControlsPageState extends State<ControlsPage> {
                             Text('Alarm'),
                           ],
                         )
-                      : Text(
-                          i == 6 ? 'Very long item with value $i' : 'Item $i'),
+                      : Text(i == 6 ? 'Very long item with value $i' : 'Item $i'),
                   enabled: i != 4,
                   value: '$i',
-                  itemState: popupSelectedItem?.value == '$i'
-                      ? AppKitItemState.on
-                      : AppKitItemState.off,
+                  itemState: popupSelectedItem?.value == '$i' ? AppKitItemState.on : AppKitItemState.off,
                 ),
           ],
         );
@@ -68,37 +65,19 @@ class _ControlsPageState extends State<ControlsPage> {
         return AppKitContextMenu<int>(
           maxWidth: 200,
           entries: [
-            AppKitContextMenuItem(
-                child: titleWithIconMenuItem('Cut', Icons.cut),
-                value: 0,
-                enabled: true),
-            AppKitContextMenuItem(
-                child: titleWithIconMenuItem('Copy', Icons.copy),
-                value: 1,
-                enabled: true),
-            AppKitContextMenuItem(
-                child: titleWithIconMenuItem('Paste', Icons.paste),
-                value: 2,
-                enabled: true),
+            AppKitContextMenuItem(child: titleWithIconMenuItem('Cut', Icons.cut), value: 0, enabled: true),
+            AppKitContextMenuItem(child: titleWithIconMenuItem('Copy', Icons.copy), value: 1, enabled: true),
+            AppKitContextMenuItem(child: titleWithIconMenuItem('Paste', Icons.paste), value: 2, enabled: true),
             const AppKitContextMenuDivider(),
-            const AppKitContextMenuItem(
-                child: Text('Select All'), value: 3, enabled: true),
-            const AppKitContextMenuItem(
-                child: Text('Select None'), value: 3, enabled: true),
+            const AppKitContextMenuItem(child: Text('Select All'), value: 3, enabled: true),
+            const AppKitContextMenuItem(child: Text('Select None'), value: 3, enabled: true),
             const AppKitContextMenuDivider(),
-            AppKitContextMenuItem(
-                child: const Text('Other...'),
-                value: 6,
-                enabled: true,
-                items: [
-                  const AppKitContextMenuItem(
-                      child: Text('Submenu Item 1'), value: 7, enabled: true),
-                  const AppKitContextMenuItem(
-                      child: Text('Submenu Item 2'), value: 8, enabled: true),
-                  const AppKitContextMenuDivider(),
-                  AppKitContextMenuItem.plain('Submenu Item 3',
-                      value: 9, enabled: false),
-                ]),
+            AppKitContextMenuItem(child: const Text('Other...'), value: 6, enabled: true, items: [
+              const AppKitContextMenuItem(child: Text('Submenu Item 1'), value: 7, enabled: true),
+              const AppKitContextMenuItem(child: Text('Submenu Item 2'), value: 8, enabled: true),
+              const AppKitContextMenuDivider(),
+              AppKitContextMenuItem.plain('Submenu Item 3', value: 9, enabled: false),
+            ]),
           ],
         );
       };
@@ -277,13 +256,11 @@ class _ControlsPageState extends State<ControlsPage> {
                               Row(
                                 children: [
                                   AppKitRadioButton<bool>(
-                                    groupValue:
-                                        radioButtonValue2 && radioButtonValue3
-                                            ? true
-                                            : !radioButtonValue2 &&
-                                                    !radioButtonValue3
-                                                ? false
-                                                : null,
+                                    groupValue: radioButtonValue2 && radioButtonValue3
+                                        ? true
+                                        : !radioButtonValue2 && !radioButtonValue3
+                                            ? false
+                                            : null,
                                     value: true,
                                     onChanged: (value) {
                                       setState(() {
@@ -300,8 +277,7 @@ class _ControlsPageState extends State<ControlsPage> {
                               Row(
                                 children: [
                                   AppKitRadioButton<bool>(
-                                    groupValue: !radioButtonValue2 &&
-                                        !radioButtonValue3,
+                                    groupValue: !radioButtonValue2 && !radioButtonValue3,
                                     value: true,
                                     onChanged: (value) {
                                       setState(() {

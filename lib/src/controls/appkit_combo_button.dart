@@ -100,8 +100,7 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
   bool _isSplitButtonHeldDown = false;
   bool _isButtonHeldDown = false;
 
-  bool get isDown =>
-      _isSplitButtonHeldDown || _isButtonHeldDown || _isContextMenuOpened;
+  bool get isDown => _isSplitButtonHeldDown || _isButtonHeldDown || _isContextMenuOpened;
 
   bool get isDark => AppKitTheme.of(context).brightness == Brightness.dark;
 
@@ -168,8 +167,8 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
       if (null != itemRect && widget.menuBuilder != null) {
         final contextMenu = widget.menuBuilder!(context);
         final menu = contextMenu.copyWith(
-            position: contextMenu.position ??
-                AppKitMenuEdge.auto.getRectPosition(itemRect));
+          position: contextMenu.position ?? AppKitMenuEdge.auto.getRectPosition(itemRect),
+        );
 
         isContextMenuOpened = true;
 
@@ -197,44 +196,46 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
       label: widget.semanticLabel,
       button: true,
       enabled: enabled,
-      child: Consumer<MainWindowModel>(builder: (context, model, _) {
-        final isMainWindow = model.isMainWindow;
-        final theme = AppKitTheme.of(context);
-        final comboButtonTheme = AppKitComboButtonTheme.of(context);
-        final comboButtonThemeDataSize =
-            comboButtonTheme.get(widget.controlSize);
+      child: Consumer<MainWindowModel>(
+        builder: (context, model, _) {
+          final isMainWindow = model.isMainWindow;
+          final theme = AppKitTheme.of(context);
+          final comboButtonTheme = AppKitComboButtonTheme.of(context);
+          final comboButtonThemeDataSize = comboButtonTheme.get(widget.controlSize);
 
-        return Builder(
-          builder: (context) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(
+          return Builder(
+            builder: (context) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(
                   minWidth: comboButtonThemeDataSize.buttonSize.width,
-                  maxHeight: comboButtonThemeDataSize.buttonSize.height),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        comboButtonThemeDataSize.borderRadius),
-                    color: enabled
-                        ? theme.controlColor
-                        : theme.controlColor.multiplyOpacity(0.5),
+                  maxHeight: comboButtonThemeDataSize.buttonSize.height,
+                ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(comboButtonThemeDataSize.borderRadius),
+                    color: enabled ? theme.controlColor : theme.controlColor.multiplyOpacity(0.5),
                     border: GradientBoxBorder(
                       gradient: LinearGradient(
                         colors: isDark
                             ? [
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.primary)
-                                    .multiplyOpacity(0.5),
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.quaternary)
-                                    .multiplyOpacity(0.0)
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.primary,
+                                ).multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.quaternary,
+                                ).multiplyOpacity(0.0),
                               ]
                             : [
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.tertiary)
-                                    .multiplyOpacity(0.5),
-                                AppKitDynamicColor.resolve(context,
-                                        AppKitColors.text.opaque.secondary)
-                                    .multiplyOpacity(0.5)
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.tertiary,
+                                ).multiplyOpacity(0.5),
+                                AppKitDynamicColor.resolve(
+                                  context,
+                                  AppKitColors.text.opaque.secondary,
+                                ).multiplyOpacity(0.5),
                               ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -244,59 +245,47 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppKitColors.shadowColor.color
-                            .withValues(alpha: isDark ? 0.75 : 0.15),
+                        color: AppKitColors.shadowColor.color.withValues(alpha: isDark ? 0.75 : 0.15),
                         blurRadius: 0.5,
                         spreadRadius: 0,
                         offset: const Offset(0, 0.5),
                         blurStyle: BlurStyle.outer,
                       ),
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
                           child: _ButtonWidget(
-                              padding: widget.padding,
-                              height:
-                                  comboButtonThemeDataSize.buttonSize.height,
-                              controlSize: widget.controlSize,
-                              style: widget.style,
-                              enabled: enabled,
-                              isMainWindow: isMainWindow,
-                              onTapDown: _handleButtonTapDown,
-                              onTapUp: _handleButtonTapUp,
-                              onTapCancel: _handleButtonTapCancel,
-                              onLongPress:
-                                  widget.style == AppKitComboButtonStyle.unified
-                                      ? _handleButtonLongPress
-                                      : null,
-                              isDown: _isButtonHeldDown,
-                              comboButtonTheme: comboButtonThemeDataSize,
-                              theme: theme,
-                              child: widget.child)),
-                      if (widget.style == AppKitComboButtonStyle.split) ...[
-                        VerticalDivider(
-                          indent: isDown
-                              ? 0.0
-                              : (comboButtonThemeDataSize.buttonSize.height /
-                                      5) +
-                                  1,
-                          endIndent: isDown
-                              ? 0.0
-                              : (comboButtonThemeDataSize.buttonSize.height /
-                                      5) +
-                                  1,
-                          width: 0.5,
-                          thickness: 0.5,
-                          color: AppKitColors.text.opaque.secondary
-                              .multiplyOpacity(0.8),
+                            padding: widget.padding,
+                            height: comboButtonThemeDataSize.buttonSize.height,
+                            controlSize: widget.controlSize,
+                            style: widget.style,
+                            enabled: enabled,
+                            isMainWindow: isMainWindow,
+                            onTapDown: _handleButtonTapDown,
+                            onTapUp: _handleButtonTapUp,
+                            onTapCancel: _handleButtonTapCancel,
+                            onLongPress: widget.style == AppKitComboButtonStyle.unified ? _handleButtonLongPress : null,
+                            isDown: _isButtonHeldDown,
+                            comboButtonTheme: comboButtonThemeDataSize,
+                            theme: theme,
+                            child: widget.child,
+                          ),
                         ),
-                        _SplitButton(
-                            width:
-                                comboButtonThemeDataSize.buttonSize.height - 5,
+                        if (widget.style == AppKitComboButtonStyle.split) ...[
+                          VerticalDivider(
+                            indent: isDown ? 0.0 : (comboButtonThemeDataSize.buttonSize.height / 5) + 1,
+                            endIndent: isDown ? 0.0 : (comboButtonThemeDataSize.buttonSize.height / 5) + 1,
+                            width: 0.5,
+                            thickness: 0.5,
+                            color: AppKitColors.text.opaque.secondary.multiplyOpacity(0.8),
+                          ),
+                          _SplitButton(
+                            width: comboButtonThemeDataSize.buttonSize.height - 5,
                             height: comboButtonThemeDataSize.buttonSize.height,
                             enabled: enabled,
                             isMainWindow: isMainWindow,
@@ -305,16 +294,18 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
                             onTapCancel: _handleSplitTapCancel,
                             comboButtonThemeDataSize: comboButtonThemeDataSize,
                             themeData: theme,
-                            isDown: _isSplitButtonHeldDown),
+                            isDown: _isSplitButtonHeldDown,
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
-      }),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -322,21 +313,19 @@ class _AppKitComboButtonState<T> extends State<AppKitComboButton<T>> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<bool>('enabled', enabled));
-    properties.add(
-        DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
-    properties.add(
-        DiagnosticsProperty<String>('semanticLabel', widget.semanticLabel));
-    properties.add(DiagnosticsProperty<AppKitControlSize>(
-        'controlSize', widget.controlSize));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
+    properties.add(DiagnosticsProperty<String>('semanticLabel', widget.semanticLabel));
+    properties.add(DiagnosticsProperty<AppKitControlSize>('controlSize', widget.controlSize));
     properties.add(DiagnosticsProperty<Widget>('child', widget.child));
-    properties.add(DiagnosticsProperty<ContextMenuBuilder>(
-        'menuBuilder', widget.menuBuilder));
-    properties.add(ObjectFlagProperty<VoidCallback>(
-        'onPressed', widget.onPressed,
-        ifNull: 'disabled'));
-    properties.add(ObjectFlagProperty<ValueChanged<AppKitContextMenuItem<T>?>>(
-        'onItemSelected', widget.onItemSelected,
-        ifNull: 'disabled'));
+    properties.add(DiagnosticsProperty<ContextMenuBuilder>('menuBuilder', widget.menuBuilder));
+    properties.add(ObjectFlagProperty<VoidCallback>('onPressed', widget.onPressed, ifNull: 'disabled'));
+    properties.add(
+      ObjectFlagProperty<ValueChanged<AppKitContextMenuItem<T>?>>(
+        'onItemSelected',
+        widget.onItemSelected,
+        ifNull: 'disabled',
+      ),
+    );
     properties.add(EnumProperty<AppKitComboButtonStyle>('style', widget.style));
     properties.add(DiagnosticsProperty<bool>('isDown', isDown));
   }
@@ -383,8 +372,7 @@ class _SplitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? controlBackgroundColor;
     if (enabled && isDown) {
-      controlBackgroundColor =
-          themeData.controlColor.multiplyLuminance(0.9).withValues(alpha: 0.5);
+      controlBackgroundColor = themeData.controlColor.multiplyLuminance(0.9).withValues(alpha: 0.5);
     }
 
     return GestureDetector(
@@ -396,10 +384,8 @@ class _SplitButton extends StatelessWidget {
             ? BoxDecoration(
                 backgroundBlendMode: BlendMode.darken,
                 borderRadius: BorderRadius.only(
-                  topRight:
-                      Radius.circular(comboButtonThemeDataSize.borderRadius),
-                  bottomRight:
-                      Radius.circular(comboButtonThemeDataSize.borderRadius),
+                  topRight: Radius.circular(comboButtonThemeDataSize.borderRadius),
+                  bottomRight: Radius.circular(comboButtonThemeDataSize.borderRadius),
                 ),
                 color: controlBackgroundColor,
               )
@@ -413,9 +399,7 @@ class _SplitButton extends StatelessWidget {
               child: Icon(
                 Icons.chevron_right,
                 size: width * 0.65,
-                color:
-                    AppKitDynamicColor.resolve(context, AppKitColors.textColor)
-                        .multiplyOpacity(enabled ? 1.0 : 0.5),
+                color: AppKitDynamicColor.resolve(context, AppKitColors.textColor).multiplyOpacity(enabled ? 1.0 : 0.5),
               ),
             ),
           ),
@@ -462,8 +446,7 @@ class _ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? controlBackgroundColor;
     if (enabled && isDown) {
-      controlBackgroundColor =
-          theme.controlColor.multiplyLuminance(0.9).withValues(alpha: 0.5);
+      controlBackgroundColor = theme.controlColor.multiplyLuminance(0.9).withValues(alpha: 0.5);
     }
 
     return GestureDetector(
@@ -471,56 +454,48 @@ class _ButtonWidget extends StatelessWidget {
       onTap: enabled ? onTapUp : null,
       onTapCancel: enabled ? onTapCancel : null,
       onLongPress: enabled && onLongPress != null ? onLongPress : null,
-      child: Builder(builder: (context) {
-        return IntrinsicWidth(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: height,
-              maxHeight: height,
-              minWidth: comboButtonTheme.buttonSize.width,
-            ),
-            child: DecoratedBox(
-              decoration: enabled && isDown
-                  ? BoxDecoration(
-                      backgroundBlendMode: BlendMode.darken,
-                      borderRadius: style == AppKitComboButtonStyle.split
-                          ? BorderRadius.only(
-                              topLeft: Radius.circular(
-                                  comboButtonTheme.borderRadius),
-                              bottomLeft: Radius.circular(
-                                  comboButtonTheme.borderRadius),
-                            )
-                          : BorderRadius.circular(
-                              comboButtonTheme.borderRadius),
-                      color: controlBackgroundColor,
-                    )
-                  : const BoxDecoration(),
-              child: Padding(
-                padding:
-                    comboButtonTheme.padding.add(padding ?? EdgeInsets.zero),
-                child: Align(
-                  widthFactor: 1.0,
-                  heightFactor: 1.0,
-                  alignment: Alignment.center,
-                  child: Opacity(
-                    opacity: enabled ? 1.0 : 0.5,
-                    child: DefaultTextStyle(
-                      style: AppKitTheme.of(context)
-                          .typography
-                          .body
-                          .copyWith(fontSize: comboButtonTheme.fontSize),
-                      child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: child,
+      child: Builder(
+        builder: (context) {
+          return IntrinsicWidth(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: height,
+                maxHeight: height,
+                minWidth: comboButtonTheme.buttonSize.width,
+              ),
+              child: DecoratedBox(
+                decoration: enabled && isDown
+                    ? BoxDecoration(
+                        backgroundBlendMode: BlendMode.darken,
+                        borderRadius: style == AppKitComboButtonStyle.split
+                            ? BorderRadius.only(
+                                topLeft: Radius.circular(comboButtonTheme.borderRadius),
+                                bottomLeft: Radius.circular(comboButtonTheme.borderRadius),
+                              )
+                            : BorderRadius.circular(comboButtonTheme.borderRadius),
+                        color: controlBackgroundColor,
+                      )
+                    : const BoxDecoration(),
+                child: Padding(
+                  padding: comboButtonTheme.padding.add(padding ?? EdgeInsets.zero),
+                  child: Align(
+                    widthFactor: 1.0,
+                    heightFactor: 1.0,
+                    alignment: Alignment.center,
+                    child: Opacity(
+                      opacity: enabled ? 1.0 : 0.5,
+                      child: DefaultTextStyle(
+                        style: AppKitTheme.of(context).typography.body.copyWith(fontSize: comboButtonTheme.fontSize),
+                        child: FittedBox(fit: BoxFit.contain, child: child),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 const _kSheetBorderRadius = BorderRadius.all(Radius.circular(12.0));
-const EdgeInsets _defaultInsetPadding =
-    EdgeInsets.symmetric(horizontal: 140.0, vertical: 48.0);
+const EdgeInsets _defaultInsetPadding = EdgeInsets.symmetric(horizontal: 140.0, vertical: 48.0);
 
 class AppKitSheet extends StatelessWidget {
   const AppKitSheet({
@@ -27,33 +26,31 @@ class AppKitSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasAppKitTheme(context));
 
-    final EdgeInsets effectivePadding =
-        MediaQuery.of(context).viewInsets + (insetPadding ?? EdgeInsets.zero);
+    final EdgeInsets effectivePadding = MediaQuery.of(context).viewInsets + (insetPadding ?? EdgeInsets.zero);
 
-    return Consumer<MainWindowModel>(builder: (context, model, _) {
-      final theme = AppKitTheme.of(context);
-      final brightness = AppKitTheme.brightnessOf(context);
+    return Consumer<MainWindowModel>(
+      builder: (context, model, _) {
+        final theme = AppKitTheme.of(context);
+        final brightness = AppKitTheme.brightnessOf(context);
 
-      final outerBorderColor = brightness.resolve(
-        Colors.black.withValues(alpha: 0.23),
-        Colors.black.withValues(alpha: 0.76),
-      );
+        final outerBorderColor = brightness.resolve(
+          Colors.black.withValues(alpha: 0.23),
+          Colors.black.withValues(alpha: 0.76),
+        );
 
-      final innerBorderColor = brightness.resolve(
-        Colors.white.withValues(alpha: 0.45),
-        Colors.white.withValues(alpha: 0.15),
-      );
-      return AnimatedPadding(
-        padding: effectivePadding,
-        duration: insetAnimationDuration,
-        curve: insetAnimationCurve,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-              color: backgroundColor ??
-                  brightness.resolve(
-                    CupertinoColors.systemGrey6.color,
-                    theme.controlBackgroundColor,
-                  ),
+        final innerBorderColor = brightness.resolve(
+          Colors.white.withValues(alpha: 0.45),
+          Colors.white.withValues(alpha: 0.15),
+        );
+        return AnimatedPadding(
+          padding: effectivePadding,
+          duration: insetAnimationDuration,
+          curve: insetAnimationCurve,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color:
+                  backgroundColor ??
+                  brightness.resolve(CupertinoColors.systemGrey6.color, theme.controlBackgroundColor),
               borderRadius: _kSheetBorderRadius,
               boxShadow: [
                 BoxShadow(
@@ -61,27 +58,23 @@ class AppKitSheet extends StatelessWidget {
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
-              ]),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2,
-                color: innerBorderColor,
-              ),
-              borderRadius: _kSheetBorderRadius,
+              ],
             ),
-            foregroundDecoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: outerBorderColor,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2, color: innerBorderColor),
+                borderRadius: _kSheetBorderRadius,
               ),
-              borderRadius: _kSheetBorderRadius,
+              foregroundDecoration: BoxDecoration(
+                border: Border.all(width: 1, color: outerBorderColor),
+                borderRadius: _kSheetBorderRadius,
+              ),
+              child: child,
             ),
-            child: child,
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
 
@@ -99,9 +92,7 @@ Future<T?> showAppKitSheet<T>({
   final stream = provider.isMainWindow;
 
   // combine the two streams and return the first value
-  return Stream.fromFutures([initialData.first, stream.first])
-      .first
-      .then((data) {
+  return Stream.fromFutures([initialData.first, stream.first]).first.then((data) {
     if (!context.mounted) {
       return null;
     }
@@ -125,10 +116,8 @@ Future<T?> showAppKitSheet<T>({
           to: navigator.context,
         ),
         barrierDismissible: barrierDismissible,
-        barrierColor:
-            barrierColor ?? theme.controlBackgroundColor.multiplyOpacity(0.5),
-        barrierLabel: barrierLabel ??
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: barrierColor ?? theme.controlBackgroundColor.multiplyOpacity(0.5),
+        barrierLabel: barrierLabel ?? MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ),
     );
   });
@@ -142,10 +131,10 @@ class _AppKitSheetRoute<T> extends PopupRoute<T> {
     Color? barrierColor = const Color(0x80000000),
     String? barrierLabel,
     super.settings,
-  })  : _pageBuilder = pageBuilder,
-        _barrierDismissible = barrierDismissible,
-        _barrierLabel = barrierLabel,
-        _barrierColor = barrierColor;
+  }) : _pageBuilder = pageBuilder,
+       _barrierDismissible = barrierDismissible,
+       _barrierLabel = barrierLabel,
+       _barrierColor = barrierColor;
 
   final RoutePageBuilder _pageBuilder;
 
@@ -173,16 +162,11 @@ class _AppKitSheetRoute<T> extends PopupRoute<T> {
   Duration get reverseTransitionDuration => const Duration(milliseconds: 120);
 
   @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
-      child: capturedThemes
-          .wrap(_pageBuilder(context, animation, secondaryAnimation)),
+      child: capturedThemes.wrap(_pageBuilder(context, animation, secondaryAnimation)),
     );
   }
 
@@ -195,23 +179,14 @@ class _AppKitSheetRoute<T> extends PopupRoute<T> {
   ) {
     if (animation.status == AnimationStatus.reverse) {
       return FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutSine,
-        ),
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutSine),
         child: child,
       );
     }
     return ScaleTransition(
-      scale: CurvedAnimation(
-        parent: animation,
-        curve: const SubtleBounceCurve(),
-      ),
+      scale: CurvedAnimation(parent: animation, curve: const SubtleBounceCurve()),
       child: FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.fastLinearToSlowEaseIn,
-        ),
+        opacity: CurvedAnimation(parent: animation, curve: Curves.fastLinearToSlowEaseIn),
         child: child,
       ),
     );

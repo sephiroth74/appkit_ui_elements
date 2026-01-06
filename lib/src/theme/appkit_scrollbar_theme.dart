@@ -4,23 +4,17 @@ import 'package:appkit_ui_elements/appkit_ui_elements.dart';
 import 'package:flutter/foundation.dart';
 
 class AppKitScrollbarTheme extends InheritedWidget {
-  const AppKitScrollbarTheme({
-    super.key,
-    required this.data,
-    required super.child,
-  });
+  const AppKitScrollbarTheme({super.key, required this.data, required super.child});
 
   final AppKitScrollbarThemeData data;
 
   static AppKitScrollbarThemeData of(BuildContext context) {
-    final AppKitScrollbarTheme? scrollbarTheme =
-        context.dependOnInheritedWidgetOfExactType<AppKitScrollbarTheme>();
+    final AppKitScrollbarTheme? scrollbarTheme = context.dependOnInheritedWidgetOfExactType<AppKitScrollbarTheme>();
     return scrollbarTheme?.data ?? AppKitTheme.of(context).scrollbarTheme;
   }
 
   @override
-  bool updateShouldNotify(AppKitScrollbarTheme oldWidget) =>
-      data != oldWidget.data;
+  bool updateShouldNotify(AppKitScrollbarTheme oldWidget) => data != oldWidget.data;
 }
 
 class AppKitScrollbarThemeData with Diagnosticable {
@@ -52,26 +46,17 @@ class AppKitScrollbarThemeData with Diagnosticable {
   }) {
     return AppKitScrollbarThemeData(
       thickness: thickness ?? this.thickness,
-      thicknessWhileHovering:
-          thicknessWhileHovering ?? this.thicknessWhileHovering,
+      thicknessWhileHovering: thicknessWhileHovering ?? this.thicknessWhileHovering,
       thumbVisibility: thumbVisibility ?? this.thumbVisibility,
       radius: radius ?? this.radius,
       thumbColor: thumbColor ?? this.thumbColor,
     );
   }
 
-  static AppKitScrollbarThemeData lerp(
-    AppKitScrollbarThemeData? a,
-    AppKitScrollbarThemeData? b,
-    double t,
-  ) {
+  static AppKitScrollbarThemeData lerp(AppKitScrollbarThemeData? a, AppKitScrollbarThemeData? b, double t) {
     return AppKitScrollbarThemeData(
       thickness: lerpDouble(a?.thickness, b?.thickness, t),
-      thicknessWhileHovering: lerpDouble(
-        a?.thicknessWhileHovering,
-        b?.thicknessWhileHovering,
-        t,
-      ),
+      thicknessWhileHovering: lerpDouble(a?.thicknessWhileHovering, b?.thicknessWhileHovering, t),
       thumbVisibility: t < 0.5 ? a?.thumbVisibility : b?.thumbVisibility,
       radius: Radius.lerp(a?.radius, b?.radius, t),
       thumbColor: Color.lerp(a?.thumbColor, b?.thumbColor, t),
@@ -91,13 +76,7 @@ class AppKitScrollbarThemeData with Diagnosticable {
 
   @override
   int get hashCode {
-    return Object.hash(
-      thickness,
-      thicknessWhileHovering,
-      thumbVisibility,
-      radius,
-      thumbColor,
-    );
+    return Object.hash(thickness, thicknessWhileHovering, thumbVisibility, radius, thumbColor);
   }
 
   @override
@@ -115,22 +94,10 @@ class AppKitScrollbarThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<double?>('thickness', thickness, defaultValue: null),
-    );
-    properties.add(DiagnosticsProperty<double?>(
-      'thicknessWhileHovering',
-      thicknessWhileHovering,
-      defaultValue: null,
-    ));
-    properties.add(DiagnosticsProperty<bool>(
-      'thumbVisibility',
-      thumbVisibility,
-      defaultValue: null,
-    ));
-    properties.add(
-      DiagnosticsProperty<Radius>('radius', radius, defaultValue: null),
-    );
+    properties.add(DiagnosticsProperty<double?>('thickness', thickness, defaultValue: null));
+    properties.add(DiagnosticsProperty<double?>('thicknessWhileHovering', thicknessWhileHovering, defaultValue: null));
+    properties.add(DiagnosticsProperty<bool>('thumbVisibility', thumbVisibility, defaultValue: null));
+    properties.add(DiagnosticsProperty<Radius>('radius', radius, defaultValue: null));
     properties.add(ColorProperty('thumbColor', thumbColor, defaultValue: null));
   }
 }

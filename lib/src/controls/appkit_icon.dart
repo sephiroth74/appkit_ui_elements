@@ -33,12 +33,7 @@ class AppKitIcon extends StatelessWidget {
   /// Creates an [AppKitIcon] widget.
   ///
   /// The [icon] parameter must not be null.
-  const AppKitIcon(
-    this.icon, {
-    super.key,
-    this.size,
-    this.color,
-  });
+  const AppKitIcon(this.icon, {super.key, this.size, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +41,6 @@ class AppKitIcon extends StatelessWidget {
     final theme = AppKitIconTheme.of(context);
     final size = this.size ?? theme.size;
     final color = this.color ?? theme.color;
-    return Icon(
-      icon,
-      size: size,
-      color: color,
-    );
+    return Icon(icon, size: size, color: color);
   }
 }

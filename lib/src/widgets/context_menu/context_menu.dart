@@ -25,8 +25,9 @@ class AppKitContextMenu<T> {
   }
 
   AppKitContextMenuItem<T>? _firstWhereOrNull(
-      List<AppKitContextMenuEntry<T>> entries,
-      bool Function(AppKitContextMenuItem<T> element) test) {
+    List<AppKitContextMenuEntry<T>> entries,
+    bool Function(AppKitContextMenuItem<T> element) test,
+  ) {
     for (final entry in entries) {
       if (entry is AppKitContextMenuItem<T>) {
         if (test(entry)) {
@@ -43,14 +44,12 @@ class AppKitContextMenu<T> {
     return null;
   }
 
-  AppKitContextMenuItem<T>? firstWhereOrNull(
-      bool Function(AppKitContextMenuItem<T> element) test) {
+  AppKitContextMenuItem<T>? firstWhereOrNull(bool Function(AppKitContextMenuItem<T> element) test) {
     return _firstWhereOrNull(entries, test);
   }
 
   AppKitContextMenuItem<T>? findItemByValue(T? value) {
-    return _firstWhereOrNull(
-        entries, (e) => e.value != null && e.value == value);
+    return _firstWhereOrNull(entries, (e) => e.value != null && e.value == value);
   }
 
   AppKitContextMenu<T> copyWith({

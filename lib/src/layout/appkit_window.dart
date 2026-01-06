@@ -69,11 +69,8 @@ class _AppKitWindowState extends State<AppKitWindow> {
   @override
   void initState() {
     super.initState();
-    _sidebarWidth = (widget.sidebar?.startWidth ?? widget.sidebar?.minWidth) ??
-        _sidebarWidth;
-    _endSidebarWidth =
-        (widget.endSidebar?.startWidth ?? widget.endSidebar?.minWidth) ??
-            _endSidebarWidth;
+    _sidebarWidth = (widget.sidebar?.startWidth ?? widget.sidebar?.minWidth) ?? _sidebarWidth;
+    _endSidebarWidth = (widget.endSidebar?.startWidth ?? widget.endSidebar?.minWidth) ?? _endSidebarWidth;
 
     widget.disableWallpaperTinting
         ? AppKitGlobalWallpaperTintingSettings.disableWallpaperTinting()
@@ -89,8 +86,7 @@ class _AppKitWindowState extends State<AppKitWindow> {
     final sidebar = widget.sidebar;
     if (sidebar == null) {
       _sidebarWidth = 0.0;
-    } else if (sidebar.minWidth != old.sidebar!.minWidth ||
-        sidebar.maxWidth != old.sidebar!.maxWidth) {
+    } else if (sidebar.minWidth != old.sidebar!.minWidth || sidebar.maxWidth != old.sidebar!.maxWidth) {
       if (sidebar.minWidth > _sidebarWidth) {
         _sidebarWidth = sidebar.minWidth;
       }
@@ -106,8 +102,7 @@ class _AppKitWindowState extends State<AppKitWindow> {
     final endSidebar = widget.endSidebar;
     if (endSidebar == null) {
       _endSidebarWidth = 0.0;
-    } else if (endSidebar.minWidth != old.endSidebar!.minWidth ||
-        endSidebar.maxWidth != old.endSidebar!.maxWidth) {
+    } else if (endSidebar.minWidth != old.endSidebar!.minWidth || endSidebar.maxWidth != old.endSidebar!.maxWidth) {
       if (endSidebar.minWidth > _endSidebarWidth) {
         _endSidebarWidth = endSidebar.minWidth;
       }
@@ -149,12 +144,10 @@ class _AppKitWindowState extends State<AppKitWindow> {
     final sidebar = widget.sidebar;
     final endSidebar = widget.endSidebar;
     if (sidebar?.startWidth != null) {
-      assert((sidebar!.startWidth! >= sidebar.minWidth) &&
-          (sidebar.startWidth! <= sidebar.maxWidth!));
+      assert((sidebar!.startWidth! >= sidebar.minWidth) && (sidebar.startWidth! <= sidebar.maxWidth!));
     }
     if (endSidebar?.startWidth != null) {
-      assert((endSidebar!.startWidth! >= endSidebar.minWidth) &&
-          (endSidebar.startWidth! <= endSidebar.maxWidth!));
+      assert((endSidebar!.startWidth! >= endSidebar.minWidth) && (endSidebar.startWidth! <= endSidebar.maxWidth!));
     }
     final theme = AppKitTheme.of(context);
     late Color backgroundColor = widget.backgroundColor ?? theme.canvasColor;
@@ -188,13 +181,10 @@ class _AppKitWindowState extends State<AppKitWindow> {
         final height = constraints.maxHeight;
         final isAtBreakpoint = width <= (sidebar?.windowBreakpoint ?? 0);
         final isAtEndBreakpoint = width <= (endSidebar?.windowBreakpoint ?? 0);
-        final canShowSidebar =
-            _showSidebar && !isAtBreakpoint && sidebar != null;
-        final canShowEndSidebar =
-            _showEndSidebar && !isAtEndBreakpoint && endSidebar != null;
+        final canShowSidebar = _showSidebar && !isAtBreakpoint && sidebar != null;
+        final canShowEndSidebar = _showEndSidebar && !isAtEndBreakpoint && endSidebar != null;
         final visibleSidebarWidth = canShowSidebar ? _sidebarWidth : 0.0;
-        final visibleEndSidebarWidth =
-            canShowEndSidebar ? _endSidebarWidth : 0.0;
+        final visibleEndSidebarWidth = canShowEndSidebar ? _endSidebarWidth : 0.0;
         final sidebarState = widget.sidebarState;
 
         final layout = Stack(
@@ -242,35 +232,21 @@ class _AppKitWindowState extends State<AppKitWindow> {
                             const SizedBox(height: 12),
                           ] else
                             const SizedBox.shrink(),
-                          if (_sidebarScrollController.hasClients &&
-                              _sidebarScrollController.offset > 0.0)
-                            Divider(
-                                thickness: 1, height: 1, color: dividerColor),
+                          if (_sidebarScrollController.hasClients && _sidebarScrollController.offset > 0.0)
+                            Divider(thickness: 1, height: 1, color: dividerColor),
                           if (sidebar.top != null && constraints.maxHeight > 81)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                              ),
-                              child: sidebar.top!,
-                            ),
+                            Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: sidebar.top!),
                           Expanded(
                             child: AppKitScrollbar(
                               controller: _sidebarScrollController,
                               child: Padding(
                                 padding: sidebar.padding,
-                                child: sidebar.builder(
-                                  context,
-                                  _sidebarScrollController,
-                                ),
+                                child: sidebar.builder(context, _sidebarScrollController),
                               ),
                             ),
                           ),
-                          if (sidebar.bottom != null &&
-                              constraints.maxHeight > 141)
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: sidebar.bottom!,
-                            ),
+                          if (sidebar.bottom != null && constraints.maxHeight > 141)
+                            Padding(padding: const EdgeInsets.all(16.0), child: sidebar.bottom!),
                         ],
                       ),
                     ),
@@ -287,9 +263,7 @@ class _AppKitWindowState extends State<AppKitWindow> {
               height: height,
               child: ClipRect(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    top: widget.titleBar != null ? widget.titleBar!.height : 0,
-                  ),
+                  padding: EdgeInsets.only(top: widget.titleBar != null ? widget.titleBar!.height : 0),
                   child: widget.child ?? const SizedBox.shrink(),
                 ),
               ),
@@ -300,9 +274,7 @@ class _AppKitWindowState extends State<AppKitWindow> {
               left: visibleSidebarWidth,
               width: width - visibleSidebarWidth,
               height: widget.titleBar?.height,
-              child: ClipRect(
-                child: widget.titleBar ?? const SizedBox.shrink(),
-              ),
+              child: ClipRect(child: widget.titleBar ?? const SizedBox.shrink()),
             ),
 
             // Sidebar resizer
@@ -321,30 +293,20 @@ class _AppKitWindowState extends State<AppKitWindow> {
                   },
                   onHorizontalDragUpdate: (details) {
                     setState(() {
-                      var newWidth = _sidebarDragStartWidth +
-                          details.globalPosition.dx -
-                          _sidebarDragStartPosition;
+                      var newWidth = _sidebarDragStartWidth + details.globalPosition.dx - _sidebarDragStartPosition;
 
                       if (sidebar!.startWidth != null &&
                           sidebar.snapToStartBuffer != null &&
-                          (newWidth - sidebar.startWidth!).abs() <=
-                              sidebar.snapToStartBuffer!) {
+                          (newWidth - sidebar.startWidth!).abs() <= sidebar.snapToStartBuffer!) {
                         newWidth = sidebar.startWidth!;
                       }
 
                       if (sidebar.dragClosed) {
-                        final closeBelow =
-                            sidebar.minWidth - sidebar.dragClosedBuffer;
+                        final closeBelow = sidebar.minWidth - sidebar.dragClosedBuffer;
                         _showSidebar = newWidth >= closeBelow;
                       }
 
-                      _sidebarWidth = math.max(
-                        sidebar.minWidth,
-                        math.min(
-                          sidebar.maxWidth!,
-                          newWidth,
-                        ),
-                      );
+                      _sidebarWidth = math.max(sidebar.minWidth, math.min(sidebar.maxWidth!, newWidth));
 
                       if (_sidebarWidth == sidebar.minWidth) {
                         _sidebarCursor = SystemMouseCursors.resizeRight;
@@ -359,11 +321,7 @@ class _AppKitWindowState extends State<AppKitWindow> {
                     cursor: _sidebarCursor,
                     child: Align(
                       alignment: Alignment.center,
-                      child: VerticalDivider(
-                        thickness: 1,
-                        width: 1,
-                        color: dividerColor,
-                      ),
+                      child: VerticalDivider(thickness: 1, width: 1, color: dividerColor),
                     ),
                   ),
                 ),
@@ -393,38 +351,22 @@ class _AppKitWindowState extends State<AppKitWindow> {
                     insertRepaintBoundary: true,
                     child: Column(
                       children: [
-                        if (endSidebar.topOffset > 0)
-                          SizedBox(height: endSidebar.topOffset),
-                        if (_endSidebarScrollController.hasClients &&
-                            _endSidebarScrollController.offset > 0.0)
-                          Divider(
-                            thickness: 1,
-                            height: 1,
-                            color: dividerColor,
-                          ),
+                        if (endSidebar.topOffset > 0) SizedBox(height: endSidebar.topOffset),
+                        if (_endSidebarScrollController.hasClients && _endSidebarScrollController.offset > 0.0)
+                          Divider(thickness: 1, height: 1, color: dividerColor),
                         if (endSidebar.top != null)
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: endSidebar.top!,
-                          ),
+                          Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: endSidebar.top!),
                         Expanded(
                           child: AppKitScrollbar(
                             controller: _endSidebarScrollController,
                             child: Padding(
                               padding: endSidebar.padding,
-                              child: endSidebar.builder(
-                                context,
-                                _endSidebarScrollController,
-                              ),
+                              child: endSidebar.builder(context, _endSidebarScrollController),
                             ),
                           ),
                         ),
                         if (endSidebar.bottom != null)
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: endSidebar.bottom!,
-                          ),
+                          Padding(padding: const EdgeInsets.all(16.0), child: endSidebar.bottom!),
                       ],
                     ),
                   ),
@@ -447,30 +389,21 @@ class _AppKitWindowState extends State<AppKitWindow> {
                   },
                   onHorizontalDragUpdate: (details) {
                     setState(() {
-                      var newWidth = _endSidebarDragStartWidth -
-                          details.globalPosition.dx +
-                          _endSidebarDragStartPosition;
+                      var newWidth =
+                          _endSidebarDragStartWidth - details.globalPosition.dx + _endSidebarDragStartPosition;
 
                       if (endSidebar!.startWidth != null &&
                           endSidebar.snapToStartBuffer != null &&
-                          (newWidth + endSidebar.startWidth!).abs() <=
-                              endSidebar.snapToStartBuffer!) {
+                          (newWidth + endSidebar.startWidth!).abs() <= endSidebar.snapToStartBuffer!) {
                         newWidth = endSidebar.startWidth!;
                       }
 
                       if (endSidebar.dragClosed) {
-                        final closeBelow =
-                            endSidebar.minWidth - endSidebar.dragClosedBuffer;
+                        final closeBelow = endSidebar.minWidth - endSidebar.dragClosedBuffer;
                         _showEndSidebar = newWidth >= closeBelow;
                       }
 
-                      _endSidebarWidth = math.max(
-                        endSidebar.minWidth,
-                        math.min(
-                          endSidebar.maxWidth!,
-                          newWidth,
-                        ),
-                      );
+                      _endSidebarWidth = math.max(endSidebar.minWidth, math.min(endSidebar.maxWidth!, newWidth));
 
                       if (_endSidebarWidth == endSidebar.minWidth) {
                         _endSidebarCursor = SystemMouseCursors.resizeLeft;
@@ -485,11 +418,7 @@ class _AppKitWindowState extends State<AppKitWindow> {
                     cursor: _endSidebarCursor,
                     child: Align(
                       alignment: Alignment.center,
-                      child: VerticalDivider(
-                        thickness: 1,
-                        width: 1,
-                        color: dividerColor,
-                      ),
+                      child: VerticalDivider(thickness: 1, width: 1, color: dividerColor),
                     ),
                   ),
                 ),
@@ -549,8 +478,8 @@ class AppKitWindowScope extends InheritedWidget {
     required this.isEndSidebarShown,
     required VoidCallback sidebarToggler,
     required VoidCallback endSidebarToggler,
-  })  : _sidebarToggler = sidebarToggler,
-        _endSidebarToggler = endSidebarToggler;
+  }) : _sidebarToggler = sidebarToggler,
+       _endSidebarToggler = endSidebarToggler;
 
   /// Provides the constraints from the [AppKitWindow] to its descendants.
   final BoxConstraints constraints;
@@ -569,8 +498,7 @@ class AppKitWindowScope extends InheritedWidget {
   ///
   /// The [context] argument must not be null.
   static AppKitWindowScope of(BuildContext context) {
-    final AppKitWindowScope? result =
-        context.dependOnInheritedWidgetOfExactType<AppKitWindowScope>();
+    final AppKitWindowScope? result = context.dependOnInheritedWidgetOfExactType<AppKitWindowScope>();
     assert(result != null, 'No MacosWindowScope found in context');
     return result!;
   }
@@ -610,7 +538,6 @@ class AppKitWindowScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(AppKitWindowScope oldWidget) {
-    return constraints != oldWidget.constraints ||
-        isSidebarShown != oldWidget.isSidebarShown;
+    return constraints != oldWidget.constraints || isSidebarShown != oldWidget.isSidebarShown;
   }
 }

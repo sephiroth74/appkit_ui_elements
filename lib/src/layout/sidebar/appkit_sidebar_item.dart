@@ -80,12 +80,8 @@ class AppKitSidebarItem with Diagnosticable {
     properties.add(StringProperty('semanticLabel', semanticLabel));
     properties.add(DiagnosticsProperty<ShapeBorder>('shape', shape));
     properties.add(DiagnosticsProperty<FocusNode>('focusNode', focusNode));
-    properties.add(IterableProperty<AppKitSidebarItem>(
-      'disclosure items',
-      disclosureItems,
-    ));
-    properties.add(
-        FlagProperty('expandDisclosureItems', value: expandDisclosureItems));
+    properties.add(IterableProperty<AppKitSidebarItem>('disclosure items', disclosureItems));
+    properties.add(FlagProperty('expandDisclosureItems', value: expandDisclosureItems));
     properties.add(DiagnosticsProperty<Widget?>('trailing', trailing));
     properties.add(DiagnosticsProperty<Widget?>('leading', leading));
     properties.add(DiagnosticsProperty<Widget>('label', label));

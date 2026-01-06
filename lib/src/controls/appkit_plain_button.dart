@@ -36,13 +36,7 @@ class AppKitPlainButton extends StatefulWidget {
   /// The semantic label for the button, used for accessibility.
   final String? semanticLabel;
 
-  const AppKitPlainButton({
-    super.key,
-    required this.child,
-    required this.onPressed,
-    this.semanticLabel,
-    this.color,
-  });
+  const AppKitPlainButton({super.key, required this.child, required this.onPressed, this.semanticLabel, this.color});
 
   @override
   State<AppKitPlainButton> createState() => _AppKitPlainButtonState();
@@ -81,39 +75,33 @@ class _AppKitPlainButtonState extends State<AppKitPlainButton> {
         onTapUp: enabled ? _handleTapUp : null,
         onTapCancel: enabled ? _handleTapCancel : null,
         onTap: enabled ? _handleTap : null,
-        child: Consumer<MainWindowModel>(builder: (context, model, _) {
-          final theme = AppKitTheme.of(context);
-          final isDark = theme.brightness == Brightness.dark;
-          final color = widget.color ??
-              AppKitDynamicColor.resolve(
-                  context, AppKitColors.text.opaque.quaternary);
-          final blendedColor = Color.lerp(theme.canvasColor, color, color.a)!;
+        child: Consumer<MainWindowModel>(
+          builder: (context, model, _) {
+            final theme = AppKitTheme.of(context);
+            final isDark = theme.brightness == Brightness.dark;
+            final color = widget.color ?? AppKitDynamicColor.resolve(context, AppKitColors.text.opaque.quaternary);
+            final blendedColor = Color.lerp(theme.canvasColor, color, color.a)!;
 
-          final lumination = blendedColor.computeLuminance();
-          final textColor = lumination > 0.5
-              ? AppKitColors.text.opaque.primary.darkColor
-              : AppKitColors.text.opaque.primary.color;
+            final lumination = blendedColor.computeLuminance();
+            final textColor = lumination > 0.5
+                ? AppKitColors.text.opaque.primary.darkColor
+                : AppKitColors.text.opaque.primary.color;
 
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-            foregroundDecoration: isDown
-                ? BoxDecoration(
-                    color: (isDark ? Colors.white : Colors.black)
-                        .withValues(alpha: 0.1),
-                  )
-                : null,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: Center(
-              child: DefaultTextStyle(
-                style: theme.typography.body.copyWith(color: textColor),
-                child: widget.child,
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+              foregroundDecoration: isDown
+                  ? BoxDecoration(color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1))
+                  : null,
+              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4.0)),
+              child: Center(
+                child: DefaultTextStyle(
+                  style: theme.typography.body.copyWith(color: textColor),
+                  child: widget.child,
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }

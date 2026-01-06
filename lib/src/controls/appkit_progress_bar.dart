@@ -113,8 +113,7 @@ class AppKitProgressBar extends StatefulWidget {
   State<AppKitProgressBar> createState() => _AppKitProgressBarState();
 }
 
-class _AppKitProgressBarState extends State<AppKitProgressBar>
-    with TickerProviderStateMixin {
+class _AppKitProgressBarState extends State<AppKitProgressBar> with TickerProviderStateMixin {
   bool get inderterminate => widget.value == null;
 
   late final AnimationController _controller;
@@ -124,24 +123,25 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-        vsync: this, duration: _kAnimationDuration, value: 0.0);
+    _controller = AnimationController(vsync: this, duration: _kAnimationDuration, value: 0.0);
 
     _progressEndAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-            parent: _controller,
-            curve: const Interval(0.1, 0.9, curve: Curves.easeInOut)));
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.1, 0.9, curve: Curves.easeInOut),
+      ),
+    );
 
     _progressLeftAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-            parent: _controller,
-            curve: const Interval(0.4, 0.95, curve: Curves.easeInOut)));
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.4, 0.95, curve: Curves.easeInOut),
+      ),
+    );
 
-    Tween<double>(begin: 1.0, end: 1.0).animate(
-        CurvedAnimation(parent: _controller, curve: const Interval(0.9, 1.0)));
+    Tween<double>(begin: 1.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: const Interval(0.9, 1.0)));
 
-    Tween<double>(begin: 0.0, end: 0.0).animate(
-        CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.1)));
+    Tween<double>(begin: 0.0, end: 0.0).animate(CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.1)));
 
     if (inderterminate) {
       _controller.addListener(_animationListener);
@@ -184,45 +184,39 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
     debugCheckHasAppKitTheme(context);
 
     return Semantics(
-        value: widget.value?.toStringAsFixed(2) ?? 'Indeterminate',
-        label: widget.semanticsLabel,
-        child: Builder(builder: (context) {
+      value: widget.value?.toStringAsFixed(2) ?? 'Indeterminate',
+      label: widget.semanticsLabel,
+      child: Builder(
+        builder: (context) {
           final theme = AppKitTheme.of(context);
           final progressTheme = AppKitProgressTheme.of(context);
           final isDark = theme.brightness == Brightness.dark;
           return ConstrainedBox(
-            constraints: BoxConstraints(
-                maxHeight: widget.height, minHeight: widget.height),
+            constraints: BoxConstraints(maxHeight: widget.height, minHeight: widget.height),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final realWidth = constraints.maxWidth;
 
                 final width = realWidth - widget.height;
                 final borderRadius = BorderRadius.circular(widget.height / 2);
-                final isMainWindow =
-                    MainWindowStateListener.instance.isMainWindow.value;
-                final trackColor =
-                    widget.trackColor ?? progressTheme.trackColor;
+                final isMainWindow = MainWindowStateListener.instance.isMainWindow.value;
+                final trackColor = widget.trackColor ?? progressTheme.trackColor;
                 final color = isMainWindow
                     ? (widget.color ?? progressTheme.color ?? theme.activeColor)
-                    : (progressTheme.accentColorUnfocused ??
-                        theme.activeColorUnfocused);
+                    : (progressTheme.accentColorUnfocused ?? theme.activeColorUnfocused);
 
                 final double progressEnd;
                 final double progressLeft;
 
                 if (inderterminate) {
-                  final bool isForward =
-                      _controller.status == AnimationStatus.forward;
+                  final bool isForward = _controller.status == AnimationStatus.forward;
 
                   if (isForward) {
                     progressLeft = (width * _progressLeftAnimation.value);
                     progressEnd = (width * _progressEndAnimation.value);
                   } else {
-                    progressLeft =
-                        (width * _progressEndAnimation.value + widget.height);
-                    progressEnd =
-                        (width * _progressLeftAnimation.value - widget.height);
+                    progressLeft = (width * _progressEndAnimation.value + widget.height);
+                    progressEnd = (width * _progressLeftAnimation.value - widget.height);
                   }
                 } else {
                   progressLeft = 0.0;
@@ -232,38 +226,41 @@ class _AppKitProgressBarState extends State<AppKitProgressBar>
                 return SizedBox(
                   width: realWidth,
                   child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: trackColor,
-                        borderRadius: borderRadius,
-                        border: Border.all(
-                          color: isDark
-                              ? AppKitColors.fills.opaque.quaternary.color
-                              : AppKitColors.fills.opaque.quaternary.darkColor,
-                          width: 1.0,
-                        ),
-                        // TODO: Check this
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: AppKitDynamicColor.resolve(context, AppKitColors.shadowColor).withValues(alpha: 0.5),
-                        //     spreadRadius: -widget.height / 6,
-                        //     blurRadius: widget.height / 6,
-                        //   ),
-                        // ],
+                    decoration: BoxDecoration(
+                      color: trackColor,
+                      borderRadius: borderRadius,
+                      border: Border.all(
+                        color: isDark
+                            ? AppKitColors.fills.opaque.quaternary.color
+                            : AppKitColors.fills.opaque.quaternary.darkColor,
+                        width: 1.0,
                       ),
-                      child: CustomPaint(
-                        painter: _ProgressPainter(
-                          left: progressLeft,
-                          end: progressEnd + widget.height,
-                          isMainWindow: isMainWindow,
-                          borderRadius: borderRadius,
-                          progressColor: color,
-                        ),
-                      )),
+                      // TODO: Check this
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: AppKitDynamicColor.resolve(context, AppKitColors.shadowColor).withValues(alpha: 0.5),
+                      //     spreadRadius: -widget.height / 6,
+                      //     blurRadius: widget.height / 6,
+                      //   ),
+                      // ],
+                    ),
+                    child: CustomPaint(
+                      painter: _ProgressPainter(
+                        left: progressLeft,
+                        end: progressEnd + widget.height,
+                        isMainWindow: isMainWindow,
+                        borderRadius: borderRadius,
+                        progressColor: color,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }
 
@@ -304,11 +301,13 @@ class _ProgressPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final rect = Rect.fromLTRB(left, 0, end, size.height);
-    final rrect = RRect.fromRectAndCorners(rect,
-        topLeft: borderRadius.topLeft,
-        bottomLeft: borderRadius.bottomLeft,
-        topRight: borderRadius.topRight,
-        bottomRight: borderRadius.bottomRight);
+    final rrect = RRect.fromRectAndCorners(
+      rect,
+      topLeft: borderRadius.topLeft,
+      bottomLeft: borderRadius.bottomLeft,
+      topRight: borderRadius.topRight,
+      bottomRight: borderRadius.bottomRight,
+    );
     canvas.drawRRect(rrect, paint);
 
     if (isMainWindow) {

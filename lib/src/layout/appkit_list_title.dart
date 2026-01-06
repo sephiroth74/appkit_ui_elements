@@ -54,21 +54,14 @@ class AppKitListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DefaultTextStyle(
-                    style: AppKitTheme.of(context)
-                        .typography
-                        .headline
-                        .copyWith(fontWeight: FontWeight.w600),
+                    style: AppKitTheme.of(context).typography.headline.copyWith(fontWeight: FontWeight.w600),
                     child: title,
                   ),
                   if (subtitle != null)
                     DefaultTextStyle(
-                      style: AppKitTheme.of(context)
-                          .typography
-                          .subheadline
-                          .copyWith(
-                            color: AppKitColors.text.opaque.secondary
-                                .resolveFromContext(context),
-                          ),
+                      style: AppKitTheme.of(context).typography.subheadline.copyWith(
+                        color: AppKitColors.text.opaque.secondary.resolveFromContext(context),
+                      ),
                       child: subtitle!,
                     ),
                 ],

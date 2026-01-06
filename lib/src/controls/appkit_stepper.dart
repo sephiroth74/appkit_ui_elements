@@ -76,11 +76,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
     properties.add(DoubleProperty('maxValue', widget.maxValue));
     properties.add(DoubleProperty('increment', widget.increment));
     properties.add(DoubleProperty('value', widget.value));
-    properties.add(ObjectFlagProperty<ValueChanged<double>>(
-      'onChanged',
-      widget.onChanged,
-      ifNull: 'disabled',
-    ));
+    properties.add(ObjectFlagProperty<ValueChanged<double>>('onChanged', widget.onChanged, ifNull: 'disabled'));
   }
 
   Size get size => widget.controlSize.size;
@@ -112,119 +108,114 @@ class _AppKitStepperState extends State<AppKitStepper> {
           onPanCancel: widget.enabled ? _onPanCancel : null,
           onPanUpdate: widget.enabled ? _onPanUpdate : null,
           onPanStart: widget.enabled ? _onPanStart : null,
-          child: Consumer<MainWindowModel>(builder: (context, model, _) {
-            final AppKitThemeData theme = AppKitTheme.of(context);
-            final isDark = theme.brightness.isDark;
-            final controlBorderColor = isDark
-                ? Colors.white.withValues(alpha: 0.2 * enabledFactor)
-                : Colors.black.withValues(alpha: 0.2 * enabledFactor);
+          child: Consumer<MainWindowModel>(
+            builder: (context, model, _) {
+              final AppKitThemeData theme = AppKitTheme.of(context);
+              final isDark = theme.brightness.isDark;
+              final controlBorderColor = isDark
+                  ? Colors.white.withValues(alpha: 0.2 * enabledFactor)
+                  : Colors.black.withValues(alpha: 0.2 * enabledFactor);
 
-            final iconColor = !theme.brightness.isDark
-                ? widget.enabled
-                    ? AppKitColors.labelColor.color
-                    : AppKitColors.text.opaque.tertiary.color
-                : widget.enabled
-                    ? AppKitColors.labelColor.darkColor
-                    : AppKitColors.text.opaque.tertiary.darkColor;
+              final iconColor = !theme.brightness.isDark
+                  ? widget.enabled
+                        ? AppKitColors.labelColor.color
+                        : AppKitColors.text.opaque.tertiary.color
+                  : widget.enabled
+                  ? AppKitColors.labelColor.darkColor
+                  : AppKitColors.text.opaque.tertiary.darkColor;
 
-            return DecoratedBox(
-              decoration: BoxDecoration(
+              return DecoratedBox(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius),
                   boxShadow: [
                     BoxShadow(
-                      color:
-                          Colors.black.withValues(alpha: 0.15 * enabledFactor),
+                      color: Colors.black.withValues(alpha: 0.15 * enabledFactor),
                       offset: Offset(0, height / 80),
                       blurRadius: height / 80,
                       blurStyle: BlurStyle.outer,
                     ),
                     BoxShadow(
-                      color:
-                          Colors.black.withValues(alpha: 0.05 * enabledFactor),
+                      color: Colors.black.withValues(alpha: 0.05 * enabledFactor),
                       offset: Offset(0, height / 20),
                       blurRadius: height / 26.666,
                       blurStyle: BlurStyle.outer,
                     ),
-                  ]),
-              child: Stack(
-                children: [
-                  // Top Stepper
-                  SizedBox(
-                    width: width,
-                    height: height / 2,
-                    child: Container(
-                      foregroundDecoration:
-                          _isPointerDown && _isPointerIncreasing
-                              ? BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(borderRadius),
-                                      topRight: Radius.circular(borderRadius)))
-                              : null,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: AppKitDynamicColor.resolve(
-                                  context, AppKitColors.controlColor)
-                              .multiplyOpacity(widget.enabled ? 1.0 : 0.5),
-                          border: Border(
-                            top: BorderSide(
-                                color: controlBorderColor, width: borderWidth),
-                            left: BorderSide(
-                                color: controlBorderColor, width: borderWidth),
-                            right: BorderSide(
-                                color: controlBorderColor, width: borderWidth),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    // Top Stepper
+                    SizedBox(
+                      width: width,
+                      height: height / 2,
+                      child: Container(
+                        foregroundDecoration: _isPointerDown && _isPointerIncreasing
+                            ? BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(borderRadius),
+                                  topRight: Radius.circular(borderRadius),
+                                ),
+                              )
+                            : null,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: AppKitDynamicColor.resolve(
+                              context,
+                              AppKitColors.controlColor,
+                            ).multiplyOpacity(widget.enabled ? 1.0 : 0.5),
+                            border: Border(
+                              top: BorderSide(color: controlBorderColor, width: borderWidth),
+                              left: BorderSide(color: controlBorderColor, width: borderWidth),
+                              right: BorderSide(color: controlBorderColor, width: borderWidth),
+                            ),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(borderRadius),
+                              topRight: Radius.circular(borderRadius),
+                            ),
                           ),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(borderRadius),
-                            topRight: Radius.circular(borderRadius),
-                          ),
-                        ),
-                        child: CustomPaint(
-                          painter: IconButtonPainter(
-                            color: iconColor,
-                            icon: AppKitControlButtonIcon.disclosureUp,
-                            offset: Offset(0, -height / 10),
-                            strokeWidth: strokeWidth,
-                            strokeCap: StrokeCap.square,
-                            size: height / 2,
+                          child: CustomPaint(
+                            painter: IconButtonPainter(
+                              color: iconColor,
+                              icon: AppKitControlButtonIcon.disclosureUp,
+                              offset: Offset(0, -height / 10),
+                              strokeWidth: strokeWidth,
+                              strokeCap: StrokeCap.square,
+                              size: height / 2,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
 
-                  // Bottom Stepper
-                  Positioned(
-                    bottom: 0,
-                    child: SizedBox(
-                      width: width,
-                      height: height / 2,
-                      child: Container(
-                        foregroundDecoration: _isPointerDown &&
-                                !_isPointerIncreasing
-                            ? BoxDecoration(
-                                color: isDark
-                                    ? Colors.white.withValues(alpha: 0.15)
-                                    : Colors.black.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.only(
+                    // Bottom Stepper
+                    Positioned(
+                      bottom: 0,
+                      child: SizedBox(
+                        width: width,
+                        height: height / 2,
+                        child: Container(
+                          foregroundDecoration: _isPointerDown && !_isPointerIncreasing
+                              ? BoxDecoration(
+                                  color: isDark
+                                      ? Colors.white.withValues(alpha: 0.15)
+                                      : Colors.black.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(borderRadius),
-                                    bottomRight: Radius.circular(borderRadius)))
-                            : null,
-                        child: DecoratedBox(
+                                    bottomRight: Radius.circular(borderRadius),
+                                  ),
+                                )
+                              : null,
+                          child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: AppKitDynamicColor.resolve(
-                                      context, AppKitColors.controlColor)
-                                  .multiplyOpacity(widget.enabled ? 1.0 : 0.5),
+                                context,
+                                AppKitColors.controlColor,
+                              ).multiplyOpacity(widget.enabled ? 1.0 : 0.5),
                               border: Border(
-                                left: BorderSide(
-                                    color: controlBorderColor,
-                                    width: borderWidth),
-                                right: BorderSide(
-                                    color: controlBorderColor,
-                                    width: borderWidth),
-                                bottom: BorderSide(
-                                    color: controlBorderColor,
-                                    width: borderWidth),
+                                left: BorderSide(color: controlBorderColor, width: borderWidth),
+                                right: BorderSide(color: controlBorderColor, width: borderWidth),
+                                bottom: BorderSide(color: controlBorderColor, width: borderWidth),
                               ),
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(borderRadius),
@@ -240,88 +231,90 @@ class _AppKitStepperState extends State<AppKitStepper> {
                                 strokeWidth: strokeWidth,
                                 size: height / 2,
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
 
-                  // Top Gradient
-                  Positioned(
-                    bottom: height / 2,
-                    left: borderWidth,
-                    child: SizedBox(
-                      width: width - borderWidth * 2,
-                      height: height / 5,
-                      child: DecoratedBox(
+                    // Top Gradient
+                    Positioned(
+                      bottom: height / 2,
+                      left: borderWidth,
+                      child: SizedBox(
+                        width: width - borderWidth * 2,
+                        height: height / 5,
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                        colors: [
-                          (isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0),
-                          (isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0.05 * enabledFactor),
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ))),
+                            gradient: LinearGradient(
+                              colors: [
+                                (isDark ? Colors.white : Colors.black).withValues(alpha: 0),
+                                (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05 * enabledFactor),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
 
-                  // Bottom Gradient
-                  Positioned(
-                    top: height / 2,
-                    left: borderWidth,
-                    child: SizedBox(
-                      width: width - borderWidth * 2,
-                      height: height / 5,
-                      child: DecoratedBox(
+                    // Bottom Gradient
+                    Positioned(
+                      top: height / 2,
+                      left: borderWidth,
+                      child: SizedBox(
+                        width: width - borderWidth * 2,
+                        height: height / 5,
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                        colors: [
-                          (isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0),
-                          (isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0.05 * enabledFactor),
-                        ],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ))),
+                            gradient: LinearGradient(
+                              colors: [
+                                (isDark ? Colors.white : Colors.black).withValues(alpha: 0),
+                                (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05 * enabledFactor),
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
 
-                  // Filler
-                  Positioned(
-                    top: (height / 2) - (height / 20),
-                    left: borderWidth,
-                    child: SizedBox(
-                      width: width - borderWidth * 2,
-                      height: height / 10,
-                      child: DecoratedBox(
+                    // Filler
+                    Positioned(
+                      top: (height / 2) - (height / 20),
+                      left: borderWidth,
+                      child: SizedBox(
+                        width: width - borderWidth * 2,
+                        height: height / 10,
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color: (isDark ? Colors.white : Colors.black)
-                            .withValues(alpha: 0.05 * enabledFactor),
-                      )),
+                            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05 * enabledFactor),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
 
-                  // Separator
-                  Positioned(
-                    top: (height / 2) - (separatorWidth / 2),
-                    left: borderWidth,
-                    child: SizedBox(
-                      width: width - borderWidth * 2,
-                      height: separatorWidth,
-                      child: DecoratedBox(
+                    // Separator
+                    Positioned(
+                      top: (height / 2) - (separatorWidth / 2),
+                      left: borderWidth,
+                      child: SizedBox(
+                        width: width - borderWidth * 2,
+                        height: separatorWidth,
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
-                        color: (isDark ? Colors.white : Colors.black)
-                            .withValues(alpha: 0.075 * enabledFactor),
-                      )),
+                            color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.075 * enabledFactor),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -351,8 +344,7 @@ class _AppKitStepperState extends State<AppKitStepper> {
           _mouseDownTimer?.cancel();
         } else {
           _mouseDownInitializationTimer?.cancel();
-          _mouseDownInitializationTimer =
-              Timer(_longPressDuration, _onStepperInit);
+          _mouseDownInitializationTimer = Timer(_longPressDuration, _onStepperInit);
         }
       });
     }
@@ -400,8 +392,8 @@ class _AppKitStepperState extends State<AppKitStepper> {
 
   void _onPanUpdate(DragUpdateDetails details) {
     setState(() {
-      isPointerDown = (details.localPosition.dy >= 0 &&
-              details.localPosition.dy <= height) &&
+      isPointerDown =
+          (details.localPosition.dy >= 0 && details.localPosition.dy <= height) &&
           (details.localPosition.dx >= 0 && details.localPosition.dx <= width);
       _isPointerIncreasing = details.localPosition.dy < height / 2;
     });
@@ -414,14 +406,12 @@ class _AppKitStepperState extends State<AppKitStepper> {
   }
 
   void _incrementValue() {
-    final newValue = (widget.value + widget.increment)
-        .clamp(widget.minValue, widget.maxValue);
+    final newValue = (widget.value + widget.increment).clamp(widget.minValue, widget.maxValue);
     widget.onChanged?.call(newValue);
   }
 
   void _decrementValue() {
-    final newValue = (widget.value - widget.increment)
-        .clamp(widget.minValue, widget.maxValue);
+    final newValue = (widget.value - widget.increment).clamp(widget.minValue, widget.maxValue);
     widget.onChanged?.call(newValue);
   }
 }

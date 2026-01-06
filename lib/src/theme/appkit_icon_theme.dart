@@ -5,11 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AppKitIconTheme extends InheritedTheme {
-  const AppKitIconTheme({
-    super.key,
-    required this.data,
-    required super.child,
-  });
+  const AppKitIconTheme({super.key, required this.data, required super.child});
 
   factory AppKitIconTheme.toolbar(
     BuildContext context, {
@@ -20,35 +16,21 @@ class AppKitIconTheme extends InheritedTheme {
     Color? color,
   }) {
     final iconButton = AppKitIconButtonTheme(
-        data: AppKitIconButtonTheme.fallback(brightness),
-        child: AppKitIconButton(
-          icon: icon,
-          padding: showLabel
-              ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3)
-              : const EdgeInsets.all(5),
-          disabledColor: Colors.transparent,
-          color: color ??
-              AppKitColors.toolbarIconColor.resolveFromBrightness(brightness),
-          onPressed: onPressed,
-          boxConstraints: showLabel
-              ? const BoxConstraints(
-                  minHeight: 19,
-                  minWidth: 35,
-                  maxWidth: 35,
-                  maxHeight: 22,
-                )
-              : const BoxConstraints(
-                  minHeight: 28,
-                  maxHeight: 28,
-                  minWidth: 33,
-                  maxWidth: 33,
-                ),
-        ));
+      data: AppKitIconButtonTheme.fallback(brightness),
+      child: AppKitIconButton(
+        icon: icon,
+        padding: showLabel ? const EdgeInsets.symmetric(horizontal: 5, vertical: 3) : const EdgeInsets.all(5),
+        disabledColor: Colors.transparent,
+        color: color ?? AppKitColors.toolbarIconColor.resolveFromBrightness(brightness),
+        onPressed: onPressed,
+        boxConstraints: showLabel
+            ? const BoxConstraints(minHeight: 19, minWidth: 35, maxWidth: 35, maxHeight: 22)
+            : const BoxConstraints(minHeight: 28, maxHeight: 28, minWidth: 33, maxWidth: 33),
+      ),
+    );
 
     return AppKitIconTheme(
-      data: AppKitIconThemeData(
-        size: showLabel ? 16.0 : 20.0,
-      ),
+      data: AppKitIconThemeData(size: showLabel ? 16.0 : 20.0),
       child: iconButton,
     );
   }
@@ -60,12 +42,14 @@ class AppKitIconTheme extends InheritedTheme {
     VoidCallback? onPressed,
     Color? color,
   }) {
-    return AppKitIconTheme.toolbar(context,
-        icon: icon,
-        brightness: Brightness.light,
-        showLabel: showLabel,
-        onPressed: onPressed,
-        color: color);
+    return AppKitIconTheme.toolbar(
+      context,
+      icon: icon,
+      brightness: Brightness.light,
+      showLabel: showLabel,
+      onPressed: onPressed,
+      color: color,
+    );
   }
 
   factory AppKitIconTheme.darkOpaqueToolbar(
@@ -75,26 +59,20 @@ class AppKitIconTheme extends InheritedTheme {
     VoidCallback? onPressed,
     Color? color,
   }) {
-    return AppKitIconTheme.toolbar(context,
-        icon: icon,
-        brightness: Brightness.dark,
-        showLabel: showLabel,
-        onPressed: onPressed,
-        color: color);
+    return AppKitIconTheme.toolbar(
+      context,
+      icon: icon,
+      brightness: Brightness.dark,
+      showLabel: showLabel,
+      onPressed: onPressed,
+      color: color,
+    );
   }
 
-  static Widget merge({
-    Key? key,
-    required AppKitIconThemeData data,
-    required Widget child,
-  }) {
+  static Widget merge({Key? key, required AppKitIconThemeData data, required Widget child}) {
     return Builder(
       builder: (BuildContext context) {
-        return AppKitIconTheme(
-          key: key,
-          data: _getInheritedIconThemeData(context).merge(data),
-          child: child,
-        );
+        return AppKitIconTheme(key: key, data: _getInheritedIconThemeData(context).merge(data), child: child);
       },
     );
   }
@@ -106,8 +84,7 @@ class AppKitIconTheme extends InheritedTheme {
   }
 
   static AppKitIconThemeData _getInheritedIconThemeData(BuildContext context) {
-    final AppKitIconTheme? iconTheme =
-        context.dependOnInheritedWidgetOfExactType<AppKitIconTheme>();
+    final AppKitIconTheme? iconTheme = context.dependOnInheritedWidgetOfExactType<AppKitIconTheme>();
     return iconTheme?.data ?? AppKitTheme.of(context).iconTheme;
   }
 
@@ -127,36 +104,17 @@ class AppKitIconTheme extends InheritedTheme {
 }
 
 class AppKitIconThemeData with Diagnosticable {
-  const AppKitIconThemeData({
-    this.color,
-    double? opacity,
-    this.size,
-  }) : _opacity = opacity;
+  const AppKitIconThemeData({this.color, double? opacity, this.size}) : _opacity = opacity;
 
-  const AppKitIconThemeData.fallback()
-      : color = const Color.fromARGB(255, 0, 122, 255),
-        _opacity = 1.0,
-        size = 24.0;
+  const AppKitIconThemeData.fallback() : color = const Color.fromARGB(255, 0, 122, 255), _opacity = 1.0, size = 24.0;
 
-  AppKitIconThemeData copyWith({
-    Color? color,
-    double? opacity,
-    double? size,
-  }) {
-    return AppKitIconThemeData(
-      color: color ?? this.color,
-      opacity: opacity ?? this.opacity,
-      size: size ?? this.size,
-    );
+  AppKitIconThemeData copyWith({Color? color, double? opacity, double? size}) {
+    return AppKitIconThemeData(color: color ?? this.color, opacity: opacity ?? this.opacity, size: size ?? this.size);
   }
 
   AppKitIconThemeData merge(AppKitIconThemeData? other) {
     if (other == null) return this;
-    return copyWith(
-      color: other.color,
-      opacity: other.opacity,
-      size: other.size,
-    );
+    return copyWith(color: other.color, opacity: other.opacity, size: other.size);
   }
 
   AppKitIconThemeData resolve(BuildContext context) => this;
@@ -171,11 +129,7 @@ class AppKitIconThemeData with Diagnosticable {
 
   final double? size;
 
-  static AppKitIconThemeData lerp(
-    AppKitIconThemeData? a,
-    AppKitIconThemeData? b,
-    double t,
-  ) {
+  static AppKitIconThemeData lerp(AppKitIconThemeData? a, AppKitIconThemeData? b, double t) {
     return AppKitIconThemeData(
       color: Color.lerp(a?.color, b?.color, t),
       opacity: ui.lerpDouble(a?.opacity, b?.opacity, t),
@@ -186,10 +140,7 @@ class AppKitIconThemeData with Diagnosticable {
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is AppKitIconThemeData &&
-        other.color == color &&
-        other.opacity == opacity &&
-        other.size == size;
+    return other is AppKitIconThemeData && other.color == color && other.opacity == opacity && other.size == size;
   }
 
   @override
